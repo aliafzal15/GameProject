@@ -17,14 +17,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import com.app.bL.Map;
 import com.app.controller.CharacterEditorMenuController;
-import com.app.guiEngine.MapEditor;
+import com.app.mapValidation.MapFinalValidation;
 import com.app.menus.CharacterEditorMainMenu;
 import com.app.menus.ItemEditorMainMenu;
+import com.app.menus.MapEditor;
 import com.app.models.MapModel;
 import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
+
 import com.app.staticEngine.AppStatics;
 import com.app.utilities.FileStorage;
 
@@ -55,7 +56,7 @@ import com.app.towerDefense.staticContent.AppilicationEnums.E_MapEditorMode;
 *********/
 
 /**
- *  @author AliAfzal
+ *  @author Ali Afzal
  * This class allows us to select an option on the main game window.
  * Options Available in File Menu: Item Editor , Character Editor , Map Editor , Campaign Editor and Exit
  * Options Available in Help Menu: About
@@ -200,7 +201,7 @@ public class JMenuBarComponent {
 						}//KeyTyped
 					});//txtY.addKeyListener(new KeyAdapter() 
 								
-					Object[] message = { "Size of X in Map:", txtX, "Size of Y in Map:", txtY };
+					Object[] message = { "Size of X in Map:[1-30]", txtX, "Size of Y in Map:[1-30]", txtY };
 		
 					int option = JOptionPane.showConfirmDialog(null, message, "SET SIZE OF MAP",
 							JOptionPane.OK_CANCEL_OPTION);			
@@ -252,6 +253,26 @@ public class JMenuBarComponent {
 					
 				}//else if(e.getSource().equals(menuItemEditor))
 				
+				else if (e.getSource().equals(menuItemOpenMap)) {
+					JFileChooser fileChooser = new JFileChooserComponent().getJFileChooser(E_JFileChooserrMode.Open);
+					int result = fileChooser.showOpenDialog(new_jframe);
+					if (result == JFileChooser.APPROVE_OPTION) {
+						File file = fileChooser.getSelectedFile();
+						MapModel mapModel = (new com.app.utilities.FileStorage()).openMapFile(file);
+						if (mapModel != null) {
+							
+								new MapEditor(new_jframe, AppStatics.TITLE_MAP_EDITOR,
+										AppStatics.CHILD_POPUP_WINDOW_WIDTH,
+										AppStatics.CHILD_POPUP_WINDOW_HEIGHT, mapModel, E_MapEditorMode.Open);
+							
+
+						} else
+							JOptionPane.showMessageDialog(null, "Unable to .dd open File");
+					} else {
+						JOptionPane.showMessageDialog(null, "No File Selected");
+					}
+				}//else if e.getSource().equals(menuItemOpenMap)
+				
 				
 				
 				
@@ -264,7 +285,7 @@ public class JMenuBarComponent {
 	menuItemCreateMap.addActionListener(new menuItemAction());	
 	menuItemEditor.addActionListener(new menuItemAction());
 	menuItemCharacterEditor.addActionListener(new menuItemAction());
-
+	menuItemOpenMap.addActionListener(new menuItemAction());
 ///******************************************************************************		
 	
 	return menuBar;
@@ -295,9 +316,9 @@ public class JMenuBarComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource().equals(menuItemSave)) {
-					String MapValidationStatus = (new Map()).mapValidations(new_mapModel);
+					String MapValidationStatus = (new MapFinalValidation()).mapValidations(new_mapModel);
 
-					if (MapValidationStatus != null)
+					if (MapValidationStatus != "")
 						JOptionPane.showMessageDialog(null, MapValidationStatus);
 					else {
 						JFileChooser fileChooser = new JFileChooserComponent()
@@ -305,10 +326,10 @@ public class JMenuBarComponent {
 						int result = fileChooser.showSaveDialog(null);
 						if (result == JFileChooser.APPROVE_OPTION) {
 							File file = fileChooser.getSelectedFile();
-							new_mapModel.setMapSecret();
+							//new_mapModel.setMapSecret();
 							String msg = new FileStorage().saveMapFile(file, new_mapModel);
 							if (msg.contains("SUCCESS")) {
-								JOptionPane.showMessageDialog(null, "File Save Successfuly.");
+								JOptionPane.showMessageDialog(null, "File Saved Successfuly.");
 								closeFrame(new_jframe);
 							} else
 								JOptionPane.showMessageDialog(null, msg);
@@ -319,6 +340,9 @@ public class JMenuBarComponent {
 				else if (e.getSource().equals(menuItemExit)) {
 					closeFrame(new_jframe);
 				}
+				
+				
+				
 
 			}
 

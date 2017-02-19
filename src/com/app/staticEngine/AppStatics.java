@@ -6,7 +6,7 @@ package com.app.staticEngine;
  * This class contains all constant variables such as windows width, height of window for main window and child window, 
  * titles, menu items names and image paths
  * 
- * @author George
+ * @author Ali Afzal
  *
  */
 public class AppStatics {

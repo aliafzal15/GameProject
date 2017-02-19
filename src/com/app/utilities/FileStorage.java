@@ -38,8 +38,8 @@ public class FileStorage {
 		String fileContent = getJsonFromObject(new_mapModel);
 		fileContent = (new MiscellaneousHelper()).EncodeBase64(fileContent);
 		String filePath = new_file.getPath();
-		if (!filePath.endsWith(".tdm"))
-			filePath += ".tdm";
+		if (!filePath.endsWith(".dd"))
+			filePath += ".dd";
 		try {
 			FileWriter fileWriter = new FileWriter(filePath);
 			fileWriter.write(fileContent);

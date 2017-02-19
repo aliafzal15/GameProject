@@ -7,6 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.app.staticEngine.AppEnums.*;
+import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 
 
 /**
@@ -28,12 +29,12 @@ public class JFileChooserComponent {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		if (new_fileChooserMode == E_JFileChooserrMode.Open) {
-			fileChooser.setDialogTitle("D&D Select .ddm file");
+			fileChooser.setDialogTitle("Durgeons & Dragons .dd file");
 		} else {
-			fileChooser.setDialogTitle("D&D Map Save");
+			fileChooser.setDialogTitle("Durgeons & Dragons Save");
 		}
 		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Tower Defence Map", "ddm"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Durgeons & Dragons", "dd"));
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		return fileChooser;
