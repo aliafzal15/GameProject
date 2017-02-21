@@ -34,7 +34,7 @@ public class JFileChooserComponent {
 			fileChooser.setDialogTitle("Durgeons & Dragons Save");
 		}
 		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Durgeons & Dragons", "dd"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Durgeons & Dragons", "dd","ddc"));
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		return fileChooser;

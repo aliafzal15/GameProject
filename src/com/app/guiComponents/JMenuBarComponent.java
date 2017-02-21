@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import com.app.controller.CharacterEditorMenuController;
 import com.app.mapValidation.MapFinalValidation;
+import com.app.menus.CampaignEditorMenu;
 import com.app.menus.CharacterEditorMainMenu;
 import com.app.menus.ItemEditorMainMenu;
 import com.app.menus.MapEditor;
@@ -125,9 +126,12 @@ public class JMenuBarComponent {
 		final JMenuItem menuItemEditor=new JMenuItem(AppStatics.MENU_ITEM_EDITOR);
 		menuFile.add(menuItemEditor);
 		final JMenuItem menuItemCharacterEditor=new JMenuItem(AppStatics.MENU_Character_EDITOR);
-		menuFile.add(menuItemCharacterEditor);
+		menuFile.add(menuItemCharacterEditor);	
+		final JMenuItem menuItemCampaignEditor = new JMenuItem(AppStatics.MENU_Campaign_EDITOR);
+		menuFile.add(menuItemCampaignEditor);
 		final JMenuItem menuItemExit = new JMenuItem(AppStatics.MENU_ITEM_EXIT);
 		menuFile.add(menuItemExit);
+		
 		/**
 		 * Creating Help Parent Menu [Starts]
 		 * 
@@ -273,6 +277,13 @@ public class JMenuBarComponent {
 					}
 				}//else if e.getSource().equals(menuItemOpenMap)
 				
+				else if(e.getSource().equals(menuItemCampaignEditor)){
+					
+					CampaignEditorMenu temp=new CampaignEditorMenu();
+							
+					
+				}//else if(e.getSource().equals(menuItemEditor))
+				
 				
 				
 				
@@ -286,6 +297,7 @@ public class JMenuBarComponent {
 	menuItemEditor.addActionListener(new menuItemAction());
 	menuItemCharacterEditor.addActionListener(new menuItemAction());
 	menuItemOpenMap.addActionListener(new menuItemAction());
+	menuItemCampaignEditor.addActionListener(new menuItemAction());
 ///******************************************************************************		
 	
 	return menuBar;
@@ -326,7 +338,7 @@ public class JMenuBarComponent {
 						int result = fileChooser.showSaveDialog(null);
 						if (result == JFileChooser.APPROVE_OPTION) {
 							File file = fileChooser.getSelectedFile();
-							//new_mapModel.setMapSecret();
+							new_mapModel.setMapFileName(file.getName());
 							String msg = new FileStorage().saveMapFile(file, new_mapModel);
 							if (msg.contains("SUCCESS")) {
 								JOptionPane.showMessageDialog(null, "File Saved Successfuly.");

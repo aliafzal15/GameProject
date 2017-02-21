@@ -4,6 +4,7 @@ package com.app.utilities;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import com.app.models.CampaignModel;
 import com.app.models.CharacterModel;
 import com.app.models.ItemsModel;
 import com.app.models.MapModel;
@@ -756,5 +758,56 @@ if(items.size()>0){
 	out.close();
 } 	
 }	
+
+public String saveCampaignFile(File new_file, CampaignModel camp){
+	
+
+		   //write converted json data to a file named "CountryGSON.json"
+		   String fileContent = getJsonFromObject(camp);
+		   //fileContent = (new MiscellaneousHelper()).EncodeBase64(fileContent);
+		   
+			String filePath = new_file.getPath();
+				if (!filePath.endsWith(".ddc")){
+						filePath += ".ddc";
+				}
+						try {
+							FileWriter fileWriter = new FileWriter(filePath);
+							fileWriter.write(fileContent);
+							fileWriter.write(System.lineSeparator());
+							fileWriter.flush();
+							fileWriter.close();
+							return "SUCCESS";
+						} catch (Exception e) {
+							e.printStackTrace();
+							return "ERROR : " + e.getMessage();
+						}
+		   
+	}
+
+public CampaignModel openCampaignFile(File new_file) throws IOException {
+
+	String line;
+	
+	CampaignModel tempCampiagnModel = null;
+ 			
+	File filename=new File(new_file.getPath());			
+	FileReader fr=new FileReader(filename);
+	BufferedReader in=new BufferedReader(fr);
+
+	
+	while ((line=in.readLine())!=null){
+		
+		//line = EncodeBase64(line);			
+		tempCampiagnModel= (CampaignModel) getObjectFromJson(line, CampaignModel.class);		
+
+	}
+  in.close();
+		
+		return tempCampiagnModel;
+
+}
+
+
+
 
 }
