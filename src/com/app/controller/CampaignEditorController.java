@@ -88,16 +88,12 @@ public class CampaignEditorController {
 						}else{
 							JOptionPane.showMessageDialog(null, "Invalid Camapign. Make sure that exit point of one map is the entry point of the second map and so on.");
 						}
-					
-					
-					
+										
 					
 				} else{
 					
 				}
-				
-				
-				
+							
 			}//action performed
         });
 		
@@ -116,9 +112,7 @@ public class CampaignEditorController {
 				
 			}//action performed
         });
-		
-		
-		
+			
 		objCmpEditMenu.btnLoadCamp.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {

@@ -11,6 +11,12 @@ import com.app.controller.CampaignEditorController;
 import java.awt.Font;
 import javax.swing.JButton;
 
+/**
+ * This is the Campaign editor view class.
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class CampaignEditorMenu {
 
 	public JFrame frameCamp;
@@ -23,7 +29,12 @@ public class CampaignEditorMenu {
 	public JButton btnLoadCamp;
 	public JButton btnRmvMap;
 
-
+	/**
+	 * Initializes the main campaign editor window and gives call to the controller constructor.
+	 * 
+	 * @author Ali Afzal
+	 *
+	 */
 	public CampaignEditorMenu() {
 		initialize();
 		new CampaignEditorController(this);

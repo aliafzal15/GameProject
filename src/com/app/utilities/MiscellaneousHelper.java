@@ -8,7 +8,7 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * this class is a miscellaneous helper class
  * 
- * @author Sajjad Ashraf
+ * @author Ali Afzal
  *
  */
 public class MiscellaneousHelper {

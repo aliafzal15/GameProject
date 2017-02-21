@@ -20,7 +20,7 @@ import com.app.models.MapModel;
 
 
 /**
- * This is the map editor class
+ * This is the map editor view class
  * 
  * @author Ali Afzal
  *

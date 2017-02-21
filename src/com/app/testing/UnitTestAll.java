@@ -19,19 +19,69 @@ import com.app.utilities.FileStorage;
 
 
 
-
+/**
+ * This class is for Unit Testing of Important Units in the Game
+ * 
+ * @author AliAfzal
+ *
+ */
 public class UnitTestAll {
 	
+
+	/**
+	 * This is type of the fighter of data type String
+	 */
 	private String fighterType;
+	
+	/**
+	 * This is type of the Zombie of data type String
+	 */
 	private String zombieType;
+	
+	/**
+	 * This is object of the fighter of data type CharacterModel
+	 */
 	private CharacterModel objFighter;
+	
+	
+	/**
+	 * This is object of the Zombie of data type CharacterModel
+	 */
 	private CharacterModel objZombie;
+	
+	/**
+	 * This is a character object of data type CharacterModel
+	 */
 	private CharacterModel objCharacter;
+	
+	/**
+	 * This is temporary item object of data type ItemsModel
+	 */
 	private ItemsModel tempItem;
+	
+	/**
+	 * This is Items ArrayList of data Type ItemsModel
+	 */
 	private ArrayList<ItemsModel> items;
+	
+
+	/**
+	 * This is Characters ArrayList of data Type CharacterModel
+	 */
 	private ArrayList<CharacterModel> characters;
+	
+
+	/**
+	 * This is Main Menu object of Character Editor to disable GUI during test execution
+	 */
 	private CharacterEditorMainMenu mainMenu;
 	
+
+/**
+ * This method initializes all the objects that need to be used in the test methods
+ * 
+ *
+ */	
 	@Before
 	public void initializeTest() {
 		System.out.println("@BeforeClass - oneTimeSetUp.");
@@ -274,8 +324,10 @@ public class UnitTestAll {
 	}	
 	
 
-	
-	
+/**
+ * This method is for destroying all the objects after the test has been executed
+ *
+ */	
 	@After
 	public void tearDown() throws Exception {
 		// Add additional tear down code here

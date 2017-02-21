@@ -4,7 +4,7 @@ package com.app.staticEngine;
 
 /**
  * this class contains enumerators used for map editing and validation
- * @author AliAfzal
+ * @author Ali Afzal
  * 
  */
 public class AppEnums {

@@ -20,12 +20,19 @@ import com.app.models.MapModel;
 import com.google.gson.Gson;
 
 /**
- * This class is for saving a map,saving items and saving characters
+ * This class is for saving a map, campaign, saving items and saving characters
  * 
  * @author AliAfzal
  *
  */
 public class FileStorage {
+	
+	/**
+	 * Default Constructor
+	 */
+	public FileStorage(){
+		
+	}
 
 	/**
 	 * this method saves the map file
@@ -100,14 +107,15 @@ public class FileStorage {
 		return gson.fromJson(new_jsonString, new_class);
 	}
 	
+	/**
+	 * this method save the item in a file
+	 * 
+	 * @param items: which is an ArrayList of Type ItemsModel
+	 */
 	public void SaveItemInFile(ArrayList <ItemsModel> items) throws IOException{
 		
 
-		/**
-		 * this method save the item in a file
-		 * 
-		 * @param ArrayList <ItemsModel> items
-		 */
+	
 		
 		 File filename=new File("Items.txt");
 		 //FileWriter fw=new FileWriter(filename,true);//true will ensure appending of file
@@ -133,14 +141,12 @@ public class FileStorage {
 		
 	}
 	
+	/**
+	 * this method reads items from a file
+	 * 
+	 * @return items: which is an ArrayList of Type ItemsModel
+	 */	
 	public ArrayList <ItemsModel> ReadItemInFile() throws IOException{
-	
-	
-		/**
-		 * this method reads the item from a file
-		 * 
-		 * @return ArrayList <ItemsModel> items
-		 */
 	
 		
 		String line;
@@ -150,11 +156,6 @@ public class FileStorage {
 		 ArrayList <ItemsModel> newItems=new ArrayList();
 		
 		File filename=new File("Items.txt");
-		
-
-		
-		
-		
 		
 		
 	if(filename.exists()){
@@ -212,10 +213,8 @@ public class FileStorage {
 	/**
 	 * this method saves the Character in a file
 	 * 
-	 * @param ArrayList <CharacterModel> items
-	 */
-	
-	
+	 * @param chars: which is an ArrayList of type CharacterModel
+	 */	
 public void SaveCharInFile(ArrayList <CharacterModel> chars) throws IOException{
 		
 
@@ -270,15 +269,10 @@ public void SaveCharInFile(ArrayList <CharacterModel> chars) throws IOException{
 /**
  * this method reads the character from a file
  * 
- * @return ArrayList <ItemsModel> items
+ * @return newChars: which is an ArrayList of type CharacterModel
  */
-
-
 public ArrayList <CharacterModel> readCharacterInFile() throws IOException{
-	
-	
-
-	
+		
 	String line;
 	
 	ArrayList reading=new ArrayList();
@@ -351,6 +345,11 @@ return newChars;
 	
 }
 
+/**
+ * this method deletes all characters in File
+ * 
+ * @param items: which is an ArrayList of Type ItemsModel
+ */
 public void deleteCharacter()throws IOException{
 	
 
@@ -383,21 +382,14 @@ public void deleteCharacter()throws IOException{
 	 fw=new FileWriter(filename);
 	 out=new BufferedWriter(fw);	
 	 out.close();
-
-	
-	/*
-		if(filename.exists()){
-			
-
-			
-			boolean tr=filename.delete();
-			System.out.println("FileDeleted>>>>"+tr);
-			
-		}
-	*/	
 	
 }
 
+/**
+ * this method saves the worn items by the Fighter character in the file
+ * 
+ * @param items, which is an ArrayList of Type ItemsModel
+ */
 public void saveWornItemDetailsFighter(ArrayList<ItemsModel> items) throws IOException{
 	
 	 File filename=new File("FighterWornItems.txt");
@@ -421,11 +413,13 @@ if(items.size()>0){
 	 	
 }
 
+/**
+ * this method reads the worn items by the Fighter character from the file
+ * 
+ * @param items: which is an ArrayList of Type ItemsModel
+ */
 public ArrayList <ItemsModel> readWornItemsFighter() throws IOException{
-	
-	
-
-	
+		
 	String line;
 	
 	ArrayList reading=new ArrayList();
@@ -489,7 +483,11 @@ return newItms;
 	
 }
 
-
+/**
+ * this method saves the Bag Pack items of the Fighter in file
+ * 
+ * @param items: which is an ArrayList of Type ItemsModel
+ */
 public void saveBagItemDetailsFighter(ArrayList<ItemsModel> items) throws IOException{
 	
 	 File filename=new File("FighterBagItems.txt");
@@ -511,10 +509,12 @@ if(items.size()>0){
  } 	
 }
 
+/**
+ * this method reads the Bag Pack items of the Fighter in file
+ * 
+ * @return items: which is an ArrayList of Type ItemsModel
+ */
 public ArrayList <ItemsModel> readBagItemsFighter() throws IOException{
-	
-	
-
 	
 	String line;
 	
@@ -579,6 +579,11 @@ return newItms;
 	
 }
 
+/**
+ * this method reads the worn items of the Zombie in file
+ * 
+ * @return items: which is an ArrayList of Type ItemsModel
+ */
 public ArrayList <ItemsModel> readWornItemsZombie() throws IOException{
 	
 	
@@ -646,7 +651,11 @@ return newItms;
 	  	 		
 	
 }
-
+/**
+ * this method reads the Bag Pack items of the Zombie in file
+ * 
+ * @return items: which is an ArrayList of Type ItemsModel
+ */
 public ArrayList <ItemsModel> readBagItemsZombie() throws IOException{
 	
 	
@@ -715,6 +724,11 @@ return newItms;
 	
 }
 
+/**
+ * this method saves the Worn Items of the Zombie in file
+ * 
+ * @param items: which is an ArrayList of Type ItemsModel
+ */
 public void saveWornItemDetailsZombie(ArrayList<ItemsModel> items) throws IOException{
 	
 	 File filename=new File("ZombieWornItems.txt");
@@ -738,6 +752,11 @@ if(items.size()>0){
 	 	
 }
 
+/**
+ * this method saves the Bag Pack items of the Zombie in file
+ * 
+ * @param items: which is an ArrayList of Type ItemsModel
+ */
 public void saveBagItemDetailsZombie(ArrayList<ItemsModel> items) throws IOException{
 	
 	 File filename=new File("ZombieBagItems.txt");
@@ -759,6 +778,11 @@ if(items.size()>0){
 } 	
 }	
 
+/**
+ * this method saves the campaign in file
+ * 
+ * @param camp: which is an object of CampaignModel
+ */
 public String saveCampaignFile(File new_file, CampaignModel camp){
 	
 
@@ -784,6 +808,11 @@ public String saveCampaignFile(File new_file, CampaignModel camp){
 		   
 	}
 
+/**
+ * this method reads the campaign details in file
+ * 
+ * @return camp: which is an object of CampaignModel
+ */
 public CampaignModel openCampaignFile(File new_file) throws IOException {
 
 	String line;

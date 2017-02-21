@@ -43,7 +43,11 @@ public class GameWindow extends JFrame {
 		
 	}
 
-
+	/**
+	 * This Method Initialized the GUI elements on the main game window.
+	 * 
+	 *
+	 */
 	private void initGui() {
 		
 		this.getContentPane().removeAll();

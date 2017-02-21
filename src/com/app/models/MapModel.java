@@ -47,6 +47,10 @@ public class MapModel {
 	 *            map width
 	 * @param new_mapHeight
 	 *            map height
+	 * @param mapDesc
+	 * 			 Description generated at the time of saving the map regarding the validation
+	 * @param fileNam
+	 * 			  File Name of the Map as saved on the Hard drive.          
 	 */
 	public MapModel(Point new_entryPoint,
 			Point new_exitPoint, boolean new_isEntryDone, boolean new_isExitDone, int[][] new_mapGridSelection,
