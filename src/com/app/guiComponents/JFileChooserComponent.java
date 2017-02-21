@@ -11,10 +11,11 @@ import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 
 
 /**
- *  @author AliAfzal
+ * 
  * This class allows us to select an option on the main game window.
- * Options Available in File Menu: Item Editor , Character Editor , Map Editor , Campaign Editor and Exit
- * Options Available in Help Menu: About
+ * <p>Options Available in File Menu: Item Editor , Character Editor , Map Editor , Campaign Editor and Exit<p>
+ * <p>Options Available in Help Menu: About<p>
+ * @author AliAfzal
  */
 public class JFileChooserComponent {
 

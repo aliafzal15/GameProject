@@ -18,6 +18,13 @@ import org.apache.commons.codec.language.MatchRatingApproachEncoder;
 
 import com.app.models.MapModel;
 
+
+/**
+ * This class holds all the action listeners for the MapEditor
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class MapEditorMapElements {
 
 	private JFrame frame;
@@ -30,7 +37,21 @@ public class MapEditorMapElements {
 	private int exit_j;
 	private int entry_i;
 	private int entry_j;
-
+	
+	/**
+	 * This method initializes the GUI of the Map Editor and calls the action listener based on the parameters.
+	 * 
+	 * @param btn
+	 * 			button pressed on the map editor
+	 * 
+	 * @param mapMdl
+	 * 			map object of MapModel Type
+	 * 
+	 * @param i 
+	 * 		 index x of map grid selection
+	 * @param j 
+	 * 		 index y of map grid selection
+	 */
 	public MapEditorMapElements(final JButton btn,MapModel mapMdl,final int i,final int j) {
 		initialize();
 		newMapModel=mapMdl;
@@ -172,11 +193,24 @@ public class MapEditorMapElements {
 			
 	}
 	
+	/**
+	 * This method sets the value of the element to be added on the map
+	 * 
+	 */
 	public void setElementValue(){
 		this.elementMapValue=(String) comboElements.getSelectedItem();
 	}
 	
-	
+	/**
+	 * This method sets entry point on the map
+	 * @param mdl
+	 * 			map object of MapModel Type
+	 * @param  i 
+	 * 		  index i of the button on grid layout
+	 * @param  j 
+	 * 		  index j of the button on grid layout		
+	 * 
+	 */
 	public void setEntryExit(MapModel mdl,int i,int j){
 		
 		
@@ -202,7 +236,14 @@ public class MapEditorMapElements {
 	}
 }
 	
-	
+	/**
+	 * This method checks if exit is already done on map or not
+	 * @param map
+	 * 			object of MapModel type.
+	 * @return boolean
+	 * 				
+	 * 
+	 */
 	public boolean checkIfExitDone(MapModel map){
 		if(map.isExitDone){
 			JOptionPane.showMessageDialog(null,"Exit Already Exits");
@@ -214,6 +255,14 @@ public class MapEditorMapElements {
 		}
 	}
 	
+	/**
+	 * This method checks if entry is already done on map or not
+	 * @param map
+	 * 			object of MapModel type
+	 * @return boolean
+	 * 				
+	 * 
+	 */
 	public boolean checkIfEntryDone(MapModel map){
 		if(map.isEntryDone){
 			JOptionPane.showMessageDialog(null,"Entry Already Exits");
@@ -225,6 +274,17 @@ public class MapEditorMapElements {
 		}
 	}
 	
+	/**
+	 * This method checks if entry is done in the same column as exit
+	 * @param mapmdl
+	 * 			map object of MapModel Type
+	 * @param  y 
+	 * 		  coordinate y of the entry point
+	 * 
+	 * @return boolean
+	 * 				
+	 * 
+	 */
 	public boolean checkIfEntryInSameColumn(MapModel mapmdl,int y){
 	
 		Point tempPointEntry=mapmdl.getEntryPoint();
@@ -241,6 +301,14 @@ public class MapEditorMapElements {
 				}				
 	   }
 	
+	/**
+	 * This method checks if exit is done in the same column as entry
+	 * @param  y 
+	 * 		  coordinate y of the exit point
+	 * 
+	 * @return boolean				
+	 * 
+	 */
 	public boolean checkIfExitInSameColumn(MapModel mapmdl,int y){
 		
 		Point tempPointExit=mapmdl.getExitPoint();
@@ -257,7 +325,14 @@ public class MapEditorMapElements {
 				}				
 	   }
 	
-	
+	/**
+	 * This method checks if Zombie on map if fighter is to be placed.
+	 * @param mpMdl
+	 * 			object of MapModel type
+	 * @return boolean
+	 * 				
+	 * 
+	 */
 	public boolean checkIfZombieInMap(MapModel mpMdl){
 		
 			if(mpMdl.isFighterPlaced==true){
@@ -272,6 +347,14 @@ public class MapEditorMapElements {
 		
 	}
 	
+	/**
+	 * This method checks if Fighter on map if Zombie is to be placed.
+	 * @param mpMdl
+	 * 			object of MapModel type
+	 * @return boolean
+	 * 				
+	 * 
+	 */
 	public boolean checkIfFighterInMap(MapModel mpMdl){
 		
 		if(mpMdl.isFighterPlaced==true){			
@@ -284,7 +367,17 @@ public class MapEditorMapElements {
 		 }
 	
 }
-	
+	/**
+	 * This method set map grid selection value for zombie and fighter when an element is changed on map editor.
+	 * @param mdl
+	 * 			object of MapModel type
+	 * @param i
+	 * 		  index i of map grid selection
+	 * @param j 
+	 * 		  index j of map grid selection	
+	 * 				
+	 * 
+	 */
 	public void setIsFighterZombie(MapModel mdl,int i, int j){
 			
 		if(mdl.mapGridSelection[i][j]==2){

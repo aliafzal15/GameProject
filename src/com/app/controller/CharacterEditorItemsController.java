@@ -16,6 +16,15 @@ import com.app.models.ItemsModel;
 import com.app.utilities.FileStorage;
 
 
+
+
+/**
+ * 
+ *This Class holds all the logic for actions available on the Character Inventory Menu.
+ *@author Ali Afzal
+ * 
+ *
+ */
 public class CharacterEditorItemsController {
 	
 	public CharacterEditorItemsInventory itemInv;
@@ -36,7 +45,19 @@ public class CharacterEditorItemsController {
 	private int strengthClassEnchanment;
 	private int attackBonusClassEnchanment;
 	
-	
+	/**
+	 * 
+	 *This Constructor holds all the action listeners for Item Inventory Menu
+	 *
+	 *@param characterLists
+	 *			ArrayList of all characters in the file and their properties
+	 *@param objIndex
+	 *			index in the ArrayList which holds the character properties 
+	 *@param plyrType
+	 *			Type of the character
+	 *@param mainMenu
+	 *			CharacterEditorMainMenu object to manipulate GUI elements
+	 */
 	public CharacterEditorItemsController(final ArrayList <CharacterModel> characterLists,final int objIndex,String plyrType,CharacterEditorMainMenu mainMenu){
 		
 		this.characterList=characterLists;
@@ -394,7 +415,9 @@ public class CharacterEditorItemsController {
 	
 	
 	
-	
+/**
+ * Default Constructor
+ */	
 public CharacterEditorItemsController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -403,17 +426,19 @@ public CharacterEditorItemsController() {
 
 
 
-
-
-
+/**
+ * This Method Sets all Items Combo
+ */
 private void setAllItemsCombo(){
-	
-	
-	
+		
 	
 }
-	
 
+/**
+ * 
+ *This Method reads items from the items file
+ *
+ */	
 public void getItemsFromFile(){
 	
 	itemStorage=new FileStorage();
@@ -432,7 +457,12 @@ public void getItemsFromFile(){
 	
 }
 	
-
+/**
+ * 
+ *This Method populates All Items Combo 
+ *
+ *				
+ */
 public void populateAllItemsCombo(){
 	
 	for(int i=0; i <this.allItems.size();i++){
@@ -442,6 +472,13 @@ public void populateAllItemsCombo(){
 	}
 }
 
+/**
+ * 
+ *This Method populates Worn Items Combo
+ *@param objInx
+ *			index of the character object in characterLists ArrayList
+ *				
+ */
 public void populateWornItemsCombo(int objInx) {
 	
 
@@ -498,7 +535,13 @@ else if(this.plyrType.equals("Zombie")){
 
 	}
 
-
+/**
+ * 
+ *This Method checks if the item already in worn list or not
+ *@param items
+ *			list of items worn
+ *				
+ */
 public boolean checkIfItemInWorn(ArrayList<ItemsModel> items){
 	
 	if(items.size()>0){
@@ -522,10 +565,23 @@ public boolean checkIfItemInWorn(ArrayList<ItemsModel> items){
 	return true;
 }
 
+/**
+ * 
+ *This Method populates Worn Items Combo
+ *@return plyrType: Type of the character
+ *			
+ *				
+ */
 public String getPlayerType(){
 	return this.plyrType;
 }
 
+
+/**
+ * 
+ *This Method remove an item in worn combo and list
+ *						
+ */
 public void removeItemWorn(){
 	
 	if(this.plyrType.equals("Fighter")){
@@ -601,6 +657,14 @@ public void removeItemWorn(){
 	
 }
 
+/**
+ * 
+ *This Method checks if item already in worn then remove the older entry and adds new entry
+ *@param items
+ *			list of items worn in items ArrayList
+ *			
+ *				
+ */
 public boolean checkIfItemInWornRmv(ArrayList<ItemsModel> items){
 	
 	if(items.size()>0){
@@ -625,6 +689,13 @@ public boolean checkIfItemInWornRmv(ArrayList<ItemsModel> items){
 	return true;
 }
 
+/**
+ * 
+ *This Method populates Bag Pack Items Combo
+ *@param objInx
+ *			index of the character in the characterLists
+ *						
+ */
 public void populateBagItemsCombo(int objInx) {
 	
 
@@ -682,7 +753,12 @@ else if(this.plyrType.equals("Zombie")){
 
 	}
 
-
+/**
+ * 
+ *This Method removes item in the Bag Pack
+ *			
+ *				
+ */
 public void removeItemBag(){
 	
 	if(this.plyrType.equals("Fighter")){
@@ -754,6 +830,14 @@ public void removeItemBag(){
 	
 }
 
+
+/**
+ * 
+ *This Method populates Worn Items Combo
+ *@return plyrType: Type of the character
+ *			
+ *				
+ */
 public boolean checkIfItemInBagRmv(ArrayList<ItemsModel> items){
 	
 	if(items.size()>0){
@@ -776,6 +860,14 @@ public boolean checkIfItemInBagRmv(ArrayList<ItemsModel> items){
 	return true;
 }
 
+/**
+ * 
+ *This Method adds item to worn from bag list
+ *@param objInx
+ *			index of the character in the characterLists
+ *			
+ *				
+ */
 public void addWornToBag(int objInx,String plyrType){
 	
 	
@@ -852,6 +944,13 @@ public void addWornToBag(int objInx,String plyrType){
 
 }
 
+
+/**
+ * 
+ *This Method renders the Main Character Editor Menu
+ *			
+ *				
+ */
 public void render(){
 	setAllCombosNull();
 	populateAllItemsCombo();
@@ -860,10 +959,23 @@ public void render(){
 	updateAblities();
 }
 
+
+/**
+ * 
+ *This Method returns the player index
+ *@return plyrIndex			
+ *				
+ */
 private int getPlyrIndex(){
 	return this.plyrIndex;
 }
 
+/**
+ * 
+ *This Method sets all combos to Null
+ *			
+ *				
+ */
 public void setAllCombosNull(){
 	
 	this.itemInv.comboBagPack.removeAllItems();
@@ -871,6 +983,13 @@ public void setAllCombosNull(){
 	this.itemInv.comboItemsWorn.removeAllItems();
 }
 
+/**
+ * 
+ *This Method checks if bag item already in worn list
+ *@param items
+ *		   All items ArrayList				
+ *				
+ */
 public boolean checkIfBagItemInWorn(ArrayList<ItemsModel> items){
 	
 if(items.size()>0){
@@ -892,12 +1011,13 @@ if(items.size()>0){
 		
 }
 
+/**
+ * 
+ *This Method updates all ability scores
+ *			
+ *				
+ */
 public void updateAblities(){
-	
-	
-	
-	
-	
 	
 	try {
 		  FileStorage objFSO=new FileStorage();
@@ -950,7 +1070,13 @@ public int getItemEnchanement(String itmType){
 
 }
 
-
+/**
+ * 
+ *This Method gets the enchantment class of the item
+ *@param Type
+ *			Item Type			
+ *@return the class to be increased
+ */
 public String getEnchanementType(String Type){
 	
 	String classType;
@@ -987,7 +1113,13 @@ public String getEnchanementType(String Type){
 	
 	}
 
-
+/**
+ * 
+ *This Method initializes the enchantment class
+ *@param Type
+ *			Item Type			
+ *@return enchm: the enchantment value
+ */
 private int initializeEnchanementClass(String Type){
 	
 	int enchm=0;
@@ -1025,6 +1157,14 @@ private int initializeEnchanementClass(String Type){
 	
 	}
 
+/**
+ * 
+ *This Method sets the enchantment value of the object Armor,Strength or Attack Bonus according to enchantment class
+ *@param type
+ *			Item type	
+ *@param Opr		
+ *		 Operation to be performed either add or subtract
+ */
 public void setEnchanementValues(String type,String bonus,String Opr){
 	
 	
@@ -1090,6 +1230,15 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 	
 }
 
+/**
+ * 
+ *This Method checks if item in worn list		
+ *@param items
+ *		   items worn list.
+ *@param temp
+ *			combo item to be compared
+ *@return boolean : False, if found. True, if not found.
+ */
 public boolean checkIfItemInWornList(ArrayList<ItemsModel> items,String temp){
 			
 		  for(int i=0;i<items.size();i++){
@@ -1100,15 +1249,19 @@ public boolean checkIfItemInWornList(ArrayList<ItemsModel> items,String temp){
 					//			JOptionPane.ERROR_MESSAGE);
 			  		return false;
 			  	}
-			  	
-			  		
-			  
+			  			  
 		  }
 				
 
 	return true;
 }
 
+/**
+ * 
+ *This Method sets the frame possible
+ *@param val
+ *		True to set visible.
+ */
 public void setFrameVisbile(boolean val){
 	itemInv.frame.setVisible(val);
 	

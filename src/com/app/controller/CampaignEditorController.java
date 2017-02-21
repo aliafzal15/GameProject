@@ -20,12 +20,20 @@ import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
 import com.app.utilities.FileStorage;
 
+/**
+ * This class holds the logic for campaign editor controller.
+ */
 public class CampaignEditorController {
 	
 	private MapModel map;
 	private CampaignModel campaign;
 
 
+	/**
+	 * This Constructor holds the logic for action listeners on the Campaign Editor Menu
+	 * @param objCmpEditMenu
+	 * 				View object of the Campaign Editor Menu
+	 */
 	public CampaignEditorController(final CampaignEditorMenu objCmpEditMenu){
 		
 		campaign=new CampaignModel();
@@ -154,6 +162,12 @@ public class CampaignEditorController {
 		
 	}//class constructor
 	
+	/**
+	 * This Method validates if the campaign is valid or not
+	 * @param camp
+	 * 			 object of type Campaign Model
+	 * @return boolean: returns True if validated otherwise False.
+	 */
 	public boolean getCampaignValidation(CampaignModel camp){
 		
 		if(camp.getCampaignMaps().size()>1){

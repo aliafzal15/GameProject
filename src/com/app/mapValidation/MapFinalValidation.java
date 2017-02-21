@@ -8,8 +8,7 @@ import com.app.staticEngine.AppEnums;
 import com.app.staticEngine.AppEnums.E_MapValidationDirecton;
 
 /**
- * This class validates map features(Entry,Exit,Scenery) and map path from the
- * root
+ * This class validates map features(Entry,Exit,Scenery) and placement of character.
  * 
  * @author Ali Afzal
  *
@@ -29,7 +28,7 @@ public class MapFinalValidation {
 	/**
 	 * This method validates the map
 	 * 
-	 * @param new_mapModel
+	 * @param newMapModel
 	 *            as a map
 	 * @return the routeStatus
 	 */

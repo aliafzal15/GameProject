@@ -4,14 +4,10 @@ import com.app.menus.GameWindow;
 import com.app.staticEngine.*;
 
 /**
- * 
+ * Main Class that initiates the creation of the project
  * @author AliAfzal
  *
- * Main Class that initiates the creation of the project
- *
  */
-
-
 public class Game {
 
 	/**
@@ -25,7 +21,7 @@ public class Game {
 	}
 
 	/**
-	 * method that will start the game process and threads
+	 * Method that will start the game process and threads
 	 */
 	public void start() {
 

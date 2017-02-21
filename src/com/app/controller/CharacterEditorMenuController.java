@@ -443,7 +443,6 @@ private void updateLabels(boolean bolEmpty){
 
 }
 
-
 	/**
 	 * This function resets all characters to zero values, updates the GUI 
 	 *        

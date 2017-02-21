@@ -31,8 +31,11 @@ import com.app.controller.MapEditorMapElements;
 import com.app.models.MapModel;
 
 
-
-
+/**
+ * Main Class that initializes the panel for Map Editor
+ * @author AliAfzal
+ *
+ */
 public class JPanelComponent {
 
 	//public BottomGamePanelView bottomGamePanel;
@@ -40,6 +43,12 @@ public class JPanelComponent {
 	public String elementaVal;
 
 	// -- Map Editor window Create and Open map mode
+	
+	/**
+	 * This method initialized the grid layout for the Map Editor and places elements if map to be edited else
+	 * plain grid layout with buttons on it.
+	 *
+	 */
 	public JPanel getMapEditorGridPanel(final MapModel mapModel, E_MapEditorMode mapEditorMode) {
 		if (E_MapEditorMode.Create == mapEditorMode) {
 			mapModel.mapGridSelection = new int[mapModel.getMapHeight()][mapModel.getMapWidth()];

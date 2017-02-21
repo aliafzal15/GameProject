@@ -34,37 +34,18 @@ import com.app.menus.ItemEditorMainMenu;
 
 import javax.swing.*;
 
-/*import com.app.models.MapModel;
-import com.app.staticEngine.*;
-import com.app.staticEngine.AppEnums.*;
-import com.app.bL.Map;
-import com.app.guiComponents.JFileChooserComponent;
-import com.app.guiEngine.MapEditor;
-import com.app.staticEngine.AppStatics;
-import com.app.utilities.FileStorage;
-import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
-//import com.app.towerDefense.utilities.FileStorage;
-*/
-/************
-import com.app.towerDefense.guiComponents.BottomGamePanelView;
-import com.app.towerDefense.guiComponents.JFileChooserComponent;
-import com.app.towerDefense.guiComponents.JPanelComponent;
-import com.app.towerDefense.guisystem.MapEditor;
-import com.app.towerDefense.models.MapModel;
-
-import com.app.towerDefense.staticContent.AppilicationEnums.E_JFileChooserrMode;
-import com.app.towerDefense.staticContent.AppilicationEnums.E_MapEditorMode;
-*********/
-
 /**
- *  @author Ali Afzal
- * This class allows us to select an option on the main game window.
- * Options Available in File Menu: Item Editor , Character Editor , Map Editor , Campaign Editor and Exit
- * Options Available in Help Menu: About
+ * This class holds all the functionality for the main game window
+ * @author AliAfzal
+ *
  */
 public class JMenuBarComponent {
 
 
+	/**
+	 * This method gets the menu bar for the main game window.
+	 *
+	 */
 	public JMenuBar getGameJMenuBar(final JFrame new_jframe) {
 		
 		/**
@@ -154,13 +135,11 @@ public class JMenuBarComponent {
 		menuHelp.add(menuItemAbout);
 
 		/**
-		 * This class handle the menu Item action
+		 * This class handle the menu Item actions
 		 * 
 		 * @author AliAfzal
 		 *
-		 */
-
- 	
+		 */	
 	class menuItemAction implements ActionListener {
 
 			@Override

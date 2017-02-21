@@ -13,6 +13,10 @@ import com.app.menus.CharacterEditorMainMenu;
 import com.app.models.CharacterModel;
 import com.app.utilities.FileStorage;
 
+
+/**
+ * This class edits the level of the character and hencen the ability scores.
+ */
 public class CharacterEditorEditMenuController {
 	
 	private int charLevel;
@@ -24,6 +28,10 @@ public class CharacterEditorEditMenuController {
 	private String plrType;
 	private FileStorage objFSO;
 	
+	
+	/**
+	 * This Constructor holds the action listeners for the Edit Menu to change the level
+	 */
 	public CharacterEditorEditMenuController(final ArrayList <CharacterModel> characterLists,final int objIndex,String plyrType,final CharacterEditorMainMenu mainFrame){
 		editFrame= new CharacterEditorEditMenu();
 		this.charLevel=characterLists.get(objIndex).getCharLevel();
