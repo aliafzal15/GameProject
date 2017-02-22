@@ -2,6 +2,7 @@ package com.app.testing;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,9 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.app.controller.CharacterEditorItemsController;
+import com.app.mapValidation.MapFinalValidation;
 import com.app.menus.CharacterEditorMainMenu;
 import com.app.models.CharacterModel;
 import com.app.models.ItemsModel;
+import com.app.models.MapModel;
 import com.app.utilities.FileStorage;
 
 
@@ -76,6 +79,11 @@ public class UnitTestAll {
 	 */
 	private CharacterEditorMainMenu mainMenu;
 	
+	/**
+	 * This is MapModel Object
+	 */
+	private MapModel map;
+	
 
 /**
  * This method initializes all the objects that need to be used in the test methods
@@ -94,6 +102,8 @@ public class UnitTestAll {
 		items=new ArrayList();
 		mainMenu=new CharacterEditorMainMenu();
 		mainMenu.setVisible(false);
+		map=new MapModel();
+		
 		
 	}
 	
@@ -169,7 +179,7 @@ public class UnitTestAll {
 	 * 
 	 */	
 	@Test
-	public void testsetBagItem() {
+	public void testSetBagItem() {
 		
 		
 		
@@ -251,7 +261,7 @@ public class UnitTestAll {
 	 */	
 		
 	@Test
-	public void testsetEnchanementValues() {
+	public void testSetEnchanementValues() {
 		
 				
 		ItemsModel tempItemAdd=new ItemsModel();
@@ -323,6 +333,90 @@ public class UnitTestAll {
 		assertEquals("Helmet",items.get(0).itemType);		
 	}	
 	
+	/**
+	 *  
+	 * This Test is to verify that a valid map is stored
+	 * @throws IOException if not saved in file/read from file
+	 */			
+	@Test
+	public void testMapValidation() {
+	
+		map.setEntryPoint(new Point(1,0));
+		map.setExitPoint(new Point(1,4));
+		map.setMapDescriptionOnSave("");
+		map.isEntryDone=true;
+		map.isExitDone=true;
+		map.isZombiePlaced=true;
+		
+		MapFinalValidation mapValidator=new MapFinalValidation();
+		
+		mapValidator.mapValidations(map);
+		System.out.println("Map Desc"+map.mapDescriptionOnSave);
+		assertEquals("",map.mapDescriptionOnSave);
+			
+	}	
+	
+	/**
+	 *  
+	 * This Test is to verify that a valid map is stored if exit not done
+	 */	
+	@Test
+	public void testMapValidationExitNotDone() {
+	
+		map.setExitPoint(new Point(1,4));
+		map.setMapDescriptionOnSave("");
+		map.isExitDone=true;
+		map.isZombiePlaced=true;
+		
+		MapFinalValidation mapValidator=new MapFinalValidation();
+		
+		mapValidator.mapValidations(map);
+		System.out.println("Map Desc"+map.mapDescriptionOnSave);
+		assertNotEquals("",map.mapDescriptionOnSave);
+			
+	}	
+	
+	/**
+	 *  
+	 * This Test is to verify that a valid map is stored if no character is placed on map
+	 */	
+	@Test
+	public void testMapValidationWithNoCharacter() {
+	
+		map.setEntryPoint(new Point(1,0));
+		map.setExitPoint(new Point(1,4));
+		map.setMapDescriptionOnSave("");
+		map.isEntryDone=true;
+		map.isExitDone=true;
+		
+		MapFinalValidation mapValidator=new MapFinalValidation();
+		
+		mapValidator.mapValidations(map);
+		System.out.println("Map Desc"+map.mapDescriptionOnSave);
+		assertNotEquals("",map.mapDescriptionOnSave);
+			
+	}	
+	
+	/**
+	 *  
+	 * This Test is to verify that a valid map is stored if entry not done
+	 */	
+	@Test
+	public void testMapValidationEntryNotDone() {
+	
+		map.setEntryPoint(new Point(1,0));
+		map.setMapDescriptionOnSave("");
+		map.isEntryDone=true;
+		map.isZombiePlaced=true;
+		
+		MapFinalValidation mapValidator=new MapFinalValidation();
+		
+		mapValidator.mapValidations(map);
+		System.out.println("Map Desc"+map.mapDescriptionOnSave);
+		assertNotEquals("",map.mapDescriptionOnSave);
+			
+	}	
+	
 
 /**
  * This method is for destroying all the objects after the test has been executed
@@ -339,6 +433,7 @@ public class UnitTestAll {
 		items=null;
 		characters=null;
 		mainMenu=null;
+		map=null;
 		
 
 	}

@@ -343,11 +343,8 @@ private void getCharactersFromFile(){
 	}
 	
 	objFSO=null;
-	
 
-	//return items;
-	
-	
+	//return items;	
 }
 
 /**
