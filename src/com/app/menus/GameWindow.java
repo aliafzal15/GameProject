@@ -55,7 +55,6 @@ public class GameWindow extends JFrame {
 		
 		//gameJmenubar= (new JMenuBarComponent());
 		
-		
 		gameJMenuBarComponent=new JMenuBarComponent();
 		gameJMenuBar = gameJMenuBarComponent.getGameJMenuBar(this);
 		this.setJMenuBar(gameJMenuBar);
