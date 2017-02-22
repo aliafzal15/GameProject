@@ -130,7 +130,7 @@ public class CharacterEditorMainMenu extends JFrame  {
 		lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 12));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
-		lblNewLabel.setIcon(new ImageIcon("images/fighter2.jpg"));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\User\\workspace\\SOEN 6441 Build 1\\images\\fighter2.jpg"));
 		lblNewLabel.setBounds(135, 38, 144, 75);
 		newFrame.getContentPane().add(lblNewLabel);
 		
@@ -138,7 +138,7 @@ public class CharacterEditorMainMenu extends JFrame  {
 		
 		lblNewLabel_1 = new JLabel("Zombie");
 		lblNewLabel_1.setFont(new Font("Arial Black", Font.BOLD, 11));
-		lblNewLabel_1.setIcon(new ImageIcon("images/zombie.jpg"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\User\\workspace\\SOEN 6441 Build 1\\images\\zombie.jpg"));
 		lblNewLabel_1.setBounds(543, 38, 144, 75);
 		newFrame.getContentPane().add(lblNewLabel_1);
 		
