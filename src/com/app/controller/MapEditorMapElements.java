@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,7 +18,10 @@ import javax.swing.JPanel;
 
 import org.apache.commons.codec.language.MatchRatingApproachEncoder;
 
+import com.app.models.CharacterModel;
+import com.app.models.ItemsModel;
 import com.app.models.MapModel;
+import com.app.utilities.FileStorage;
 
 
 /**
@@ -37,7 +42,12 @@ public class MapEditorMapElements {
 	private int exit_j;
 	private int entry_i;
 	private int entry_j;
-	
+	private ArrayList<CharacterModel> tempCharacters;
+	private ArrayList<ItemsModel> tempFighterWornItems;
+	private ArrayList<ItemsModel> tempFighterBagItems;
+	private ArrayList<ItemsModel> tempZombieWornItems;
+	private ArrayList<ItemsModel> tempZombieBagItems;
+	private int currObjLoc;
 	/**
 	 * This method initializes the GUI of the Map Editor and calls the action listener based on the parameters.
 	 * 
@@ -51,10 +61,28 @@ public class MapEditorMapElements {
 	 * 		 index x of map grid selection
 	 * @param j 
 	 * 		 index y of map grid selection
+	 * @throws IOException 
 	 */
-	public MapEditorMapElements(final JButton btn,MapModel mapMdl,final int i,final int j) {
+	public MapEditorMapElements(final JButton btn,MapModel mapMdl,final int i,final int j) throws IOException {
 		initialize();
+		
+		FileStorage objFSO=new FileStorage();
+		
 		newMapModel=mapMdl;
+		
+		tempCharacters=new ArrayList();
+		tempFighterBagItems=new ArrayList();
+		tempFighterWornItems=new ArrayList();
+		tempZombieWornItems=new ArrayList();
+		tempZombieBagItems=new ArrayList();
+		
+		tempCharacters=objFSO.readCharacterInFile();
+		tempFighterWornItems=objFSO.readWornItemsFighter();
+		tempZombieWornItems=objFSO.readWornItemsZombie();
+		tempFighterBagItems=objFSO.readBagItemsFighter();
+		tempZombieBagItems=objFSO.readBagItemsZombie();
+		
+		
 		
 		btnSaveElement.addActionListener(new ActionListener() {
 			@Override
@@ -79,27 +107,41 @@ public class MapEditorMapElements {
 						}
 					}
 					else if(elementMapValue=="Fighter" && checkIfZombieInMap(newMapModel)==false){
-					
-						btn.setBackground(Color.yellow);
-						btn.setText("F");
-						newMapModel.mapGridSelection[i][j] = 2;	
-						newMapModel.isFighterPlaced=true;
-						newMapModel.isZombiePlaced=false;
-						setEntryExit(newMapModel,i,j);
+						
+						if(CheckIfInArray(tempCharacters,"Fighter")){
+							
+							setIsFighterZombie(newMapModel,i, j);
+							btn.setBackground(Color.yellow);
+							btn.setText("F");
+							newMapModel.mapGridSelection[i][j] = 2;	
+							newMapModel.isFighterPlaced=true;
+							newMapModel.isZombiePlaced=false;
+							newMapModel.mapCharacters=tempCharacters.get(currObjLoc);
+							newMapModel.mapCharactersWornItems=tempFighterWornItems;
+							newMapModel.mapCharactersBagItems=tempFighterBagItems;
+							setEntryExit(newMapModel,i,j);
+						}
 					}
 					else if(elementMapValue=="Zombie" && checkIfFighterInMap(newMapModel)==false){
 						
-						btn.setBackground(Color.orange);
-						btn.setText("Z");
-						newMapModel.mapGridSelection[i][j] = 3;	
-						newMapModel.isFighterPlaced=false;
-						newMapModel.isZombiePlaced=true;
-						setEntryExit(newMapModel,i,j);
+						if(CheckIfInArray(tempCharacters,"Zombie")){
+								setIsFighterZombie(newMapModel,i, j);
+								btn.setBackground(Color.orange);
+								btn.setText("Z");
+								newMapModel.mapGridSelection[i][j] = 3;	
+								newMapModel.isFighterPlaced=false;
+								newMapModel.isZombiePlaced=true;
+								newMapModel.mapCharacters=tempCharacters.get(currObjLoc);
+								newMapModel.mapCharactersWornItems=tempZombieWornItems;
+								newMapModel.mapCharactersBagItems=tempZombieBagItems;
+								setEntryExit(newMapModel,i,j);
+						}
 					}
 					else if((elementMapValue=="Entry") && (checkIfEntryDone(newMapModel)!=true)){
 						
 						if( ((i>=0 && j==0) || (i<=newMapModel.getMapWidth()-1 && j==newMapModel.getMapHeight()-1))   &&  (checkIfExitInSameColumn(newMapModel,j)==false) ){    
 								
+							
 								setIsFighterZombie(newMapModel,i, j);
 								btn.setBackground(Color.white);
 								btn.setText("O");
@@ -382,14 +424,53 @@ public class MapEditorMapElements {
 			
 		if(mdl.mapGridSelection[i][j]==2){
 			mdl.isFighterPlaced=false;
+			mdl.mapCharacters=null;
+			mdl.mapCharactersWornItems=null;
 		}
 			
 		else if(mdl.mapGridSelection[i][j]==3){
 			mdl.isZombiePlaced=false;
+			mdl.mapCharacters=null;
+			mdl.mapCharactersWornItems=null;
+			
 		}
 		
    	}
 	
+	private boolean CheckIfInArray(ArrayList <CharacterModel> charsList,String charType){
+		
+  if(charsList !=null){	
+	 if (charsList.size()>0){
+		
+		for (int i=0;i<charsList.size();i++){
+			String tempType =charsList.get(i).getCharType();
+			
+				if(tempType.equals(charType)){ 
+					this.currObjLoc=i;
+				    return true;				
+				}
 				
-}
+		 }//for
+		
+		JOptionPane.showMessageDialog (null,"Character Could not be Added. Please Create Character from Character Editor and then try again !!!");
+		return false;
+		
+	 }//if
+	 
+	 
+	 else{
+		JOptionPane.showMessageDialog (null,"Character Could not be Added. Please Create Character from Character Editor and then try again !!!");
+		 return false;
+	 }
+			
+	
+  }
 
+	else{
+		JOptionPane.showMessageDialog (null,"Character Could not be Added. Please Create Character from Character Editor and then try again !!!");
+		 return false;
+	}
+
+ }	
+	
+}

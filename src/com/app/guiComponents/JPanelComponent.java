@@ -120,7 +120,12 @@ public class JPanelComponent {
 						
 						
 				
-				       MapEditorMapElements mapElementObj=new MapEditorMapElements(btn,mapModel,_i,_j);
+				       try {
+						MapEditorMapElements mapElementObj=new MapEditorMapElements(btn,mapModel,_i,_j);
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
 						
 					   System.out.println(" Btn Name : " + btn.getName());
 					}
