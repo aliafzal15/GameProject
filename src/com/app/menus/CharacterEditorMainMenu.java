@@ -287,11 +287,6 @@ public class CharacterEditorMainMenu extends JFrame  {
 		lblzArmorClassVal.setBounds(509, 272, 46, 14);
 		newFrame.getContentPane().add(lblzArmorClassVal);
 		
-		lblHeader = new JLabel("Character Editor");
-		lblHeader.setFont(new Font("Arial Black", Font.BOLD, 16));
-		lblHeader.setForeground(new Color(0, 128, 0));
-		lblHeader.setBounds(284, 0, 176, 14);
-		newFrame.getContentPane().add(lblHeader);
 		
 		lblfLevel = new JLabel("Level: ");
 		lblfLevel.setFont(new Font("Arial Black", Font.BOLD, 12));

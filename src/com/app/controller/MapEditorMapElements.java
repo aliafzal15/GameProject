@@ -139,7 +139,7 @@ public class MapEditorMapElements {
 					}
 					else if((elementMapValue=="Entry") && (checkIfEntryDone(newMapModel)!=true)){
 						
-						if( ((i>=0 && j==0) || (i<=newMapModel.getMapWidth()-1 && j==newMapModel.getMapHeight()-1))   &&  (checkIfExitInSameColumn(newMapModel,j)==false) ){    
+						if( ((i>=0 && j==0) || (i<=newMapModel.getMapHeight()-1 && j==newMapModel.getMapWidth()-1))   &&  (checkIfExitInSameColumn(newMapModel,j)==false) ){    
 								
 							
 								setIsFighterZombie(newMapModel,i, j);
@@ -161,7 +161,7 @@ public class MapEditorMapElements {
 					}
 					else if((elementMapValue=="Exit")&& (checkIfExitDone(newMapModel)!=true)){
 						System.out.println(i+" "+j);
-							if( ((i>=0 && j==0) || (i<=newMapModel.getMapWidth()-1 && j==newMapModel.getMapHeight()-1))   &&  (checkIfEntryInSameColumn(newMapModel,j)==false) ){ 
+							if( ((i>=0 && j==0) || (i<=newMapModel.getMapHeight()-1 && j==newMapModel.getMapWidth()-1))   &&  (checkIfEntryInSameColumn(newMapModel,j)==false) ){ 
 								
 								setIsFighterZombie(newMapModel,i, j);
 								btn.setBackground(Color.gray);
@@ -203,6 +203,7 @@ public class MapEditorMapElements {
 		frame.setBounds(100, 100, 348, 187);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setTitle("Map Elements");
 		
 		frame.setVisible(true);
 		
