@@ -102,6 +102,27 @@ public class JPanelComponent {
 					} else if (mapModel.mapGridSelection[i][j] == 5) {
 						b[i][j].setBackground(Color.gray);
 						b[i][j].setText("E");
+					} else if (mapModel.mapGridSelection[i][j] == 6) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IW");
+					} else if (mapModel.mapGridSelection[i][j] == 7) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IS");
+					} else if (mapModel.mapGridSelection[i][j] == 8) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IA");
+					} else if (mapModel.mapGridSelection[i][j] == 9) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IBO");
+					} else if (mapModel.mapGridSelection[i][j] == 10) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IBL");
+					} else if (mapModel.mapGridSelection[i][j] == 11) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IR");
+					} else if (mapModel.mapGridSelection[i][j] == 12) {
+						b[i][j].setBackground(Color.blue);
+						b[i][j].setText("IH");
 					} else {
 						b[i][j].setBackground(Color.green);
 					}
