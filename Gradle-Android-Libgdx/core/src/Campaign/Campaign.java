@@ -20,6 +20,11 @@ public class Campaign implements Json.Serializable{
         this.mapPack = new Array<Map>();
     }
 
+    public Campaign(Campaign camp){
+		this.name = camp.getName();
+		this.mapPack = new Array<Map>(camp.getMapPack());
+	}
+
     public Array<Map> getMapPack() {
 		return mapPack;
 	}
@@ -48,7 +53,7 @@ public class Campaign implements Json.Serializable{
 	
 	@Override
 	public String toString() {
-		return name + " [" + mapPack.size + "] ";
+		return name + " [size:" + mapPack.size + "] ";
 	}
 
 	public Array<String> getMapListInfo(){

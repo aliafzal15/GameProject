@@ -29,7 +29,7 @@ public class MainMenu implements Screen{
 
     private Stage stage;
 
-    public static Label.LabelStyle style, styleSec;
+    public static Label.LabelStyle style;
     public static BitmapFont font, fontSec;
     public static ItemInventory itemInventory;
     public static CharacterInventory characterInventory;
@@ -57,8 +57,6 @@ public class MainMenu implements Screen{
 
         font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
         style = new Label.LabelStyle(font, Color.WHITE);
-        fontSec = new BitmapFont(Gdx.files.internal("android/assets/Style/font.fnt"),false);
-        styleSec = new Label.LabelStyle(fontSec, Color.RED);
         
         itemInventory = new ItemInventory();
         characterInventory = new CharacterInventory();

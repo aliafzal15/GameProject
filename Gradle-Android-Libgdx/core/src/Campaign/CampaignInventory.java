@@ -28,7 +28,8 @@ public class CampaignInventory {
 	}
 
 	public void addToCampaignPack(Campaign campaign){
-		campaignPack.add(campaign);
+        Campaign tmp = new Campaign(campaign);
+		campaignPack.add(tmp);
     }
 
 	public Array<String> getCampaignPackInfo(){

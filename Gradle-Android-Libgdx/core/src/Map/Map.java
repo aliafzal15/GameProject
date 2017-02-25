@@ -233,7 +233,7 @@ public class Map implements Json.Serializable{
 
     @Override
 	public String toString() {
-		return name + "[ " + size + " x " + size +"]";
+		return name + " [" + size + " x " + size +"]";
 	}
 
 	@Override

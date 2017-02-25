@@ -7,8 +7,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -77,57 +80,18 @@ public class CampaignEditorScreen implements Screen {
         stage.addActor(backwardButton);
 
         inventoryMapInfoLabel = new Label("", MainMenu.style);
-        inventoryMapInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 2), (Gdx.graphics.getHeight() / 4));
+        inventoryMapInfoLabel.setPosition((Gdx.graphics.getWidth() * 3 / 4), (Gdx.graphics.getHeight() / 4));
         stage.addActor(inventoryMapInfoLabel);
 
         inventoryCampaignInfoLabel = new Label("", MainMenu.style);
         inventoryCampaignInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 4), (Gdx.graphics.getHeight() / 4));
         stage.addActor(inventoryCampaignInfoLabel);
 
-		
-		inputTable = new Table();
-		inputTable.setSize(Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() * 1 / 6);
-		inputTable.setPosition( Gdx.graphics.getWidth() * 1 / 2 , Gdx.graphics.getHeight() * 3 / 4);
-		inputTable.add(new Label("name", MainMenu.style));
-		nameField = new TextField("", MainMenu.skin);
-		inputTable.add(nameField);
-		stage.addActor(inputTable);
-		
-        mapSaveButton = new TextButton("SAVE", MainMenu.buttonStyle);
-        mapSaveButton.setWidth(Gdx.graphics.getWidth() / 9);
-        mapSaveButton.setHeight(Gdx.graphics.getHeight() / 9);
-        mapSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 2) + 30, Gdx.graphics.getHeight() * 3 / 4 - 30);
-        mapSaveButton.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (! nameField.getText().equals("") && mapList.size != 0 ) {
-					campaign.setName(nameField.getText());
-					campaign.setMapPack(mapList);
-					MainMenu.campaignInventory.addToCampaignPack(campaign);
-					MainMenu.campaignInventory.saveToFile();
-					nameField.setText("");
-					mapList.clear();
-					campaignTable.clearChildren();
-					campaignInventoryTable.clearChildren();
-					buildCampaignInventoryMatrix();
-					addCampaignInventoryMatrixListener();
-				}
-                else{
-                	new Dialog("Error", MainMenu.skin, "dialog") {
-                	}.text("Campaign name or maps cannot be empty").button("OK", true).key(Keys.ENTER, true)
-                	    .show(stage);
-                }
-				return true;
-			}
-        });
-		stage.addActor(mapSaveButton);
-
-		
         mapInventoryTable = new Table();
 
         mapInventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
-        mapInventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 10 , Gdx.graphics.getHeight() * 1 / 8);
-
+        mapInventoryTable.setPosition(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 8);
+        mapInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/scrollPaper.png")))));
         mapInventoryMatrix = new Label[PublicParameter.mapInventoryRow * PublicParameter.mapInventoryColumn ];
         buildMapInventoryMatrix();
         addMapInventoryMatrixListener();
@@ -136,8 +100,8 @@ public class CampaignEditorScreen implements Screen {
         
         campaignInventoryTable = new Table();
 
-        campaignInventoryTable.setSize(Gdx.graphics.getWidth() /2 , Gdx.graphics.getHeight() * 1 / 5);
-        campaignInventoryTable.setPosition(0 , Gdx.graphics.getHeight() * 1 / 50);
+        campaignInventoryTable.setSize(Gdx.graphics.getWidth() * 9 / 10 , Gdx.graphics.getHeight() * 1 / 5);
+        campaignInventoryTable.setPosition(10 , Gdx.graphics.getHeight() * 1 / 50);
         campaignInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpackBackground.png")))));
 
         campaignInventoryMatrix = new Label[PublicParameter.campaignInventorySize];
@@ -146,16 +110,52 @@ public class CampaignEditorScreen implements Screen {
 
         stage.addActor(campaignInventoryTable);
 
-
         campaignTable = new Table();
         campaignTable.setSize(Gdx.graphics.getWidth() *1 / 2, Gdx.graphics.getHeight() * 2 / 3);
-        campaignTable.setPosition( 0 , Gdx.graphics.getHeight() * 1 / 7);
+        campaignTable.setPosition(10 , Gdx.graphics.getHeight() * 1 / 5);
 
         campaignMatrix = new Label[PublicParameter.mapInventoryRow * PublicParameter.mapInventoryColumn];
         buildCampaignMatrix();
         addCampaignMatrixListener();
 
         stage.addActor(campaignTable);
+
+        inputTable = new Table();
+        inputTable.setSize(Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() * 1 / 6);
+        inputTable.setPosition( Gdx.graphics.getWidth() * 1 / 2 , Gdx.graphics.getHeight() * 3 / 4);
+        inputTable.add(new Label("name", MainMenu.style));
+        nameField = new TextField("", MainMenu.skin);
+        inputTable.add(nameField);
+        stage.addActor(inputTable);
+
+        mapSaveButton = new TextButton("SAVE", MainMenu.buttonStyle);
+        mapSaveButton.setWidth(Gdx.graphics.getWidth() / 9);
+        mapSaveButton.setHeight(Gdx.graphics.getHeight() / 9);
+        mapSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 2) + 30, Gdx.graphics.getHeight() * 3 / 4 - 30);
+        mapSaveButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (! nameField.getText().equals("") && mapList.size != 0 ) {
+                    campaign.setName(nameField.getText());
+                    campaign.setMapPack(mapList);
+                    MainMenu.campaignInventory.addToCampaignPack(campaign);
+                    MainMenu.campaignInventory.saveToFile();
+                    nameField.setText("");
+                    mapList.clear();
+                    campaignTable.clearChildren();
+                    campaignInventoryTable.clearChildren();
+                    buildCampaignInventoryMatrix();
+                    addCampaignInventoryMatrixListener();
+                }
+                else{
+                    new Dialog("Error", MainMenu.skin, "dialog") {
+                    }.text("Campaign name or maps cannot be empty").button("OK", true).key(Keys.ENTER, true)
+                            .show(stage);
+                }
+                return true;
+            }
+        });
+        stage.addActor(mapSaveButton);
 
     }
 
@@ -166,12 +166,13 @@ public class CampaignEditorScreen implements Screen {
         for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.mapInventoryRow; j++) {
                 if ((i * PublicParameter.mapInventoryRow) + j < mapList.size) {
-                	campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(mapList.get((i * PublicParameter.mapInventoryRow) + j).toString()+"--", MainMenu.style);
+                	campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(mapList.get((i * PublicParameter.mapInventoryRow) + j).toString()+"--", MainMenu.skin);
                 } else {
-                	campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", MainMenu.style);
+                	campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", MainMenu.skin);
                 }
+                campaignMatrix[(i * PublicParameter.mapInventoryRow) + j].setAlignment(Align.center);
                 tmpLabel = campaignMatrix[(i * PublicParameter.mapInventoryRow) + j];
-                campaignTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(10);
+                campaignTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
             }
             campaignTable.row();
         }
@@ -179,15 +180,18 @@ public class CampaignEditorScreen implements Screen {
 
     private void buildMapInventoryMatrix() {
     	Label tmpLabel;
+        BitmapFont font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.mapInventoryRow; j++) {
                 if ((i * PublicParameter.mapInventoryRow) + j < MainMenu.mapInventory.getMapPack().size) {
-                	mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(MainMenu.mapInventory.getMapPack().get((i * PublicParameter.mapInventoryRow) + j).toString(), MainMenu.style);
+                	mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(MainMenu.mapInventory.getMapPack().get((i * PublicParameter.mapInventoryRow) + j).toString(), style);
                 } else {
-                    mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", MainMenu.style);
+                    mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", style);
                 }
+                mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j].setAlignment(Align.center);
                 tmpLabel = mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j];
-                mapInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(10);
+                mapInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
             }
             mapInventoryTable.row();
         }
@@ -203,7 +207,7 @@ public class CampaignEditorScreen implements Screen {
                 campaignInventoryMatrix[i] = new Label("", MainMenu.style);
             }
             tmpLabel = campaignInventoryMatrix[(i)];
-            campaignInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(10);
+            campaignInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
         }
     }
 
@@ -224,7 +228,7 @@ public class CampaignEditorScreen implements Screen {
 
         stage.draw();
 
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
         batch.end();
     }
 
@@ -286,9 +290,10 @@ public class CampaignEditorScreen implements Screen {
             campaignInventoryMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                	mapList = new Array<Map>();
-                	Array<Map> listPointer = MainMenu.campaignInventory.getCampaignPack().removeIndex(getButton()).getMapPack();
-                    for(Map m : listPointer){
+                	Campaign campaignPointer = MainMenu.campaignInventory.getCampaignPack().removeIndex(getButton());
+                    nameField.setText(campaignPointer.getName());
+                    mapList.clear();
+                    for(Map m : campaignPointer.getMapPack()){
                     	mapList.add(m);
                     }
                 	campaignTable.clearChildren();

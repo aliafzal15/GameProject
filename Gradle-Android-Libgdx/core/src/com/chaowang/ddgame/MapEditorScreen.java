@@ -42,7 +42,7 @@ public class MapEditorScreen implements Screen{
 
 	private ImageButton[] mapMatrix, elementList;
 	private Table mapTable, elementTable, inputTable;
-	private SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox;
+	private SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox, mapSelectBox;
 
 	private Map map;
 	private int matrixPointer = 0;
@@ -252,7 +252,11 @@ public class MapEditorScreen implements Screen{
 		hostileSelectBox = new SelectBox<String>(MainMenu.skin);
 		hostileSelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
 		elementTable.add(hostileSelectBox).colspan(3);
-
+		elementTable.row();
+		elementTable.add(new Label("Maps ", MainMenu.style));
+		mapSelectBox = new SelectBox<String>(MainMenu.skin);
+		mapSelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
+		elementTable.add(mapSelectBox).colspan(3);
 	}
 
 	@Override
