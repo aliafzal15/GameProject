@@ -18,6 +18,7 @@ public class CharacterEditorEditMenu {
 	public JLabel lblLevel;
 	public JComboBox comboLevel;
 	public JButton btnSaveLevel;
+	public JFrame frame;
 	
 	
 	
@@ -34,7 +35,7 @@ public class CharacterEditorEditMenu {
 	 * All GUI objects are created and aligned on the window in this method.
 	 */	
 	private void initialize() {
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setBounds(100, 100, 326, 147);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);

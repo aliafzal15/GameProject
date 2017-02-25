@@ -604,9 +604,7 @@ private boolean CheckIfItemInArray(ArrayList <ItemsModel> itemsList,String type)
 		 else{
 			JOptionPane.showMessageDialog (null,"Item Could not be Added. Please Create Item from Item Editor and then try again !!!");
 			 return false;
-		 }
-				
-		
+		 }		
 	  }
 
 		else{

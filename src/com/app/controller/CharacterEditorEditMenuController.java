@@ -55,17 +55,20 @@ public class CharacterEditorEditMenuController {
 					if(plrType.equals("Zombie")){
 					mainFrame.lblzHitPointsVal.setText(Integer.toString(hitPnts));
 					mainFrame.lblzAttackBonusVal.setText(Integer.toString(attackBonus));
+					mainFrame.lblzLevelVal.setText(Integer.toString(characterLists.get(objIndx).getCharLevel()));
 					}
 					
 					else if(plrType.equals("Fighter")){
 						mainFrame.lblfHitPointsVal.setText(Integer.toString(hitPnts));
 						mainFrame.lblfAttackBonusVal.setText(Integer.toString(attackBonus));
+						mainFrame.lblfLevelVal.setText(Integer.toString(characterLists.get(objIndx).getCharLevel()));
 						}
 					
 					 try {
 						  objFSO=new FileStorage();
 						  objFSO.SaveCharInFile(characterLists);
 						  objFSO=null;
+						  editFrame.frame.dispose();
 						  
 					  } catch (IOException e1) {
 					
