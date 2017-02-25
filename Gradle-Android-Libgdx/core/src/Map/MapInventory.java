@@ -34,9 +34,12 @@ public class MapInventory {
 
     public Array<String> getMapListInfo(){
         Array<String> mapPackInfo = new Array<String>();
+        mapPackInfo.add("");
         for (int i = 0; i < mapPack.size; i++){
-        	mapPackInfo.add(i +"-" + mapPack.get(i).getName() + "-"+
-            		mapPack.get(i).getSize()+"-"+mapPack.get(i).getLevel());
+        	mapPackInfo.add(i+"-"+ mapPack.get(i).getName()
+                    +"-item:"+mapPack.get(i).getItemLocationList().size()
+                    +"-NPC:"+mapPack.get(i).getFriendLocationList().size()
+                    +"-enemy:"+mapPack.get(i).getEnemyLocationList().size());
         }
         return mapPackInfo;
     }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.IntAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -106,16 +107,27 @@ public class MapEditorScreen implements Screen{
 				if (sizeField.getText().matches("^[1-9]$|^0[1-9]$|^1[0-1]$") &&
 						levelField.getText().matches("^[1-9]$") &&
 						( ! nameField.getText().equals(""))) {
-					mapMatrix = new ImageButton[Integer.parseInt(sizeField.getText()) * Integer.parseInt(sizeField.getText())];
-					map.setSize(Integer.parseInt(sizeField.getText()));
-					map.setLevel(Integer.parseInt(levelField.getText()));
-					map.setName(nameField.getText());
-					buildMapMatrix();
-					addMapMatrixListener();
-					sizeField.setDisabled(true);
-					levelField.setDisabled(true);
-					nameField.setDisabled(true);
-					confirmButton.setTouchable(Touchable.disabled);
+					if(map.getSize() != Integer.parseInt(sizeField.getText())){
+						mapTable.clearChildren();
+						map = new Map();
+						mapMatrix = new ImageButton[Integer.parseInt(sizeField.getText()) * Integer.parseInt(sizeField.getText())];
+						map.setSize(Integer.parseInt(sizeField.getText()));
+						map.setLevel(Integer.parseInt(levelField.getText()));
+						map.setName(nameField.getText());
+						buildMapMatrix();
+						addMapMatrixListener();
+						sizeField.setDisabled(true);
+						levelField.setDisabled(true);
+						nameField.setDisabled(true);
+						confirmButton.setTouchable(Touchable.disabled);
+					} else{
+						map.setLevel(Integer.parseInt(levelField.getText()));
+						map.setName(nameField.getText());
+						sizeField.setDisabled(true);
+						levelField.setDisabled(true);
+						nameField.setDisabled(true);
+						confirmButton.setTouchable(Touchable.disabled);
+					}
 				}
 				return true;
 			}
@@ -148,6 +160,7 @@ public class MapEditorScreen implements Screen{
 					if(entryCount == 1 && exitCount == 1){
 						MazeSolver solver = new MazeSolver();
 						if(solver.solveMaze(map.getLocationMatrix())){
+							map.getWallLocationList().clear();
 							map.addWall();
 							MainMenu.mapInventory.addToInventory(map);
 							MainMenu.mapInventory.saveToFile();
@@ -255,7 +268,7 @@ public class MapEditorScreen implements Screen{
 		elementTable.row();
 		elementTable.add(new Label("Maps ", MainMenu.style));
 		mapSelectBox = new SelectBox<String>(MainMenu.skin);
-		mapSelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
+		mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
 		elementTable.add(mapSelectBox).colspan(3);
 	}
 
@@ -306,9 +319,9 @@ public class MapEditorScreen implements Screen{
 		stage.dispose();
 	}
 
-	private void addElementListListener(){
-		for (int i = 0; i < elementList.length; i++){
-			elementList[i].addListener(new ClickListener(i){
+	private void addElementListListener() {
+		for (int i = 0; i < elementList.length; i++) {
+			elementList[i].addListener(new ClickListener(i) {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					matrixPointer = getButton();
@@ -321,57 +334,94 @@ public class MapEditorScreen implements Screen{
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				String text = itemSelectBox.getSelected();
-                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
-                System.out.println("item level is "+ level);
-                if(level == map.getLevel()){
-                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-                    matrixPointer = -1;
-                    itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
-                }
-                else{
-                	new Dialog("Error", MainMenu.skin, "dialog") {
-                	}.text("Item level not same as map level").button("OK", true).key(Keys.ENTER, true)
-                	    .show(stage);
-                }
+				if(!text.equals("")){
+					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
+					System.out.println("item level is " + level);
+					if (level == map.getLevel()) {
+						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+						matrixPointer = -1;
+						itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
+					} else {
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Item level not same as map level").button("OK", true).key(Keys.ENTER, true)
+								.show(stage);
+					}
+				} else{
+					matrixPointer = 0;
+				}
 			}
 		});
 
-        friendlySelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                String text = friendlySelectBox.getSelected();
-                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
-                if(level == map.getLevel()) {
-                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-                    System.out.println("friend level is "+ level);
-                    matrixPointer = -2;
-                    characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-                }
-                else{
-                	new Dialog("Error", MainMenu.skin, "dialog") {
-                	}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
-                	    .show(stage);
-                }
-            }
-        });
+		friendlySelectBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String text = friendlySelectBox.getSelected();
+				if(!text.equals("")){
+					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
+					if (level == map.getLevel()) {
+						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+						System.out.println("friend level is " + level);
+						matrixPointer = -2;
+						characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
+					} else {
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
+								.show(stage);
+					}
+				} else{
+					matrixPointer = 0;
+				}
+			}
+		});
 
-        hostileSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                String text = hostileSelectBox.getSelected();
-                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
-                if(level == map.getLevel()) {
-                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-                    matrixPointer = -3;
-                    characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-                }
-                else{
-                	new Dialog("Error", MainMenu.skin, "dialog") {
-                	}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
-                	    .show(stage);
-                }
-            }
-        });
+		hostileSelectBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String text = hostileSelectBox.getSelected();
+				if(!text.equals("")){
+					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
+					if (level == map.getLevel()) {
+						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+						matrixPointer = -3;
+						characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
+					} else {
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
+								.show(stage);
+					}
+				} else{
+					matrixPointer = 0;
+				}
+			}
+		});
+
+		mapSelectBox.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				String text = mapSelectBox.getSelected();
+				if(!text.equals("")){
+					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+					map = MainMenu.mapInventory.getMapPack().get(index);
+					nameField.setText(MainMenu.mapInventory.getMapPack().get(index).getName());
+					levelField.setText(Integer.toString(MainMenu.mapInventory.getMapPack().get(index).getLevel()));
+					sizeField.setText(Integer.toString(MainMenu.mapInventory.getMapPack().get(index).getSize()));
+					sizeField.setDisabled(false);
+					levelField.setDisabled(false);
+					nameField.setDisabled(false);
+					confirmButton.setTouchable(Touchable.enabled);
+					MainMenu.mapInventory.getMapPack().removeIndex(index);
+					mapTable.clearChildren();
+					MainMenu.mapInventory.saveToFile();
+					mapMatrix = new ImageButton[map.getSize() * map.getSize()];
+					buildMapMatrix();
+					addMapMatrixListener();
+					mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
+				} else {
+					mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
+				}
+				return true;
+			}
+		});
 	}
 
 	private void addMapMatrixListener() {

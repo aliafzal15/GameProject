@@ -32,6 +32,7 @@ public class CharacterInventory {
 
     public Array<String> getCharacterListInfo(){
         Array<String> characterPackInfo = new Array<String>();
+        characterPackInfo.add("");
         for (int i = 0; i < characterPack.size; i++){
             characterPackInfo.add(i +"-" + characterPack.get(i).getName() + "-"+
             		characterPack.get(i).getRaceType().toString()+"-"+characterPack.get(i).getLevel());
