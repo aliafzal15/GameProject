@@ -15,6 +15,10 @@ import com.chaowang.ddgame.EquipmentEditorScreen;
 import com.chaowang.ddgame.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import Character.Character;
 import Items.Item;
 
@@ -30,6 +34,12 @@ public class EquipmentController {
 
 
     public void buildBackpackMatrix() {
+        for (int i = 0; i < character.getBackpack().size(); i++) {
+            if (character.getBackpack().get(i).getLevel() > (1 + character.getLevel()) / 2) {
+                character.getBackpack().remove(i);
+            }
+        }
+
         for (int i = 0; i < PublicParameter.itemBackpackRow; i++) {
             for (int j = 0; j < PublicParameter.itemBackpackColumn; j++) {
                 if ((i * PublicParameter.itemBackpackColumn) + j < character.getBackpack().size()) {
@@ -45,6 +55,13 @@ public class EquipmentController {
     }
 
     public void buildEquipmentMatrix() {
+        // check if equipment has higher level item need to remove.
+        for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = character.getEquipment().entrySet().iterator(); it.hasNext(); ) {
+            HashMap.Entry<Item.ItemType, Item> entry = it.next();
+            if(entry.getValue().getLevel() > (1 + character.getLevel()) / 2 ) {
+                it.remove();
+            }
+        }
 
         view.equipmentTable.add(new Label("", MainMenuScreen.style));
         if(character.getEquipment().get(Item.ItemType.HELMET) != null){
@@ -108,7 +125,7 @@ public class EquipmentController {
             view.backpackMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (character.getBackpack().get(button).getLevel() <= (1 + character.getLevel() / 2)
+                    if (character.getBackpack().get(button).getLevel() <= (1 + character.getLevel()) / 2
                             && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
                         Item itemtmp = character.getBackpack().remove(getButton());
                         character.loadEquipment(itemtmp);
@@ -121,7 +138,7 @@ public class EquipmentController {
                     }
                     else{
                         new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                        }.text("Item level not same as character level").button("OK", true).key(Input.Keys.ENTER, true).show(view.stage);
+                        }.text("Item level to high, or cannot equip").button("OK", true).key(Input.Keys.ENTER, true).show(view.stage);
                     }
                     return true;
                 }

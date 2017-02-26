@@ -153,7 +153,7 @@ public class CharacterEditorScreen implements Screen {
 
 		bonusField = new TextField[Abilities.ABILITYSIZE];
 		for (int i = 0;  i < bonusField.length ; i ++){
-			bonusField[i] =  new TextField("0", MainMenuScreen.skin);
+			bonusField[i] =  new TextField(Integer.toString(character.getAbilityBonusArr()[i]), MainMenuScreen.skin);
 			bonusField[i].setDisabled(true);
 		}
 
@@ -243,9 +243,8 @@ public class CharacterEditorScreen implements Screen {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^")) {
-					character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
-					character.setName(nameText.getText());
-					game.setScreen(new EquipmentEditorScreen(game, character));
+					controller.controlSwitchPageButton();
+					game.setScreen(new EquipmentEditorScreen(game, controller.getCharacter()));
 				}
 				return true;
 			}
@@ -260,9 +259,8 @@ public class CharacterEditorScreen implements Screen {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^")) {
-					character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
-					character.setName(nameText.getText());
-					game.setScreen(new BackpackEditorScreen(game, character));
+					controller.controlSwitchPageButton();
+					game.setScreen(new BackpackEditorScreen(game, controller.getCharacter()));
 				}
 				return true;
 			}
@@ -293,48 +291,12 @@ public class CharacterEditorScreen implements Screen {
 		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 6);
 
 		inventoryMatrix = new ImageButton[PublicParameter.characterInventoryRow * PublicParameter.characterInventoryColumn];
-		buildInventoryMatrix();
+		controller.buildInventoryMatrix();
 		controller.addInventoryMatrixListener();
 
 		stage.addActor(inventoryTable);
 	}
 
-	public void buildInventoryMatrix() {
-		for (int i = 0; i < PublicParameter.characterInventoryRow; i++) {
-			for (int j = 0; j < PublicParameter.characterInventoryColumn; j++) {
-				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenuScreen.characterInventory.getChatacterPack().size ) {
-					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.characterInventory.getChatacterPack().get(i * PublicParameter.characterInventoryColumn + j).getTexture())));
-				} else {
-					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
-				}
-				ImageButton tempButton = inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j];
-				inventoryTable.add(tempButton).width(PublicParameter.characterCellWidth).height(PublicParameter.characterCellHeight).space(15);
-			}
-			inventoryTable.row();
-		}
-	}
-
-	public void initialEditorItem() {
-		raceLabel.setText(character.getRaceType().toString());
-		characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
-		levelLabel.setText(Integer.toString(character.getLevel()));
-		promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
-		nameText.setText(character.getName());
-		strengthLabel.setText(Integer.toString(character.getStrength()));
-		dexterityLabel.setText(Integer.toString(character.getDexterity()));
-		constitutionLabel.setText(Integer.toString(character.getConstitution()));
-		wisdomLabel.setText(Integer.toString(character.getWisdom()));
-		intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
-		charismaLabel.setText(Integer.toString(character.getCharisma()));
-		hitpointLabel.setText(Integer.toString(character.getHitPoints()));
-		armorClassLabel.setText(Integer.toString(character.getArmorClass()));
-		attackBonusLabel.setText(Integer.toString(character.getAttackBonus()));
-		damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
-		for (int i = 0; i < bonusField.length; i++){
-			bonusField[i].setText(Integer.toString(character.getAbilityBonusArr()[i]));
-		}
-
-	}
 
 	@Override
 	public void render(float delta) {
@@ -389,4 +351,11 @@ public class CharacterEditorScreen implements Screen {
 
 	}
 
+	public Character getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(Character character) {
+		this.character = character;
+	}
 }

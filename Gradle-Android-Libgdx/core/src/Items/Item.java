@@ -142,7 +142,7 @@ public class Item implements Json.Serializable{
 	}
 
 	public  String toString(){
-        return "Item Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Level: "+this.level+"| Ability: "+this.enchantedAbility.toString();
+        return "Item Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
     }
 
 	public boolean nextAbility(){

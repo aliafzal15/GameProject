@@ -1,2 +1,3 @@
-{ItemType:WEAPON,Name:HELMET,Level:1,enchantedAbility:ATTACKBONUS,abiltyPointer:0}
-{ItemType:BELT,Name:HELMET,Level:2,enchantedAbility:CONSTITUTION,abiltyPointer:0}
+{ItemType:SHIELD,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
+{ItemType:BOOTS,Name:HELMET,Level:2,enchantedAbility:DEXTERITY,abiltyPointer:1}
+{ItemType:WEAPON,Name:HELMET,Level:5,enchantedAbility:ATTACKBONUS,abiltyPointer:0}

@@ -29,6 +29,13 @@ public class BackpackController {
     }
 
     public void buildBackpackMatrix() {
+        // check if backpack has higher level item need to remove.
+        for (int i = 0; i < character.getBackpack().size(); i++) {
+            if (character.getBackpack().get(i).getLevel() > (1 + character.getLevel()) / 2) {
+                character.getBackpack().remove(i);
+            }
+        }
+
         for (int i = 0; i < PublicParameter.itemBackpackRow; i++) {
             for (int j = 0; j < PublicParameter.itemBackpackColumn; j++) {
                 if ((i * PublicParameter.itemBackpackColumn) + j < character.getBackpack().size()) {
@@ -89,7 +96,7 @@ public class BackpackController {
             view.inventoryMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel() == character.getLevel()) {
+                    if(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel() <= (1 + character.getLevel()) / 2) {
                         if(character.getBackpack().size() < PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow){
                             Item item = new Item(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getItemType(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getName(),
