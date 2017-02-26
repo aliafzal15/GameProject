@@ -342,7 +342,7 @@ public class Character implements Json.Serializable{
 		for (int i = 0 ; i < tmp.length; i++){
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
-        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+tmp;
+        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
     }
 
 
