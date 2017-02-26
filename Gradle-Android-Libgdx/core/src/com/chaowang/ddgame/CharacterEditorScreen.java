@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import Character.Character;
+import Character.Abilities;
 import util.AbilityModifier;
 import util.Dice;
 
@@ -36,12 +38,13 @@ public class CharacterEditorScreen implements Screen {
 	private SpriteBatch batch;
 	private Texture backgroundTexture;
 	private Table editorTable, inventoryTable;
-	private TextButton raceLeftButton, raceRightButton, characterSaveButton, mainPageButton;
+	private TextButton raceLeftButton, raceRightButton, levelLeftButton, levelRightButton, characterSaveButton, mainPageButton, confirmButton;
 	private Character character;
-	private Label classLabel, raceLabel;
+	private Label raceLabel, levelLabel, promotePointLabel;
 	private Label hitpointLabel, attackBonusLabel, damageBonusLaber, armorClassLabel,
 			strengthLabel, dexterityLabel, constitutionLabel, wisdomLabel, intellegenceLabel, charismaLabel, characterInfoLabel;
-	private TextField nameText, levelText;
+	private TextField[] bonusField;
+	private TextField nameText;
 	private Image characterImage;
 
 
@@ -82,12 +85,14 @@ public class CharacterEditorScreen implements Screen {
 			character = new Character();
 		}
 		nameText = new TextField(character.getName(), MainMenu.skin);
-		if(character.getLevel() > 0){
-			levelText = new TextField(Integer.toString(character.getLevel()), MainMenu.skin);
+
+		if(character.getStrength() > 0){
+			levelLabel = new Label(Integer.toString(character.getLevel()), MainMenu.style);
 		}
 		else{
-			levelText = new TextField("0", MainMenu.skin);
+			levelLabel = new Label("1", MainMenu.style);
 		}
+
 		raceLabel = new Label(character.getRaceType().toString(), MainMenu.style);
 		characterImage = new Image(character.getTexture());
 
@@ -113,7 +118,89 @@ public class CharacterEditorScreen implements Screen {
 			}
 		});
 
-		classLabel = new Label("Fighter",MainMenu.style);
+		levelLeftButton = new TextButton("<", MainMenu.buttonStyle);
+		levelLeftButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				character.resetPromotePoint();
+				character.levelDown();
+				levelLabel.setText(Integer.toString(character.getLevel()));
+				promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
+				confirmButton.setTouchable(Touchable.enabled);
+				for (int i = 0; i < bonusField.length; i++){
+					bonusField[i].setText(Integer.toString(character.getAbilityBonusArr()[i]));
+					bonusField[i].setDisabled(false);
+				}
+				return true;
+			}
+		});
+		levelLeftButton.setTouchable(Touchable.disabled);
+
+		levelRightButton = new TextButton(">", MainMenu.buttonStyle);
+		levelRightButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				character.resetPromotePoint();
+				character.levelUp();
+				levelLabel.setText(Integer.toString(character.getLevel()));
+				promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
+				confirmButton.setTouchable(Touchable.enabled);
+				for (int i = 0; i < bonusField.length; i++){
+					bonusField[i].setText(Integer.toString(character.getAbilityBonusArr()[i]));
+					bonusField[i].setDisabled(false);
+				}
+				return true;
+			}
+		});
+		levelRightButton.setTouchable(Touchable.disabled);
+
+		confirmButton = new TextButton("OK", MainMenu.buttonStyle);
+		confirmButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (bonusField[0].getText().matches(("^[0-9]$")) &&
+						bonusField[1].getText().matches(("^[0-9]$")) &&
+						bonusField[2].getText().matches(("^[0-9]$")) &&
+						bonusField[3].getText().matches(("^[0-9]$")) &&
+						bonusField[4].getText().matches(("^[0-9]$")) &&
+						bonusField[5].getText().matches(("^[0-9]$"))){
+					int sum = 0;
+					for (int i = 0;  i < bonusField.length ; i ++){
+						sum += Integer.valueOf(bonusField[i].getText());
+					}
+					if ( sum <= character.getPromotionPoint()){
+						character.setPromotionPoint(character.getPromotionPoint() - sum);
+						for (int i = 0;  i < bonusField.length ; i ++){
+							character.getAbilityBonusArr()[i] = Integer.valueOf(bonusField[i].getText());
+							bonusField[i].setDisabled(true);
+						}
+						character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
+						character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity() + character.getDexterityBonus()));
+						character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength() + character.getStrengthBonus(),
+								character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+						character.setDamageBonus(AbilityModifier.damageBonusModifier( character.getStrength()+ character.getStrengthBonus()));
+						promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
+						hitpointLabel.setText(Integer.toString(character.getHitPoints()));
+						armorClassLabel.setText(Integer.toString(character.getArmorClass()));
+						attackBonusLabel.setText(Integer.toString(character.getAttackBonus()));
+						damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
+						levelLeftButton.setTouchable(Touchable.disabled);
+						levelRightButton.setTouchable(Touchable.disabled);
+						confirmButton.setTouchable(Touchable.disabled);
+					} else{
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Input greater than promo point").button("OK", true).key(Keys.ENTER, true).show(stage);
+					}
+				}else{
+					new Dialog("Error", MainMenu.skin, "dialog") {
+					}.text("Input too large").button("OK", true).key(Keys.ENTER, true).show(stage);
+				}
+				return true;
+			}
+		});
+		confirmButton.setTouchable(Touchable.disabled);
+
+		promotePointLabel = new Label(Integer.toString(character.getPromotionPoint()),MainMenu.style);
 		strengthLabel = new Label(Integer.toString(character.getStrength()),MainMenu.style);
 		dexterityLabel = new Label(Integer.toString(character.getDexterity()),MainMenu.style);
 		constitutionLabel = new Label(Integer.toString(character.getConstitution()),MainMenu.style);
@@ -125,12 +212,16 @@ public class CharacterEditorScreen implements Screen {
 		damageBonusLaber  = new Label(Integer.toString(character.getDamageBonus()),MainMenu.style);
 		armorClassLabel  = new Label(Integer.toString(character.getArmorClass()),MainMenu.style);
 
+		bonusField = new TextField[Abilities.ABILITYSIZE];
+		for (int i = 0;  i < bonusField.length ; i ++){
+			bonusField[i] =  new TextField("0", MainMenu.skin);
+			bonusField[i].setDisabled(true);
+		}
 
 		editorTable = new Table();
 
 		editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() );
 		editorTable.setPosition(Gdx.graphics.getWidth() / 10, 2);
-
 
 		editorTable.add(new Label("", MainMenu.style)).width(80);
 		editorTable.add(characterImage).maxSize(250, 250).center();
@@ -138,34 +229,44 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.add(new Label("Name", MainMenu.style));
 		editorTable.add(nameText);
 		editorTable.row();
-		editorTable.add(new Label("Level", MainMenu.style));
-		editorTable.add(levelText);
-		editorTable.add(new Label("1 - 9", MainMenu.style));
+		editorTable.add(levelLeftButton).size(50, 50);
+		editorTable.add(levelLabel).center();
+		editorTable.add(levelRightButton).size(50, 50).expandX();
 		editorTable.row();
 		editorTable.add(raceLeftButton).size(50, 50);
 		editorTable.add(raceLabel).center();
 		editorTable.add(raceRightButton).size(50, 50).expandX();
 		editorTable.row();
+		editorTable.add(new Label("Promo Point", MainMenu.style));
+		editorTable.add(promotePointLabel);
+		editorTable.add(confirmButton).size(50, 50).expandX();
+		editorTable.row();
 		editorTable.add(new Label("class", MainMenu.style));
-		editorTable.add(classLabel);
+		editorTable.add(new Label("Fighter", MainMenu.style));
 		editorTable.row();
 		editorTable.add(new Label("strength", MainMenu.style));
 		editorTable.add(strengthLabel);
+		editorTable.add(bonusField[0]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("dexterity", MainMenu.style));
 		editorTable.add(dexterityLabel);
+		editorTable.add(bonusField[1]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("constitution", MainMenu.style));
 		editorTable.add(constitutionLabel);
+		editorTable.add(bonusField[2]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("wisdom", MainMenu.style));
 		editorTable.add(wisdomLabel);
+		editorTable.add(bonusField[3]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("intelligence", MainMenu.style));
 		editorTable.add(intellegenceLabel);
+		editorTable.add(bonusField[4]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("charisma", MainMenu.style));
 		editorTable.add(charismaLabel);
+		editorTable.add(bonusField[5]).width(30);
 		editorTable.row();
 		editorTable.add(new Label("hit point", MainMenu.style));
 		editorTable.add(hitpointLabel);
@@ -189,18 +290,24 @@ public class CharacterEditorScreen implements Screen {
 		characterSaveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$") && Integer.parseInt(wisdomLabel.getText().toString())!=0 ) {
-					character.setLevel(Integer.parseInt(levelText.getText()));
-					character.setName(nameText.getText());
-					MainMenu.characterInventory.addToInventory(character);
-					MainMenu.characterInventory.saveToFile();
-					inventoryTable.clearChildren();
-					buildInventoryMatrix();
-					addInventoryMatrixListener();
-					character = new Character();
-					initialEditorItem();
-				}
-                else{
+				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.parseInt(wisdomLabel.getText().toString())!=0 ) {
+					if(bonusField[0].isDisabled()){
+						character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
+						character.setName(nameText.getText());
+						MainMenu.characterInventory.addToInventory(character);
+						MainMenu.characterInventory.saveToFile();
+						inventoryTable.clearChildren();
+						buildInventoryMatrix();
+						addInventoryMatrixListener();
+						character = new Character();
+						initialEditorItem();
+						confirmButton.setTouchable(Touchable.disabled);
+					}else{
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Need to click Ok button first").button("OK", true).key(Keys.ENTER, true)
+								.show(stage);
+					}
+				} else{
                 	new Dialog("Error", MainMenu.skin, "dialog") {
                 	}.text("Character input value error").button("OK", true).key(Keys.ENTER, true)
                 	    .show(stage);
@@ -210,8 +317,6 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(characterSaveButton);
 
-
-
 		equipmentPageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/equipment.png")))));
 		equipmentPageButton.setWidth(Gdx.graphics.getWidth() / 15);
 		equipmentPageButton.setHeight(Gdx.graphics.getHeight() / 15);
@@ -219,8 +324,8 @@ public class CharacterEditorScreen implements Screen {
 		equipmentPageButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$")) {
-					character.setLevel(Integer.parseInt(levelText.getText()));
+				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^")) {
+					character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
 					character.setName(nameText.getText());
 					game.setScreen(new EquipmentEditorScreen(game, character));
 				}
@@ -236,8 +341,8 @@ public class CharacterEditorScreen implements Screen {
 		backpackButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$")) {
-					character.setLevel(Integer.parseInt(levelText.getText()));
+				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^")) {
+					character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
 					character.setName(nameText.getText());
 					game.setScreen(new BackpackEditorScreen(game, character));
 				}
@@ -246,7 +351,6 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(backpackButton);
 
-
 		diceButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/dice.png")))));
 		diceButton.setWidth(Gdx.graphics.getWidth() / 15);
 		diceButton.setHeight(Gdx.graphics.getHeight() / 15);
@@ -254,9 +358,9 @@ public class CharacterEditorScreen implements Screen {
 		diceButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$") ) {
-					character.setLevel(Integer.parseInt(levelText.getText()));
-					int multiplier = Integer.parseInt(levelText.getText()) / 2;
+				if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.valueOf(wisdomLabel.getText().toString()) == 0) {
+					character.setLevel(Integer.parseInt(levelLabel.getText().toString()));
+					int multiplier = Integer.parseInt(levelLabel.getText().toString()) / 2;
 					character.setStrength(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setDexterity(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setConstitution(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
@@ -272,7 +376,6 @@ public class CharacterEditorScreen implements Screen {
 					charismaLabel.setText(Integer.toString(character.getCharisma()));
 
 					character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution(), character.getLevel()));
-					System.out.println("Dexterity is" + character.getDexterity() );
 					character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity()));
 					character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength(), character.getDexterity(), character.getLevel()));
 					character.setDamageBonus(AbilityModifier.damageBonusModifier(character.getStrength()));
@@ -308,7 +411,8 @@ public class CharacterEditorScreen implements Screen {
 	private void initialEditorItem() {
 		raceLabel.setText(character.getRaceType().toString());
 		characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
-		levelText.setText(Integer.toString(character.getLevel()));
+		levelLabel.setText(Integer.toString(character.getLevel()));
+		promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 		nameText.setText(character.getName());
 		strengthLabel.setText(Integer.toString(character.getStrength()));
 		dexterityLabel.setText(Integer.toString(character.getDexterity()));
@@ -320,6 +424,9 @@ public class CharacterEditorScreen implements Screen {
 		armorClassLabel.setText(Integer.toString(character.getArmorClass()));
 		attackBonusLabel.setText(Integer.toString(character.getAttackBonus()));
 		damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
+		for (int i = 0; i < bonusField.length; i++){
+			bonusField[i].setText(Integer.toString(character.getAbilityBonusArr()[i]));
+		}
 
 	}
 
@@ -400,8 +507,10 @@ public class CharacterEditorScreen implements Screen {
 					character = new Character(
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getName(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getLevel(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getPromotionPoint(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getRaceType(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getAllAttributes(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getAbilityBonusArr(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getBackpack(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getEquipment());
 					initialEditorItem();
@@ -410,6 +519,8 @@ public class CharacterEditorScreen implements Screen {
 					inventoryTable.clearChildren();
 					buildInventoryMatrix();
 					addInventoryMatrixListener();
+					levelLeftButton.setTouchable(Touchable.enabled);
+					levelRightButton.setTouchable(Touchable.enabled);
 					return true;
 				}
 

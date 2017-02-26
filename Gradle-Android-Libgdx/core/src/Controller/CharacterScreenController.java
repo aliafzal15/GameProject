@@ -1,9 +1,10 @@
-package Character;
+package Controller;
+import Character.Character;
 
-public class CharacterEditor {
+public class CharacterScreenController {
 	Character player;
 	
-	public CharacterEditor(Character player){
+	public CharacterScreenController(Character player){
 		this.player = player;
 	}
 	

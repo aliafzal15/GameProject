@@ -1,4 +1,4 @@
-package com.chaowang.ddgame;
+package LibgdxExample;
 
 
 import com.badlogic.gdx.graphics.Texture;

@@ -226,7 +226,7 @@ public class EquipmentEditorScreen implements Screen{
             backpackMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (character.getBackpack().get(button).getLevel() == character.getLevel()
+                    if (character.getBackpack().get(button).getLevel() <= (1 + character.getLevel() / 2)
                             && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
                         Item itemtmp = character.getBackpack().remove(getButton());
                         character.loadEquipment(itemtmp);

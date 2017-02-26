@@ -39,7 +39,7 @@ public class MapEditorScreen implements Screen{
 	private SpriteBatch batch;
 	private TextButton backwardButton, saveButton, confirmButton;
 	private Texture backgroundTexture, imageTexture;
-	private TextField nameField, sizeField, levelField;
+	private TextField nameField, sizeField;
 
 	private ImageButton[] mapMatrix, elementList;
 	private Table mapTable, elementTable, inputTable;
@@ -91,10 +91,6 @@ public class MapEditorScreen implements Screen{
 		sizeField = new TextField("", MainMenu.skin);
 		inputTable.add(sizeField);
 		inputTable.row();
-		inputTable.add(new Label("level (1 - 9)", MainMenu.style));
-		levelField = new TextField("", MainMenu.skin);
-		inputTable.add(levelField);
-		inputTable.row();
 		inputTable.add(new Label("name", MainMenu.style));
 		nameField = new TextField("", MainMenu.skin);
 		inputTable.add(nameField);
@@ -105,26 +101,21 @@ public class MapEditorScreen implements Screen{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (sizeField.getText().matches("^[1-9]$|^0[1-9]$|^1[0-1]$") &&
-						levelField.getText().matches("^[1-9]$") &&
 						( ! nameField.getText().equals(""))) {
 					if(map.getSize() != Integer.parseInt(sizeField.getText())){
 						mapTable.clearChildren();
 						map = new Map();
 						mapMatrix = new ImageButton[Integer.parseInt(sizeField.getText()) * Integer.parseInt(sizeField.getText())];
 						map.setSize(Integer.parseInt(sizeField.getText()));
-						map.setLevel(Integer.parseInt(levelField.getText()));
 						map.setName(nameField.getText());
 						buildMapMatrix();
 						addMapMatrixListener();
 						sizeField.setDisabled(true);
-						levelField.setDisabled(true);
 						nameField.setDisabled(true);
 						confirmButton.setTouchable(Touchable.disabled);
 					} else{
-						map.setLevel(Integer.parseInt(levelField.getText()));
 						map.setName(nameField.getText());
 						sizeField.setDisabled(true);
-						levelField.setDisabled(true);
 						nameField.setDisabled(true);
 						confirmButton.setTouchable(Touchable.disabled);
 					}
@@ -166,8 +157,6 @@ public class MapEditorScreen implements Screen{
 							MainMenu.mapInventory.saveToFile();
 							sizeField.setText("");
 							sizeField.setDisabled(false);
-							levelField.setText("");
-							levelField.setDisabled(false);
 							nameField.setText("");
 							nameField.setDisabled(false);
 							confirmButton.setTouchable(Touchable.enabled);
@@ -335,17 +324,9 @@ public class MapEditorScreen implements Screen{
 			public void changed(ChangeEvent event, Actor actor) {
 				String text = itemSelectBox.getSelected();
 				if(!text.equals("")){
-					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
-					System.out.println("item level is " + level);
-					if (level == map.getLevel()) {
-						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-						matrixPointer = -1;
-						itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
-					} else {
-						new Dialog("Error", MainMenu.skin, "dialog") {
-						}.text("Item level not same as map level").button("OK", true).key(Keys.ENTER, true)
-								.show(stage);
-					}
+					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+					matrixPointer = -1;
+					itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
 				} else{
 					matrixPointer = 0;
 				}
@@ -357,17 +338,9 @@ public class MapEditorScreen implements Screen{
 			public void changed(ChangeEvent event, Actor actor) {
 				String text = friendlySelectBox.getSelected();
 				if(!text.equals("")){
-					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
-					if (level == map.getLevel()) {
-						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-						System.out.println("friend level is " + level);
-						matrixPointer = -2;
-						characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-					} else {
-						new Dialog("Error", MainMenu.skin, "dialog") {
-						}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
-								.show(stage);
-					}
+					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+					matrixPointer = -2;
+					characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
 				} else{
 					matrixPointer = 0;
 				}
@@ -379,16 +352,9 @@ public class MapEditorScreen implements Screen{
 			public void changed(ChangeEvent event, Actor actor) {
 				String text = hostileSelectBox.getSelected();
 				if(!text.equals("")){
-					int level = Integer.parseInt(text.substring(text.lastIndexOf('-') + 1));
-					if (level == map.getLevel()) {
-						int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-						matrixPointer = -3;
-						characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-					} else {
-						new Dialog("Error", MainMenu.skin, "dialog") {
-						}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
-								.show(stage);
-					}
+					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+					matrixPointer = -3;
+					characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
 				} else{
 					matrixPointer = 0;
 				}
@@ -403,10 +369,8 @@ public class MapEditorScreen implements Screen{
 					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
 					map = MainMenu.mapInventory.getMapPack().get(index);
 					nameField.setText(MainMenu.mapInventory.getMapPack().get(index).getName());
-					levelField.setText(Integer.toString(MainMenu.mapInventory.getMapPack().get(index).getLevel()));
 					sizeField.setText(Integer.toString(MainMenu.mapInventory.getMapPack().get(index).getSize()));
 					sizeField.setDisabled(false);
-					levelField.setDisabled(false);
 					nameField.setDisabled(false);
 					confirmButton.setTouchable(Touchable.enabled);
 					MainMenu.mapInventory.getMapPack().removeIndex(index);

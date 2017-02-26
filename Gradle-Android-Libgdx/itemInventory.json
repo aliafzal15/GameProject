@@ -1,3 +1,1 @@
-{ItemType:ARMOR,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
-{ItemType:BOOTS,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
-{ItemType:HELMET,Name:HELMET,Level:1,enchantedAbility:WISDOM,abiltyPointer:2}
+{ItemType:WEAPON,Name:HELMET,Level:1,enchantedAbility:ATTACKBONUS,abiltyPointer:0}

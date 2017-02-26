@@ -1,4 +1,4 @@
-package com.chaowang.ddgame;
+package LibgdxExample;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

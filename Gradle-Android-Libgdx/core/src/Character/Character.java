@@ -29,6 +29,8 @@ public class Character implements Json.Serializable{
 	private int damageBonus;
 	private int hitPoints;
 	private int armorClass;
+	private int promotionPoint;
+	private int[] abilityBonusArr;
     private Texture texture;
 	boolean isFriendly = true;
 
@@ -40,7 +42,7 @@ public class Character implements Json.Serializable{
 	};
 	
 	public Character(String name) {
-		this(name, 0, RaceType.HUMAN);
+		this(name, 1, RaceType.HUMAN);
 	}
 
 	public Character(String name, int level, RaceType raceType) {
@@ -52,18 +54,21 @@ public class Character implements Json.Serializable{
 		this.damageBonus = 0;
 		this.armorClass = 0;
 		this.abilities = new Abilities(0);
+		this.abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		this.level = level;
-        this.backpack = new ArrayList<Item>();
+		this.promotionPoint = level - 1;
+		this.backpack = new ArrayList<Item>();
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
     }
 
-    public Character(String name, int level, RaceType raceType, int[] abilityArr) {
+    public Character(String name, int level,int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonus) {
         this.setName(name);
         this.classType = ClassType.FIGHTER;
         this.raceType  = raceType;
-        this.level = level;
-        this.backpack = new ArrayList<Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
+		this.level = level;
+		this.promotionPoint = promotionPoint;
+		this.backpack = new ArrayList<Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
@@ -73,11 +78,12 @@ public class Character implements Json.Serializable{
         this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
         this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+2]);
         this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+3]);
-
+		abilityBonusArr = new int[Abilities.ABILITYSIZE];
+		System.arraycopy(abilityBonus, 0, abilityBonusArr, 0, abilityBonus.length );
     }
 
-    public Character(String name, int level, RaceType raceType, int[] abilityArr, ArrayList<Item> backpack, HashMap<Item.ItemType,Item> equipment) {
-        this(name,level,raceType,abilityArr);
+    public Character(String name, int level,int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType,Item> equipment) {
+        this(name,level,promotionPoint,raceType,abilityArr, abilityBonusArr);
         this.backpack = backpack;
 		this.equipment = equipment;
     }
@@ -127,6 +133,45 @@ public class Character implements Json.Serializable{
         }
     }
 
+	public void resetPromotePoint(){
+		promotionPoint = level -1;
+		for (int i : abilityBonusArr){
+			i = 0;
+		}
+	}
+
+    public void levelDown(){
+		if (level > 1 ){
+			level --;
+			if(promotionPoint > 0){
+				promotionPoint --;
+			}
+		}
+	}
+
+	public void levelUp(){
+		if (level < 10 ){
+			level ++;
+			if(promotionPoint < 9){
+				promotionPoint++;
+			}
+		}
+	}
+
+	public void setStrengthBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.STRENGTH.getIndex()] = bonus; }
+	public void setDexterityBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.DEXTERITY.getIndex()] = bonus; }
+	public void setConstitutionBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.CONSTITUTION.getIndex()] = bonus; }
+	public void setWisdomBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.WISDOM.getIndex()] = bonus; }
+	public void setIntellegenceBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.INTELLIGENCE.getIndex()] = bonus; }
+	public void setCharismaBonus (int bonus){ abilityBonusArr[Abilities.AbilityType.CHARISMA.getIndex()] = bonus; }
+
+	public int getStrengthBonus (){ return abilityBonusArr[Abilities.AbilityType.STRENGTH.getIndex()] ; }
+	public int getDexterityBonus (){ return abilityBonusArr[Abilities.AbilityType.DEXTERITY.getIndex()] ; }
+	public int getConstitutionBonus (){ return abilityBonusArr[Abilities.AbilityType.CONSTITUTION.getIndex()] ; }
+	public int getWisdomBonus (){ return abilityBonusArr[Abilities.AbilityType.WISDOM.getIndex()] ; }
+	public int getIntellegenceBonus (){ return abilityBonusArr[Abilities.AbilityType.INTELLIGENCE.getIndex()] ; }
+	public int getCharismaBonus (){ return abilityBonusArr[Abilities.AbilityType.CHARISMA.getIndex()] ; }
+
     public boolean previousRace(){
         if(raceType.getIndex() <=0 ){
             return false;
@@ -137,6 +182,22 @@ public class Character implements Json.Serializable{
             return true;
         }
     }
+
+	public int getPromotionPoint() {
+		return promotionPoint;
+	}
+
+	public void setPromotionPoint(int promotionPoint) {
+		this.promotionPoint = promotionPoint;
+	}
+
+	public int[] getAbilityBonusArr() {
+		return abilityBonusArr;
+	}
+
+	public void setAbilityBonusArr(int[] abilityBonusArr) {
+		this.abilityBonusArr = abilityBonusArr;
+	}
 
 	public String getName() {
 		return name;
@@ -277,7 +338,11 @@ public class Character implements Json.Serializable{
 	}
 
     public  String toString(){
-        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+this.abilities.toString();
+		int[] tmp = new int[Abilities.ABILITYSIZE];
+		for (int i = 0 ; i < tmp.length; i++){
+			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
+		}
+        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+tmp;
     }
 
 
@@ -380,7 +445,8 @@ public class Character implements Json.Serializable{
 		json.writeValue("isFriendly", isFriendly);
 		json.writeValue("equipment", equipment, HashMap.class, Item.class);
 		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
-
+		json.writeValue("PromoPoint", promotionPoint);
+		json.writeValue("BonusAbilities", abilityBonusArr);
 	}
 
 	@Override
@@ -424,6 +490,9 @@ public class Character implements Json.Serializable{
 				backpack.add(item);
 			}
 		}
+
+		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asInt();
+		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
 
 	}
 

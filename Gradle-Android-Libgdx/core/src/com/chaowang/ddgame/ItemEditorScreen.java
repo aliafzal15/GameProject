@@ -131,9 +131,9 @@ public class ItemEditorScreen implements Screen {
 		editorTable.add(new Label("Name", MainMenu.style));
 		editorTable.add(nameText);
 		editorTable.row();
-		editorTable.add(new Label("Level", MainMenu.style));
+		editorTable.add(new Label("Bonus point", MainMenu.style));
 		editorTable.add(levelText);
-		editorTable.add(new Label("1 - 9", MainMenu.style));
+		editorTable.add(new Label("1 - 5", MainMenu.style));
 		editorTable.row();
 		editorTable.add(itemLeftButton).size(50, 50);
 		editorTable.add(itemLabel).center();
@@ -152,7 +152,7 @@ public class ItemEditorScreen implements Screen {
 		itemSaveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$")) {
+				if (levelText.getText().matches("^[1-5]$")) {
 					item.setLevel(Integer.parseInt(levelText.getText()));
 					item.setName(nameText.getText());
 					MainMenu.itemInventory.addToInventory(item);

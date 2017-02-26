@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import LibgdxExample.Player;
+import LibgdxExample.Tile;
 import Map.*;
 
 
@@ -30,19 +32,19 @@ public class PlayScreen implements Screen{
     private Texture mario;
     private Sprite sprite;
     private Vector2 position;
-    private Player player;
+    private LibgdxExample.Player player;
     private Tree tree, tree1;
     private ShapeRenderer sr;
     private ArrayList<Tree> trees;
     private Iterator<Tree> treeIterator;
 
-    private Enemy enemy;
-    private ArrayList<Enemy> enemies;
-    private Iterator<Enemy> enemyIterator;
+    private LibgdxExample.Enemy enemy;
+    private ArrayList<LibgdxExample.Enemy> enemies;
+    private Iterator<LibgdxExample.Enemy> enemyIterator;
 
     private Game game;
     private ArrayList<Tile> tiles;
-    Iterator<Tile> tileIterator;
+    Iterator<LibgdxExample.Tile> tileIterator;
 
     OrthographicCamera cam;
     Sound sound;
@@ -67,12 +69,12 @@ public class PlayScreen implements Screen{
         trees.add(tree);
         trees.add(tree1);
 
-        enemies = new ArrayList<Enemy>();
+        enemies = new ArrayList<LibgdxExample.Enemy>();
 
         if(Gdx.files.local("player.dat").exists()){
             try{
-                player = new Player(new Vector2(Gdx.graphics.getWidth() /2 , Gdx.graphics.getHeight() /2 ), "android/assets/Mario.png");
-                player.setPosition(Player.readPlayer());
+                player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() /2 , Gdx.graphics.getHeight() /2 ), "android/assets/Mario.png");
+                player.setPosition(LibgdxExample.Player.readPlayer());
             } catch (ClassNotFoundException e){
                 e.printStackTrace();
             } catch (IOException e){
@@ -81,7 +83,7 @@ public class PlayScreen implements Screen{
             System.out.println("Player exist, reading file");
         }
         else{
-            player = new  Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), "android/assets/Mario.png");
+            player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), "android/assets/Mario.png");
             try{
                 Player.savePlayer(player);
             } catch (IOException e){
@@ -90,7 +92,7 @@ public class PlayScreen implements Screen{
 
             System.out.println("Player does not exist, create player and save player ");
         }
-        enemy = new Enemy(new Vector2(50, 50), player);
+        enemy = new LibgdxExample.Enemy(new Vector2(50, 50), player);
         enemies.add(enemy);
 
 //        tiles = new ArrayList<Tile>();
@@ -170,7 +172,7 @@ public class PlayScreen implements Screen{
 
         enemyIterator = enemies.iterator();
         while(enemyIterator.hasNext()){
-            Enemy cur = enemyIterator.next();
+            LibgdxExample.Enemy cur = enemyIterator.next();
 
             cur.update();
             batch.draw(cur.getEnemyTexture(),cur.getPosition().x,cur.getPosition().y, 25, 25);
@@ -278,7 +280,7 @@ public class PlayScreen implements Screen{
     @Override
     public void dispose() {
         try {
-            Player.savePlayer(player);
+            LibgdxExample.Player.savePlayer(player);
         } catch (IOException e){
             e.printStackTrace();
         }
