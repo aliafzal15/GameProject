@@ -2,53 +2,40 @@ package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.IntAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import Items.Item;
-import Character.Character;
+import Controller.MapController;
 import Map.Map;
-import util.MazeSolver;
 
 public class MapEditorScreen implements Screen{
 
 	private Game game;
-	private Stage stage;
+	public Stage stage;
 	private SpriteBatch batch;
-	private TextButton backwardButton, saveButton, confirmButton;
-	private Texture backgroundTexture, imageTexture;
-	private TextField nameField, sizeField;
+	public TextButton backwardButton, saveButton, confirmButton;
+	public Texture backgroundTexture;
+	public TextField nameField, sizeField;
 
-	private ImageButton[] mapMatrix, elementList;
-	private Table mapTable, elementTable, inputTable;
-	private SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox, mapSelectBox;
+	public ImageButton[] mapMatrix, elementList;
+	public Table mapTable, elementTable, inputTable;
+	public SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox, mapSelectBox;
 
 	private Map map;
-	private int matrixPointer = 0;
-    private Item itemCarrier;
-    private Character characterCarrier;
+	private MapController mapController;
+
 
 	public MapEditorScreen (Game game) {
 		this.game = game;
@@ -62,9 +49,9 @@ public class MapEditorScreen implements Screen{
 		batch = new SpriteBatch();
 
 		map = new Map();
-		matrixPointer = 0;
+		mapController = new MapController(this.map, this);
 
-		backwardButton = new TextButton("<--", MainMenu.buttonStyle);
+		backwardButton = new TextButton("<--", MainMenuScreen.buttonStyle);
 		backwardButton.setWidth(Gdx.graphics.getWidth() / 20 );
 		backwardButton.setHeight(Gdx.graphics.getHeight() / 15);
 
@@ -72,7 +59,7 @@ public class MapEditorScreen implements Screen{
 		backwardButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				game.setScreen(new MainMenu(game));
+				game.setScreen(new MainMenuScreen(game));
 				return true;
 			}
 		});
@@ -87,39 +74,20 @@ public class MapEditorScreen implements Screen{
 		inputTable = new Table();
 		inputTable.setSize(Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() * 1 / 6);
 		inputTable.setPosition( Gdx.graphics.getWidth() * 7 / 10 , Gdx.graphics.getHeight() * 3 / 4);
-		inputTable.add(new Label("size (2 - 9)", MainMenu.style));
-		sizeField = new TextField("", MainMenu.skin);
+		inputTable.add(new Label("size (2 - 11)", MainMenuScreen.style));
+		sizeField = new TextField("", MainMenuScreen.skin);
 		inputTable.add(sizeField);
 		inputTable.row();
-		inputTable.add(new Label("name", MainMenu.style));
-		nameField = new TextField("", MainMenu.skin);
+		inputTable.add(new Label("name", MainMenuScreen.style));
+		nameField = new TextField("", MainMenuScreen.skin);
 		inputTable.add(nameField);
 		stage.addActor(inputTable);
 
-		confirmButton = new TextButton("CONFIRM", MainMenu.buttonStyle);
+		confirmButton = new TextButton("CONFIRM", MainMenuScreen.buttonStyle);
 		confirmButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (sizeField.getText().matches("^[1-9]$|^0[1-9]$|^1[0-1]$") &&
-						( ! nameField.getText().equals(""))) {
-					if(map.getSize() != Integer.parseInt(sizeField.getText())){
-						mapTable.clearChildren();
-						map = new Map();
-						mapMatrix = new ImageButton[Integer.parseInt(sizeField.getText()) * Integer.parseInt(sizeField.getText())];
-						map.setSize(Integer.parseInt(sizeField.getText()));
-						map.setName(nameField.getText());
-						buildMapMatrix();
-						addMapMatrixListener();
-						sizeField.setDisabled(true);
-						nameField.setDisabled(true);
-						confirmButton.setTouchable(Touchable.disabled);
-					} else{
-						map.setName(nameField.getText());
-						sizeField.setDisabled(true);
-						nameField.setDisabled(true);
-						confirmButton.setTouchable(Touchable.disabled);
-					}
-				}
+				mapController.controlConfirmButton();
 				return true;
 			}
 		});
@@ -133,52 +101,19 @@ public class MapEditorScreen implements Screen{
 		elementTable.setPosition( Gdx.graphics.getWidth() * 7 / 10 , Gdx.graphics.getHeight() * 1 / 7);
 
 		elementList = new ImageButton[PublicParameter.mapPixelType];
-		buildElementList();
-		addElementListListener();
+		mapController.buildElementList();
+		mapController.addElementListListener();
 
 		stage.addActor(elementTable);
 
-		saveButton = new TextButton("SAVE", MainMenu.buttonStyle);
+		saveButton = new TextButton("SAVE", MainMenuScreen.buttonStyle);
 		saveButton.setWidth(Gdx.graphics.getWidth() / 9);
 		saveButton.setHeight(Gdx.graphics.getHeight() / 12);
 		saveButton.setPosition((Gdx.graphics.getWidth() * 8 / 10) - saveButton.getWidth() / 2, (Gdx.graphics.getHeight() / 15));
 		saveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				int entryCount = map.validateEntryDoor();
-				int exitCount = map.validateExitDoor();
-				if (Integer.parseInt(sizeField.getText()) == map.getSize() && entryCount > 0 && exitCount > 0 ) {
-					if(entryCount == 1 && exitCount == 1){
-						MazeSolver solver = new MazeSolver();
-						if(solver.solveMaze(map.getLocationMatrix())){
-							map.getWallLocationList().clear();
-							map.addWall();
-							MainMenu.mapInventory.addToInventory(map);
-							MainMenu.mapInventory.saveToFile();
-							sizeField.setText("");
-							sizeField.setDisabled(false);
-							nameField.setText("");
-							nameField.setDisabled(false);
-							confirmButton.setTouchable(Touchable.enabled);
-							mapTable.clearChildren();
-						}
-						else{
-							new Dialog("Error", MainMenu.skin, "dialog") {
-							}.text("No path to exit").button("OK", true).key(Keys.ENTER, true)
-									.show(stage);
-						}
-					}
-					else{
-						new Dialog("Error", MainMenu.skin, "dialog") {
-						}.text("Map entry door exit door more than 1").button("OK", true).key(Keys.ENTER, true)
-								.show(stage);
-					}
-				}
-				else{
-					new Dialog("Error", MainMenu.skin, "dialog") {
-					}.text("Map does not have entry door or exit door").button("OK", true).key(Keys.ENTER, true)
-							.show(stage);
-				}
+				mapController.controlSaveButton();
 				return true;
 			}
 
@@ -186,81 +121,6 @@ public class MapEditorScreen implements Screen{
 		});
 		stage.addActor(saveButton);
 	}
-
-	private void buildMapMatrix() {
-		int size = map.getSize();
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
- 				switch (map.getLocationMatrix()[i][j]){
-                    case -3:
-                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/enemy.png")))));
-                        break;
-                    case -2:
-                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/friend.png")))));
-                        break;
-                    case -1:
-                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/chest.png")))));
-                        break;
-                    case 1:
-						mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/wall.png")))));
-						break;
-					case 2:
-						mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/entryDoor.png")))));
-						break;
-					case 3:
-						mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/exitDoor.png")))));
-						break;
-					default:
-						mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/pave.png")))));
-						break;
-				}
-				mapTable.add(mapMatrix[(i * size) + j]).fill();
-			}
-			mapTable.row();
-		}
-	}
-
-	private void buildElementList() {
-
-		for (int i = 0 ; i < elementList.length ; i++){
-			switch (i){
-				case 1:
-					elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/wall.png")))));
-					break;
-				case 2:
-					elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/entryDoor.png")))));
-					break;
-				case 3:
-					elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/exitDoor.png")))));
-					break;
-				default:
-					elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/pave.png")))));
-					break;
-			}
-			elementTable.add(elementList[i]).fill().expandX();
-		}
-		elementTable.row();
-		elementTable.add(new Label("Item", MainMenu.style));
-		itemSelectBox = new SelectBox<String>(MainMenu.skin);
-		itemSelectBox.setItems(MainMenu.itemInventory.getItemPackInfo());
-		elementTable.add(itemSelectBox).colspan(3);
-		elementTable.row();
-		elementTable.add(new Label("Friendly ",MainMenu.style));
-		friendlySelectBox = new SelectBox<String>(MainMenu.skin);
-		friendlySelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
-		elementTable.add(friendlySelectBox).colspan(3);
-		elementTable.row();
-		elementTable.add(new Label("Hostile ", MainMenu.style));
-		hostileSelectBox = new SelectBox<String>(MainMenu.skin);
-		hostileSelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
-		elementTable.add(hostileSelectBox).colspan(3);
-		elementTable.row();
-		elementTable.add(new Label("Maps ", MainMenu.style));
-		mapSelectBox = new SelectBox<String>(MainMenu.skin);
-		mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
-		elementTable.add(mapSelectBox).colspan(3);
-	}
-
 	@Override
 	public void render(float delta) {
 
@@ -306,125 +166,6 @@ public class MapEditorScreen implements Screen{
 	@Override
 	public void dispose() {
 		stage.dispose();
-	}
-
-	private void addElementListListener() {
-		for (int i = 0; i < elementList.length; i++) {
-			elementList[i].addListener(new ClickListener(i) {
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					matrixPointer = getButton();
-					return true;
-				}
-			});
-		}
-
-		itemSelectBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				String text = itemSelectBox.getSelected();
-				if(!text.equals("")){
-					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-					matrixPointer = -1;
-					itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
-				} else{
-					matrixPointer = 0;
-				}
-			}
-		});
-
-		friendlySelectBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				String text = friendlySelectBox.getSelected();
-				if(!text.equals("")){
-					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-					matrixPointer = -2;
-					characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-				} else{
-					matrixPointer = 0;
-				}
-			}
-		});
-
-		hostileSelectBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				String text = hostileSelectBox.getSelected();
-				if(!text.equals("")){
-					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-					matrixPointer = -3;
-					characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
-				} else{
-					matrixPointer = 0;
-				}
-			}
-		});
-
-		mapSelectBox.addListener(new ClickListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				String text = mapSelectBox.getSelected();
-				if(!text.equals("")){
-					int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
-					map = MainMenu.mapInventory.getMapPack().get(index);
-					nameField.setText(MainMenu.mapInventory.getMapPack().get(index).getName());
-					sizeField.setText(Integer.toString(MainMenu.mapInventory.getMapPack().get(index).getSize()));
-					sizeField.setDisabled(false);
-					nameField.setDisabled(false);
-					confirmButton.setTouchable(Touchable.enabled);
-					MainMenu.mapInventory.getMapPack().removeIndex(index);
-					mapTable.clearChildren();
-					MainMenu.mapInventory.saveToFile();
-					mapMatrix = new ImageButton[map.getSize() * map.getSize()];
-					buildMapMatrix();
-					addMapMatrixListener();
-					mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
-				} else {
-					mapSelectBox.setItems(MainMenu.mapInventory.getMapListInfo());
-				}
-				return true;
-			}
-		});
-	}
-
-	private void addMapMatrixListener() {
-		for (int i = 0; i < mapMatrix.length; i++) {
-			mapMatrix[i].addListener(new ClickListener(i) {
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    int i = getButton() / map.getSize();
-                    int j = getButton() % map.getSize();
-                    switch (map.getLocationMatrix()[i][j]){
-                        case -3:
-                            map.removeEnemyLocationList(i,j);
-                            break;
-                        case -2:
-                            map.removeFriendLocationList(i,j);
-                            break;
-                        case -1:
-                            map.removeItemLocationList(i,j);
-                            break;
-                    }
-					map.getLocationMatrix()[i][j] = matrixPointer;
-                    switch (map.getLocationMatrix()[i][j]){
-                        case -3:
-                            map.addEnemyLocationList(i,j,characterCarrier);
-                            break;
-                        case -2:
-                            map.addFriendLocationList(i,j,characterCarrier);
-                            break;
-                        case -1:
-                            map.addItemLocationList(i,j, itemCarrier);
-                            break;
-                    }
-					mapTable.clearChildren();
-					buildMapMatrix();
-					addMapMatrixListener();
-					return true;
-				}
-			});
-		}
 	}
 
 }

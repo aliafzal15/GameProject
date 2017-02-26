@@ -12,7 +12,7 @@ public class DDGame extends Game {
     @Override
 	public void create () {
 		game = this;
-        setScreen(new MainMenu(game));
+        setScreen(new MainMenuScreen(game));
 
 
 //		float w = Gdx.graphics.getWidth();

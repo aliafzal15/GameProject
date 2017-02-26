@@ -25,12 +25,12 @@ import Items.ItemInventory;
 import Character.CharacterInventory;
 import Map.MapInventory;
 
-public class MainMenu implements Screen{
+public class MainMenuScreen implements Screen{
 
     private Stage stage;
 
     public static Label.LabelStyle style;
-    public static BitmapFont font, fontSec;
+    public static BitmapFont font;
     public static ItemInventory itemInventory;
     public static CharacterInventory characterInventory;
     public static MapInventory mapInventory;
@@ -44,7 +44,7 @@ public class MainMenu implements Screen{
     private SpriteBatch batch;
     private Game game;
 
-    public MainMenu(Game game) {
+    public MainMenuScreen(Game game) {
         this.game = game;
     }
 
