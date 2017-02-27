@@ -29,10 +29,10 @@ public class MazeSolver {
 				else{
 					maze[i][j] = 1;
 					if(locationMatrix[i][j] == 2){
-						startX = j; startY = i;
+						startX = i; startY = j;
 					}
 					if(locationMatrix[i][j] == 3){
-						endX = j; endY = i;
+						endX = i; endY = j;
 					}
 				}
 			}
