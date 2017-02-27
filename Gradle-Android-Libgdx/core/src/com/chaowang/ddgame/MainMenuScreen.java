@@ -24,7 +24,11 @@ import java.io.IOException;
 import Items.ItemInventory;
 import Character.CharacterInventory;
 import Map.MapInventory;
-
+/**
+ * view for main menu
+ * @author chao wang
+ * @version 1.0
+ */
 public class MainMenuScreen implements Screen{
 
     private Stage stage;
@@ -43,11 +47,16 @@ public class MainMenuScreen implements Screen{
 
     private SpriteBatch batch;
     private Game game;
-
+    /**
+     * constructor
+     * @param game
+     */
     public MainMenuScreen(Game game) {
         this.game = game;
     }
-
+    /**
+     * show main menu on screen
+     */
     @Override
     public void show() {
 
@@ -165,7 +174,9 @@ public class MainMenuScreen implements Screen{
 
         batch = new SpriteBatch();
     }
-
+    /**
+     * put image on background
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);

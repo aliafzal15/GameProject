@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Controller.ItemController;
 import Items.Item;
-
+/**
+ * view for item editor 
+ * @author chao wang
+ * @version 1.0
+ */
 public class ItemEditorScreen implements Screen {
     private Game game;
 	public Stage stage;
@@ -34,11 +38,16 @@ public class ItemEditorScreen implements Screen {
 	private SpriteBatch batch;
 	private ItemController itemController;
 	private Item item;
-
+	/**
+	 * constructor
+	 * @param game
+	 */
 	public ItemEditorScreen(Game game) {
         this.game = game;
 	}
-
+    /**
+     * show whole item editor view on screen
+     */
 	@Override
 	public void show() {
 
@@ -159,7 +168,9 @@ public class ItemEditorScreen implements Screen {
 
 		stage.addActor(inventoryTable);
 	}
-
+	 /**
+     * put image on background
+     */
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -180,7 +191,9 @@ public class ItemEditorScreen implements Screen {
 		//stage.setDebugAll(true);
         batch.end();
 	}
-
+    /**
+     * update the item editor view
+     */
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub

@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Controller.EquipmentController;
 import Character.Character;
-
+/**
+ * view for equipment editor 
+ * @author chao wang
+ * @version 1.0
+ */
 public class EquipmentEditorScreen implements Screen{
 
     private Game game;
@@ -34,12 +38,18 @@ public class EquipmentEditorScreen implements Screen{
     private EquipmentController controller;
     public Label equipmentItemInfoLabel, backpackItemInfoLabel;
 
-
+    /**
+     * constructor
+     * @param game
+     * @param character
+     */
     public EquipmentEditorScreen (Game game, Character character) {
         this.game = game;
         this.character = character;
     }
-
+    /**
+     * show whole equipment editor view on screen
+     */
     @Override
     public void show() {
 
@@ -94,7 +104,9 @@ public class EquipmentEditorScreen implements Screen{
         stage.addActor(equipmentTable);
 
     }
-
+    /**
+     * put image on background
+     */
     @Override
     public void render(float delta) {
 

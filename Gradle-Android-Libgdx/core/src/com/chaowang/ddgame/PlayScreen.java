@@ -26,7 +26,11 @@ import LibgdxExample.Player;
 import LibgdxExample.Tile;
 import Map.*;
 
-
+/**
+ * view for playing game(not for current build)
+ * @author chao wang
+ * @version 1.0
+ */
 public class PlayScreen implements Screen{
     private SpriteBatch batch;
     private Texture mario;

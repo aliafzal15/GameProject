@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Campaign.Campaign;
 import Controller.CampaignController;
-
+/**
+ * view for campaign editor 
+ * @author chao wang
+ * @version 1.0
+ */
 public class CampaignEditorScreen implements Screen {
 
     private Game game;
@@ -36,11 +40,16 @@ public class CampaignEditorScreen implements Screen {
     private CampaignController campaignController;
 
 
-
+     /**
+     * constructor
+     * @param game
+     */
     public CampaignEditorScreen(Game game) {
         this.game = game;
     }
-
+    /**
+     * show whole campaign view on screen
+     */
     @Override
     public void show() {
 
@@ -127,7 +136,9 @@ public class CampaignEditorScreen implements Screen {
         stage.addActor(mapSaveButton);
 
     }
-
+    /**
+     * put image on background
+     */
     @Override
     public void render(float delta) {
 
@@ -148,7 +159,9 @@ public class CampaignEditorScreen implements Screen {
         //stage.setDebugAll(true);
         batch.end();
     }
-
+    /**
+     * update the campaign editor view
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);

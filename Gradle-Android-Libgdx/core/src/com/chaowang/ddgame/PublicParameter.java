@@ -4,7 +4,11 @@ import com.badlogic.gdx.Gdx;
 
 import Items.Item;
 
-
+/**
+ * class for storing public parameters
+ * @author chao wang
+ * @version 1.0
+ */
 public interface PublicParameter {
 
     int characterInventoryRow = 5, characterInventoryColumn = 5;

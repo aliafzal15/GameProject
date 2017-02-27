@@ -2,7 +2,11 @@ package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
+/**
+ * class for driving the game view
+ * @author chao wang
+ * @version 1.0
+ */
 public class DDGame extends Game {
 	private OrthographicCamera camera;
 

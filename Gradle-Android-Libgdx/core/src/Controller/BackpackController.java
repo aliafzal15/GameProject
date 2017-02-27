@@ -17,17 +17,27 @@ import com.chaowang.ddgame.BackpackEditorScreen;
 
 import Items.Item;
 import Character.Character;
-
+/**
+ * controller for backpack
+ * @author chao wang
+ * @version 1.0
+ */
 public class BackpackController {
 
     private Character character;
     private BackpackEditorScreen view;
-
+    /**
+     * constructor
+     * @param view
+     * @param model
+     */
     public BackpackController(BackpackEditorScreen view, Character model){
         character = model;
         this.view = view;
     }
-
+    /**
+     * backpack matrix
+     */
     public void buildBackpackMatrix() {
         // check if backpack has higher level item need to remove.
         for (int i = 0; i < character.getBackpack().size(); i++) {
@@ -49,7 +59,9 @@ public class BackpackController {
             view.backpackTable.row();
         }
     }
-
+    /**
+     * inventory matrix
+     */
     public void buildInventoryMatrix() {
         for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
@@ -64,7 +76,9 @@ public class BackpackController {
             view.inventoryTable.row();
         }
     }
-
+    /**
+     * back pack listener
+     */
     public void addBackpackMatrixListener() {
         for (int i = 0; i < character.getBackpack().size() ; i++){
             view.backpackMatrix[i].addListener(new ClickListener(i) {

@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Character.Character;
 import Controller.BackpackController;
-
+/**
+ * view for backpack editor 
+ * @author chao wang
+ * @version 1.0
+ */
 public class BackpackEditorScreen implements Screen {
 
     private Game game;
@@ -34,12 +38,18 @@ public class BackpackEditorScreen implements Screen {
     private BackpackController controller;
     public Label inventoryItemInfoLabel, backpackItemInfoLabel;
 
-
+    /**
+     * constructor
+     * @param game
+     * @param character
+     */
     public BackpackEditorScreen(Game game, Character character) {
         this.game = game;
         this.character = character;
     }
-
+    /**
+     * show whole back pack editor view on screen
+     */
     @Override
     public void show() {
 
@@ -94,7 +104,9 @@ public class BackpackEditorScreen implements Screen {
 
     }
 
-
+    /**
+     * put image on background
+     */
     @Override
     public void render(float delta) {
 
@@ -115,7 +127,9 @@ public class BackpackEditorScreen implements Screen {
         //stage.setDebugAll(true);
         batch.end();
     }
-
+    /**
+     * update the back pack editor view
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);

@@ -24,7 +24,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import Character.Character;
 import Character.Abilities;
 import Controller.CharacterController;
-
+/**
+ * view for character editor 
+ * @author chao wang
+ * @version 1.0
+ */
 public class CharacterEditorScreen implements Screen {
 
 	private Game game;
@@ -44,16 +48,25 @@ public class CharacterEditorScreen implements Screen {
 
 	public ImageButton[] inventoryMatrix;
 	private ImageButton diceButton ,backpackButton,equipmentPageButton;
-
+	/**
+	 * Constructor
+	 * @param game
+	 */
 	public CharacterEditorScreen(Game game) {
 		this.game = game;
 	}
-
+	/**
+	 * Constructor
+	 * @param game
+	 * @param character
+	 */
 	public CharacterEditorScreen(Game game, Character character) {
 		this.game = game;
 		this.character = character;
 	}
-
+    /**
+     * show whole character view on screen
+     */
 	@Override
 	public void show() {
 
@@ -297,7 +310,9 @@ public class CharacterEditorScreen implements Screen {
 		stage.addActor(inventoryTable);
 	}
 
-
+    /**
+     * put image on background
+     */
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -319,7 +334,9 @@ public class CharacterEditorScreen implements Screen {
 
 		batch.end();
 	}
-
+    /**
+     * update the editor view
+     */
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -350,11 +367,17 @@ public class CharacterEditorScreen implements Screen {
 		stage.dispose();
 
 	}
-
+	/**
+	 * get character
+	 * @return  character
+	 */
 	public Character getCharacter() {
 		return character;
 	}
-
+	/**
+	 * set character
+	 * @param character
+	 */
 	public void setCharacter(Character character) {
 		this.character = character;
 	}
