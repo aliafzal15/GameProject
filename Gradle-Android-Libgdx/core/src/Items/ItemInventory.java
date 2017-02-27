@@ -12,18 +12,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * inventory for storing items
+ * @author chao wang
+ * @version 1.0
+ */
 public class ItemInventory {
     private Array<Item> itemPack;
-
+    /**
+     * constructor
+     */
     public ItemInventory() {
         this.itemPack = new Array<Item>();
     }
-
+    /**
+     * get item pack
+     * @return a array as item pack
+     */
     public Array<Item> getItemPack() {
         return itemPack;
     }
-
+    /**
+     * get information for item pack
+     * @return the information
+     */
     public Array<String> getItemPackInfo(){
         Array<String> itemPackInfo = new Array<String>();
         itemPackInfo.add("");
@@ -33,15 +45,24 @@ public class ItemInventory {
         }
         return itemPackInfo;
     }
-
+    /**
+     * set item pack
+     * @param itemPack
+     */
     public void setItemPack(Array<Item> itemPack) {
         this.itemPack = itemPack;
     }
-
+    /**
+     * add new created item to inventory
+     * @param item new created item
+     */
     public void addToInventory(Item item){
         itemPack.add(item);
     }
-
+    /**
+     * read files for itemInventory information
+     * @throws IOException
+     */
     public  void readFile() throws IOException {
         File file = new File("itemInventory.json");
         file.createNewFile(); // if file already exists will do nothing
@@ -57,7 +78,9 @@ public class ItemInventory {
         }
         scanner.close();
     }
-
+    /**
+     * write files for itemInventory information
+     */
     public void saveToFile(){
         FileHandle file = Gdx.files.local("itemInventory.json");
         file.write(false);

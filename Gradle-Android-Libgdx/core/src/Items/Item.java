@@ -8,10 +8,16 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.io.Serializable;
-
+/**
+ * the class is for item editor
+ * @author chao wang
+ * @version 1.0
+ */
 public class Item implements Json.Serializable{
 
-
+	/**
+	 * all item types
+	 */
     public enum ItemType {
         HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
         ARMOR(1, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
@@ -23,20 +29,34 @@ public class Item implements Json.Serializable{
 
         EnchantedAbility[] abilityArr;
         private int index;
-
+        /**
+         * construct item type
+         * @param index
+         * @param abilityArr
+         */
         private ItemType(int index, EnchantedAbility[] abilityArr) {
             this.index = index;
             this.abilityArr = abilityArr;
         }
-
+        /**
+         * get enchanted ability
+         * @return a array as enchanted abilities
+         */
         public EnchantedAbility[] getEnchantedAbility() {
             return abilityArr;
         }
-
+        /**
+         * get item index
+         * @return index
+         */
         public int getIndex() {
             return index;
         }
-
+        /**
+         * get the item type
+         * @param index to choose which specific item
+         * @return a specific item type
+         */
         public static ItemType getItemType(int index){
             switch (index){
                 case 0:
@@ -65,7 +85,13 @@ public class Item implements Json.Serializable{
     private EnchantedAbility enchantedAbility;
     private Texture texture;
     private int abilityPointer = 0;
-
+    /**
+     * constructor
+     * @param type
+     * @param name
+     * @param level
+     * @param enchantedAbility
+     */
     public Item(ItemType type , String name, int level, EnchantedAbility enchantedAbility) {
         this.itemType = type;
         abilityPointer=0;
@@ -80,7 +106,10 @@ public class Item implements Json.Serializable{
         this.enchantedAbility = enchantedAbility;
         updateTexture(type);
     }
-
+    /**
+     * update the item type image
+     * @param type a item type
+     */
     private void updateTexture(ItemType type) {
 //        if (texture != null){
 //            texture.dispose();
@@ -109,42 +138,71 @@ public class Item implements Json.Serializable{
                 break;
         }
     }
-
+    /**
+     * constructor
+     */
     public Item(){
         this(ItemType.HELMET, "HELMET", 0, ItemType.ARMOR.getEnchantedAbility()[0]);
     }
+    /**
+     * set the item level
+     * @param level the level of the item
+     */
     public void setLevel(int level) {
         this.level = level;
     }
-
+    /**
+     * set the item name
+     * @param name the name of the item
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * get the item type
+     * @return the item type
+     */
     public ItemType getItemType() {
         return itemType;
     }
-
+    /**
+     * get the item level
+     * @return the item level
+     */
     public int getLevel() {
         return level;
     }
-
+    /**
+     * get the item name 
+     * @return the name of the item
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * get the item image
+     * @return the item image
+     */
     public Texture getTexture() {
         return texture;
     }
-
+    /**
+     * get the enchanted ability
+     * @return the enchanted ability
+     */
     public EnchantedAbility getEnchantedAbility() {
         return enchantedAbility;
 	}
-
+    /**
+     * switch to the string type
+     */
 	public  String toString(){
         return "Item Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
     }
-
+	/**
+	 * switch to next ability type
+	 * @return if successfully change to the next ability type
+	 */
 	public boolean nextAbility(){
         if(abilityPointer >= this.itemType.abilityArr.length - 1){
             return false;
@@ -155,7 +213,10 @@ public class Item implements Json.Serializable{
             return true;
         }
     }
-
+	/**
+	 * switch to the previous ability type
+	 * @return if successfully change back to the previous ability type
+	 */
     public boolean previousAbility(){
         if(abilityPointer <= 0 ){
             return false;
@@ -166,7 +227,10 @@ public class Item implements Json.Serializable{
             return true;
         }
     }
-
+    /**
+     * switch to next item type
+     * @return if successfully change to the next item type
+     */
     public boolean nextItem(){
         if(itemType.index >= 6 ){
             return false;
@@ -179,7 +243,10 @@ public class Item implements Json.Serializable{
             return true;
         }
     }
-
+    /**
+     * switch to the previous item type
+     * @return if successfully change back to the previous item type
+     */
     public boolean previousItem(){
         if(itemType.index <=0 ){
             return false;
@@ -193,7 +260,9 @@ public class Item implements Json.Serializable{
         }
     }
 
-
+    /**
+     * write files for item information
+     */
     @Override
     public void write(Json json) {
         json.writeValue("ItemType", itemType);
@@ -202,7 +271,9 @@ public class Item implements Json.Serializable{
         json.writeValue("enchantedAbility", enchantedAbility);
         json.writeValue("abiltyPointer", abilityPointer);
     }
-
+    /**
+     * read files for item information
+     */
     @Override
     public void read(Json json, JsonValue jsonData) {
         itemType = ItemType.valueOf(jsonData.child.asString());

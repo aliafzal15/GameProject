@@ -1,22 +1,34 @@
 package Items;
 
 /**
- * Created by Chao on 09/02/2017.
+ * enchanted ability for items
+ * @author chao wang
+ * @version 1.0
  */
 
 public enum EnchantedAbility {
 
     STRENGTH(0), DEXTERITY(1), CONSTITUTION(2), WISDOM(3), INTELLIGENCE(4), CHARISMA(5), ARMORCLASS(6), ATTACKBONUS(7), DAMAGEBONUS(8);
     int index;
-
+    /**
+     * constructor
+     * @param value the specific EnchantedAbility
+     */
     private EnchantedAbility(int value) {
         this.index = value;
     }
-
+    /**
+     * get the index of the specific EnchantedAbility
+     * @return the index of the specific EnchantedAbility
+     */
     public int getIndex() {
         return index;
     }
-
+    /**
+     * get the specific EnchantedAbility
+     * @param index  the index of the specific EnchantedAbility
+     * @return the specific EnchantedAbility
+     */
     public EnchantedAbility getAbility (int index) {
         switch (index) {
             case 0:

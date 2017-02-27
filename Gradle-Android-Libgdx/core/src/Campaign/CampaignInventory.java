@@ -9,29 +9,47 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
-
+/**
+ * inventory for storing campaigns
+ * @author chao wang
+ * @version 1.0
+ */
 public class CampaignInventory {
 
-
+	
     private Array<Campaign> campaignPack;
-
+    /**
+     * constructor
+     */
     public CampaignInventory() {
         this.campaignPack = new Array<Campaign>();
     }
-
+    /**
+     * get campaign pack
+     * @return campaign pack
+     */
     public Array<Campaign> getCampaignPack() {
 		return campaignPack;
 	}
-
+    /**
+     * set campaign pack
+     * @param campaignPack
+     */
 	public void setCampaignPackPack(Array<Campaign> campaignPack) {
 		this.campaignPack = campaignPack;
 	}
-
+	/**
+	 * add new campaign to inventory
+	 * @param campaign
+	 */
 	public void addToCampaignPack(Campaign campaign){
         Campaign tmp = new Campaign(campaign);
 		campaignPack.add(tmp);
     }
-
+	/**
+	 * get campaign pack information
+	 * @return
+	 */
 	public Array<String> getCampaignPackInfo(){
         Array<String> itemPackInfo = new Array<String>();
         for (int i = 0; i < campaignPack.size; i++){
@@ -40,7 +58,10 @@ public class CampaignInventory {
         }
         return itemPackInfo;
     }
-
+	/**
+	 * read files about campaign inventory
+	 * @throws IOException
+	 */
     public  void readFile() throws IOException {
         File file = new File("CampaignInventory.json");
         file.createNewFile(); // if file already exists will do nothing
@@ -57,7 +78,9 @@ public class CampaignInventory {
         scanner.close();
 
     }
-
+    /**
+     * write files about campaign inventory
+     */
     public void saveToFile(){
 
         FileHandle file = Gdx.files.local("CampaignInventory.json");

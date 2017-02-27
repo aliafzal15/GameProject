@@ -1,5 +1,9 @@
 package util;
-
+/**
+ * a algorithm to solve maze routes problems
+ * @author chao wang
+ * @version 1.0
+ */
 public class MazeSolver {
 	private int width, height;
 	private int[][] maze; //= new int[width][height]; // The maze
@@ -7,7 +11,10 @@ public class MazeSolver {
 	private boolean[][] correctPath; //= new boolean[width][height]; // The solution to the maze
 	private int startX, startY; // Starting X and Y values of maze
 	private int endX, endY;     // Ending X and Y values of maze
-	
+	/**
+	 * generate maze
+	 * @param locationMatrix a certain matrix
+	 */
 	private void generateMaze(int[][] locationMatrix){
 		height = locationMatrix.length;
 		width = locationMatrix[0].length;
@@ -32,7 +39,11 @@ public class MazeSolver {
 		}
 
 	}
-	
+	/**
+	 * maze solver
+	 * @param locationMatrix a matrix as maze
+	 * @return if successfully passing the maze
+	 */
 	public boolean solveMaze(int[][] locationMatrix) {
 	    generateMaze(locationMatrix); // Create Maze (1 = path, 2 = wall)
 	    for (int row = 0; row < maze.length; row++)  
@@ -47,7 +58,12 @@ public class MazeSolver {
 	    // If b is false, there is no solution to the maze
 	    return b;
 	}
-
+	/**
+	 * recursive solve algorithm 
+	 * @param x
+	 * @param y
+	 * @return true of false
+	 */
 	private boolean recursiveSolve(int x, int y) {
 	    if (x == endX && y == endY) return true; // If you reached the end
 	    if (maze[x][y] == 2 || wasHere[x][y]) return false;  

@@ -12,7 +12,11 @@ import java.util.Iterator;
 
 import Items.Item;
 import Character.Character;
-
+/**
+ * class for map editor
+ * @author chao wang
+ * @version 1.0
+ */
 public class Map implements Json.Serializable{
 
     private int level = 1;
@@ -26,7 +30,9 @@ public class Map implements Json.Serializable{
     private HashMap<Vector2,Character> enemyLocationList;
 
     private int[][]  locationMatrix;
-
+    /**
+     * constructor
+     */
     public  Map(){
         this.level = 0 ;
         this.name = "";
@@ -38,7 +44,13 @@ public class Map implements Json.Serializable{
         enemyLocationList = new HashMap<Vector2, Character>();
         wallLocationList = new ArrayList<Wall>();
     }
-
+    /**
+     * 
+     * constructor
+     * @param level the level of the map
+     * @param size the size of the map
+     * @param name the name
+     */
     public Map(int level, int size, String name) {
         this.level = level;
         this.size = size;
@@ -53,18 +65,33 @@ public class Map implements Json.Serializable{
         friendLocationList = new HashMap<Vector2, Character>();
         enemyLocationList = new HashMap<Vector2, Character>();
     }
-
+    /**
+     * constructor
+     * @param level the level of the map
+     * @param size the size of the map
+     * @param name the name
+     * @param entryEntryDoor the information about entry door
+     * @param exitEntryDoor the information about exit door
+     */
     public Map(int level, int size, String name, EntryDoor entryEntryDoor, ExitDoor exitEntryDoor) {
         this(level, size, name);
         this.entryDoor = entryEntryDoor;
         this.exitDoor = exitEntryDoor;
     }
-
+    /**
+     * add to a list about wall locations 
+     * @param i
+     * @param j
+     */
     public void addWallLocationList(int i, int j){
         Wall wall = new Wall(new Vector2(j* PublicParameter.mapPixelSize, i*PublicParameter.mapPixelSize));
         wallLocationList.add(wall);
     }
-
+    /**
+     * remove from a list about wall locations 
+     * @param i
+     * @param j
+     */
     public void removeWallLocationList(int i, int j){
         for (int k = 0; k< wallLocationList.size() ; k++) {
             if(wallLocationList.get(k).getPosition().x == j*PublicParameter.mapPixelSize
@@ -73,36 +100,72 @@ public class Map implements Json.Serializable{
             }
         }
     }
-
+    /**
+     * add to a list about item locations 
+     * @param i
+     * @param j
+     * @param item
+     */
     public void addItemLocationList(int i, int j, Item item ){
         itemLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), item);
     }
-
+    /**
+     * remove from a list about item locations 
+     * @param i
+     * @param j
+     * @return
+     */
     public Item removeItemLocationList(int i, int j){
        return itemLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
     }
-
+    /**
+     * add to a list about friends locations 
+     * @param i
+     * @param j
+     * @param character
+     */
     public void addFriendLocationList(int i, int j, Character character ){
         friendLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
     }
-
+    /**
+     * remove from a list about friends locations 
+     * @param i
+     * @param j
+     * @return
+     */
     public Character removeFriendLocationList(int i, int j){
         return friendLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
     }
-
+    /**
+     * add to a list about enemy locations 
+     * @param i
+     * @param j
+     * @param character
+     */
     public void addEnemyLocationList(int i, int j, Character character ){
     	character.setFriendly(false);
         enemyLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
     }
-
+    /**
+     * remove from a list about enemy locations 
+     * @param i
+     * @param j
+     * @return
+     */
     public Character removeEnemyLocationList(int i, int j ){
         return enemyLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
     }
-
+    /**
+     * get the matrix of map location
+     * @return the matrix of map location
+     */
     public int[][] getLocationMatrix() {
         return locationMatrix;
     }
-
+    /**
+     * set the size of the map
+     * @param size the size of the map
+     */
     public void setSize(int size) {
         this.size = size;
         locationMatrix = new int[size][size];
@@ -112,77 +175,129 @@ public class Map implements Json.Serializable{
         }
         wallLocationList = new ArrayList<Wall>(size);
     }
-
+    /**
+     * get the name
+     * @return
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * set the names
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * get the map level
+     * @return map level
+     */
     public int getLevel() {
         return level;
     }
-
+    /**
+     * set the map level
+     * @param level map level
+     */
     public void setLevel(int level) {
         this.level = level;
     }
-
+    /**
+     * get the entry door information
+     * @return entry door information
+     */
     public EntryDoor getEntryDoor() {
         return entryDoor;
     }
-
+    /**
+     * set the entry door information
+     * @param entryDoor the entry door
+     */
     public void setEntryDoor(EntryDoor entryDoor) {
         this.entryDoor = entryDoor;
     }
-
+    /**
+     * get the exit door information
+     * @return exit door information
+     */
     public ExitDoor getExitDoor() {
         return exitDoor;
     }
-
+    /**
+     * set the exit door information
+     * @param exitDoor exit door information
+     */
     public void setExitDoor( ExitDoor exitDoor) {
         this.exitDoor = exitDoor;
     }
-
+    /**
+     * get wall locations
+     * @return wall locations
+     */
     public ArrayList<Wall> getWallLocationList() {
         return wallLocationList;
     }
-
+    /**
+     * set wall locations
+     * @param wallLocationList wall locations information
+     */
     public void setWallLocationList(ArrayList<Wall> wallLocationList) {
         this.wallLocationList = wallLocationList;
     }
-
+    /**
+     * get item locations
+     * @return item locations
+     */
     public HashMap<Vector2, Item> getItemLocationList() {
         return itemLocationList;
     }
-
+    /**
+     * set item locations
+     * @param itemLocationList item locations
+     */
     public void setItemLocationList(HashMap<Vector2, Item> itemLocationList) {
         this.itemLocationList = itemLocationList;
     }
-
-    
-    
+    /**
+     * get enemy locations list
+     * @return enemy locations
+     */
     public HashMap<Vector2, Character> getEnemyLocationList() {
 		return enemyLocationList;
 	}
-
+    /**
+     * set enemy locations
+     * @param enemyLocationList enemy locations
+     */
 	public void setEnemyLocationList(HashMap<Vector2, Character> enemyLocationList) {
 		this.enemyLocationList = enemyLocationList;
 	}
-
+	/**
+	 * get friend locations list
+	 * @return friend locations
+	 */
 	public HashMap<Vector2, Character> getFriendLocationList() {
         return friendLocationList;
     }
-
-    public void setFriendLocationList(HashMap<Vector2, Character> enemyLocationList) {
-        this.friendLocationList = enemyLocationList;
+	/**
+	 * set friend locations 
+	 * @param friendLocationList
+	 */
+    public void setFriendLocationList(HashMap<Vector2, Character> friendLocationList) {
+        this.friendLocationList = friendLocationList;
     }
-
+    /**
+     * get the size of map
+     * @return size
+     */
     public int getSize() {
         return size;
     }
-
+    /**
+     * validate entry door
+     * @return the amount of entry doors
+     */
     public int validateEntryDoor() {
         int x = 0, y = 0, count = 0;
         for (int i = 0 ; i< locationMatrix.length; i ++){
@@ -198,7 +313,10 @@ public class Map implements Json.Serializable{
         }
         return  count;
     }
-
+    /**
+     * map validation for doors
+     * @return the amount of doors
+     */
     public int validateExitDoor() {
         int x = 0, y = 0, count = 0;
         for (int i = 0 ; i< locationMatrix.length; i ++){
@@ -214,7 +332,9 @@ public class Map implements Json.Serializable{
         }
         return count;
     }
-
+    /**
+     * add wall
+     */
     public void addWall(){
         for (int i=0; i< locationMatrix.length ; i++){
             for (int j = 0; j < locationMatrix[0].length; j++){
@@ -224,18 +344,23 @@ public class Map implements Json.Serializable{
             }
         }
     }
-
+    /**
+     * get the distance between entry door and exit door
+     * @return distance
+     */
     public Vector2 getDistanceOfEntryExit(){
         return new Vector2( Math.abs(entryDoor.getPosition().x - exitDoor.getPosition().x), Math.abs(entryDoor.getPosition().y - exitDoor.getPosition().y));
     }
-    
-    
-
+    /**
+     * switch to string type
+     */
     @Override
 	public String toString() {
 		return name + " [" + size + " x " + size +"]";
 	}
-
+	/**
+	 * write files for map information
+	 */
 	@Override
     public void write(Json json) {
         json.writeValue("Name", name);
@@ -250,7 +375,9 @@ public class Map implements Json.Serializable{
         json.writeValue("enemyLocationList", enemyLocationList, HashMap.class, Character.class);
 
     }
-
+	/**
+	 * read files for map information
+	 */
     @Override
     public void read(Json json, JsonValue jsonData) {
         String context;
