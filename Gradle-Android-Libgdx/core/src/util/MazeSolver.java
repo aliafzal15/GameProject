@@ -11,6 +11,7 @@ public class MazeSolver {
 	private boolean[][] correctPath; //= new boolean[width][height]; // The solution to the maze
 	private int startX, startY; // Starting X and Y values of maze
 	private int endX, endY;     // Ending X and Y values of maze
+	private static int[][] directions = new int[][]{{-1,-1}, {-1,0}, {-1,1},  {0,1}, {1,1},  {1,0},  {1,-1},  {0, -1}};
 	/**
 	 * generate maze
 	 * @param locationMatrix a certain matrix
@@ -89,6 +90,23 @@ public class MazeSolver {
 	            correctPath[x][y] = true;
 	            return true;
 	        }
+	    return false;
+	}
+	
+	
+	public boolean isInSurroundings(){
+	    for (int[] direction : directions) {
+	        int cx = startX + direction[0];
+	        int cy = startY + direction[1];
+	        if(cy >=0 && cy < maze.length){
+	            if(cx >= 0 && cx < maze[cy].length){
+	            	if(endX == cx && endY == cy){
+	            		return true;
+	            	}	      
+	            }
+	        }
+
+	    }
 	    return false;
 	}
 }
