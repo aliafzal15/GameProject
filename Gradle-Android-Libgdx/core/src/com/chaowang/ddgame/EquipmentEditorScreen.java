@@ -48,7 +48,7 @@ public class EquipmentEditorScreen implements Screen{
         this.character = character;
     }
     /**
-     * show whole equipment editor view on screen
+     * show whole equipment editor on screen
      */
     @Override
     public void show() {

@@ -17,21 +17,32 @@ import com.chaowang.ddgame.PublicParameter;
 
 import Campaign.Campaign;
 import Map.Map;
-
+/**
+ * controller for campaign
+ * @author chao wang
+ * @version 1.0
+ */
 public class CampaignController {
 
     private Array<Map> mapList;
     private Map map;
     private Campaign campaign;
     private CampaignEditorScreen view;
-
+    /**
+     * 
+     * constructor
+     * @param model
+     * @param view
+     */
     public CampaignController(Campaign model, CampaignEditorScreen view){
         this.view = view;
         this.campaign = model;
         mapList = new Array<Map>();
         map = new Map();
     }
-
+    /**
+     * control to save the campaign information after pressing save button 
+     */
     public void controlSaveButton(){
         if (! view.nameField.getText().equals("") && mapList.size > 1 ) {
             campaign.setName(view.nameField.getText());
@@ -52,7 +63,9 @@ public class CampaignController {
         }
     }
 
-
+    /**
+     * build matrix structure for campaign
+     */
     public void buildCampaignMatrix() {
         Label tmpLabel;
         for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
@@ -69,7 +82,9 @@ public class CampaignController {
             view.campaignTable.row();
         }
     }
-
+    /**
+     * build matrix structure for map inventory
+     */
     public void buildMapInventoryMatrix() {
         Label tmpLabel;
         BitmapFont font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
@@ -89,7 +104,9 @@ public class CampaignController {
         }
     }
 
-
+    /**
+     * build matrix structure for campaign inventory
+     */
     public void buildCampaignInventoryMatrix() {
         Label tmpLabel;
         for (int i = 0; i < PublicParameter.campaignInventorySize; i++) {
@@ -103,7 +120,9 @@ public class CampaignController {
         }
     }
 
-
+    /**
+     * add listener to listen campaign matrix
+     */
     public void addCampaignMatrixListener() {
         for (int i = 0; i < mapList.size ; i++){
             view.campaignMatrix[i].addListener(new ClickListener(i) {
@@ -129,7 +148,9 @@ public class CampaignController {
         }
     }
 
-
+    /**
+     * add listener to listen campaign inventory matrix
+     */
     public void addCampaignInventoryMatrixListener() {
         for (int i = 0; i < MainMenuScreen.campaignInventory.getCampaignPack().size ; i++){
             view.campaignInventoryMatrix[i].addListener(new ClickListener(i) {
@@ -163,7 +184,9 @@ public class CampaignController {
             });
         }
     }
-
+    /**
+     * add listener to listen map inventory matrix
+     */
     public void addMapInventoryMatrixListener() {
         for (int i = 0; i < MainMenuScreen.mapInventory.getMapPack().size ; i++){
             view.mapInventoryMatrix[i].addListener(new ClickListener(i) {

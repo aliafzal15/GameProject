@@ -20,37 +20,57 @@ import com.chaowang.ddgame.PublicParameter;
 import Character.Character;
 import util.AbilityModifier;
 import util.Dice;
-
+/**
+ * controller for character
+ * @author chao wang
+ * @version 1.0
+ */
 public class CharacterController {
 	Character character;
 	CharacterEditorScreen view;
-
+	/**
+	 * constructor
+	 * @param view
+	 * @param model
+	 */
 	public CharacterController(CharacterEditorScreen view, Character model) {
 		this.character = model;
 		this.view = view;
 	}
-
+	/**
+	 * get character
+	 * @return character
+	 */
 	public Character getCharacter() {
 		return character;
 	}
-
+	/**
+	 * set character
+	 * @param character
+	 */
 	public void setCharacter(Character character) {
 		this.character = character;
 	}
-
+    /**
+     * controller for switching to previous race information after pressing button 
+     */
 	public void controlRaceLeftButton() {
 		character.previousRace();
 		view.raceLabel.setText(character.getRaceType().toString());
 		view.characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
 	}
-
+    /**
+     * controller for switching to the next race information after pressing  button 
+     */
 	public void controlRaceRightButotn() {
 		character.nextRace();
 		view.raceLabel.setText(character.getRaceType().toString());
 		view.characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
 	}
 
-
+    /**
+     * controller for switching to main menu page
+     */
 	public void controlSwitchPageButton(){
 		character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
 		character.setName(view.nameText.getText());
@@ -58,7 +78,9 @@ public class CharacterController {
 			character.getAbilityBonusArr()[i] = Integer.parseInt(view.bonusField[i].getText());
 		}
 	}
-
+    /**
+     * controller for switching to the previous level information
+     */
 	public void controlLevelLeftButton() {
 		character.resetPromotePoint();
 		character.levelDown();
@@ -70,7 +92,9 @@ public class CharacterController {
 			view.bonusField[i].setDisabled(false);
 		}
 	}
-
+    /**
+     * controller for switching to the next race information
+     */
 	public void controlLevelRightButton() {
 		character.resetPromotePoint();
 		character.levelUp();
@@ -82,7 +106,9 @@ public class CharacterController {
 			view.bonusField[i].setDisabled(false);
 		}
 	}
-
+	/**
+	 * controller for confirming all input information
+	 */
 	public void controlConfirmButton() {
 		if (view.bonusField[0].getText().matches(("^[0-9]$")) &&
 				view.bonusField[1].getText().matches(("^[0-9]$")) &&
@@ -122,7 +148,9 @@ public class CharacterController {
 			}.text("Input too large").button("OK", true).key(Input.Keys.ENTER, true).show(view.stage);
 		}
 	}
-
+	/**
+	 * controller for saving information after pressing save button
+	 */
 	public void controlSaveButton() {
 		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.parseInt(view.wisdomLabel.getText().toString()) != 0) {
 			if (view.bonusField[0].isDisabled()) {
@@ -148,7 +176,9 @@ public class CharacterController {
 					.show(view.stage);
 		}
 	}
-
+	/**
+	 * control to dice
+	 */
 	public void controlDiceButton() {
 		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.valueOf(view.wisdomLabel.getText().toString()) == 0) {
 			character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
@@ -178,7 +208,9 @@ public class CharacterController {
 			view.damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
 		}
 	}
-
+	/**
+	 * listen any change from character inventory
+	 */
 	public void addInventoryMatrixListener() {
 		for (int i = 0; i < MainMenuScreen.characterInventory.getChatacterPack().size; i++) {
 			view.inventoryMatrix[i].addListener(new ClickListener(i) {
@@ -218,7 +250,9 @@ public class CharacterController {
 		}
 	}
 
-
+	/**
+	 * build matrix structure for inventory
+	 */
 	public void buildInventoryMatrix() {
 		for (int i = 0; i < PublicParameter.characterInventoryRow; i++) {
 			for (int j = 0; j < PublicParameter.characterInventoryColumn; j++) {
@@ -233,7 +267,9 @@ public class CharacterController {
 			view.inventoryTable.row();
 		}
 	}
-
+	/**
+	 * set up initial character editor page
+	 */
 	public void initialEditorItem() {
 		view.raceLabel.setText(character.getRaceType().toString());
 		view.characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));

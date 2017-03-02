@@ -21,18 +21,29 @@ import java.util.Map;
 
 import Character.Character;
 import Items.Item;
-
+/**
+ * controller for equipment
+ * @author chao wang
+ * @version 1.0
+ */
 public class EquipmentController {
 
     private EquipmentEditorScreen view;
     private Character character;
-
+    /**
+     * constructor
+     * @param view
+     * @param model
+     */
     public EquipmentController(EquipmentEditorScreen view, Character model){
         this.view = view;
         character = model;
     }
 
-
+    /**
+     * 
+     * build matrix structure for backpack
+     */
     public void buildBackpackMatrix() {
         for (int i = 0; i < character.getBackpack().size(); i++) {
             if (character.getBackpack().get(i).getLevel() > (1 + character.getLevel()) / 2) {
@@ -53,7 +64,9 @@ public class EquipmentController {
             view.backpackTable.row();
         }
     }
-
+    /**
+     * build matrix structure for equipment
+     */
     public void buildEquipmentMatrix() {
         // check if equipment has higher level item need to remove.
         for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = character.getEquipment().entrySet().iterator(); it.hasNext(); ) {
@@ -119,7 +132,9 @@ public class EquipmentController {
 
     }
 
-
+    /**
+     * listen any changes from backpack matrix
+     */
     public void addBackpackMatrixListener() {
         for (int i = 0; i < character.getBackpack().size() ; i++) {
             view.backpackMatrix[i].addListener(new ClickListener(i) {
@@ -155,7 +170,9 @@ public class EquipmentController {
         }
     }
 
-
+    /**
+     * listen any change from equipment matrix
+     */
     public void addEquipmentMatrixListener() {
         for (int i = 0; i < view.equipmentMatrix.length ; i++){
             view.equipmentMatrix[i].addListener(new ClickListener(i) {

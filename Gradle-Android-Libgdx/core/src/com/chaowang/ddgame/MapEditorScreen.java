@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Controller.MapController;
 import Map.Map;
-
+/**
+ * view for map editor
+ * @author chao wang
+ * @version 1.0
+ */
 public class MapEditorScreen implements Screen{
 
 	private Game game;
@@ -40,7 +44,9 @@ public class MapEditorScreen implements Screen{
 	public MapEditorScreen (Game game) {
 		this.game = game;
 	}
-
+    /**
+     * show whole map editor on screen
+     */
 	@Override
 	public void show() {
 
@@ -121,6 +127,9 @@ public class MapEditorScreen implements Screen{
 		});
 		stage.addActor(saveButton);
 	}
+    /**
+     * put image on background
+     */
 	@Override
 	public void render(float delta) {
 
@@ -141,7 +150,9 @@ public class MapEditorScreen implements Screen{
 		//stage.setDebugAll(true);
 		batch.end();
 	}
-
+    /**
+     * update the map editor view
+     */
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
