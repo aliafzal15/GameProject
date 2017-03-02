@@ -33,7 +33,7 @@ public class Door {
      * @param position the position of the door 
      */
     public Door(Vector2 position) {
-        this(position, new Vector2(PublicParameter.mapPixelSize,PublicParameter.mapPixelSize));
+        this(position, new Vector2(PublicParameter.MAP_PIXEL_SIZE,PublicParameter.MAP_PIXEL_SIZE));
     }
     /**
      * update the door

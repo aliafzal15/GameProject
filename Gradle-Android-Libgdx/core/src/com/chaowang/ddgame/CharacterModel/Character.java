@@ -92,7 +92,7 @@ public class Character implements Json.Serializable{
         this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
-		this.backpack = new ArrayList<Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
+		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_COLUMN * PublicParameter.ITEM_BACKPACK_ROW);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];

@@ -11,19 +11,19 @@ import com.chaowang.ddgame.ItemModel.Item;
  */
 public interface PublicParameter {
 
-    int characterInventoryRow = 5, characterInventoryColumn = 5;
-    int characterCellWidth = Gdx.graphics.getHeight() * 3 / 5 / characterInventoryRow;
-    int characterCellHeight = Gdx.graphics.getHeight() * 3 / 5 / characterInventoryColumn;
-    int itemInventoryRow = 7, itemInventoryColumn = 7;
-    int itemCellWidth = Gdx.graphics.getHeight() * 5 / 8 / itemInventoryRow;
-    int itemCellHeight = Gdx.graphics.getHeight() * 5 / 8 / itemInventoryColumn;
-    int itemBackpackRow = 2, itemBackpackColumn = 5;
-    int itemTypeCount = Item.ItemType.values().length;
-    int mapPixelType = 4, mapPixelSize = 64;
-    int mapInventoryRow = 5, mapInventoryColumn = 5;
-    int mapCellWidth = Gdx.graphics.getHeight() * 7 / 8 / itemInventoryRow;
-    int mapCellHeight = Gdx.graphics.getHeight() * 3 / 8 / itemInventoryColumn;
-    int campaignInventorySize = 6;
+    int CHARACTER_INVENTORY_ROW = 5, CHARACTER_INVENTORY_COLUMN = 5;
+    int CHARACTER_CELL_WIDTH = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_ROW;
+    int CHARACTER_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_COLUMN;
+    int ITEM_INVENTORY_ROW = 7, ITEM_INVENTORY_COLUMN = 7;
+    int ITEM_CELL_WIDTH = Gdx.graphics.getHeight() * 5 / 8 / ITEM_INVENTORY_ROW;
+    int ITEM_CELL_HEIGHT = Gdx.graphics.getHeight() * 5 / 8 / ITEM_INVENTORY_COLUMN;
+    int ITEM_BACKPACK_ROW = 2, ITEM_BACKPACK_COLUMN = 5;
+    int ITEM_TYPE_COUNT = Item.ItemType.values().length;
+    int MAP_PIXEL_TYPE = 4, MAP_PIXEL_SIZE = 64;
+    int MAP_INVENTORY_ROW = 5, MAP_INVENTORY_COLUMN = 5;
+    int MAP_CELL_WIDTH = Gdx.graphics.getHeight() * 7 / 8 / ITEM_INVENTORY_ROW;
+    int MAP_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 8 / ITEM_INVENTORY_COLUMN;
+    int Campaign_INVENTORY_SIZE = 6;
 
 
 }

@@ -86,7 +86,7 @@ public class EquipmentEditorScreen implements Screen{
         backpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
         backpackTable.setPosition(Gdx.graphics.getWidth() * 3 / 7, Gdx.graphics.getHeight() * 1 / 3);
 
-        backpackMatrix = new ImageButton[PublicParameter.itemBackpackRow * PublicParameter.itemBackpackColumn];
+        backpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
         controller.buildBackpackMatrix();
         controller.addBackpackMatrixListener();
 
@@ -98,7 +98,7 @@ public class EquipmentEditorScreen implements Screen{
         equipmentTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
         equipmentTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("MaleHumanUnderwear.png")))));
 
-        equipmentMatrix = new ImageButton[PublicParameter.itemTypeCount];
+        equipmentMatrix = new ImageButton[PublicParameter.ITEM_TYPE_COUNT];
         controller.buildEquipmentMatrix();
         controller.addEquipmentMatrixListener();
 

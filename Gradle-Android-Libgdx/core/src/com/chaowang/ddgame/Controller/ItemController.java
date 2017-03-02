@@ -1,6 +1,10 @@
 package com.chaowang.ddgame.Controller;
 
-
+/**
+ * controller for item
+ * @author chao wang
+ * @version 1.0
+ */
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -102,15 +106,15 @@ public class ItemController {
      * build matrix structure for item inventory
      */
     public void buildInventoryMatrix() {
-        for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
-            for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
-                if ((i * PublicParameter.itemInventoryColumn) + j < MainMenuScreen.itemInventory.getItemPack().size) {
-                    view.inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryColumn + j).getTexture())));
+        for (int i = 0; i < PublicParameter.ITEM_INVENTORY_ROW; i++) {
+            for (int j = 0; j < PublicParameter.ITEM_INVENTORY_COLUMN; j++) {
+                if ((i * PublicParameter.ITEM_INVENTORY_COLUMN) + j < MainMenuScreen.itemInventory.getItemPack().size) {
+                    view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.itemInventory.getItemPack().get(i * PublicParameter.ITEM_INVENTORY_COLUMN + j).getTexture())));
                 } else {
-                    view.inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+                    view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
-                ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j];
-                view.inventoryTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);
+                ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_COLUMN) + j];
+                view.inventoryTable.add(tempButton).width(PublicParameter.ITEM_CELL_WIDTH).height(PublicParameter.ITEM_CELL_HEIGHT).space(15);
             }
             view.inventoryTable.row();
         }

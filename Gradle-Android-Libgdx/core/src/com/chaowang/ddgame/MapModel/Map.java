@@ -91,7 +91,7 @@ public class Map implements Json.Serializable{
      * @param j
      */
     public void addWallLocationList(int i, int j){
-        Wall wall = new Wall(new Vector2(j* PublicParameter.mapPixelSize, i*PublicParameter.mapPixelSize));
+        Wall wall = new Wall(new Vector2(j* PublicParameter.MAP_PIXEL_SIZE, i*PublicParameter.MAP_PIXEL_SIZE));
         wallLocationList.add(wall);
     }
     /**
@@ -101,8 +101,8 @@ public class Map implements Json.Serializable{
      */
     public void removeWallLocationList(int i, int j){
         for (int k = 0; k< wallLocationList.size() ; k++) {
-            if(wallLocationList.get(k).getPosition().x == j*PublicParameter.mapPixelSize
-                    && wallLocationList.get(k).getPosition().y == i*PublicParameter.mapPixelSize ){
+            if(wallLocationList.get(k).getPosition().x == j*PublicParameter.MAP_PIXEL_SIZE
+                    && wallLocationList.get(k).getPosition().y == i*PublicParameter.MAP_PIXEL_SIZE ){
                 wallLocationList.remove(k);
             }
         }
@@ -114,7 +114,7 @@ public class Map implements Json.Serializable{
      * @param item
      */
     public void addItemLocationList(int i, int j, Item item ){
-        itemLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), item);
+        itemLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), item);
     }
     /**
      * remove from a list about item locations 
@@ -123,7 +123,7 @@ public class Map implements Json.Serializable{
      * @return
      */
     public Item removeItemLocationList(int i, int j){
-       return itemLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
+       return itemLocationList.remove(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE));
     }
     /**
      * add to a list about friends locations 
@@ -132,7 +132,7 @@ public class Map implements Json.Serializable{
      * @param character
      */
     public void addFriendLocationList(int i, int j, Character character ){
-        friendLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
+        friendLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
      * remove from a list about friends locations 
@@ -141,7 +141,7 @@ public class Map implements Json.Serializable{
      * @return
      */
     public Character removeFriendLocationList(int i, int j){
-        return friendLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
+        return friendLocationList.remove(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE));
     }
     /**
      * add to a list about enemy locations 
@@ -151,7 +151,7 @@ public class Map implements Json.Serializable{
      */
     public void addEnemyLocationList(int i, int j, Character character ){
     	character.setFriendly(false);
-        enemyLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
+        enemyLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
      * remove from a list about enemy locations 
@@ -160,7 +160,7 @@ public class Map implements Json.Serializable{
      * @return
      */
     public Character removeEnemyLocationList(int i, int j ){
-        return enemyLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
+        return enemyLocationList.remove(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE));
     }
     /**
      * get the matrix of map location
@@ -316,7 +316,7 @@ public class Map implements Json.Serializable{
             }
         }
         if (count == 1){
-            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.mapPixelSize, y * PublicParameter.mapPixelSize));
+            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
         }
         return  count;
     }
@@ -335,7 +335,7 @@ public class Map implements Json.Serializable{
             }
         }
         if(count == 1){
-            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.mapPixelSize, y * PublicParameter.mapPixelSize));
+            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
         }
         return count;
     }
@@ -346,7 +346,7 @@ public class Map implements Json.Serializable{
         for (int i=0; i< locationMatrix.length ; i++){
             for (int j = 0; j < locationMatrix[0].length; j++){
                 if(locationMatrix[i][j] == 1 ){
-                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.mapPixelSize, i* PublicParameter.mapPixelSize)));
+                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, i* PublicParameter.MAP_PIXEL_SIZE)));
                 }
             }
         }

@@ -164,7 +164,7 @@ public class ItemEditorScreen implements Screen {
 		inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
 		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 10);
 
-		inventoryMatrix = new ImageButton[PublicParameter.itemInventoryRow * PublicParameter.itemInventoryColumn];
+		inventoryMatrix = new ImageButton[PublicParameter.ITEM_INVENTORY_ROW * PublicParameter.ITEM_INVENTORY_COLUMN];
 	 	itemController.buildInventoryMatrix();
 		itemController.addInventoryMatrixListener();
 

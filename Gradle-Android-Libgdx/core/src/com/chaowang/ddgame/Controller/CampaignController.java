@@ -68,16 +68,16 @@ public class CampaignController {
      */
     public void buildCampaignMatrix() {
         Label tmpLabel;
-        for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
-            for (int j = 0; j < PublicParameter.mapInventoryRow; j++) {
-                if ((i * PublicParameter.mapInventoryRow) + j < mapList.size) {
-                    view.campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(mapList.get((i * PublicParameter.mapInventoryRow) + j).toString()+"--", MainMenuScreen.skin);
+        for (int i = 0; i < PublicParameter.MAP_INVENTORY_ROW; i++) {
+            for (int j = 0; j < PublicParameter.MAP_INVENTORY_ROW; j++) {
+                if ((i * PublicParameter.MAP_INVENTORY_ROW) + j < mapList.size) {
+                    view.campaignMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j] = new Label(mapList.get((i * PublicParameter.MAP_INVENTORY_ROW) + j).toString()+"--", MainMenuScreen.skin);
                 } else {
-                    view.campaignMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", MainMenuScreen.skin);
+                    view.campaignMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j] = new Label("", MainMenuScreen.skin);
                 }
-                view.campaignMatrix[(i * PublicParameter.mapInventoryRow) + j].setAlignment(Align.center);
-                tmpLabel = view.campaignMatrix[(i * PublicParameter.mapInventoryRow) + j];
-                view.campaignTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
+                view.campaignMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j].setAlignment(Align.center);
+                tmpLabel = view.campaignMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j];
+                view.campaignTable.add(tmpLabel).width(PublicParameter.MAP_CELL_WIDTH).height(PublicParameter.MAP_CELL_HEIGHT).space(18);
             }
             view.campaignTable.row();
         }
@@ -89,16 +89,16 @@ public class CampaignController {
         Label tmpLabel;
         BitmapFont font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
-        for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
-            for (int j = 0; j < PublicParameter.mapInventoryRow; j++) {
-                if ((i * PublicParameter.mapInventoryRow) + j < MainMenuScreen.mapInventory.getMapPack().size) {
-                    view.mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label(MainMenuScreen.mapInventory.getMapPack().get((i * PublicParameter.mapInventoryRow) + j).toString(), style);
+        for (int i = 0; i < PublicParameter.MAP_INVENTORY_ROW; i++) {
+            for (int j = 0; j < PublicParameter.MAP_INVENTORY_ROW; j++) {
+                if ((i * PublicParameter.MAP_INVENTORY_ROW) + j < MainMenuScreen.mapInventory.getMapPack().size) {
+                    view.mapInventoryMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j] = new Label(MainMenuScreen.mapInventory.getMapPack().get((i * PublicParameter.MAP_INVENTORY_ROW) + j).toString(), style);
                 } else {
-                    view.mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j] = new Label("", style);
+                    view.mapInventoryMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j] = new Label("", style);
                 }
-                view.mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j].setAlignment(Align.center);
-                tmpLabel = view.mapInventoryMatrix[(i * PublicParameter.mapInventoryRow) + j];
-                view.mapInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
+                view.mapInventoryMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j].setAlignment(Align.center);
+                tmpLabel = view.mapInventoryMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j];
+                view.mapInventoryTable.add(tmpLabel).width(PublicParameter.MAP_CELL_WIDTH).height(PublicParameter.MAP_CELL_HEIGHT).space(18);
             }
             view.mapInventoryTable.row();
         }
@@ -109,14 +109,14 @@ public class CampaignController {
      */
     public void buildCampaignInventoryMatrix() {
         Label tmpLabel;
-        for (int i = 0; i < PublicParameter.campaignInventorySize; i++) {
+        for (int i = 0; i < PublicParameter.Campaign_INVENTORY_SIZE; i++) {
             if (i < MainMenuScreen.campaignInventory.getCampaignPack().size) {
                 view.campaignInventoryMatrix[i] = new Label(MainMenuScreen.campaignInventory.getCampaignPack().get(i).toString() + "--", MainMenuScreen.style);
             } else {
                 view.campaignInventoryMatrix[i] = new Label("", MainMenuScreen.style);
             }
             tmpLabel = view.campaignInventoryMatrix[(i)];
-            view.campaignInventoryTable.add(tmpLabel).width(PublicParameter.mapCellWidth).height(PublicParameter.mapCellHeight).space(18);
+            view.campaignInventoryTable.add(tmpLabel).width(PublicParameter.MAP_CELL_WIDTH).height(PublicParameter.MAP_CELL_HEIGHT).space(18);
         }
     }
 

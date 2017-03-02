@@ -1,6 +1,10 @@
 package com.chaowang.ddgame.Controller;
 
-
+/**
+ * controller for map
+ * @author chao wang
+ * @version 1.0
+ */
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;

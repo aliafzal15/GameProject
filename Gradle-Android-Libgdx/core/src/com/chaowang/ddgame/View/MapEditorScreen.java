@@ -107,7 +107,7 @@ public class MapEditorScreen implements Screen{
 		elementTable.setSize(Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() * 1 / 2);
 		elementTable.setPosition( Gdx.graphics.getWidth() * 7 / 10 , Gdx.graphics.getHeight() * 1 / 7);
 
-		elementList = new ImageButton[PublicParameter.mapPixelType];
+		elementList = new ImageButton[PublicParameter.MAP_PIXEL_TYPE];
 		mapController.buildElementList();
 		mapController.addElementListListener();
 

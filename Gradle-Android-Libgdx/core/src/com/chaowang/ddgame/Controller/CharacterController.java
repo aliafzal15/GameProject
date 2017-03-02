@@ -253,15 +253,15 @@ public class CharacterController {
 	 * build matrix structure for inventory
 	 */
 	public void buildInventoryMatrix() {
-		for (int i = 0; i < PublicParameter.characterInventoryRow; i++) {
-			for (int j = 0; j < PublicParameter.characterInventoryColumn; j++) {
-				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenuScreen.characterInventory.getChatacterPack().size) {
-					view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.characterInventory.getChatacterPack().get(i * PublicParameter.characterInventoryColumn + j).getTexture())));
+		for (int i = 0; i < PublicParameter.CHARACTER_INVENTORY_ROW; i++) {
+			for (int j = 0; j < PublicParameter.CHARACTER_INVENTORY_COLUMN; j++) {
+				if ((i * PublicParameter.CHARACTER_INVENTORY_COLUMN) + j < MainMenuScreen.characterInventory.getChatacterPack().size) {
+					view.inventoryMatrix[(i * PublicParameter.CHARACTER_INVENTORY_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.characterInventory.getChatacterPack().get(i * PublicParameter.CHARACTER_INVENTORY_COLUMN + j).getTexture())));
 				} else {
-					view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+					view.inventoryMatrix[(i * PublicParameter.CHARACTER_INVENTORY_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
 				}
-				ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j];
-				view.inventoryTable.add(tempButton).width(PublicParameter.characterCellWidth).height(PublicParameter.characterCellHeight).space(15);
+				ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.CHARACTER_INVENTORY_COLUMN) + j];
+				view.inventoryTable.add(tempButton).width(PublicParameter.CHARACTER_CELL_WIDTH).height(PublicParameter.CHARACTER_CELL_HEIGHT).space(15);
 			}
 			view.inventoryTable.row();
 		}

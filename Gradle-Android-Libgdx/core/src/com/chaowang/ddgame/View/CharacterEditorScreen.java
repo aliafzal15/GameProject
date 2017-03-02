@@ -303,7 +303,7 @@ public class CharacterEditorScreen implements Screen {
 		inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
 		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 6);
 
-		inventoryMatrix = new ImageButton[PublicParameter.characterInventoryRow * PublicParameter.characterInventoryColumn];
+		inventoryMatrix = new ImageButton[PublicParameter.CHARACTER_INVENTORY_ROW * PublicParameter.CHARACTER_INVENTORY_COLUMN];
 		controller.buildInventoryMatrix();
 		controller.addInventoryMatrixListener();
 

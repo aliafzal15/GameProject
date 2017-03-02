@@ -85,7 +85,7 @@ public class BackpackEditorScreen implements Screen {
         inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
         inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 10 , Gdx.graphics.getHeight() * 1 / 8);
 
-        inventoryMatrix = new ImageButton[PublicParameter.itemInventoryRow * PublicParameter.itemInventoryColumn ];
+        inventoryMatrix = new ImageButton[PublicParameter.ITEM_INVENTORY_ROW * PublicParameter.ITEM_INVENTORY_COLUMN ];
         controller.buildInventoryMatrix();
         controller.addInventoryMatrixListener();
 
@@ -97,7 +97,7 @@ public class BackpackEditorScreen implements Screen {
         backpackTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 1 / 3);
         backpackTable.setPosition( 0 , Gdx.graphics.getHeight() * 1 / 3);
 
-        backpackMatrix = new ImageButton[PublicParameter.itemBackpackRow * PublicParameter.itemBackpackColumn];
+        backpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
         controller.buildBackpackMatrix();
         controller.addBackpackMatrixListener();
 

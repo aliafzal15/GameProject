@@ -87,7 +87,7 @@ public class CampaignEditorScreen implements Screen {
         mapInventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 7 / 10);
         mapInventoryTable.setPosition(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 4);
         mapInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("scrollPaper.png")))));
-        mapInventoryMatrix = new Label[PublicParameter.mapInventoryRow * PublicParameter.mapInventoryColumn ];
+        mapInventoryMatrix = new Label[PublicParameter.MAP_INVENTORY_ROW * PublicParameter.MAP_INVENTORY_COLUMN ];
         campaignController.buildMapInventoryMatrix();
         campaignController.addMapInventoryMatrixListener();
 
@@ -99,7 +99,7 @@ public class CampaignEditorScreen implements Screen {
         campaignInventoryTable.setPosition(10 , Gdx.graphics.getHeight() * 1 / 50);
         campaignInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
 
-        campaignInventoryMatrix = new Label[PublicParameter.campaignInventorySize];
+        campaignInventoryMatrix = new Label[PublicParameter.Campaign_INVENTORY_SIZE];
         campaignController.buildCampaignInventoryMatrix();
         campaignController.addCampaignInventoryMatrixListener();
 
@@ -109,7 +109,7 @@ public class CampaignEditorScreen implements Screen {
         campaignTable.setSize(Gdx.graphics.getWidth() *1 / 2, Gdx.graphics.getHeight() * 2 / 3);
         campaignTable.setPosition(10 , Gdx.graphics.getHeight() * 1 / 5);
 
-        campaignMatrix = new Label[PublicParameter.mapInventoryRow * PublicParameter.mapInventoryColumn];
+        campaignMatrix = new Label[PublicParameter.MAP_INVENTORY_ROW * PublicParameter.MAP_INVENTORY_COLUMN];
         campaignController.buildCampaignMatrix();
         campaignController.addCampaignMatrixListener();
 

@@ -46,15 +46,15 @@ public class BackpackController {
             }
         }
 
-        for (int i = 0; i < PublicParameter.itemBackpackRow; i++) {
-            for (int j = 0; j < PublicParameter.itemBackpackColumn; j++) {
-                if ((i * PublicParameter.itemBackpackColumn) + j < character.getBackpack().size()) {
-                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getBackpack().get(i * PublicParameter.itemBackpackColumn + j).getTexture())));
+        for (int i = 0; i < PublicParameter.ITEM_BACKPACK_ROW; i++) {
+            for (int j = 0; j < PublicParameter.ITEM_BACKPACK_COLUMN; j++) {
+                if ((i * PublicParameter.ITEM_BACKPACK_COLUMN) + j < character.getBackpack().size()) {
+                    view.backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getBackpack().get(i * PublicParameter.ITEM_BACKPACK_COLUMN + j).getTexture())));
                 } else {
-                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+                    view.backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
-                ImageButton tempButton = view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j];
-                view.backpackTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);
+                ImageButton tempButton = view.backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j];
+                view.backpackTable.add(tempButton).width(PublicParameter.ITEM_CELL_WIDTH).height(PublicParameter.ITEM_CELL_HEIGHT).space(15);
             }
             view.backpackTable.row();
         }
@@ -63,15 +63,15 @@ public class BackpackController {
      * inventory matrix
      */
     public void buildInventoryMatrix() {
-        for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
-            for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
-                if ((i * PublicParameter.itemInventoryRow) + j < MainMenuScreen.itemInventory.getItemPack().size) {
-                    view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryRow + j).getTexture())));
+        for (int i = 0; i < PublicParameter.ITEM_INVENTORY_ROW; i++) {
+            for (int j = 0; j < PublicParameter.ITEM_INVENTORY_COLUMN; j++) {
+                if ((i * PublicParameter.ITEM_INVENTORY_ROW) + j < MainMenuScreen.itemInventory.getItemPack().size) {
+                    view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_ROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.itemInventory.getItemPack().get(i * PublicParameter.ITEM_INVENTORY_ROW + j).getTexture())));
                 } else {
-                    view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+                    view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_ROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
-                ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j];
-                view.inventoryTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);
+                ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.ITEM_INVENTORY_ROW) + j];
+                view.inventoryTable.add(tempButton).width(PublicParameter.ITEM_CELL_WIDTH).height(PublicParameter.ITEM_CELL_HEIGHT).space(15);
             }
             view.inventoryTable.row();
         }
@@ -113,7 +113,7 @@ public class BackpackController {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel() <= (1 + character.getLevel()) / 2) {
-                        if(character.getBackpack().size() < PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow){
+                        if(character.getBackpack().size() < PublicParameter.ITEM_BACKPACK_COLUMN * PublicParameter.ITEM_BACKPACK_ROW){
                             Item item = new Item(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getItemType(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getName(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel(),

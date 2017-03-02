@@ -102,7 +102,7 @@ public class Item implements Json.Serializable{
         this.level = level;
         this.name = name;
         this.enchantedAbility = enchantedAbility;
-        this.texture = new Texture(Gdx.files.internal("items/armor.png"));
+        updateTexture(this.itemType);
     }
     /**
      * update the item type image
