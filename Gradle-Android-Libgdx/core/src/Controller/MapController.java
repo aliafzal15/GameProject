@@ -154,40 +154,47 @@ public class MapController {
      * controller for saving information after pressing save button
      */
     public void controlSaveButton(){
-        int entryCount = map.validateEntryDoor();
-        int exitCount = map.validateExitDoor();
-        if (Integer.parseInt(view.sizeField.getText()) == map.getSize() && entryCount > 0 && exitCount > 0 ) {
-            if(entryCount == 1 && exitCount == 1){
-                MazeSolver solver = new MazeSolver();
-                if(solver.solveMaze(map.getLocationMatrix())){
-                    map.getWallLocationList().clear();
-                    map.addWall();
-                    MainMenuScreen.mapInventory.addToInventory(map);
-                    MainMenuScreen.mapInventory.saveToFile();
-                    view.sizeField.setText("");
-                    view.sizeField.setDisabled(false);
-                    view.nameField.setText("");
-                    view.nameField.setDisabled(false);
-                    view.confirmButton.setTouchable(Touchable.enabled);
-                    view.mapTable.clearChildren();
+    	if(!view.confirmButton.isTouchable()){
+            int entryCount = map.validateEntryDoor();
+            int exitCount = map.validateExitDoor();
+            if (Integer.parseInt(view.sizeField.getText()) == map.getSize() && entryCount > 0 && exitCount > 0 ) {
+                if(entryCount == 1 && exitCount == 1){
+                    MazeSolver solver = new MazeSolver();
+                    if(solver.solveMaze(map.getLocationMatrix())){
+                        map.getWallLocationList().clear();
+                        map.addWall();
+                        MainMenuScreen.mapInventory.addToInventory(map);
+                        MainMenuScreen.mapInventory.saveToFile();
+                        view.sizeField.setText("");
+                        view.sizeField.setDisabled(false);
+                        view.nameField.setText("");
+                        view.nameField.setDisabled(false);
+                        view.confirmButton.setTouchable(Touchable.enabled);
+                        view.mapTable.clearChildren();
+                    }
+                    else{
+                        new Dialog("Error", MainMenuScreen.skin, "dialog") {
+                        }.text("No path to exit").button("OK", true).key(Input.Keys.ENTER, true)
+                                .show(view.stage);
+                    }
                 }
                 else{
                     new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                    }.text("No path to exit").button("OK", true).key(Input.Keys.ENTER, true)
+                    }.text("Map entry door exit door more than 1").button("OK", true).key(Input.Keys.ENTER, true)
                             .show(view.stage);
                 }
             }
             else{
                 new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                }.text("Map entry door exit door more than 1").button("OK", true).key(Input.Keys.ENTER, true)
+                }.text("Map does not have entry door or exit door").button("OK", true).key(Input.Keys.ENTER, true)
                         .show(view.stage);
             }
-        }
-        else{
+    	} else{
             new Dialog("Error", MainMenuScreen.skin, "dialog") {
-            }.text("Map does not have entry door or exit door").button("OK", true).key(Input.Keys.ENTER, true)
+            }.text("Need to hit confirm button first").button("OK", true).key(Input.Keys.ENTER, true)
                     .show(view.stage);
-        }
+    	}
+
     }
     /**
      * listen any changes from items list
