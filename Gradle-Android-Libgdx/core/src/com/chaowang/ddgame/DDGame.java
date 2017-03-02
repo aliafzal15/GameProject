@@ -3,6 +3,8 @@ package com.chaowang.ddgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.chaowang.ddgame.View.*;
+
 /**
  * class for driving the game view
  * @author chao wang
