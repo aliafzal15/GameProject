@@ -81,7 +81,7 @@ public class Abilities  {
 		this(0);
 	}
 	/**
-	 * switch to string type 
+	 * switch to string type as output
 	 */
 	public String toString(){
 		return 	Integer.toString(this.abilityArr[0]) + " | " +Integer.toString(this.abilityArr[1]) + " | " + Integer.toString(this.abilityArr[2]) + " | "
@@ -102,7 +102,7 @@ public class Abilities  {
 		this.abilityArr = abilityArr;
 	}
 	/**
-	 * set ability
+	 * set ability level
 	 * @param index
 	 * @param value
 	 */

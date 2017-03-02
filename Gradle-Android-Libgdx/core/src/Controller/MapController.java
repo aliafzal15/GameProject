@@ -22,14 +22,22 @@ import Items.Item;
 import Map.Map;
 import Character.Character;
 import util.MazeSolver;
-
+/**
+ * controller for maps
+ * @author chao wang
+ * @version 1.0
+ */
 public class MapController {
     private  Map map;
     private MapEditorScreen view;
     private int matrixPointer = 0;
     private Item itemCarrier;
     private Character characterCarrier;
-
+    /**
+     * constructor
+     * @param model
+     * @param view
+     */
     public MapController(Map model, MapEditorScreen view){
         this.map = model;
         this.view = view;
@@ -37,8 +45,9 @@ public class MapController {
         itemCarrier = new Item();
         characterCarrier = new Character();
     }
-
-
+    /**
+     * controller for confirming all input information on map editor page
+     */
     public void controlConfirmButton(){
         if (view.sizeField.getText().matches("^[1-9]$|^0[1-9]$|^1[0-1]$") &&
                 ( ! view.nameField.getText().equals(""))) {
@@ -62,7 +71,9 @@ public class MapController {
         }
     }
 
-
+    /**
+     * build matrix structure for map
+     */
     private void buildMapMatrix() {
         int size = map.getSize();
         for (int i = 0; i < size; i++) {
@@ -95,8 +106,10 @@ public class MapController {
             view.mapTable.row();
         }
     }
-
-
+    /**
+     * 
+     * list items information
+     */
     public void buildElementList() {
 
         for (int i = 0 ; i < view.elementList.length ; i++){
@@ -137,7 +150,9 @@ public class MapController {
         view.mapSelectBox.setItems(MainMenuScreen.mapInventory.getMapListInfo());
         view.elementTable.add(view.mapSelectBox).colspan(3);
     }
-
+    /**
+     * controller for saving information after pressing save button
+     */
     public void controlSaveButton(){
         int entryCount = map.validateEntryDoor();
         int exitCount = map.validateExitDoor();
@@ -174,7 +189,9 @@ public class MapController {
                     .show(view.stage);
         }
     }
-
+    /**
+     * listen any changes from items list
+     */
     public void addElementListListener() {
         for (int i = 0; i < view.elementList.length; i++) {
             view.elementList[i].addListener(new ClickListener(i) {
@@ -254,7 +271,9 @@ public class MapController {
             }
         });
     }
-
+    /**
+     * listen any changes from map matrix
+     */
     private void addMapMatrixListener() {
         for (int i = 0; i < view.mapMatrix.length; i++) {
             view.mapMatrix[i].addListener(new ClickListener(i) {

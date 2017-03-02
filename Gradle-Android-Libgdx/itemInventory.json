@@ -1,4 +1,3 @@
-{ItemType:SHIELD,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
 {ItemType:WEAPON,Name:HELMET,Level:5,enchantedAbility:ATTACKBONUS,abiltyPointer:0}
 {ItemType:SHIELD,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
 {ItemType:RING,Name:HELMET,Level:2,enchantedAbility:CONSTITUTION,abiltyPointer:3}
@@ -8,3 +7,4 @@
 {ItemType:HELMET,Name:HELMET,Level:3,enchantedAbility:ARMORCLASS,abiltyPointer:1}
 {ItemType:HELMET,Name:HELMET,Level:3,enchantedAbility:WISDOM,abiltyPointer:2}
 {ItemType:SHIELD,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}
+{ItemType:BOOTS,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:0}

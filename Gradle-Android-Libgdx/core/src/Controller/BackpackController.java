@@ -104,7 +104,9 @@ public class BackpackController {
         }
     }
 
-
+    /**
+     * inventory matrix listener
+     */
     public void addInventoryMatrixListener() {
         for (int i = 0; i < MainMenuScreen.itemInventory.getItemPack().size ; i++){
             view.inventoryMatrix[i].addListener(new ClickListener(i) {

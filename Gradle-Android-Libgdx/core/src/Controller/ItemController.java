@@ -18,40 +18,58 @@ import com.chaowang.ddgame.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import Items.Item;
-
+/**
+ * controller for items
+ * @author chao wang
+ * @version 1.0
+ */
 public class ItemController {
     private Item model;
     private ItemEditorScreen view;
-
+    /**
+     * constructor
+     * @param view
+     * @param model
+     */
     public ItemController(ItemEditorScreen view, Item model){
         this.model = model;
         this.view = view;
     }
-
+    /**
+     * controller for switching to previous item information after pressing button  
+     */
     public void controlItemLeftButton(){
         model.previousItem();
         view.itemLabel.setText(model.getItemType().toString());
         view.abilityLabel.setText(model.getEnchantedAbility().toString());
         view.itemImage.setDrawable(new SpriteDrawable(new Sprite(model.getTexture())));
     }
-
+    /**
+     * controller for switching to next item information after pressing button  
+     */
     public void controlItemRightButton() {
         model.nextItem();
         view.itemLabel.setText(model.getItemType().toString());
         view.abilityLabel.setText(model.getEnchantedAbility().toString());
         view.itemImage.setDrawable(new SpriteDrawable(new Sprite(model.getTexture())));
     }
-
+    /**
+     * controller for switching to previous ability level after pressing button  
+     */
     public void controlAbilityLeftButton(){
         model.previousAbility();
         view.abilityLabel.setText(model.getEnchantedAbility().toString());
     }
-
+    /**
+     * controller for switching to next ability level after pressing button  
+     */
     public void controlAbilityRightButton(){
         model.nextAbility();
         view.abilityLabel.setText(model.getEnchantedAbility().toString());
     }
-
+    /**
+     * controller for saving information after pressing save button
+     */
     public void controlSaveButton(){
         if (view.levelText.getText().matches("^[1-5]$")) {
             model.setLevel(Integer.parseInt(view.levelText.getText()));
@@ -70,7 +88,9 @@ public class ItemController {
                     .show(view.stage);
         }
     }
-
+    /**
+     * set up initial item editor page
+     */
     public void initialEditorItem() {
         view.itemLabel.setText(model.getItemType().toString());
         view.abilityLabel.setText(model.getEnchantedAbility().toString());
@@ -78,7 +98,9 @@ public class ItemController {
         view.levelText.setText(Integer.toString(model.getLevel()));
         view.nameText.setText(model.getName());
     }
-
+    /**
+     * build matrix structure for item inventory
+     */
     public void buildInventoryMatrix() {
         for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
@@ -93,7 +115,9 @@ public class ItemController {
             view.inventoryTable.row();
         }
     }
-
+    /**
+     * listen any changes from item inventory
+     */
     public void addInventoryMatrixListener() {
         for (int i = 0; i < MainMenuScreen.itemInventory.getItemPack().size ; i++){
             view.inventoryMatrix[i].addListener(new ClickListener(i) {
