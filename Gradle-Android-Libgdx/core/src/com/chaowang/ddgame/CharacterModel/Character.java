@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.chaowang.ddgame.ClassesModel.Class.ClassType;
-
+import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.RacesModel.Race.RaceType;
 import com.chaowang.ddgame.util.AbilityModifier;
 import com.badlogic.gdx.utils.Json;
@@ -38,8 +38,8 @@ public class Character implements Json.Serializable{
     private Texture texture;
 	boolean isFriendly = true;
 
-    private HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item> equipment;
-    private ArrayList<com.chaowang.ddgame.ItemModel.Item> backpack;
+    private HashMap<Item.ItemType, Item> equipment;
+    private ArrayList<Item> backpack;
     
     /**
      * constructor for the class
@@ -73,8 +73,8 @@ public class Character implements Json.Serializable{
 		this.abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		this.level = level;
 		this.promotionPoint = level - 1;
-		this.backpack = new ArrayList<com.chaowang.ddgame.ItemModel.Item>();
-        this.equipment = new HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item>();
+		this.backpack = new ArrayList<Item>();
+        this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
     }
 	/**
@@ -92,8 +92,8 @@ public class Character implements Json.Serializable{
         this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
-		this.backpack = new ArrayList<com.chaowang.ddgame.ItemModel.Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
-        this.equipment = new HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item>();
+		this.backpack = new ArrayList<Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
+        this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
@@ -116,7 +116,7 @@ public class Character implements Json.Serializable{
      * @param backpack the backpack of the character
      * @param equipment the equipment of the character
      */
-    public Character(String name, int level, int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonusArr, ArrayList<com.chaowang.ddgame.ItemModel.Item> backpack, HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item> equipment) {
+    public Character(String name, int level, int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType, Item> equipment) {
         this(name,level,promotionPoint,raceType,abilityArr, abilityBonusArr);
         this.backpack = backpack;
 		this.equipment = equipment;
@@ -315,33 +315,33 @@ public class Character implements Json.Serializable{
      * get backpack
      * @return backpack
      */
-    public ArrayList<com.chaowang.ddgame.ItemModel.Item> getBackpack() {
+    public ArrayList<Item> getBackpack() {
         return backpack;
     }
     /**
      * set backpack
      */
-    public void setBackpack(ArrayList<com.chaowang.ddgame.ItemModel.Item> backpack) {
+    public void setBackpack(ArrayList<Item> backpack) {
         this.backpack = backpack;
     }
     /**
      * get equipment
      * @return equipment
      */
-    public HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item> getEquipment() {
+    public HashMap<Item.ItemType, Item> getEquipment() {
         return equipment;
     }
     /**
      * set equipment
      */
-    public void setEquipment(HashMap<com.chaowang.ddgame.ItemModel.Item.ItemType, com.chaowang.ddgame.ItemModel.Item> equipment) {
+    public void setEquipment(HashMap<Item.ItemType, Item> equipment) {
         this.equipment = equipment;
     }
     /**
      * load equipment
      * @param item the specific item for the character
      */
-    public void loadEquipment(com.chaowang.ddgame.ItemModel.Item item) {
+    public void loadEquipment(Item item) {
     	equipment.put(item.getItemType(), item);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
@@ -369,8 +369,8 @@ public class Character implements Json.Serializable{
      * @param itemType the type if the equipment
      * @return the removed equipment
      */
-    public com.chaowang.ddgame.ItemModel.Item removeEquipment(com.chaowang.ddgame.ItemModel.Item.ItemType itemType) {
-    	com.chaowang.ddgame.ItemModel.Item item = equipment.remove(itemType);
+    public Item removeEquipment(Item.ItemType itemType) {
+    	Item item = equipment.remove(itemType);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
     		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
@@ -643,8 +643,8 @@ public class Character implements Json.Serializable{
 		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("armorClass", armorClass);
 		json.writeValue("isFriendly", isFriendly);
-		json.writeValue("equipment", equipment, HashMap.class, com.chaowang.ddgame.ItemModel.Item.class);
-		json.writeValue("backPack", backpack, ArrayList.class, com.chaowang.ddgame.ItemModel.Item.class);
+		json.writeValue("equipment", equipment, HashMap.class, Item.class);
+		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
 		json.writeValue("PromoPoint", promotionPoint);
 		json.writeValue("BonusAbilities", abilityBonusArr);
 	}
@@ -667,28 +667,28 @@ public class Character implements Json.Serializable{
 		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
 		if(equipmentPointer != null){
 			Iterator<JsonValue> dataIterator = equipmentPointer.iterator();
-			com.chaowang.ddgame.ItemModel.Item item;
+			Item item;
 			JsonValue dataValue;
 			String context;
 			while(dataIterator.hasNext()){
 				dataValue= dataIterator.next();
 				context = dataValue.toString();
 				context = context.substring(context.indexOf("{")-1);
-				item = json.fromJson(com.chaowang.ddgame.ItemModel.Item.class, context);
-				equipment.put(com.chaowang.ddgame.ItemModel.Item.ItemType.valueOf(dataValue.name) ,item);
+				item = json.fromJson(Item.class, context);
+				equipment.put(Item.ItemType.valueOf(dataValue.name) ,item);
 			}
 		}
 
 		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next.next;
 		if(backPackPointer != null){
 			Iterator<JsonValue> dataIterator = backPackPointer.iterator();
-			com.chaowang.ddgame.ItemModel.Item item;
+			Item item;
 			JsonValue dataValue;
 			String context;
 			while(dataIterator.hasNext()){
 				dataValue= dataIterator.next();
 				context = dataValue.toString();
-				item = json.fromJson(com.chaowang.ddgame.ItemModel.Item.class, context);
+				item = json.fromJson(Item.class, context);
 				backpack.add(item);
 			}
 		}

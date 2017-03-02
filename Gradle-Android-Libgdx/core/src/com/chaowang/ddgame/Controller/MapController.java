@@ -45,6 +45,17 @@ public class MapController {
         itemCarrier = new Item();
         characterCarrier = new Character();
     }
+    
+    /**
+     * constructor only connect to model
+     * @param model
+     */
+    public MapController(Map model, Item item, Character character){
+        this.map = model;
+        matrixPointer = 0;
+        itemCarrier = item;
+        characterCarrier = character;
+    }
     /**
      * controller for confirming all input information on map editor page
      */
@@ -288,36 +299,63 @@ public class MapController {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     int i = getButton() / map.getSize();
                     int j = getButton() % map.getSize();
-                    switch (map.getLocationMatrix()[i][j]){
-                        case -3:
-                            map.removeEnemyLocationList(i,j);
-                            break;
-                        case -2:
-                            map.removeFriendLocationList(i,j);
-                            break;
-                        case -1:
-                            map.removeItemLocationList(i,j);
-                            break;
-                    }
-                    map.getLocationMatrix()[i][j] = matrixPointer;
-                    switch (map.getLocationMatrix()[i][j]){
-                        case -3:
-                            map.addEnemyLocationList(i,j,characterCarrier);
-                            break;
-                        case -2:
-                            map.addFriendLocationList(i,j,characterCarrier);
-                            break;
-                        case -1:
-                            map.addItemLocationList(i,j, itemCarrier);
-                            break;
-                    }
+                    addItemCharctOnSpot(i, j);
                     view.mapTable.clearChildren();
                     buildMapMatrix();
                     addMapMatrixListener();
                     return true;
                 }
+
             });
         }
     }
+    
+    /**
+     * add the item or character on the location spot, if has the old, replace with new item or character
+     * @param i x axis location
+     * @param j y axis location
+     */
+	public void addItemCharctOnSpot(int i, int j) {
+		switch (map.getLocationMatrix()[i][j]){
+            case -3:
+                map.removeEnemyLocationList(i,j);
+                break;
+            case -2:
+                map.removeFriendLocationList(i,j);
+                break;
+            case -1:
+                map.removeItemLocationList(i,j);
+                break;
+        }
+        map.getLocationMatrix()[i][j] = matrixPointer;
+        switch (map.getLocationMatrix()[i][j]){
+            case -3:
+                map.addEnemyLocationList(i,j,characterCarrier);
+                break;
+            case -2:
+                map.addFriendLocationList(i,j,characterCarrier);
+                break;
+            case -1:
+                map.addItemLocationList(i,j, itemCarrier);
+                break;
+        }
+	}
+
+	/**
+	 * @return the spot on location whether it is a item, character or wall, doors
+	 */
+	public int getMatrixPointer() {
+		return matrixPointer;
+	}
+
+	/**
+	 * reset the spot on location whether it is a item, character or wall, doors
+	 * @param matrixPointer
+	 */
+	public void setMatrixPointer(int matrixPointer) {
+		this.matrixPointer = matrixPointer;
+	}
+	
+	
 
 }

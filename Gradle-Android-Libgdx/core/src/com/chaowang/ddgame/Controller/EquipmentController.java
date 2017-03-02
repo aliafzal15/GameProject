@@ -38,6 +38,15 @@ public class EquipmentController {
         this.view = view;
         character = model;
     }
+    
+    /**
+     * constructor
+     * @param model
+     */
+    public EquipmentController(Character model){
+        character = model;
+    }
+
 
     /**
      * 
@@ -141,8 +150,7 @@ public class EquipmentController {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (character.getBackpack().get(button).getLevel() <= (1 + character.getLevel()) / 2
                             && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
-                        Item itemtmp = character.getBackpack().remove(getButton());
-                        character.loadEquipment(itemtmp);
+                        loadEquipment(getButton());
                         view.equipmentTable.clearChildren();
                         buildEquipmentMatrix();
                         addEquipmentMatrixListener();
@@ -203,5 +211,14 @@ public class EquipmentController {
             });
         }
     }
+
+    /**
+     * remove backpack item at index, and load it to character equipment
+     * @param index index of backpack 1-10
+     */
+	public void loadEquipment(int index) {
+		Item itemtmp = character.getBackpack().remove(index);
+		character.loadEquipment(itemtmp);
+	}
 
 }
