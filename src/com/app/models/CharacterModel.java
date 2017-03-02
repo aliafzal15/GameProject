@@ -48,10 +48,12 @@ private boolean isEditable;
 		
 		this.isFirstCreation=true;
 		this.charType=charType;
+		this.plyrLevel=1;
 		generateAbilityScores();
 		generateModifiers();
 		calculateHitPoints();
 		calculateAttackBonus();
+		calculateDamageBonus();
 		this.setCharLevel(1);
 		this.isEditable=true;
 		this.setArrayWorn();
@@ -93,18 +95,8 @@ private boolean isEditable;
 	 * This Method calculates the value for attack bonus.
 	 *
 	 */
-	public void calculateAttackBonus(){
-		
-		if (this.getCharLevel()==1){
-			
-			this.attackBonus=1;		
-		}
-		
-		else {
-			
-			this.attackBonus=this.attackBonus+1;
-		}
-		
+	public void calculateAttackBonus(){			
+			this.attackBonus=this.plyrLevel;		
 	}
 	
 	
