@@ -76,6 +76,15 @@ public class Map implements Json.Serializable{
         this.entryDoor = entryEntryDoor;
         this.exitDoor = exitEntryDoor;
     }
+
+    /**
+     * LocationMatrix setter
+     * @param locationMatrix
+     */
+    public void setLocationMatrix(int[][] locationMatrix) {
+        this.locationMatrix = locationMatrix;
+    }
+
     /**
      * add to a list about wall locations 
      * @param i

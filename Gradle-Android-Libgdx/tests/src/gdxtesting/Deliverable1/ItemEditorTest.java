@@ -38,6 +38,6 @@ public class ItemEditorTest {
 
 	@Test
 	public void itemLevelExist() {
-		assertEquals(item.getLevel(), 0);
+		assertEquals(item.getLevel(), 1);
 	}
 }
