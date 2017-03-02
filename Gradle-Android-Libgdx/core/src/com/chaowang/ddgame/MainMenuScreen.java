@@ -64,7 +64,7 @@ public class MainMenuScreen implements Screen{
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
+        font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
         style = new Label.LabelStyle(font, Color.WHITE);
         
         itemInventory = new ItemInventory();
@@ -81,10 +81,10 @@ public class MainMenuScreen implements Screen{
         }
 
 
-        backgroundTexture =  new Texture(Gdx.files.internal("android/assets/dnd.png"));
+        backgroundTexture =  new Texture(Gdx.files.internal("dnd.png"));
 
-        skin = new Skin(Gdx.files.internal("android/assets/Style/uiskin.json"));
-        buttonAtlas = new TextureAtlas("android/assets/buttons/button.pack");
+        skin = new Skin(Gdx.files.internal("Style/uiskin.json"));
+        buttonAtlas = new TextureAtlas("buttons/button.pack");
         skin.addRegions(buttonAtlas);
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.up = skin.getDrawable("buttonOn");

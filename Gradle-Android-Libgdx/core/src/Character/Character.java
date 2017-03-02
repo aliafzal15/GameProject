@@ -128,25 +128,25 @@ public class Character implements Json.Serializable{
     private void updateTexture(RaceType raceType) {
         switch (raceType){
             case HUMAN:
-                texture = new Texture(Gdx.files.internal("android/assets/races/human.jpg"));
+                texture = new Texture(Gdx.files.internal("races/human.jpg"));
                 break;
             case DWARF:
-                texture = new Texture(Gdx.files.internal("android/assets/races/dwarf.png"));
+                texture = new Texture(Gdx.files.internal("races/dwarf.png"));
                 break;
             case ELF:
-                texture = new Texture(Gdx.files.internal("android/assets/races/elf.png"));
+                texture = new Texture(Gdx.files.internal("races/elf.png"));
                 break;
             case ORC:
-                texture = new Texture(Gdx.files.internal("android/assets/races/orc.png"));
+                texture = new Texture(Gdx.files.internal("races/orc.png"));
                 break;
             case TAUREN:
-                texture = new Texture(Gdx.files.internal("android/assets/races/tauren.png"));
+                texture = new Texture(Gdx.files.internal("races/tauren.png"));
                 break;
             case TROLL:
-                texture = new Texture(Gdx.files.internal("android/assets/races/troll.png"));
+                texture = new Texture(Gdx.files.internal("races/troll.png"));
                 break;
             case UNDEAD:
-                texture = new Texture(Gdx.files.internal("android/assets/races/undead.png"));
+                texture = new Texture(Gdx.files.internal("races/undead.png"));
                 break;
         }
     }

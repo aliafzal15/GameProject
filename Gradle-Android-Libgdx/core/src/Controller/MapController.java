@@ -69,25 +69,25 @@ public class MapController {
             for (int j = 0; j < size; j++) {
                 switch (map.getLocationMatrix()[i][j]){
                     case -3:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/enemy.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/enemy.png")))));
                         break;
                     case -2:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/friend.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/friend.png")))));
                         break;
                     case -1:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/chest.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/chest.png")))));
                         break;
                     case 1:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/wall.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/wall.png")))));
                         break;
                     case 2:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/entryDoor.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/entryDoor.png")))));
                         break;
                     case 3:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/exitDoor.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/exitDoor.png")))));
                         break;
                     default:
-                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/pave.png")))));
+                        view.mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/pave.png")))));
                         break;
                 }
                 view.mapTable.add(view.mapMatrix[(i * size) + j]).fill();
@@ -102,16 +102,16 @@ public class MapController {
         for (int i = 0 ; i < view.elementList.length ; i++){
             switch (i){
                 case 1:
-                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/wall.png")))));
+                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/wall.png")))));
                     break;
                 case 2:
-                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/entryDoor.png")))));
+                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/entryDoor.png")))));
                     break;
                 case 3:
-                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/exitDoor.png")))));
+                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/exitDoor.png")))));
                     break;
                 default:
-                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/pave.png")))));
+                    view.elementList[i] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map/pave.png")))));
                     break;
             }
             view.elementTable.add(view.elementList[i]).fill().expandX();
@@ -142,10 +142,10 @@ public class MapController {
     	if(!view.confirmButton.isTouchable()){
             int entryCount = map.validateEntryDoor();
             int exitCount = map.validateExitDoor();
-            if (Integer.parseInt(view.sizeField.getText()) == map.getSize() && entryCount > 0 && exitCount > 0 ) {
-                if(entryCount == 1 && exitCount == 1){
-                    MazeSolver solver = new MazeSolver();
-                    if(solver.solveMaze(map.getLocationMatrix())){
+            if (Integer.parseInt(view.sizeField.getText()) == map.getSize() && entryCount ==1 && exitCount ==1 ) {
+                MazeSolver solver = new MazeSolver(map.getLocationMatrix());
+                if(! solver.isInSurroundings()){
+                    if(solver.solveMaze()){
                         map.getWallLocationList().clear();
                         map.addWall();
                         MainMenuScreen.mapInventory.addToInventory(map);
@@ -165,13 +165,13 @@ public class MapController {
                 }
                 else{
                     new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                    }.text("Map entry door exit door more than 1").button("OK", true).key(Input.Keys.ENTER, true)
+                    }.text("Map entry and exit are attached").button("OK", true).key(Input.Keys.ENTER, true)
                             .show(view.stage);
                 }
             }
             else{
                 new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                }.text("Map does not have entry door or exit door").button("OK", true).key(Input.Keys.ENTER, true)
+                }.text("Map need 1 entry door 1 exit door").button("OK", true).key(Input.Keys.ENTER, true)
                         .show(view.stage);
             }
     	} else{

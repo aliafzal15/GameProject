@@ -11,12 +11,13 @@ public class MazeSolver {
 	private boolean[][] correctPath; //= new boolean[width][height]; // The solution to the maze
 	private int startX, startY; // Starting X and Y values of maze
 	private int endX, endY;     // Ending X and Y values of maze
-	private static int[][] directions = new int[][]{{-1,-1}, {-1,0}, {-1,1},  {0,1}, {1,1},  {1,0},  {1,-1},  {0, -1}};
+    private static int[][] directions = new int[][]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    // private static int[][] directions = new int[][]{{-1,-1}, {-1,0}, {-1,1},  {0,1}, {1,1},  {1,0},  {1,-1},  {0, -1}};
 	/**
-	 * generate maze
+	 *  Create Maze (1 = path, 2 = wall)
 	 * @param locationMatrix a certain matrix
 	 */
-	private void generateMaze(int[][] locationMatrix){
+	public  MazeSolver(int[][] locationMatrix){
 		height = locationMatrix.length;
 		width = locationMatrix[0].length;
 		maze = new int[width][height];
@@ -41,13 +42,11 @@ public class MazeSolver {
 
 	}
 	/**
-	 * maze solver
-	 * @param locationMatrix a matrix as maze
+	 * maze solver, to find if there is a path to exit
 	 * @return if successfully passing the maze
 	 */
-	public boolean solveMaze(int[][] locationMatrix) {
-	    generateMaze(locationMatrix); // Create Maze (1 = path, 2 = wall)
-	    for (int row = 0; row < maze.length; row++)  
+	public boolean solveMaze() {
+	    for (int row = 0; row < maze.length; row++)
 	        // Sets boolean Arrays to default values
 	        for (int col = 0; col < maze[row].length; col++){
 	            wasHere[row][col] = false;
@@ -92,8 +91,11 @@ public class MazeSolver {
 	        }
 	    return false;
 	}
-	
-	
+
+	/**
+	 * algorithm to find if entry and exit are attached together
+	 * @return true of false
+	 */
 	public boolean isInSurroundings(){
 	    for (int[] direction : directions) {
 	        int cx = startX + direction[0];

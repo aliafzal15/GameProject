@@ -1,6 +1,7 @@
 package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 /**
  * class for driving the game view
@@ -19,10 +20,10 @@ public class DDGame extends Game {
         setScreen(new MainMenuScreen(game));
 
 
-//		float w = Gdx.graphics.getWidth();
-//		float h = Gdx.graphics.getHeight(;
-//
-//		camera = new OrthographicCamera(1, h/w);
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+
+		camera = new OrthographicCamera(1, h/w);
 
 
 

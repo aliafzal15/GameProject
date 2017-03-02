@@ -16,7 +16,7 @@ public class Tree {
         this.position = position;
         this.size = size;
         bounds = new Rectangle(position.x, position.y, size.x , size.y );
-        tree = new Texture(Gdx.files.internal("android/assets/map/tree.png"));
+        tree = new Texture(Gdx.files.internal("map/tree.png"));
     }
 
     public void update(){

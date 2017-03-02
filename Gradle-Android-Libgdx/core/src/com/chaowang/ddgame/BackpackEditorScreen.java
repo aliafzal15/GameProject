@@ -54,7 +54,7 @@ public class BackpackEditorScreen implements Screen {
     public void show() {
 
         stage = new Stage(new ScreenViewport());
-        backgroundTexture = new Texture(Gdx.files.internal("android/assets/EditorBackground.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
 
         controller = new BackpackController(this, this.character);
@@ -92,7 +92,7 @@ public class BackpackEditorScreen implements Screen {
 
 
         backpackTable = new Table();
-        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpackBackground.png")))));
+        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
         backpackTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 1 / 3);
         backpackTable.setPosition( 0 , Gdx.graphics.getHeight() * 1 / 3);
 

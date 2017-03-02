@@ -45,7 +45,7 @@ public class EquipmentController {
                 if ((i * PublicParameter.itemBackpackColumn) + j < character.getBackpack().size()) {
                     view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getBackpack().get(i * PublicParameter.itemBackpackColumn + j).getTexture())));
                 } else {
-                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
                 ImageButton tempButton = view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j];
                 view.backpackTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(25);
@@ -67,7 +67,7 @@ public class EquipmentController {
         if(character.getEquipment().get(Item.ItemType.HELMET) != null){
             view.equipmentMatrix[0] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.HELMET).getTexture())));
         }else{
-            view.equipmentMatrix[0] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[0] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[0]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         view.equipmentTable.add(new Label("", MainMenuScreen.style)).width(80);
@@ -77,7 +77,7 @@ public class EquipmentController {
         if(character.getEquipment().get(Item.ItemType.ARMOR) != null){
             view.equipmentMatrix[1] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.ARMOR).getTexture())));
         }else{
-            view.equipmentMatrix[1] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[1] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[1]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         view.equipmentTable.add(new Label("", MainMenuScreen.style)).width(80);
@@ -86,19 +86,19 @@ public class EquipmentController {
         if(character.getEquipment().get(Item.ItemType.WEAPON) != null){
             view.equipmentMatrix[2] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.WEAPON).getTexture())));
         }else{
-            view.equipmentMatrix[2] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[2] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[2]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         if(character.getEquipment().get(Item.ItemType.BELT) != null){
             view.equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.BELT).getTexture())));;
         }else{
-            view.equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[3]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         if(character.getEquipment().get(Item.ItemType.SHIELD) != null){
             view.equipmentMatrix[4] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.SHIELD).getTexture())));
         }else{
-            view.equipmentMatrix[4] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[4] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[4]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         view.equipmentTable.row();
@@ -107,13 +107,13 @@ public class EquipmentController {
         if(character.getEquipment().get(Item.ItemType.BOOTS) != null){
             view.equipmentMatrix[5] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.BOOTS).getTexture())));
         }else{
-            view.equipmentMatrix[5] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[5] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[5]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         if(character.getEquipment().get(Item.ItemType.RING) != null){
             view.equipmentMatrix[6] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.RING).getTexture())));
         }else{
-            view.equipmentMatrix[6] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+            view.equipmentMatrix[6] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
         }
         view.equipmentTable.add(view.equipmentMatrix[6]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
 

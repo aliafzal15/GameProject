@@ -36,7 +36,7 @@ public class Wall implements Json.Serializable{
         this.position = position;
         this.size = size;
         bounds = new Rectangle(position.x, position.y, size.x , size.y );
-        wall = new Texture(Gdx.files.internal("android/assets//map/wall.png"));
+        wall = new Texture(Gdx.files.internal("map/wall.png"));
     }
     /**
      * constructor

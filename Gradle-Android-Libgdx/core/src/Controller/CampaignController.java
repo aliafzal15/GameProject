@@ -72,7 +72,7 @@ public class CampaignController {
 
     public void buildMapInventoryMatrix() {
         Label tmpLabel;
-        BitmapFont font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
+        BitmapFont font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         for (int i = 0; i < PublicParameter.mapInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.mapInventoryRow; j++) {

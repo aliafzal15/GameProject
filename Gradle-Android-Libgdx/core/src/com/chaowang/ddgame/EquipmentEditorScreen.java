@@ -54,7 +54,7 @@ public class EquipmentEditorScreen implements Screen{
     public void show() {
 
         stage = new Stage(new ScreenViewport());
-        backgroundTexture = new Texture(Gdx.files.internal("android/assets/EditorBackground.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
 
         controller = new EquipmentController(this, this.character);
@@ -81,7 +81,7 @@ public class EquipmentEditorScreen implements Screen{
         stage.addActor(equipmentItemInfoLabel);
 
         backpackTable = new Table();
-        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpackBackground.png")))));
+        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
         backpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
         backpackTable.setPosition(Gdx.graphics.getWidth() * 3 / 7, Gdx.graphics.getHeight() * 1 / 3);
 
@@ -95,7 +95,7 @@ public class EquipmentEditorScreen implements Screen{
 
         equipmentTable.setSize(Gdx.graphics.getWidth() / 8 , Gdx.graphics.getHeight() * 1 / 3);
         equipmentTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
-        equipmentTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/MaleHumanUnderwear.png")))));
+        equipmentTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("MaleHumanUnderwear.png")))));
 
         equipmentMatrix = new ImageButton[PublicParameter.itemTypeCount];
         controller.buildEquipmentMatrix();

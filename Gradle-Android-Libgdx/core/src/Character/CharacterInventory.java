@@ -73,7 +73,7 @@ public class CharacterInventory {
             addToInventory(character);
         }
         scanner.close();
-
+        file.exists();
     }
     /**
      * write files

@@ -21,7 +21,7 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public EntryDoor(Vector2 position){
         super(position);
-        entryDoor = new Texture(Gdx.files.internal("android/assets/map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
     }
     /**
      * constructor
@@ -30,14 +30,14 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public EntryDoor(Vector2 position, Vector2 size){
         super(position, size);
-        entryDoor = new Texture(Gdx.files.internal("android/assets/map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
     }
     /**
      * constructor
      */
     public EntryDoor(){
         super();
-        entryDoor = new Texture(Gdx.files.internal("android/assets/map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
     }
     /**
      * put the entry door on the background image

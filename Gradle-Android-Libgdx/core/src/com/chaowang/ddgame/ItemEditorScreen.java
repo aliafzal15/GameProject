@@ -52,7 +52,7 @@ public class ItemEditorScreen implements Screen {
 	public void show() {
 
 		stage = new Stage(new ScreenViewport());
-		backgroundTexture = new Texture(Gdx.files.internal("android/assets/EditorBackground.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
 		batch = new SpriteBatch();
 
 		item = new Item();

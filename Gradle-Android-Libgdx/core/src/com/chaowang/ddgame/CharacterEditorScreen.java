@@ -71,7 +71,7 @@ public class CharacterEditorScreen implements Screen {
 	public void show() {
 
 		stage = new Stage(new ScreenViewport());
-		backgroundTexture = new Texture(Gdx.files.internal("android/assets/EditorBackground.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
 		batch = new SpriteBatch();
 
 		mainPageButton = new TextButton("<--", MainMenuScreen.buttonStyle);
@@ -248,7 +248,7 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(characterSaveButton);
 
-		equipmentPageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/equipment.png")))));
+		equipmentPageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("equipment.png")))));
 		equipmentPageButton.setWidth(Gdx.graphics.getWidth() / 15);
 		equipmentPageButton.setHeight(Gdx.graphics.getHeight() / 15);
 		equipmentPageButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 3));
@@ -264,7 +264,7 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(equipmentPageButton);
 
-		backpackButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpack.png")))));
+		backpackButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpack.png")))));
 		backpackButton.setWidth(Gdx.graphics.getWidth() / 15);
 		backpackButton.setHeight(Gdx.graphics.getHeight() / 15);
 		backpackButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 5));
@@ -280,7 +280,7 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(backpackButton);
 
-		diceButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/dice.png")))));
+		diceButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("dice.png")))));
 		diceButton.setWidth(Gdx.graphics.getWidth() / 15);
 		diceButton.setHeight(Gdx.graphics.getHeight() / 15);
 		diceButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 12));
@@ -315,7 +315,6 @@ public class CharacterEditorScreen implements Screen {
      */
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

@@ -225,7 +225,7 @@ public class CharacterController {
 				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenuScreen.characterInventory.getChatacterPack().size) {
 					view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.characterInventory.getChatacterPack().get(i * PublicParameter.characterInventoryColumn + j).getTexture())));
 				} else {
-					view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+					view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
 				}
 				ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j];
 				view.inventoryTable.add(tempButton).width(PublicParameter.characterCellWidth).height(PublicParameter.characterCellHeight).space(15);

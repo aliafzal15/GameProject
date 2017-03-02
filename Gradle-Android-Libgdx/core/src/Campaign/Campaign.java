@@ -101,7 +101,6 @@ public class Campaign implements Json.Serializable{
 	 */
 	@Override
 	public void write(Json json) {
-		// TODO Auto-generated method stub
         json.writeValue("Name", name);
         json.writeValue("MapPack", mapPack, ArrayList.class, Map.class);
 	}
@@ -110,7 +109,6 @@ public class Campaign implements Json.Serializable{
 	 */
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
         String context;
         name = jsonData.child.asString();
         JsonValue pointer = jsonData.child.next;

@@ -65,7 +65,7 @@ public class PlayScreen implements Screen{
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch = new SpriteBatch();
-        mario = new Texture(Gdx.files.internal("android/assets/Mario.png"));
+        mario = new Texture(Gdx.files.internal("Mario.png"));
         sr = new ShapeRenderer();
         tree = new Tree(new Vector2(100, 100),new Vector2(50, 100));
         tree1 = new Tree(new Vector2(200, 100),new Vector2(50, 100));
@@ -77,7 +77,7 @@ public class PlayScreen implements Screen{
 
         if(Gdx.files.local("player.dat").exists()){
             try{
-                player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() /2 , Gdx.graphics.getHeight() /2 ), "android/assets/Mario.png");
+                player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() /2 , Gdx.graphics.getHeight() /2 ), "Mario.png");
                 player.setPosition(LibgdxExample.Player.readPlayer());
             } catch (ClassNotFoundException e){
                 e.printStackTrace();
@@ -87,7 +87,7 @@ public class PlayScreen implements Screen{
             System.out.println("Player exist, reading file");
         }
         else{
-            player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), "android/assets/Mario.png");
+            player = new LibgdxExample.Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), "Mario.png");
             try{
                 Player.savePlayer(player);
             } catch (IOException e){
@@ -105,17 +105,17 @@ public class PlayScreen implements Screen{
 //            for (int j = 0 ; j < 10; j++){
 //                int R = (int) ((Math.random() * (2 - 0) + 0 ));
 //                if ( R == 0) {
-//                    tiles.add(new Tile(new Texture(Gdx.files.internal("android/assets/grass.png")), i*50, j*50, 50, 50));
+//                    tiles.add(new Tile(new Texture(Gdx.files.internal("grass.png")), i*50, j*50, 50, 50));
 //                }
 //                if ( R == 1) {
-//                    tiles.add(new Tile(new Texture(Gdx.files.internal("android/assets/dirt.png")), i*50, j*50, 50, 50));
+//                    tiles.add(new Tile(new Texture(Gdx.files.internal("dirt.png")), i*50, j*50, 50, 50));
 //                }
 //            }
 //        }
 
-        //sound = Gdx.audio.newSound(Gdx.files.internal("android/assets/sound.mp3"));
+        //sound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
         //sound.play();
-        map = new TmxMapLoader().load("android/assets/terrain.tmx");
+        map = new TmxMapLoader().load("terrain.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
         bounds = new ArrayList<Rectangle>();

@@ -54,7 +54,7 @@ public class CampaignEditorScreen implements Screen {
     public void show() {
 
         stage = new Stage(new ScreenViewport());
-        backgroundTexture = new Texture(Gdx.files.internal("android/assets/EditorBackground.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
         
         campaign = new Campaign();
@@ -85,7 +85,7 @@ public class CampaignEditorScreen implements Screen {
 
         mapInventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 7 / 10);
         mapInventoryTable.setPosition(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 4);
-        mapInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/scrollPaper.png")))));
+        mapInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("scrollPaper.png")))));
         mapInventoryMatrix = new Label[PublicParameter.mapInventoryRow * PublicParameter.mapInventoryColumn ];
         campaignController.buildMapInventoryMatrix();
         campaignController.addMapInventoryMatrixListener();
@@ -96,7 +96,7 @@ public class CampaignEditorScreen implements Screen {
 
         campaignInventoryTable.setSize(Gdx.graphics.getWidth() * 9 / 10 , Gdx.graphics.getHeight() * 1 / 5);
         campaignInventoryTable.setPosition(10 , Gdx.graphics.getHeight() * 1 / 50);
-        campaignInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpackBackground.png")))));
+        campaignInventoryTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
 
         campaignInventoryMatrix = new Label[PublicParameter.campaignInventorySize];
         campaignController.buildCampaignInventoryMatrix();

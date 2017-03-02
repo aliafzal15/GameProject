@@ -51,7 +51,7 @@ public class BackpackController {
                 if ((i * PublicParameter.itemBackpackColumn) + j < character.getBackpack().size()) {
                     view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getBackpack().get(i * PublicParameter.itemBackpackColumn + j).getTexture())));
                 } else {
-                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+                    view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
                 ImageButton tempButton = view.backpackMatrix[(i * PublicParameter.itemBackpackColumn) + j];
                 view.backpackTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);
@@ -68,7 +68,7 @@ public class BackpackController {
                 if ((i * PublicParameter.itemInventoryRow) + j < MainMenuScreen.itemInventory.getItemPack().size) {
                     view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenuScreen.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryRow + j).getTexture())));
                 } else {
-                    view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
+                    view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
                 }
                 ImageButton tempButton = view.inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j];
                 view.inventoryTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);

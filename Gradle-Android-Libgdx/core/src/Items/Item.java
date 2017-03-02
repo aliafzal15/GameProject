@@ -116,25 +116,25 @@ public class Item implements Json.Serializable{
 //        }
         switch (type){
             case ARMOR:
-                texture = new Texture(Gdx.files.internal("android/assets/items/armor.png"));
+                texture = new Texture(Gdx.files.internal("items/armor.png"));
                 break;
             case BELT:
-                texture = new Texture(Gdx.files.internal("android/assets/items/belt.png"));
+                texture = new Texture(Gdx.files.internal("items/belt.png"));
                 break;
             case BOOTS:
-                texture = new Texture(Gdx.files.internal("android/assets/items/boots.png"));
+                texture = new Texture(Gdx.files.internal("items/boots.png"));
                 break;
             case HELMET:
-                texture = new Texture(Gdx.files.internal("android/assets/items/helmet.png"));
+                texture = new Texture(Gdx.files.internal("items/helmet.png"));
                 break;
             case RING:
-                texture = new Texture(Gdx.files.internal("android/assets/items/ring.png"));
+                texture = new Texture(Gdx.files.internal("items/ring.png"));
                 break;
             case SHIELD:
-                texture = new Texture(Gdx.files.internal("android/assets/items/shield.jpg"));
+                texture = new Texture(Gdx.files.internal("items/shield.jpg"));
                 break;
             case WEAPON:
-                texture = new Texture(Gdx.files.internal("android/assets/items/sword.png"));
+                texture = new Texture(Gdx.files.internal("items/sword.png"));
                 break;
         }
     }
