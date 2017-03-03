@@ -47,9 +47,6 @@ public class MapEditorMapElements {
 	private ArrayList<ItemsModel> tempFighterBagItems;
 	private ArrayList<ItemsModel> tempZombieWornItems;
 	private ArrayList<ItemsModel> tempZombieBagItems;
-	private ArrayList<ItemsModel>tempMapItems;
-	private int tempMapItemIndicator;
-	private String tempMapItemName;
 	private int currObjLoc;
 	/**
 	 * This method initializes the GUI of the Map Editor and calls the action listener based on the parameters.
@@ -78,17 +75,12 @@ public class MapEditorMapElements {
 		tempFighterWornItems=new ArrayList();
 		tempZombieWornItems=new ArrayList();
 		tempZombieBagItems=new ArrayList();
-		tempMapItems=new ArrayList();
 		
 		tempCharacters=objFSO.readCharacterInFile();
 		tempFighterWornItems=objFSO.readWornItemsFighter();
 		tempZombieWornItems=objFSO.readWornItemsZombie();
 		tempFighterBagItems=objFSO.readBagItemsFighter();
 		tempZombieBagItems=objFSO.readBagItemsZombie();
-		tempMapItems=objFSO.ReadItemInFile();
-		
-		this.tempMapItemIndicator=0;
-		this.tempMapItemName=null;
 		
 		
 		
@@ -194,17 +186,6 @@ public class MapEditorMapElements {
 						newMapModel.mapGridSelection[i][j] = 0;	
 						setEntryExit(newMapModel,i,j);
 					}
-					else if(checkIfItemSelected(elementMapValue)){
-							if(CheckIfItemInArray(tempMapItems, tempMapItemName)){
-								setIsFighterZombie(newMapModel,i, j);
-								newMapModel.addItemMAp(tempMapItems.get(currObjLoc));
-								newMapModel.mapGridSelection[i][j] = tempMapItemIndicator;	
-								setItemGraphics(btn,tempMapItemIndicator);
-								setEntryExit(newMapModel,i,j);
-								tempMapItemIndicator=0;
-								tempMapItemName=null;								
-							}					
-					}
 								
 				frame.dispose();
 			}
@@ -240,20 +221,12 @@ public class MapEditorMapElements {
 		comboElements.setBounds(121, 62, 92, 20);
 		frame.getContentPane().add(comboElements);
 		
-		comboElements.addItem("None");
 		comboElements.addItem("Wall");
 		comboElements.addItem("Fighter");
 		comboElements.addItem("Zombie");
-		comboElements.addItem("Weapon");
-		comboElements.addItem("Shield");
-		comboElements.addItem("Armor");
-		comboElements.addItem("Boots");
-		comboElements.addItem("Belt");
-		comboElements.addItem("Ring");
-		comboElements.addItem("Helmet");
 		comboElements.addItem("Entry");
 		comboElements.addItem("Exit");
-		
+		comboElements.addItem("None");
 		
 		
 		System.out.println("Save button Not pressed");
@@ -465,18 +438,7 @@ public class MapEditorMapElements {
 		
    	}
 	
-	/**
-	 * This method checks if character is in the character file
-	 * @param charsList
-	 * 			List of characters in the file
-	 * @param charType
-	 * 		    Type of the character to be searched
-	 * @return 
-	 * 		  True if found,otherwise False	
-	 * 				
-	 * 
-	 */	
-private boolean CheckIfInArray(ArrayList <CharacterModel> charsList,String charType){
+	private boolean CheckIfInArray(ArrayList <CharacterModel> charsList,String charType){
 		
   if(charsList !=null){	
 	 if (charsList.size()>0){
@@ -511,144 +473,5 @@ private boolean CheckIfInArray(ArrayList <CharacterModel> charsList,String charT
 	}
 
  }	
-
-
-/**
- * This method checks if item is selected
- * @param val
- * 			Type of the Selected Item
- * 
- * @return 
- * 		  True if found,otherwise False	
- * 				
- * 
- */	
-
-private boolean checkIfItemSelected(String val){
 	
-	
-	if(val.equals("Weapon")){
-		this.tempMapItemIndicator=6;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Shield")){
-		this.tempMapItemIndicator=7;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Armor")){
-		this.tempMapItemIndicator=8;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Boots")){
-		this.tempMapItemIndicator=9;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Belt")){
-		this.tempMapItemIndicator=10;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Ring")){
-		this.tempMapItemIndicator=11;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else if(val.equals("Helmet")){
-		this.tempMapItemIndicator=12;
-		this.tempMapItemName=val;
-		return true;
-	}
-	else{
-		return false;
-	}	
-	
- }
-	
-
-/**
- * This method checks if item is in the items file
- * @param itemsList
- * 			List of items in the file
- * @param type
- * 		    Type of the item to be searched
- * @return 
- * 		  True if found,otherwise False	
- * 				
- * 
- */	
-private boolean CheckIfItemInArray(ArrayList <ItemsModel> itemsList,String type){
-	
-	  if(itemsList !=null){	
-		 if (itemsList.size()>0){
-			
-			for (int i=0;i<itemsList.size();i++){
-				String tempType =itemsList.get(i).itemType;
-				
-					if(tempType.equals(type)){ 
-						this.currObjLoc=i;
-					    return true;				
-					}
-					
-			 }//for
-			
-			JOptionPane.showMessageDialog (null,"Item Could not be Added. Please Create Item from Item Editor and then try again !!!");
-			return false;
-			
-		 }//if
-		 
-		 
-		 else{
-			JOptionPane.showMessageDialog (null,"Item Could not be Added. Please Create Item from Item Editor and then try again !!!");
-			 return false;
-		 }		
-	  }
-
-		else{
-			JOptionPane.showMessageDialog (null,"Item Could not be Added. Please Create Item from Item Editor and then try again !!!");
-			 return false;
-		}
-
-	 }	
-
-
-/**
- * This method sets the GUI for Item on MAP
- * @param but
- * 			Button to be altered
- * @param indicator
- * 		    type of the button to be altered
- * 				
- * 
- */	
-private void setItemGraphics(JButton but,int indicator){
-	
-	if (indicator == 6) {
-		but.setBackground(Color.blue);
-		but.setText("IW");
-	} else if (indicator == 7) {
-		but.setBackground(Color.blue);
-		but.setText("IS");
-	} else if (indicator == 8) {
-		but.setBackground(Color.blue);
-		but.setText("IA");
-	} else if (indicator == 9) {
-		but.setBackground(Color.blue);
-		but.setText("IBO");
-	} else if (indicator == 10) {
-		but.setBackground(Color.blue);
-		but.setText("IBL");
-	} else if (indicator == 11) {
-		but.setBackground(Color.blue);
-		but.setText("IR");
-	} else if (indicator == 12) {
-		but.setBackground(Color.blue);
-		but.setText("IH");
-	} 
-	
-}
-
 }
