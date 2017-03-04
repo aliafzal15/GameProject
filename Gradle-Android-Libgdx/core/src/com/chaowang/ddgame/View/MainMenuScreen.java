@@ -65,6 +65,7 @@ public class MainMenuScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
 
         font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
+        font.getData().markupEnabled = true;
         style = new Label.LabelStyle(font, Color.WHITE);
 
         itemInventory = new ItemInventory();

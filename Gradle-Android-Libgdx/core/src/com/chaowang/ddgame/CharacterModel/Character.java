@@ -98,10 +98,10 @@ public class Character implements Json.Serializable{
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
-        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+0]);
+        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+0]);
         this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
         this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+2]);
-        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+3]);
+        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+3]);
 		abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		System.arraycopy(abilityBonus, 0, abilityBonusArr, 0, abilityBonus.length );
     }
@@ -488,6 +488,31 @@ public class Character implements Json.Serializable{
 		}
         return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
     }
+    
+	/**
+	 * Display personal full abilities and attributes
+	 */
+    public  String displayAllAtributes(){
+		int[] tmp = this.getBaseAttributes();
+		for (int i = 0 ; i < tmp.length; i++){
+			if(i < abilityBonusArr.length){
+				tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
+			}
+		}
+        return "Name: "+this.name + "\n" +
+        		"Race Type: " + this.raceType.toString()+ "\n" +
+        		"Level: "+this.level+ "\n" +
+        		"Strength: " + tmp[0] + "\n" +
+        		"Dexterity: " + tmp[1] + "\n" +
+        		"Constitution: " + tmp[2] + "\n" +
+        		"Wisdom: " + tmp[3] + "\n" +
+        		"Intelligence: " + tmp[4] + "\n" +
+        		"Charisma: " + tmp[5] + "\n" +
+        		"Hit Point : " + tmp[6] + "\n" +
+				"Attach Bonus : " + tmp[7] + "\n" +
+				"Damage Bonus : " + tmp[8] + "\n" +
+				"Armor Class : " + tmp[9] ;
+	}
 
     /**
      * 
@@ -604,13 +629,13 @@ public class Character implements Json.Serializable{
 	 * get all attributes of item
 	 * @return a array as attribute
 	 */
-	public int[] getAllAttributes(){
+	public int[] getBaseAttributes(){
         int[] attributeArr = new int[Abilities.ABILITYSIZE + Character.FIGHTATTRUBUTESIZE];
         System.arraycopy(abilities.getAbilityArr(), 0 , attributeArr , 0, Abilities.ABILITYSIZE);
-        attributeArr[Abilities.ABILITYSIZE ] = armorClass;
+        attributeArr[Abilities.ABILITYSIZE ] = hitPoints;
         attributeArr[Abilities.ABILITYSIZE + 1] = attackBonus;
         attributeArr[Abilities.ABILITYSIZE + 2] = damageBonus;
-        attributeArr[Abilities.ABILITYSIZE + 3] = hitPoints;
+        attributeArr[Abilities.ABILITYSIZE + 3] = armorClass;
         return attributeArr;
     }
 
@@ -638,9 +663,9 @@ public class Character implements Json.Serializable{
 		json.writeValue("Name", name);
 		json.writeValue("Level", level);
 		json.writeValue("abilities", abilities);
+		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("attackBonus", attackBonus);
 		json.writeValue("damageBonus", damageBonus);
-		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("armorClass", armorClass);
 		json.writeValue("isFriendly", isFriendly);
 		json.writeValue("equipment", equipment, HashMap.class, Item.class);
@@ -659,9 +684,9 @@ public class Character implements Json.Serializable{
 		name = jsonData.child.next.next.asString();
 		level = jsonData.child.next.next.next.asInt();
 		setAbilities(jsonData.child.next.next.next.next.child.asIntArray());
-		attackBonus = jsonData.child.next.next.next.next.next.asInt();
-		damageBonus = jsonData.child.next.next.next.next.next.next.asInt();
-		hitPoints = jsonData.child.next.next.next.next.next.next.next.asInt();
+		hitPoints = jsonData.child.next.next.next.next.next.asInt();
+		attackBonus = jsonData.child.next.next.next.next.next.next.asInt();
+		damageBonus = jsonData.child.next.next.next.next.next.next.next.asInt();
 		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();
 		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
 		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;

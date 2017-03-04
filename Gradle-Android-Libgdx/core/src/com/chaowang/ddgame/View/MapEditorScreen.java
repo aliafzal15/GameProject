@@ -37,7 +37,7 @@ public class MapEditorScreen implements Screen{
 	public ImageButton[] mapMatrix, elementList;
 	public Table mapTable, elementTable, inputTable;
 	public SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox, mapSelectBox;
-
+	public Label mapItemInfoLabel;
 	private Map map;
 	private MapController mapController;
 
@@ -127,6 +127,10 @@ public class MapEditorScreen implements Screen{
 
 		});
 		stage.addActor(saveButton);
+
+		mapItemInfoLabel = new Label("", MainMenuScreen.style);
+		mapItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 5), (Gdx.graphics.getHeight() / 30));
+		stage.addActor(mapItemInfoLabel);
 	}
     /**
      * put image on background

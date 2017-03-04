@@ -220,7 +220,7 @@ public class CharacterController {
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getLevel(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getPromotionPoint(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getRaceType(),
-							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getAllAttributes(),
+							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getBaseAttributes(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getAbilityBonusArr(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getBackpack(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getEquipment());

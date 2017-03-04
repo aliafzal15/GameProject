@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.View.MainMenuScreen;
 import com.chaowang.ddgame.View.MapEditorScreen;
 
@@ -308,6 +310,28 @@ public class MapController {
                     buildMapMatrix();
                     addMapMatrixListener();
                     return true;
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    int i = getButton() / map.getSize();
+                    int j = getButton() % map.getSize();
+                    switch (map.getLocationMatrix()[i][j]){
+                        case -3:
+                            view.mapItemInfoLabel.setText(map.getEnemyLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                        case -2:
+                            view.mapItemInfoLabel.setText(map.getFriendLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                        case -1:
+                            view.mapItemInfoLabel.setText(map.getItemLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                    }
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    view.mapItemInfoLabel.setText("");
                 }
 
             });

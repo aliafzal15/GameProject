@@ -37,7 +37,7 @@ public class EquipmentEditorScreen implements Screen{
     public Table backpackTable, equipmentTable;
     private Character character;
     private EquipmentController controller;
-    public Label equipmentItemInfoLabel, backpackItemInfoLabel;
+    public Label equipmentItemInfoLabel, backpackItemInfoLabel, characterInfoLabel;
 
     /**
      * constructor
@@ -80,6 +80,10 @@ public class EquipmentEditorScreen implements Screen{
         equipmentItemInfoLabel = new Label("", MainMenuScreen.style);
         equipmentItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 20), (Gdx.graphics.getHeight() / 8));
         stage.addActor(equipmentItemInfoLabel);
+
+        characterInfoLabel = new Label(character.displayAllAtributes(), MainMenuScreen.style);
+        characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 4), (Gdx.graphics.getHeight() / 3));
+        stage.addActor(characterInfoLabel);
 
         backpackTable = new Table();
         backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
