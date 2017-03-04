@@ -1,5 +1,0 @@
-Boots:3
-Boots:3
-Weapon:1
-Weapon:1
-Armor:2

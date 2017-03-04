@@ -1,3 +1,0 @@
-Weapon:1
-Boots:3
-Boots:3
