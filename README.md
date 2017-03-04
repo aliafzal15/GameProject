@@ -1,4 +1,4 @@
-# Dungons and Dragons Game based on java 
+# Dungons and Dragons Game 
 
 Two version of games:
 - [Gradle-Android-Libgdx](Gradle-Android-Libgdx/) contains game based on Gradle Libgdx framwork
