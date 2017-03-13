@@ -16,7 +16,7 @@ public class Tree {
         this.position = position;
         this.size = size;
         bounds = new Rectangle(position.x, position.y, size.x , size.y );
-        tree = new Texture(Gdx.files.internal("map/tree.png"));
+        tree = new Texture(Gdx.files.internal("map/wall1.png"));
     }
 
     public void update(){
@@ -26,7 +26,7 @@ public class Tree {
 
     public void draw(SpriteBatch batch){
 
-        batch.draw(tree, position.x, position.y, size.x, size.y);
+        batch.draw(tree, position.x, position.y, size.x, size.y * 1.5f);
     }
 
     public Vector2 getPosition() {

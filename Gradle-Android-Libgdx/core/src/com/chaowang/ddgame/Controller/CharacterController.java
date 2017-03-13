@@ -12,13 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.View.CharacterEditorScreen;
+import com.chaowang.ddgame.CharacterModel.Abilities;
 import com.chaowang.ddgame.View.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.util.AbilityModifier;
+import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
+import com.chaowang.ddgame.View.CharacterEditorScreen;
+
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * controller for character
  * @author chao wang
@@ -67,7 +72,34 @@ public class CharacterController {
 		view.characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
 	}
 
-    /**
+	/**
+	 * controller for switching to previous race information after pressing button
+	 */
+	public void controlFighterLeftButton() {
+		if(character.previousFighterType()){
+			Integer[] arrTmp = new Integer[Abilities.ABILITYSIZE];
+			for ( int i = 0 ; i < arrTmp.length; i++){
+				arrTmp[i] = character.getAbilities().getAbilityArr()[i];
+			}
+			sortAbilityArrToDisplay(arrTmp);
+		}
+		view.fighterTypeLabel.setText(character.getFighterType().toString());
+	}
+	/**
+	 * controller for switching to the next race information after pressing  button
+	 */
+	public void controlFighterRightButotn() {
+		if(character.nextFighterType()){
+			Integer[] arrTmp = new Integer[Abilities.ABILITYSIZE];
+			for ( int i = 0 ; i < arrTmp.length; i++){
+				arrTmp[i] = character.getAbilities().getAbilityArr()[i];
+			}
+			sortAbilityArrToDisplay(arrTmp);
+		}
+		view.fighterTypeLabel.setText(character.getFighterType().toString());
+	}
+
+	/**
      * controller for switching to main menu page
      */
 	public void controlSwitchPageButton(){
@@ -125,11 +157,11 @@ public class CharacterController {
 					character.getAbilityBonusArr()[i] = Integer.valueOf(view.bonusField[i].getText());
 					view.bonusField[i].setDisabled(true);
 				}
-				character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
-				character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity() + character.getDexterityBonus()));
-				character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength() + character.getStrengthBonus(),
+				character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
+				character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity() + character.getDexterityBonus()));
+				character.setAttackBonus(CharacterScoreModifier.attachBonusCalculator(character.getStrength() + character.getStrengthBonus(),
 						character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
-				character.setDamageBonus(AbilityModifier.damageBonusModifier(character.getStrength() + character.getStrengthBonus()));
+				character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength() + character.getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 				view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));
 				view.armorClassLabel.setText(Integer.toString(character.getArmorClass()));
@@ -179,27 +211,33 @@ public class CharacterController {
 	 * control to dice
 	 */
 	public void controlDiceButton() {
-		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.valueOf(view.wisdomLabel.getText().toString()) == 0) {
+		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[1-9]$|^2[0]$|^") && Integer.valueOf(view.wisdomLabel.getText().toString()) == 0) {
 			character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
-			int multiplier = Integer.parseInt(view.levelLabel.getText().toString()) / 2;
-			character.setStrength(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
-			character.setDexterity(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
-			character.setConstitution(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
-			character.setWisdom(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
-			character.setIntelligence(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
-			character.setCharisma(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier));
+			Integer[] arrTmp = new Integer[Abilities.ABILITYSIZE];
+			for ( int i = 0 ; i < arrTmp.length; i++){
+				arrTmp[i] = Dice.roll(Dice.DICENUMBER, Dice.DICESIDE );
+			}
+			sortAbilityArrToDisplay(arrTmp);
+		}
+	}
 
-			view.strengthLabel.setText(Integer.toString(character.getStrength()));
-			view.dexterityLabel.setText(Integer.toString(character.getDexterity()));
-			view.constitutionLabel.setText(Integer.toString(character.getConstitution()));
-			view.wisdomLabel.setText(Integer.toString(character.getWisdom()));
-			view.intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
-			view.charismaLabel.setText(Integer.toString(character.getCharisma()));
+	private void sortAbilityArrToDisplay(Integer[] arrTmp) {
+		Arrays.sort(arrTmp, Collections.reverseOrder());
+		for ( int i = 0 ; i < arrTmp.length; i++ ){
+            character.getAbilities().getAbilityArr()[character.getFighterType().getAbilityImportance()[i]] = arrTmp[i];
+        }
+		view.strengthLabel.setText(Integer.toString(character.getStrength()));
+		view.dexterityLabel.setText(Integer.toString(character.getDexterity()));
+		view.constitutionLabel.setText(Integer.toString(character.getConstitution()));
+		view.wisdomLabel.setText(Integer.toString(character.getWisdom()));
+		view.intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
+		view.charismaLabel.setText(Integer.toString(character.getCharisma()));
 
-			character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution(), character.getLevel()));
-			character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity()));
-			character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength(), character.getDexterity(), character.getLevel()));
-			character.setDamageBonus(AbilityModifier.damageBonusModifier(character.getStrength()));
+		if(character.getStrength() != 0){
+			character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution(), character.getLevel()));
+			character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity()));
+			character.setAttackBonus(CharacterScoreModifier.attachBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength()));
 
 			view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));
 			view.armorClassLabel.setText(Integer.toString(character.getArmorClass()));
@@ -207,6 +245,7 @@ public class CharacterController {
 			view.damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
 		}
 	}
+
 	/**
 	 * listen any change from character inventory
 	 */
@@ -220,6 +259,7 @@ public class CharacterController {
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getLevel(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getPromotionPoint(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getRaceType(),
+							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getFighterType(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getBaseAttributes(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getAbilityBonusArr(),
 							MainMenuScreen.characterInventory.getChatacterPack().get(getButton()).getBackpack(),

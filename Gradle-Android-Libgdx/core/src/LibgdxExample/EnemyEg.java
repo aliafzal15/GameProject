@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Enemy {
+public class EnemyEg {
 
     private Vector2 position;
     Texture enemyTexture;
@@ -14,25 +14,25 @@ public class Enemy {
     TextureRegion[]  frames;
     TextureRegion currentFrame;
     String movement;
-    Player player;
+    PlayerEg playerEg;
 
-    public Enemy(Vector2 position, Player player){
-        enemyTexture = new Texture(Gdx.files.internal("android/assets/enemy.png"));
+    public EnemyEg(Vector2 position, PlayerEg player){
+        enemyTexture = new Texture(Gdx.files.internal("enemy.png"));
         this.position =  position;
         bounds = new Rectangle(position.x, position.y, 25, 25);
-        this.player = player;
+        this.playerEg = player;
     }
 
     public void update(){
         bounds = new Rectangle(position.x, position.y, 25 ,25 );
-        if(player.getPosition().x > position.x) {
+        if(playerEg.getPosition().x > position.x) {
             position.x++;
         }
         else{
             position.x--;
         }
 
-        if(player.getPosition().y > position.y) {
+        if(playerEg.getPosition().y > position.y) {
             position.y++;
         }
         else{

@@ -72,11 +72,11 @@ public class CharacterInventory {
         file.exists();
     }
     /**
-     * write files
+     * save files
      */
     public void saveToFile(){
 
-        FileHandle file = Gdx.files.local("characterInventory.json");
+        FileHandle file = Gdx.files.local("data" + File.separator + "characterInventory.json");
         file.write(false);
         Json json = new Json();
         String context;

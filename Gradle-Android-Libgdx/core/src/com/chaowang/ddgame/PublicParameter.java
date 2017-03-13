@@ -19,11 +19,15 @@ public interface PublicParameter {
     int ITEM_CELL_HEIGHT = Gdx.graphics.getHeight() * 5 / 8 / ITEM_INVENTORY_COLUMN;
     int ITEM_BACKPACK_ROW = 2, ITEM_BACKPACK_COLUMN = 5;
     int ITEM_TYPE_COUNT = Item.ItemType.values().length;
-    int MAP_PIXEL_TYPE = 4, MAP_PIXEL_SIZE = 64;
+    int MAP_PIXEL_TYPE = 4, MAP_PIXEL_SIZE = 128;
     int MAP_INVENTORY_ROW = 5, MAP_INVENTORY_COLUMN = 5;
     int MAP_CELL_WIDTH = Gdx.graphics.getHeight() * 7 / 8 / ITEM_INVENTORY_ROW;
     int MAP_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 8 / ITEM_INVENTORY_COLUMN;
     int Campaign_INVENTORY_SIZE = 6;
 
+    // for tutorial testing
+    int TILE_SIZE = 16;
+    float SCALE = 2f;
+    float SCALED_TILE_SIZE = TILE_SIZE * SCALE;
 
 }

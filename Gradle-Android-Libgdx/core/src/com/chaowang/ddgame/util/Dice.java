@@ -5,7 +5,7 @@ package com.chaowang.ddgame.util;
  * @version 1.0
  */
 public class Dice {
-	public static final int DICENUMBER = 3;
+	public static final int DICENUMBER = 4;
 	public static final int DICESIDE = 6;
 
 	/**

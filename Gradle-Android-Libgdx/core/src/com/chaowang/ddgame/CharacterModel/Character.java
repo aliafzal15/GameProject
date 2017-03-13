@@ -2,6 +2,7 @@ package com.chaowang.ddgame.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.chaowang.ddgame.ClassesModel.Fighter.FighterType;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.util.ArrayList;
@@ -9,10 +10,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.chaowang.ddgame.ClassesModel.Class.ClassType;
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.RacesModel.Race.RaceType;
-import com.chaowang.ddgame.util.AbilityModifier;
+import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 /**
@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.JsonValue;
 public class Character implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
-	private ClassType classType;
+	private FighterType fighterType;
 	private RaceType raceType;
 	private String name;
 	private int level;
@@ -52,7 +52,7 @@ public class Character implements Json.Serializable{
 	 * @param name the name of the character
 	 */
 	public Character(String name) {
-		this(name, 1, RaceType.HUMAN);
+		this(name, 1, RaceType.HUMAN, FighterType.BULLY);
 	}
 	/**
 	 * 
@@ -61,9 +61,9 @@ public class Character implements Json.Serializable{
 	 * @param level the level of the character
 	 * @param raceType the raceType of the character
 	 */
-	public Character(String name, int level, RaceType raceType) {
+	public Character(String name, int level, RaceType raceType, FighterType fighterType) {
 		this.setName(name);
-		this.classType = ClassType.FIGHTER;
+		this.fighterType = fighterType;
 		this.raceType  = raceType;
 		this.hitPoints = 0;
 		this.attackBonus = 0;
@@ -86,9 +86,9 @@ public class Character implements Json.Serializable{
 	 * @param abilityArr the abilityArr of the character
 	 * @param abilityBonus the abilityBonus of the character
 	 */
-    public Character(String name, int level,int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonus) {
+    public Character(String name, int level,int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonus) {
         this.setName(name);
-        this.classType = ClassType.FIGHTER;
+		this.fighterType = fighterType;
         this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
@@ -116,8 +116,8 @@ public class Character implements Json.Serializable{
      * @param backpack the backpack of the character
      * @param equipment the equipment of the character
      */
-    public Character(String name, int level, int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType, Item> equipment) {
-        this(name,level,promotionPoint,raceType,abilityArr, abilityBonusArr);
+    public Character(String name, int level, int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType, Item> equipment) {
+        this(name,level,promotionPoint,raceType, fighterType,abilityArr, abilityBonusArr);
         this.backpack = backpack;
 		this.equipment = equipment;
     }
@@ -178,6 +178,19 @@ public class Character implements Json.Serializable{
             return true;
         }
     }
+	/**
+	 * change the type of the fighter
+	 * @return if successfully changed
+	 */
+	public boolean nextFighterType(){
+		if(fighterType.getIndex() >= 2 ){
+			return false;
+		}
+		else{
+			this.fighterType = fighterType.getFighterType(this.fighterType.getIndex()+1);
+			return true;
+		}
+	}
 	/**
 	 * reset promote point for the character
 	 */
@@ -243,6 +256,19 @@ public class Character implements Json.Serializable{
             return true;
         }
     }
+	/**
+	 * change back to previous race
+	 * @return if successfully changed to previous race
+	 */
+	public boolean previousFighterType(){
+		if(fighterType.getIndex() <=0 ){
+			return false;
+		}
+		else{
+			this.fighterType = fighterType.getFighterType(this.getFighterType().getIndex() -1);
+			return true;
+		}
+	}
     /**
      * get promotion point 
      * @return promotion point 
@@ -345,14 +371,14 @@ public class Character implements Json.Serializable{
     	equipment.put(item.getItemType(), item);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
-    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
-    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
-    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] + item.getLevel());
-			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
-			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
-			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
         	this.setArmorClass(getArmorClass() + item.getLevel());
@@ -373,14 +399,14 @@ public class Character implements Json.Serializable{
     	Item item = equipment.remove(itemType);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
-    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
-    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
-    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] - item.getLevel());
-			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
-			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
-			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
         	this.setArmorClass(getArmorClass() - item.getLevel());
@@ -486,7 +512,8 @@ public class Character implements Json.Serializable{
 		for (int i = 0 ; i < tmp.length; i++){
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
-        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
+        return "Name: "+this.name + "| Race : " + this.raceType.toString()+  "| " + this.fighterType.toString() +
+				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
     }
     
 	/**
@@ -501,7 +528,8 @@ public class Character implements Json.Serializable{
 		}
         return "Name: "+this.name + "\n" +
         		"Race Type: " + this.raceType.toString()+ "\n" +
-        		"Level: "+this.level+ "\n" +
+				"Fighter Type: " + this.fighterType.toString()+ "\n" +
+				"Level: "+this.level+ "\n" +
         		"Strength: " + tmp[0] + "\n" +
         		"Dexterity: " + tmp[1] + "\n" +
         		"Constitution: " + tmp[2] + "\n" +
@@ -615,15 +643,15 @@ public class Character implements Json.Serializable{
      * get the type of the class
      * @return classType
      */
-    public ClassType getClassType() {
-		return classType;
+    public FighterType getFighterType() {
+		return fighterType;
 	}
     /**
      * set the type of the class
-     * @param classType  the type of the class
+     * @param fighterType  the type of the class
      */
-	public void setClassType(ClassType classType) {
-		this.classType = classType;
+	public void setFighterType(FighterType fighterType) {
+		this.fighterType = fighterType;
 	}
 	/**
 	 * get all attributes of item
@@ -658,7 +686,7 @@ public class Character implements Json.Serializable{
 	 */
 	@Override
 	public void write(Json json) {
-		json.writeValue("ClassType", classType);
+		json.writeValue("FighterType", fighterType);
 		json.writeValue("RaceType", raceType);
 		json.writeValue("Name", name);
 		json.writeValue("Level", level);
@@ -678,7 +706,7 @@ public class Character implements Json.Serializable{
 	 */
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		classType = ClassType.valueOf(jsonData.child.asString());
+		fighterType = FighterType.valueOf(jsonData.child.asString());
 		raceType = RaceType.valueOf(jsonData.child.next.asString());
 		updateTexture(raceType);
 		name = jsonData.child.next.next.asString();
