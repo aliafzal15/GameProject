@@ -78,8 +78,13 @@ public class GameScreen implements Screen{
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
 
+        if(actor.getBound().overlaps(mapModel.getEntryDoor()) ||actor.getBound().overlaps(mapModel.getExitDoor()) ){
+        	 playerController.reAdjust();
+        }
+        else{
+            playerController.keyDown();
+        }
 
-        playerController.keyDown();
 
         batch.end();
     }

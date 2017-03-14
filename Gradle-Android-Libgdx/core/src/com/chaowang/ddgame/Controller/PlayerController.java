@@ -16,6 +16,7 @@ public class PlayerController extends InputAdapter{
     private GameScreen gameScreen;
     private Rectangle mapBound;
     private float stateTime;
+    private String movement;
 
     public PlayerController(Actor p, GameScreen screen){
         this.actor = p;
@@ -36,21 +37,41 @@ public class PlayerController extends InputAdapter{
 
         if(Gdx.input.isKeyPressed(Input.Keys.W ) && actor.getPosition().y + actor.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
             actor.move(0,1);
+            movement = "up";
             actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S ) && actor.getPosition().y > mapBound.getY() ){
             actor.move(0,-1);
+            movement = "down";
             actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A ) && actor.getPosition().x > mapBound.getX()){
             actor.move(-1,0);
+            movement = "left";
             actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D ) && actor.getPosition().x + actor.getCurrentFrame().getRegionWidth() < mapBound.getWidth()){
             actor.move(1,0);
+            movement = "right";
             actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(8 + (stateTime *4) % 4));
         }
 
+
+    }
+    
+    public void reAdjust(){
+        if(movement == "up"){
+        	actor.move(0,-0.1f);
+        }
+        else if(movement == "down"){
+        	actor.move(0,0.1f);
+        }
+        else if(movement == "left"){
+        	actor.move(0.1f,0);
+        }
+        else if(movement == "right"){
+        	actor.move(-0.1f,0);
+        }
 
     }
 

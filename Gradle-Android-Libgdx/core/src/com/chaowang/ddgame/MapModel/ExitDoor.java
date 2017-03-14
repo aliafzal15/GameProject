@@ -13,7 +13,11 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class ExitDoor extends Door implements Json.Serializable{
 
-    Texture exitDoor;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3064593254115695006L;
+	Texture exitDoor;
     /**
      * constructor
      * @param position the exit door's position
@@ -44,14 +48,15 @@ public class ExitDoor extends Door implements Json.Serializable{
      */
     public void draw(SpriteBatch batch){
 
-        batch.draw(exitDoor, position.x, position.y, size.x, size.y * 1.5f);
+        //batch.draw(exitDoor, position.x, position.y, size.x, size.y * 1.5f);
+        batch.draw(exitDoor, x, y, this.width, this.height * 1.5f);
     }
     /**
      * write files
      */
     @Override
     public void write(Json json) {
-        json.writeValue("position", position, Vector2.class);
+        json.writeValue("position", new Vector2(this.x, this.y), Vector2.class);
     }
     /**
      * read files
@@ -60,9 +65,12 @@ public class ExitDoor extends Door implements Json.Serializable{
     public void read(Json json, JsonValue jsonData) {
         String positionStr = jsonData.child.toString();
         positionStr = positionStr.substring(positionStr.indexOf("{")-1);
-        position = json.fromJson(Vector2.class, positionStr);
-        bounds.setX(position.x);
-        bounds.setY(position.y);
+        Vector2 position = json.fromJson(Vector2.class, positionStr);
+        this.x = position.x;
+        this.y = position.y;
+//        position = json.fromJson(Vector2.class, positionStr);
+//        bounds.setX(position.x);
+//        bounds.setY(position.y);
     }
 
 }

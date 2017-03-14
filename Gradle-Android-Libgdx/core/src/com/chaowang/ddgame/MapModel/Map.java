@@ -356,7 +356,7 @@ public class Map implements Json.Serializable{
      * @return distance
      */
     public Vector2 getDistanceOfEntryExit(){
-        return new Vector2( Math.abs(entryDoor.getPosition().x - exitDoor.getPosition().x), Math.abs(entryDoor.getPosition().y - exitDoor.getPosition().y));
+        return new Vector2( Math.abs(entryDoor.x - exitDoor.x), Math.abs(entryDoor.y - exitDoor.y));
     }
     /**
      * switch to string type

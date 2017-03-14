@@ -21,6 +21,7 @@ public class Actor {
     private TextureRegion[]  frames;
     private TextureRegion currentFrame;
 
+
     public Actor(Vector2 position, Character character){
         this.position = position;
         this.character = character;
@@ -42,7 +43,7 @@ public class Actor {
         return bound;
     }
 
-    public void move (int dx, int dy ){
+    public void move (float dx, float dy ){
         position.x += dx * 2f;
         position.y += dy * 2f;
         bound.set(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());

@@ -117,10 +117,10 @@ public class MapEditorTest {
         // create external matrix for map object, wall is 1, entrance is 2, exit is 3
         for (int i =0 ; i < map.getSize(); i++){
             for(int j = 0; j < map.getSize(); j++){
-                if(i == map.getEntryDoor().getPosition().y && j == map.getEntryDoor().getPosition().x){
+                if(i == map.getEntryDoor().y && j == map.getEntryDoor().x){
                     mapMatrix[i][j] = 2;
                 }
-                else if (i == map.getExitDoor().getPosition().y && j == map.getExitDoor().getPosition().x){
+                else if (i == map.getExitDoor().y && j == map.getExitDoor().x){
                     mapMatrix[i][j] = 3;
                 }
                 else if (i == 1 ){

@@ -1,5 +1,7 @@
 package com.chaowang.ddgame.MapModel;
 
+import java.util.Vector;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,7 +30,7 @@ public class EntryDoor extends Door implements Json.Serializable{
      * @param size the entry door's size
      */
     public EntryDoor(Vector2 position, Vector2 size){
-        super(position, size);
+        super(position, size);	
         entryDoor = new Texture(Gdx.files.internal("map/entry1.png"));
     }
     /**
@@ -44,14 +46,15 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public void draw(SpriteBatch batch){
 
-        batch.draw(entryDoor, position.x, position.y, size.x, size.y * 1.5f);
+        //batch.draw(entryDoor, position.x, position.y, size.x, size.y * 1.5f);
+        batch.draw(entryDoor, x, y, this.width, this.height * 1.5f);
     }
     /**
      * write the files
      */
     @Override
     public void write(Json json) {
-        json.writeValue("position", position, Vector2.class);
+        json.writeValue("position", new Vector2(this.x, this.y), Vector2.class);
     }
     /**
      * read files
@@ -60,9 +63,9 @@ public class EntryDoor extends Door implements Json.Serializable{
     public void read(Json json, JsonValue jsonData) {
         String positionStr = jsonData.child.toString();
         positionStr = positionStr.substring(positionStr.indexOf("{")-1);
-        position = json.fromJson(Vector2.class, positionStr);
-        bounds.setX(position.x);
-        bounds.setY(position.y);
+        Vector2 position = json.fromJson(Vector2.class, positionStr);
+        this.x = position.x;
+        this.y = position.y;
     }
 
 }
