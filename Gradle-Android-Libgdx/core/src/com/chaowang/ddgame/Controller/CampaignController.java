@@ -137,7 +137,7 @@ public class CampaignController {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    view.inventoryCampaignInfoLabel.setText(mapList.get(getButton()).toString());
+                    view.inventoryCampaignInfoLabel.setText(mapList.get(getButton()).getMapInfo());
                 }
 
                 @Override
@@ -211,7 +211,7 @@ public class CampaignController {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    view.inventoryMapInfoLabel.setText(MainMenuScreen.mapInventory.getMapPack().get(getButton()).toString());
+                    view.inventoryMapInfoLabel.setText(MainMenuScreen.mapInventory.getMapPack().get(getButton()).getMapInfo());
                 }
 
                 @Override

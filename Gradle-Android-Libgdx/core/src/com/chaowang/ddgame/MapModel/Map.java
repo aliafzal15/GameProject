@@ -365,6 +365,13 @@ public class Map implements Json.Serializable{
 	public String toString() {
 		return name + " [" + size + " x " + size +"]";
 	}
+    /**
+     * @return  string detail information in the map
+     */
+    public String getMapInfo() {
+        return "Name: "+this.name + "| items : " + this.itemLocationList.size() + "| NPC : " + this.friendLocationList.size() +
+                "| enemies: "+this.enemyLocationList.size();
+    }
 	/**
 	 * write files for map information
 	 */

@@ -19,9 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.chaowang.ddgame.CharacterModel.Abilities;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.Controller.CharacterController;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CampaignModel.Campaign;
@@ -83,7 +80,7 @@ public class CampaignEditorScreen implements Screen {
         stage.addActor(backwardButton);
 
         inventoryMapInfoLabel = new Label("", MainMenuScreen.style);
-        inventoryMapInfoLabel.setPosition((Gdx.graphics.getWidth() * 3 / 4), (Gdx.graphics.getHeight() / 4));
+        inventoryMapInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 2), (Gdx.graphics.getHeight() / 4));
         stage.addActor(inventoryMapInfoLabel);
 
         inventoryCampaignInfoLabel = new Label("", MainMenuScreen.style);
@@ -152,8 +149,8 @@ public class CampaignEditorScreen implements Screen {
     @Override
     public void render(float delta) {
 
-//        Gdx.gl.glClearColor(1, 1, 1, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Gdx.input.setInputProcessor(stage);
         stage.act();
@@ -198,5 +195,4 @@ public class CampaignEditorScreen implements Screen {
     public void dispose() {
         stage.dispose();
     }
-
 }

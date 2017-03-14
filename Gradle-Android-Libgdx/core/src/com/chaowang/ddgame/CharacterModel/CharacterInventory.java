@@ -56,7 +56,7 @@ public class CharacterInventory {
      * @throws IOException
      */
     public  void readFile() throws IOException {
-        File file = new File("characterInventory.json");
+        File file = new File("data" + File.separator + "characterInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
         Scanner scanner = new Scanner(file);

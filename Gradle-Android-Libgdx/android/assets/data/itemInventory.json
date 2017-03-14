@@ -1,0 +1,5 @@
+{ItemType:HELMET,Name:HELMET,Level:1,enchantedAbility:ARMORCLASS,abiltyPointer:1}
+{ItemType:HELMET,Name:HELMET,Level:2,enchantedAbility:ARMORCLASS,abiltyPointer:1}
+{ItemType:WEAPON,Name:HELMET,Level:2,enchantedAbility:ATTACKBONUS,abiltyPointer:0}
+{ItemType:SHIELD,Name:HELMET,Level:4,enchantedAbility:ARMORCLASS,abiltyPointer:0}
+{ItemType:RING,Name:HELMET,Level:5,enchantedAbility:ARMORCLASS,abiltyPointer:0}
