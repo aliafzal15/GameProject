@@ -20,7 +20,7 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public EntryDoor(Vector2 position){
         super(position);
-        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entry1.png"));
     }
     /**
      * constructor
@@ -29,14 +29,14 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public EntryDoor(Vector2 position, Vector2 size){
         super(position, size);
-        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entry1.png"));
     }
     /**
      * constructor
      */
     public EntryDoor(){
         super();
-        entryDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
+        entryDoor = new Texture(Gdx.files.internal("map/entry1.png"));
     }
     /**
      * put the entry door on the background image
@@ -44,7 +44,7 @@ public class EntryDoor extends Door implements Json.Serializable{
      */
     public void draw(SpriteBatch batch){
 
-        batch.draw(entryDoor, position.x, position.y, size.x, size.y);
+        batch.draw(entryDoor, position.x, position.y, size.x, size.y * 1.5f);
     }
     /**
      * write the files

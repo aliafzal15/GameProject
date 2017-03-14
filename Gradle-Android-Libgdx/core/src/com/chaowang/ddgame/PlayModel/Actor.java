@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.PublicParameter;
 
 public class Actor {
     private Vector2 position;
     private Rectangle bound;
+    private Character character;
 
     private static final int COL = 4;
     private static final int ROW = 4;
@@ -19,8 +21,9 @@ public class Actor {
     private TextureRegion[]  frames;
     private TextureRegion currentFrame;
 
-    public Actor(Vector2 position){
+    public Actor(Vector2 position, Character character){
         this.position = position;
+        this.character = character;
         playerTexture = new Texture(Gdx.files.internal("arshes.png"));
         TextureRegion[][] tmp = TextureRegion.split(playerTexture,playerTexture.getWidth() / COL ,playerTexture.getHeight() / ROW);
         frames = new TextureRegion[COL * ROW];

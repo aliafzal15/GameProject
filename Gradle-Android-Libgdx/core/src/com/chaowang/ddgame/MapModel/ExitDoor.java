@@ -21,7 +21,7 @@ public class ExitDoor extends Door implements Json.Serializable{
      */
     public ExitDoor(Vector2 position, Vector2 size){
         super(position, size);
-        exitDoor = new Texture(Gdx.files.internal("map/exitDoor.png"));
+        exitDoor = new Texture(Gdx.files.internal("map/exit1.png"));
     }
     /**
      * constructor
@@ -29,14 +29,14 @@ public class ExitDoor extends Door implements Json.Serializable{
      */
     public ExitDoor(Vector2 position) {
         super(position);
-        exitDoor = new Texture(Gdx.files.internal("map/exitDoor.png"));
+        exitDoor = new Texture(Gdx.files.internal("map/exit1.png"));
     }
     /**
      * constructor
      */
     public ExitDoor(){
         super();
-        exitDoor = new Texture(Gdx.files.internal("map/entryDoor.png"));
+        exitDoor = new Texture(Gdx.files.internal("map/exit1.png"));
     }
     /**
      * put the exit door on the background image
@@ -44,7 +44,7 @@ public class ExitDoor extends Door implements Json.Serializable{
      */
     public void draw(SpriteBatch batch){
 
-        batch.draw(exitDoor, position.x, position.y, size.x, size.y);
+        batch.draw(exitDoor, position.x, position.y, size.x, size.y * 1.5f);
     }
     /**
      * write files

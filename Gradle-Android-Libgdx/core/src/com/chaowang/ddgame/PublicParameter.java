@@ -20,7 +20,7 @@ public interface PublicParameter {
     int ITEM_BACKPACK_ROW = 2, ITEM_BACKPACK_COLUMN = 5;
     int ITEM_TYPE_COUNT = Item.ItemType.values().length;
     int MAP_PIXEL_TYPE = 4, MAP_PIXEL_SIZE = 128;
-    int MAP_INVENTORY_ROW = 5, MAP_INVENTORY_COLUMN = 5;
+    int MAP_INVENTORY_ROW = 5, MAP_INVENTORY_COLUMN = 5, CAMPAIGN_INVENTORY_ROW = 5, CAMPAIGN_INVENTORY_COLUMN = 5;
     int MAP_CELL_WIDTH = Gdx.graphics.getHeight() * 7 / 8 / ITEM_INVENTORY_ROW;
     int MAP_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 8 / ITEM_INVENTORY_COLUMN;
     int Campaign_INVENTORY_SIZE = 6;

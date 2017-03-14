@@ -90,7 +90,7 @@ public class CampaignController {
         BitmapFont font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         for (int i = 0; i < PublicParameter.MAP_INVENTORY_ROW; i++) {
-            for (int j = 0; j < PublicParameter.MAP_INVENTORY_ROW; j++) {
+            for (int j = 0; j < PublicParameter.MAP_INVENTORY_COLUMN; j++) {
                 if ((i * PublicParameter.MAP_INVENTORY_ROW) + j < MainMenuScreen.mapInventory.getMapPack().size) {
                     view.mapInventoryMatrix[(i * PublicParameter.MAP_INVENTORY_ROW) + j] = new Label(MainMenuScreen.mapInventory.getMapPack().get((i * PublicParameter.MAP_INVENTORY_ROW) + j).toString(), style);
                 } else {

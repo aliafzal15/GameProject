@@ -1,5 +1,6 @@
 package com.chaowang.ddgame.MapModel;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.PublicParameter;
@@ -33,7 +34,7 @@ public class Door {
      * @param position the position of the door 
      */
     public Door(Vector2 position) {
-        this(position, new Vector2(PublicParameter.MAP_PIXEL_SIZE,PublicParameter.MAP_PIXEL_SIZE));
+        this(position, new Vector2(PublicParameter.MAP_PIXEL_SIZE * 3 / 4,PublicParameter.MAP_PIXEL_SIZE * 3 / 4));
     }
     /**
      * update the door
@@ -84,6 +85,5 @@ public class Door {
     public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
     }
-
 
 }

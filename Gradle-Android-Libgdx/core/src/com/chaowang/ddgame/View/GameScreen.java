@@ -6,35 +6,43 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.CampaignModel.Campaign;
+import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.Controller.PlayerController;
 import com.chaowang.ddgame.PlayModel.Actor;
+import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.PublicParameter;
+
+import java.nio.channels.FileChannel;
 
 public class GameScreen implements Screen{
 
     private Game game;
     private SpriteBatch batch;
-    private Actor actor;
     private PlayerController playerController;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
 
-    GameScreen(Game game){
-        this.game = game;
-        actor = new Actor(new Vector2(1,1));
-        batch = new SpriteBatch();
-        map = new TmxMapLoader().load("terrain/terrain5x5.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
-        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    private Actor actor;
+    private Map mapModel;
+    private Campaign campaign;
 
+    GameScreen(Game game, Character character,Map map, Campaign camp){
+        this.game = game;
+        this.actor = new Actor(new Vector2(1,1), character);
+        this.mapModel = map;
+        this.campaign = camp;
+        batch = new SpriteBatch();
+        this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
+        renderer = new OrthogonalTiledMapRenderer(this.map);
+        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     public TiledMap getMap() {
@@ -49,6 +57,9 @@ public class GameScreen implements Screen{
     public void show() {
         playerController = new PlayerController(actor, this);
         Gdx.input.setInputProcessor(playerController);
+
+
+
     }
 
     @Override
@@ -63,6 +74,10 @@ public class GameScreen implements Screen{
 
         batch.begin();
         batch.draw(actor.getCurrentFrame(), actor.getPosition().x, actor.getPosition().y );
+
+        mapModel.getEntryDoor().draw(batch);
+        mapModel.getExitDoor().draw(batch);
+
 
         playerController.keyDown();
 
