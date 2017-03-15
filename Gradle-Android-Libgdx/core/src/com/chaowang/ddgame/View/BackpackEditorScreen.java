@@ -125,6 +125,7 @@ public class BackpackEditorScreen implements Screen {
 
         stage.draw();
 
+
         //stage.setDebugAll(true);
         batch.end();
     }

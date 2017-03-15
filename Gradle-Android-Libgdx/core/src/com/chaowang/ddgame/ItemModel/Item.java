@@ -3,15 +3,19 @@ package com.chaowang.ddgame.ItemModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.chaowang.ddgame.PublicParameter;
 
 /**
  * the class is for item editor
  * @author chao wang
  * @version 1.0
  */
-public class Item implements Json.Serializable{
+public class Item extends Rectangle implements Json.Serializable {
 
 	/**
 	 * all item types
@@ -83,6 +87,7 @@ public class Item implements Json.Serializable{
     private EnchantedAbility enchantedAbility;
     private Texture texture;
     private int abilityPointer = 0;
+    private Texture textureOnMap;
     /**
      * constructor
      * @param type
@@ -103,6 +108,7 @@ public class Item implements Json.Serializable{
         this.name = name;
         this.enchantedAbility = enchantedAbility;
         updateTexture(this.itemType);
+        textureOnMap = new Texture(Gdx.files.internal("map/chest.png"));
     }
     /**
      * update the item type image
@@ -280,6 +286,18 @@ public class Item implements Json.Serializable{
         level = jsonData.child.next.next.asInt();
         enchantedAbility = EnchantedAbility.valueOf(jsonData.child.next.next.next.asString());
         abilityPointer = jsonData.child.next.next.next.next.asInt();
+    }
+
+    /**
+     * put the item image on the map
+     * @param batch
+     */
+    public void draw(SpriteBatch batch, Vector2 cur){
+        this.x = cur.x;
+        this.y = cur.y;
+        this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+        this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
+        batch.draw(textureOnMap, this.x , this.y, this.width, this.height );
     }
 
 }

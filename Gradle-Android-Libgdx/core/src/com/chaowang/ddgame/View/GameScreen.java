@@ -2,6 +2,7 @@ package com.chaowang.ddgame.View;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.Controller.PlayerController;
@@ -20,6 +23,8 @@ import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.nio.channels.FileChannel;
+import java.util.Iterator;
+import java.util.Set;
 
 public class GameScreen implements Screen{
 
@@ -29,16 +34,20 @@ public class GameScreen implements Screen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
+    private Stage stage;
+
 
     private Actor actor;
     private Map mapModel;
     private Campaign campaign;
+    private Set<Vector2> vectorKeySet ;
+    private Iterator<Vector2> keySetIterator ;
 
     GameScreen(Game game, Character character,Map map, Campaign camp){
         this.game = game;
         this.actor = new Actor(new Vector2(1,1), character);
         this.mapModel = map;
-        this.campaign = camp;
+        this.campaign = new Campaign(camp);
         batch = new SpriteBatch();
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
@@ -58,12 +67,22 @@ public class GameScreen implements Screen{
         playerController = new PlayerController(actor, this);
         Gdx.input.setInputProcessor(playerController);
 
+        mapModel.adjustLevel(actor.getCharacter().getLevel());
 
+        if(mapModel.getEntryDoor().y - actor.getBound().getHeight() > 0 ){
+            actor.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - actor.getBound().getWidth() /2,
+                    mapModel.getEntryDoor().y - actor.getBound().getHeight()));
+        } else {
+            actor.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - actor.getBound().getWidth() /2,
+                    mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
+        }
 
     }
 
     @Override
     public void render(float delta) {
+        Gdx.input.setInputProcessor(stage);
+        stage.act();
 
         renderer.setView(cam);
         renderer.render();
@@ -77,6 +96,20 @@ public class GameScreen implements Screen{
 
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
+
+
+        vectorKeySet = mapModel.getItemLocationList().keySet();
+        keySetIterator = vectorKeySet.iterator();
+
+        while(keySetIterator.hasNext()){
+            Vector2 cur = keySetIterator.next();
+            mapModel.getItemLocationList().get(cur).draw(batch, cur);
+            if(actor.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
+                playerController.pickupItem(mapModel.getItemLocationList().get(cur));
+                keySetIterator.remove();
+
+            }
+        }
 
         if(actor.getBound().overlaps(mapModel.getEntryDoor()) ||actor.getBound().overlaps(mapModel.getExitDoor()) ){
         	 playerController.reAdjust();

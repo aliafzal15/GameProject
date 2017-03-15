@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class EntryDoor extends Door implements Json.Serializable{
 
-    Texture entryDoor;
+    private Texture entryDoor;
     /**
      * constructor
      * @param position the entry door's position

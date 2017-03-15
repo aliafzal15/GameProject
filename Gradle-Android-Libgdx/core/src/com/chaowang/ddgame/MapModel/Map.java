@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.CharacterModel.Character;
@@ -371,6 +372,32 @@ public class Map implements Json.Serializable{
     public String getMapInfo() {
         return "Name: "+this.name + "| items : " + this.itemLocationList.size() + "| NPC : " + this.friendLocationList.size() +
                 "| enemies: "+this.enemyLocationList.size();
+    }
+
+    public void adjustLevel(int level){
+        Set<Vector2> vectorKeySet = itemLocationList.keySet();
+        Iterator<Vector2> keySetIterator = vectorKeySet.iterator();
+        Vector2 cur;
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            itemLocationList.get(cur).setLevel((int) Math.ceil( level / 4.0 ));
+        }
+
+        vectorKeySet = enemyLocationList.keySet();
+        keySetIterator = vectorKeySet.iterator();
+
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            enemyLocationList.get(cur).setLevel(level);
+        }
+
+        vectorKeySet = friendLocationList.keySet();
+        keySetIterator = vectorKeySet.iterator();
+
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            friendLocationList.get(cur).setLevel(level);
+        }
     }
 	/**
 	 * write files for map information

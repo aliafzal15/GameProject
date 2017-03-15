@@ -67,9 +67,26 @@ public class Actor {
 
     public void setPosition(Vector2 position) {
         this.position = position;
+        bound.set(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
 
     public void setBound(Rectangle bound) {
         this.bound = bound;
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
+    }
+
+    public Texture getPlayerTexture() {
+        return playerTexture;
+    }
+
+    public void setPlayerTexture(Texture playerTexture) {
+        this.playerTexture = playerTexture;
     }
 }

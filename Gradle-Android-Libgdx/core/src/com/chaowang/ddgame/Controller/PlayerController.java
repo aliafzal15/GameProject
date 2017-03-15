@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
+import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.PlayModel.Actor;
 import com.chaowang.ddgame.View.GameScreen;
 
@@ -74,6 +75,13 @@ public class PlayerController extends InputAdapter{
         }
 
     }
+
+
+    public void pickupItem(Item item){
+        actor.getCharacter().addToBackpack(item);
+
+    }
+
 
 }
 

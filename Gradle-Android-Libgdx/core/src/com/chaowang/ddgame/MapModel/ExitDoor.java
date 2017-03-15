@@ -17,7 +17,7 @@ public class ExitDoor extends Door implements Json.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3064593254115695006L;
-	Texture exitDoor;
+	private Texture exitDoor;
     /**
      * constructor
      * @param position the exit door's position

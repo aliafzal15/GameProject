@@ -73,7 +73,7 @@ public class Character implements Json.Serializable{
 		this.abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		this.level = level;
 		this.promotionPoint = level - 1;
-		this.backpack = new ArrayList<Item>();
+		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
     }
@@ -92,13 +92,13 @@ public class Character implements Json.Serializable{
         this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
-		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_COLUMN * PublicParameter.ITEM_BACKPACK_ROW);
+		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
-        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+0]);
+        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE]);
         this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
         this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+2]);
         this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+3]);
@@ -481,6 +481,26 @@ public class Character implements Json.Serializable{
 	 */
 	public void setLevel(int level) {
 		this.level = level;
+		resetPromotePoint();
+		HashMap.Entry<Item.ItemType, Item> entry;
+		for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext(); ) {
+			 entry = it.next();
+			 addToBackpack(entry.getValue());
+			 it.remove();
+		}
+		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
+		setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+	}
+
+
+	public boolean addToBackpack(Item item){
+		if(backPackisFull()){
+			backpack.remove(0);
+		}
+		backpack.add(item);
+		return true;
 	}
 	/**
 	 * get level
@@ -667,6 +687,9 @@ public class Character implements Json.Serializable{
         return attributeArr;
     }
 
+    public boolean backPackisFull(){
+		return backpack.size() >= 10;
+	}
 	/**
 	 * get the type of the race
 	 * @return the race type
