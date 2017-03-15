@@ -34,7 +34,6 @@ public class GameScreen implements Screen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
-    private Stage stage;
 
 
     private Actor actor;
@@ -81,8 +80,6 @@ public class GameScreen implements Screen{
 
     @Override
     public void render(float delta) {
-        Gdx.input.setInputProcessor(stage);
-        stage.act();
 
         renderer.setView(cam);
         renderer.render();
@@ -91,13 +88,19 @@ public class GameScreen implements Screen{
         batch.setProjectionMatrix(cam.combined);
         cam.update();
 
+		  if(Gdx.input.isTouched()){
+			  System.out.println("Application clicked");
+		  }
+		  //System.out.println("mouse x : "+ Gdx.input.getX() + "mouse y : "+ Gdx.input.getY());
+		    
+		  
         batch.begin();
         batch.draw(actor.getCurrentFrame(), actor.getPosition().x, actor.getPosition().y );
 
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
 
-
+        // draw items on screen
         vectorKeySet = mapModel.getItemLocationList().keySet();
         keySetIterator = vectorKeySet.iterator();
 
@@ -107,9 +110,34 @@ public class GameScreen implements Screen{
             if(actor.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
                 playerController.pickupItem(mapModel.getItemLocationList().get(cur));
                 keySetIterator.remove();
-
             }
         }
+        
+        // draw NPC on screen
+        vectorKeySet = mapModel.getFriendLocationList().keySet();
+        keySetIterator = vectorKeySet.iterator();
+
+        while(keySetIterator.hasNext()){
+            Vector2 cur = keySetIterator.next();
+            mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
+            if(actor.getBound().overlaps(mapModel.getFriendLocationList().get(cur)) ){
+            	System.out.println("Is a friend ");
+            }
+        }
+        
+        // draw enemy on screen
+        vectorKeySet = mapModel.getEnemyLocationList().keySet();
+        keySetIterator = vectorKeySet.iterator();
+
+        while(keySetIterator.hasNext()){
+            Vector2 cur = keySetIterator.next();
+            mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
+            if(actor.getBound().overlaps(mapModel.getEnemyLocationList().get(cur)) ){
+            	System.out.println("Is a enemy ");
+            }
+        }
+
+
 
         if(actor.getBound().overlaps(mapModel.getEntryDoor()) ||actor.getBound().overlaps(mapModel.getExitDoor()) ){
         	 playerController.reAdjust();
@@ -117,7 +145,6 @@ public class GameScreen implements Screen{
         else{
             playerController.keyDown();
         }
-
 
         batch.end();
     }

@@ -2,6 +2,10 @@ package com.chaowang.ddgame.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.ClassesModel.Fighter.FighterType;
 import com.chaowang.ddgame.PublicParameter;
 
@@ -20,7 +24,7 @@ import com.badlogic.gdx.utils.JsonValue;
  * @author chao Wang
  * @version 1.0
  */
-public class Character implements Json.Serializable{
+public class Character extends Rectangle implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
 	private FighterType fighterType;
@@ -36,7 +40,8 @@ public class Character implements Json.Serializable{
 	private int promotionPoint;
 	private int[] abilityBonusArr;
     private Texture texture;
-	boolean isFriendly = true;
+    private Texture mapTexture;
+	//boolean isFriendly = true;
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
@@ -150,20 +155,20 @@ public class Character implements Json.Serializable{
                 break;
         }
     }
-    /**
-     * decide the character is friendly or hostile 
-     * @return true or false
-     */
-	public boolean getFriendly() {
-		return isFriendly;
-	}
-	/**
-	 * set the character is friendly or hostile 
-	 * @param friend friendly or hostile 
-	 */
-	public void setFriendly(boolean friend) {
-		isFriendly = friend;
-	}
+//    /**
+//     * decide the character is friendly or hostile 
+//     * @return true or false
+//     */
+//	public boolean getFriendly() {
+//		return isFriendly;
+//	}
+//	/**
+//	 * set the character is friendly or hostile 
+//	 * @param friend friendly or hostile 
+//	 */
+//	public void setFriendly(boolean friend) {
+//		isFriendly = friend;
+//	}
 	/**
 	 * change the type of the race
 	 * @return if successfully changed
@@ -532,7 +537,7 @@ public class Character implements Json.Serializable{
 		for (int i = 0 ; i < tmp.length; i++){
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
-        return "Name: "+this.name + "| Race : " + this.raceType.toString()+  "| " + this.fighterType.toString() +
+        return "Name: "+this.name + "| Race: " + this.raceType.toString()+  "| " + this.fighterType.toString() +
 				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
     }
     
@@ -718,7 +723,7 @@ public class Character implements Json.Serializable{
 		json.writeValue("attackBonus", attackBonus);
 		json.writeValue("damageBonus", damageBonus);
 		json.writeValue("armorClass", armorClass);
-		json.writeValue("isFriendly", isFriendly);
+//		json.writeValue("isFriendly", isFriendly);
 		json.writeValue("equipment", equipment, HashMap.class, Item.class);
 		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
 		json.writeValue("PromoPoint", promotionPoint);
@@ -739,8 +744,8 @@ public class Character implements Json.Serializable{
 		attackBonus = jsonData.child.next.next.next.next.next.next.asInt();
 		damageBonus = jsonData.child.next.next.next.next.next.next.next.asInt();
 		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();
-		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
-		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
+//		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
+		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next;
 		if(equipmentPointer != null){
 			Iterator<JsonValue> dataIterator = equipmentPointer.iterator();
 			Item item;
@@ -755,7 +760,7 @@ public class Character implements Json.Serializable{
 			}
 		}
 
-		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next.next;
+		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
 		if(backPackPointer != null){
 			Iterator<JsonValue> dataIterator = backPackPointer.iterator();
 			Item item;
@@ -769,8 +774,31 @@ public class Character implements Json.Serializable{
 			}
 		}
 
-		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asInt();
-		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
+		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.asInt();
+		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
+
+	}
+	
+	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
+		if(isFriendly == true){
+			mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
+	        this.x = cur.x;
+	        this.y = cur.y;
+	        this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+	        this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
+	        batch.draw(mapTexture, this.x , this.y, this.width, this.height );
+		} else{
+			mapTexture = new Texture(Gdx.files.internal("map/enemy1.png"));
+	        this.x = cur.x;
+	        this.y = cur.y;
+	        this.width = PublicParameter.MAP_PIXEL_SIZE / 2  ;
+	        this.height = PublicParameter.MAP_PIXEL_SIZE / 2;
+	        batch.draw(mapTexture, this.x , this.y, this.width, this.height );
+//			 Sprite sprite = new Sprite(texture, (int)this.width, (int)this.height);
+//			 sprite.setPosition(this.x, this.y);
+//			 sprite.flip(true, false);
+//			 sprite.draw(batch);
+		}
 
 	}
 

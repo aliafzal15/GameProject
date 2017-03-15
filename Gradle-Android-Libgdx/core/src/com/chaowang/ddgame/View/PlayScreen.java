@@ -118,6 +118,8 @@ public class PlayScreen implements Screen{
         batch.setProjectionMatrix(cam.combined);
         cam.update();
 
+        
+
         batch.begin();
 
         batch.draw(playerEg.getCurrentFrame(), playerEg.getPosition().x, playerEg.getPosition().y );

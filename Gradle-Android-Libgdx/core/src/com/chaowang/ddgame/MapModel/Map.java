@@ -133,6 +133,7 @@ public class Map implements Json.Serializable{
      * @param character
      */
     public void addFriendLocationList(int i, int j, Character character ){
+//    	character.setFriendly(true);
         friendLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
@@ -151,7 +152,7 @@ public class Map implements Json.Serializable{
      * @param character
      */
     public void addEnemyLocationList(int i, int j, Character character ){
-    	character.setFriendly(false);
+//    	character.setFriendly(false);
         enemyLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
@@ -375,6 +376,7 @@ public class Map implements Json.Serializable{
     }
 
     public void adjustLevel(int level){
+    	this.level = level;
         Set<Vector2> vectorKeySet = itemLocationList.keySet();
         Iterator<Vector2> keySetIterator = vectorKeySet.iterator();
         Vector2 cur;
@@ -471,6 +473,39 @@ public class Map implements Json.Serializable{
             }
         }
 
+        pointer = jsonData.child.next.next.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Character friend;
+            JsonValue dataValue;
+            while(dataIterator.hasNext()){
+                dataValue= dataIterator.next();
+                context = dataValue.name();
+                location = new Vector2(Float.parseFloat(context.substring(context.indexOf("(")+1,dataValue.name.indexOf(",")))
+                        , Float.parseFloat(context.substring(context.indexOf(",")+1,dataValue.name.indexOf(")"))));
+                context = dataValue.toString();
+                context = context.substring(context.indexOf("{")-1);
+                friend = json.fromJson(Character.class, context);
+                friendLocationList.put(location,friend);
+            }
+        }
+        
+        pointer = jsonData.child.next.next.next.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Character enemy;
+            JsonValue dataValue;
+            while(dataIterator.hasNext()){
+                dataValue= dataIterator.next();
+                context = dataValue.name();
+                location = new Vector2(Float.parseFloat(context.substring(context.indexOf("(")+1,dataValue.name.indexOf(",")))
+                        , Float.parseFloat(context.substring(context.indexOf(",")+1,dataValue.name.indexOf(")"))));
+                context = dataValue.toString();
+                context = context.substring(context.indexOf("{")-1);
+                enemy = json.fromJson(Character.class, context);
+                enemyLocationList.put(location,enemy);
+            }
+        }
 
     }
 }
