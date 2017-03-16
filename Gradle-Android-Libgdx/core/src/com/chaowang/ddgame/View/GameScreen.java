@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -44,17 +45,19 @@ public class GameScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
     // followed from video
-    private int uiScale = 2;
-    private Stage uiStage;
-    private Table root;
-    private DialogBox dialogBox;
+//    private int uiScale = 2;
+//    private Stage uiStage;
+//    private Table root;
+//    private DialogBox dialogBox;
 
+    private Stage stage;
     private Actor actor;
     private Map mapModel;
     private Campaign campaign;
     private Set<Vector2> vectorKeySet ;
     private Iterator<Vector2> keySetIterator ;
     private boolean isHitObject;
+    private static int count=0;
 
     GameScreen(Game game, Character character,Map map, Campaign camp){
         this.game = game;
@@ -65,8 +68,8 @@ public class GameScreen implements Screen{
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        initUI();
+        stage = new Stage(new ScreenViewport());
+//        initUI();
     }
 
     public TiledMap getMap() {
@@ -81,7 +84,8 @@ public class GameScreen implements Screen{
     public void show() {
         playerController = new PlayerController(actor, this);
         Gdx.input.setInputProcessor(playerController);
-
+        Gdx.input.setInputProcessor(stage);
+        
         mapModel.adjustLevel(actor.getCharacter().getLevel());
 
         if(mapModel.getEntryDoor().y - actor.getBound().getHeight() > 0 ){
@@ -104,11 +108,12 @@ public class GameScreen implements Screen{
         cam.position.set(actor.getPosition().x + (actor.getCurrentFrame().getRegionWidth() / 2), actor.getPosition().y + actor.getCurrentFrame().getRegionHeight() / 2, 0);
         batch.setProjectionMatrix(cam.combined);
         cam.update();
-        uiStage.act(delta);
+        stage.act();
+//        uiStage.act(delta);
 
-		  if(Gdx.input.isTouched()){
-			  System.out.println("Application clicked");
-		  }
+//		  if(Gdx.input.isTouched()){
+//			  System.out.println("Application clicked");
+//		  }
 		  //System.out.println("mouse x : "+ Gdx.input.getX() + "mouse y : "+ Gdx.input.getY());
 		    
 		  
@@ -168,12 +173,27 @@ public class GameScreen implements Screen{
 
         if(actor.getBound().overlaps(mapModel.getExitDoor()) ){
             if(actor.getPosition().y + actor.getBound().getHeight() <= mapModel.getExitDoor().y + 1f ){
-                if(campaign.getMapPack().size == 1 ){
-                    game.setScreen(new MainMenuScreen(game));
+//            	System.out.println("actor " + (actor.getPosition().y + actor.getBound().getHeight()));
+//            	System.out.println(mapModel.getExitDoor().y);
+                if(campaign.getMapPack().size == count+1 ){
+    				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
+    					@Override
+    					public void run() {
+    	                    game.setScreen(new MainMenuScreen(game));
+    					}
+    				})));
                 } else {
-                    campaign.getMapPack().removeIndex(0);
                     actor.getCharacter().promoteUp();
-                    game.setScreen(new GameScreen(game, actor.getCharacter(), campaign.getMapPack().get(0), campaign));
+    				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
+    					@Override
+    					public void run() {
+    	                    //campaign.getMapPack().removeIndex(0);
+    						count++;
+    						System.out.println(count);
+    	                    game.setScreen(new GameScreen(game, actor.getCharacter(), campaign.getMapPack().get(count), campaign));
+    					}
+    				})));
+
                 }
             } else{
                 playerController.reAdjust();
@@ -192,12 +212,10 @@ public class GameScreen implements Screen{
         }
         batch.end();
 
-        uiStage.draw();
-//        try {
-//            Thread.sleep(100);
-//        } catch(InterruptedException ex) {
-//            Thread.currentThread().interrupt();
-//        }
+        stage.draw();
+        
+//        uiStage.draw();
+
     }
 
     @Override
@@ -225,20 +243,21 @@ public class GameScreen implements Screen{
 
     }
 
-    private void initUI(){
-        uiStage = new Stage(new ScreenViewport());
-        uiStage.getViewport().update(Gdx.graphics.getWidth() / uiScale, Gdx.graphics.getHeight() / uiScale);
-
-        root = new Table();
-        root.setFillParent(true);
-        uiStage.addActor(root);
-
-        dialogBox = new DialogBox(MainMenuScreen.skin);
-        dialogBox.animateText("Hello advanturer  \nMay I offer you a fresh beverage");
-
-        root.add(dialogBox).expand().align(Align.bottom).pad(8f);
-
-    }
+    
+//    private void initUI(){
+//        uiStage = new Stage(new ScreenViewport());
+//        uiStage.getViewport().update(Gdx.graphics.getWidth() / uiScale, Gdx.graphics.getHeight() / uiScale);
+//
+//        root = new Table();
+//        root.setFillParent(true);
+//        uiStage.addActor(root);
+//
+//        dialogBox = new DialogBox(MainMenuScreen.skin);
+//        dialogBox.animateText("Hello advanturer  \nMay I offer you a fresh beverage");
+//
+//        root.add(dialogBox).expand().align(Align.bottom).pad(8f);
+//
+//    }
 
 
 }
