@@ -1,0 +1,29 @@
+package com.chaowang.ddgame;
+
+import com.badlogic.gdx.Gdx;
+
+import com.chaowang.ddgame.ItemModel.Item;
+
+/**
+ * class for storing public parameters
+ * @author chao wang
+ * @version 1.0
+ */
+public interface PublicParameter {
+
+    int CHARACTER_INVENTORY_ROW = 5, CHARACTER_INVENTORY_COLUMN = 5;
+    int CHARACTER_CELL_WIDTH = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_ROW;
+    int CHARACTER_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_COLUMN;
+    int ITEM_INVENTORY_ROW = 7, ITEM_INVENTORY_COLUMN = 7;
+    int ITEM_CELL_WIDTH = Gdx.graphics.getHeight() * 5 / 8 / ITEM_INVENTORY_ROW;
+    int ITEM_CELL_HEIGHT = Gdx.graphics.getHeight() * 5 / 8 / ITEM_INVENTORY_COLUMN;
+    int ITEM_BACKPACK_ROW = 2, ITEM_BACKPACK_COLUMN = 5;
+    int ITEM_TYPE_COUNT = Item.ItemType.values().length;
+    int MAP_PIXEL_TYPE = 4, MAP_PIXEL_SIZE = 64;
+    int MAP_INVENTORY_ROW = 5, MAP_INVENTORY_COLUMN = 5;
+    int MAP_CELL_WIDTH = Gdx.graphics.getHeight() * 7 / 8 / ITEM_INVENTORY_ROW;
+    int MAP_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 8 / ITEM_INVENTORY_COLUMN;
+    int Campaign_INVENTORY_SIZE = 6;
+
+
+}

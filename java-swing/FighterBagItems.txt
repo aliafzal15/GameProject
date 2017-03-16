@@ -1,0 +1,5 @@
+Weapon:1
+Weapon:1
+Weapon:1
+Boots:3
+Helmet:2
