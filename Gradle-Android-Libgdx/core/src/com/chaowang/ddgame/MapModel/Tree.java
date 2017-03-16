@@ -23,7 +23,6 @@ public class Tree {
         bounds.set(position.x, position.y, size.x , size.y);
 
     }
-
     public void draw(SpriteBatch batch){
 
         batch.draw(tree, position.x, position.y, size.x, size.y * 1.5f);

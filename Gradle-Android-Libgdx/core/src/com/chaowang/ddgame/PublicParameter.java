@@ -10,7 +10,7 @@ import com.chaowang.ddgame.ItemModel.Item;
  * @version 1.0
  */
 public interface PublicParameter {
-
+    int CHARACTER_MAX_LEVEL = 20;
     int CHARACTER_INVENTORY_ROW = 5, CHARACTER_INVENTORY_COLUMN = 5;
     int CHARACTER_CELL_WIDTH = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_ROW;
     int CHARACTER_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 5 / CHARACTER_INVENTORY_COLUMN;

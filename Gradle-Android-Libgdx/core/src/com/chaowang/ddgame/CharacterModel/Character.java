@@ -133,7 +133,7 @@ public class Character extends Rectangle implements Json.Serializable{
     private void updateTexture(RaceType raceType) {
         switch (raceType){
             case HUMAN:
-                texture = new Texture(Gdx.files.internal("races/human.jpg"));
+                texture = new Texture(Gdx.files.internal("races/human.png"));
                 break;
             case DWARF:
                 texture = new Texture(Gdx.files.internal("races/dwarf.png"));
@@ -220,7 +220,7 @@ public class Character extends Rectangle implements Json.Serializable{
 	 * increase the level of the character
 	 */
 	public void levelUp(){
-		if (level < 10 ){
+		if (level < PublicParameter.CHARACTER_MAX_LEVEL ){
 			level ++;
 			if(promotionPoint < 9){
 				promotionPoint++;
@@ -480,6 +480,22 @@ public class Character extends Rectangle implements Json.Serializable{
 	public void setDamageBonus(int damageBonus) {
 		this.damageBonus = damageBonus;
 	}
+
+	/**
+	 * increase the level of the character
+	 */
+	public void promoteUp(){
+		if (level < PublicParameter.CHARACTER_MAX_LEVEL ){
+			level ++;
+			if(promotionPoint < 9){
+				promotionPoint++;
+			}
+			setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+		}
+	}
 	/**
 	 * set level
 	 * @param level the level for the character
@@ -489,15 +505,20 @@ public class Character extends Rectangle implements Json.Serializable{
 		resetPromotePoint();
 		HashMap.Entry<Item.ItemType, Item> entry;
 		for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext(); ) {
-			 entry = it.next();
-			 addToBackpack(entry.getValue());
-			 it.remove();
+			entry = it.next();
+			int difference  = entry.getValue().getLevel() - (int) Math.ceil( level / 4.0 );
+			entry.getValue().setLevel((int) Math.ceil( level / 4.0 ));
+			abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
+		}
+		for(Item item : backpack) {
+			item.setLevel((int) Math.ceil( level / 4.0 ));
 		}
 		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
 		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 		setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
 		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 	}
+
 
 
 	public boolean addToBackpack(Item item){
@@ -780,24 +801,17 @@ public class Character extends Rectangle implements Json.Serializable{
 	}
 	
 	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
+		this.x = cur.x;
+		this.y = cur.y;
 		if(isFriendly == true){
+			this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+			this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
 			mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
-	        this.x = cur.x;
-	        this.y = cur.y;
-	        this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
-	        this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
 	        batch.draw(mapTexture, this.x , this.y, this.width, this.height );
 		} else{
-			mapTexture = new Texture(Gdx.files.internal("map/enemy1.png"));
-	        this.x = cur.x;
-	        this.y = cur.y;
-	        this.width = PublicParameter.MAP_PIXEL_SIZE / 2  ;
-	        this.height = PublicParameter.MAP_PIXEL_SIZE / 2;
-	        batch.draw(mapTexture, this.x , this.y, this.width, this.height );
-//			 Sprite sprite = new Sprite(texture, (int)this.width, (int)this.height);
-//			 sprite.setPosition(this.x, this.y);
-//			 sprite.flip(true, false);
-//			 sprite.draw(batch);
+			this.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
+			this.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
+	        batch.draw(texture, this.x , this.y, this.width, this.height );
 		}
 
 	}

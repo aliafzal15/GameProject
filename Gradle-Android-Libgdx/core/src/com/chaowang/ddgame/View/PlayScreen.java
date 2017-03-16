@@ -130,7 +130,6 @@ public class PlayScreen implements Screen{
         while(treeIterator.hasNext()){
             Tree cur = treeIterator.next();
             cur.draw(batch);
-            cur.update();
             if(playerEg.getBounds().overlaps(cur.getBounds())){
                 playerEg.reAdjust();
             }

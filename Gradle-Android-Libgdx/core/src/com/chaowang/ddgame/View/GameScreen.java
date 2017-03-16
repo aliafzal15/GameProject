@@ -15,12 +15,21 @@ import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.Controller.PlayerController;
+import com.chaowang.ddgame.MapModel.Tree;
+import com.chaowang.ddgame.MapModel.Wall;
 import com.chaowang.ddgame.PlayModel.Actor;
 import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.PublicParameter;
+import com.chaowang.ddgame.util.DialogBox;
+
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
@@ -34,13 +43,18 @@ public class GameScreen implements Screen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
-
+    // followed from video
+    private int uiScale = 2;
+    private Stage uiStage;
+    private Table root;
+    private DialogBox dialogBox;
 
     private Actor actor;
     private Map mapModel;
     private Campaign campaign;
     private Set<Vector2> vectorKeySet ;
     private Iterator<Vector2> keySetIterator ;
+    private boolean isHitObject;
 
     GameScreen(Game game, Character character,Map map, Campaign camp){
         this.game = game;
@@ -51,6 +65,8 @@ public class GameScreen implements Screen{
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        initUI();
     }
 
     public TiledMap getMap() {
@@ -80,6 +96,7 @@ public class GameScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        isHitObject = false;
 
         renderer.setView(cam);
         renderer.render();
@@ -87,6 +104,7 @@ public class GameScreen implements Screen{
         cam.position.set(actor.getPosition().x + (actor.getCurrentFrame().getRegionWidth() / 2), actor.getPosition().y + actor.getCurrentFrame().getRegionHeight() / 2, 0);
         batch.setProjectionMatrix(cam.combined);
         cam.update();
+        uiStage.act(delta);
 
 		  if(Gdx.input.isTouched()){
 			  System.out.println("Application clicked");
@@ -99,6 +117,15 @@ public class GameScreen implements Screen{
 
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
+
+        //draw walls on screen
+//        for(Wall cur : mapModel.getWallLocationList() ){
+//            cur.draw(batch);
+//            if(actor.getBound().overlaps(cur)){
+//                playerController.reAdjust();
+//                isHitObject = true;
+//            }
+//        }
 
         // draw items on screen
         vectorKeySet = mapModel.getItemLocationList().keySet();
@@ -139,14 +166,38 @@ public class GameScreen implements Screen{
 
 
 
-        if(actor.getBound().overlaps(mapModel.getEntryDoor()) ||actor.getBound().overlaps(mapModel.getExitDoor()) ){
-        	 playerController.reAdjust();
-        }
-        else{
-            playerController.keyDown();
+        if(actor.getBound().overlaps(mapModel.getExitDoor()) ){
+            if(actor.getPosition().y + actor.getBound().getHeight() <= mapModel.getExitDoor().y + 1f ){
+                if(campaign.getMapPack().size == 1 ){
+                    game.setScreen(new MainMenuScreen(game));
+                } else {
+                    campaign.getMapPack().removeIndex(0);
+                    actor.getCharacter().promoteUp();
+                    game.setScreen(new GameScreen(game, actor.getCharacter(), campaign.getMapPack().get(0), campaign));
+                }
+            } else{
+                playerController.reAdjust();
+                isHitObject = true;
+            }
+
         }
 
+        if(actor.getBound().overlaps(mapModel.getEntryDoor()) ){
+            playerController.reAdjust();
+            isHitObject = true;
+        }
+
+        if(isHitObject == false){
+            playerController.keyDown();
+        }
         batch.end();
+
+        uiStage.draw();
+//        try {
+//            Thread.sleep(100);
+//        } catch(InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
     }
 
     @Override
@@ -173,4 +224,21 @@ public class GameScreen implements Screen{
     public void dispose() {
 
     }
+
+    private void initUI(){
+        uiStage = new Stage(new ScreenViewport());
+        uiStage.getViewport().update(Gdx.graphics.getWidth() / uiScale, Gdx.graphics.getHeight() / uiScale);
+
+        root = new Table();
+        root.setFillParent(true);
+        uiStage.addActor(root);
+
+        dialogBox = new DialogBox(MainMenuScreen.skin);
+        dialogBox.animateText("Hello advanturer  \nMay I offer you a fresh beverage");
+
+        root.add(dialogBox).expand().align(Align.bottom).pad(8f);
+
+    }
+
+
 }
