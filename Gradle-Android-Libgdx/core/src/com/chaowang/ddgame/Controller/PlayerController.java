@@ -7,20 +7,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
 import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.PlayModel.Actor;
+import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.View.GameScreen;
 
 
 public class PlayerController extends InputAdapter{
 
-    private Actor actor;
+    private Player player;
     private GameScreen gameScreen;
     private Rectangle mapBound;
     private float stateTime;
     private String movement;
 
-    public PlayerController(Actor p, GameScreen screen){
-        this.actor = p;
+    public PlayerController(Player p, GameScreen screen){
+        this.player = p;
         this.gameScreen = screen;
         MapProperties prop = gameScreen.getMap().getProperties();
         mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
@@ -36,25 +36,25 @@ public class PlayerController extends InputAdapter{
             stateTime = 0;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W ) && actor.getPosition().y + actor.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
-            actor.move(0,1);
+        if(Gdx.input.isKeyPressed(Input.Keys.W ) && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
+            player.move(0,1);
             movement = "up";
-            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S ) && actor.getPosition().y > mapBound.getY() ){
-            actor.move(0,-1);
+        else if(Gdx.input.isKeyPressed(Input.Keys.S ) && player.getPosition().y > mapBound.getY() ){
+            player.move(0,-1);
             movement = "down";
-            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.A ) && actor.getPosition().x > mapBound.getX()){
-            actor.move(-1,0);
+        else if(Gdx.input.isKeyPressed(Input.Keys.A ) && player.getPosition().x > mapBound.getX()){
+            player.move(-1,0);
             movement = "left";
-            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D ) && actor.getPosition().x + actor.getCurrentFrame().getRegionWidth() < mapBound.getWidth()){
-            actor.move(1,0);
+        else if(Gdx.input.isKeyPressed(Input.Keys.D ) && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()){
+            player.move(1,0);
             movement = "right";
-            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(8 + (stateTime *4) % 4));
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime *4) % 4));
         }
 
 
@@ -62,23 +62,23 @@ public class PlayerController extends InputAdapter{
     
     public void reAdjust(){
         if(movement == "up"){
-        	actor.move(0,-0.1f);
+        	player.move(0,-0.1f);
         }
         else if(movement == "down"){
-        	actor.move(0,0.1f);
+        	player.move(0,0.1f);
         }
         else if(movement == "left"){
-        	actor.move(0.1f,0);
+        	player.move(0.1f,0);
         }
         else if(movement == "right"){
-        	actor.move(-0.1f,0);
+        	player.move(-0.1f,0);
         }
 
     }
 
 
     public void pickupItem(Item item){
-        actor.getCharacter().addToBackpack(item);
+        player.getCharacter().addToBackpack(item);
 
     }
 
@@ -94,21 +94,21 @@ public class PlayerController extends InputAdapter{
 //            stateTime = 0;
 //        }
 //
-//        if(keycode == Input.Keys.UP && actor.getPosition().y < mapBound.getHeight()){
-//            actor.move(0,1);
-//            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(12 + stateTime));
+//        if(keycode == Input.Keys.UP && player.getPosition().y < mapBound.getHeight()){
+//            player.move(0,1);
+//            player.setCurrentFrame((TextureRegion)player.getAnimation().getKeyFrame(12 + stateTime));
 //        }
-//        if(keycode == Input.Keys.DOWN && actor.getPosition().y > mapBound.getY() ){
-//            actor.move(0,-1);
-//            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(0 + stateTime));
+//        if(keycode == Input.Keys.DOWN && player.getPosition().y > mapBound.getY() ){
+//            player.move(0,-1);
+//            player.setCurrentFrame((TextureRegion)player.getAnimation().getKeyFrame(0 + stateTime));
 //        }
-//        if(keycode == Input.Keys.LEFT && actor.getPosition().x > mapBound.getX()){
-//            actor.move(-1,0);
-//            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(4 + stateTime));
+//        if(keycode == Input.Keys.LEFT && player.getPosition().x > mapBound.getX()){
+//            player.move(-1,0);
+//            player.setCurrentFrame((TextureRegion)player.getAnimation().getKeyFrame(4 + stateTime));
 //        }
-//        if(keycode == Input.Keys.RIGHT && actor.getPosition().x < mapBound.getWidth()){
-//            actor.move(1,0);
-//            actor.setCurrentFrame((TextureRegion)actor.getAnimation().getKeyFrame(8 + stateTime));
+//        if(keycode == Input.Keys.RIGHT && player.getPosition().x < mapBound.getWidth()){
+//            player.move(1,0);
+//            player.setCurrentFrame((TextureRegion)player.getAnimation().getKeyFrame(8 + stateTime));
 //        }
 //        return false;
 //    }

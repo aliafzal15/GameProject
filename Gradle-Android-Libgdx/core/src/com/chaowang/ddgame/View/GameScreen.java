@@ -2,37 +2,25 @@ package com.chaowang.ddgame.View;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.Controller.PlayerController;
-import com.chaowang.ddgame.MapModel.Tree;
 import com.chaowang.ddgame.MapModel.Wall;
-import com.chaowang.ddgame.PlayModel.Actor;
+import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.MapModel.Map;
-import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.util.DialogBox;
+import com.chaowang.ddgame.util.Fade;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
-import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -49,9 +37,10 @@ public class GameScreen implements Screen{
 //    private Stage uiStage;
 //    private Table root;
 //    private DialogBox dialogBox;
+    private Fade fade;
 
     private Stage stage;
-    private Actor actor;
+    private Player player;
     private Map mapModel;
     private Campaign campaign;
     private Set<Vector2> vectorKeySet ;
@@ -61,7 +50,7 @@ public class GameScreen implements Screen{
 
     GameScreen(Game game, Character character,Map map, Campaign camp){
         this.game = game;
-        this.actor = new Actor(new Vector2(1,1), character);
+        this.player = new Player(new Vector2(1,1), character);
         this.mapModel = map;
         this.campaign = new Campaign(camp);
         batch = new SpriteBatch();
@@ -69,6 +58,8 @@ public class GameScreen implements Screen{
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(new ScreenViewport());
+        fade = new Fade(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.BLACK, Fade.FadeType.FADE_IN, 3000);
+
 //        initUI();
     }
 
@@ -82,19 +73,20 @@ public class GameScreen implements Screen{
 
     @Override
     public void show() {
-        playerController = new PlayerController(actor, this);
+        playerController = new PlayerController(player, this);
         Gdx.input.setInputProcessor(playerController);
         Gdx.input.setInputProcessor(stage);
         
-        mapModel.adjustLevel(actor.getCharacter().getLevel());
+        mapModel.adjustLevel(player.getCharacter().getLevel());
 
-        if(mapModel.getEntryDoor().y - actor.getBound().getHeight() > 0 ){
-            actor.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - actor.getBound().getWidth() /2,
-                    mapModel.getEntryDoor().y - actor.getBound().getHeight()));
+        if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
+            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                    mapModel.getEntryDoor().y - player.getBound().getHeight()));
         } else {
-            actor.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - actor.getBound().getWidth() /2,
+            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
                     mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
         }
+        stage.addActor(fade);
 
     }
 
@@ -105,10 +97,10 @@ public class GameScreen implements Screen{
         renderer.setView(cam);
         renderer.render();
 
-        cam.position.set(actor.getPosition().x + (actor.getCurrentFrame().getRegionWidth() / 2), actor.getPosition().y + actor.getCurrentFrame().getRegionHeight() / 2, 0);
+        cam.position.set(player.getPosition().x + (player.getCurrentFrame().getRegionWidth() / 2), player.getPosition().y + player.getCurrentFrame().getRegionHeight() / 2, 0);
         batch.setProjectionMatrix(cam.combined);
         cam.update();
-        stage.act();
+        //stage.act();
 //        uiStage.act(delta);
 
 //		  if(Gdx.input.isTouched()){
@@ -118,19 +110,19 @@ public class GameScreen implements Screen{
 		    
 		  
         batch.begin();
-        batch.draw(actor.getCurrentFrame(), actor.getPosition().x, actor.getPosition().y );
+        batch.draw(player.getCurrentFrame(), player.getPosition().x, player.getPosition().y );
 
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
 
         //draw walls on screen
-//        for(Wall cur : mapModel.getWallLocationList() ){
-//            cur.draw(batch);
-//            if(actor.getBound().overlaps(cur)){
-//                playerController.reAdjust();
-//                isHitObject = true;
-//            }
-//        }
+        for(Wall cur : mapModel.getWallLocationList() ){
+            cur.draw(batch);
+            if(player.getBound().overlaps(cur)){
+                playerController.reAdjust();
+                isHitObject = true;
+            }
+        }
 
         // draw items on screen
         vectorKeySet = mapModel.getItemLocationList().keySet();
@@ -139,7 +131,7 @@ public class GameScreen implements Screen{
         while(keySetIterator.hasNext()){
             Vector2 cur = keySetIterator.next();
             mapModel.getItemLocationList().get(cur).draw(batch, cur);
-            if(actor.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
+            if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
                 playerController.pickupItem(mapModel.getItemLocationList().get(cur));
                 keySetIterator.remove();
             }
@@ -152,7 +144,7 @@ public class GameScreen implements Screen{
         while(keySetIterator.hasNext()){
             Vector2 cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
-            if(actor.getBound().overlaps(mapModel.getFriendLocationList().get(cur)) ){
+            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur)) ){
             	System.out.println("Is a friend ");
             }
         }
@@ -164,45 +156,47 @@ public class GameScreen implements Screen{
         while(keySetIterator.hasNext()){
             Vector2 cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
-            if(actor.getBound().overlaps(mapModel.getEnemyLocationList().get(cur)) ){
+            if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur)) ){
             	System.out.println("Is a enemy ");
             }
         }
 
 
+//        stage.draw();
 
-        if(actor.getBound().overlaps(mapModel.getExitDoor()) ){
-            if(actor.getPosition().y + actor.getBound().getHeight() <= mapModel.getExitDoor().y + 1f ){
-//            	System.out.println("actor " + (actor.getPosition().y + actor.getBound().getHeight()));
+        if(player.getBound().overlaps(mapModel.getExitDoor()) ){
+            if(player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f ){
+//            	System.out.println("player " + (player.getPosition().y + player.getBound().getHeight()));
 //            	System.out.println(mapModel.getExitDoor().y);
-                if(campaign.getMapPack().size == count+1 ){
-    				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
-    					@Override
-    					public void run() {
-    	                    game.setScreen(new MainMenuScreen(game));
-    					}
-    				})));
-                } else {
-                    actor.getCharacter().promoteUp();
-    				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
-    					@Override
-    					public void run() {
-    	                    //campaign.getMapPack().removeIndex(0);
-    						count++;
-    						System.out.println(count);
-    	                    game.setScreen(new GameScreen(game, actor.getCharacter(), campaign.getMapPack().get(count), campaign));
-    					}
-    				})));
+                fade.startFade();
+                game.setScreen(new MainMenuScreen(game));
 
+//                if(campaign.getMapPack().size == count+1 ){
+//    				stage.addAction(Actions.sequence(Actions.fadeOut(2), Actions.run(new Runnable() {
+//    					@Override
+//    					public void run() {
+//    	                    game.setScreen(new MainMenuScreen(game));
+//    					}
+//    				})));
+                } else {
+                    player.getCharacter().promoteUp();
+                    fade.startFade();
+//                    stage.addAction(Actions.sequence(Actions.fadeOut(2), Actions.run(new Runnable() {
+//    					@Override
+//    					public void run() {
+//    	                    //campaign.getMapPack().removeIndex(0);
+//    						count++;
+//    						System.out.println(count);
+//    	                    game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
+//    					}
+//    				})));
                 }
             } else{
                 playerController.reAdjust();
                 isHitObject = true;
             }
 
-        }
-
-        if(actor.getBound().overlaps(mapModel.getEntryDoor()) ){
+        if(player.getBound().overlaps(mapModel.getEntryDoor()) ){
             playerController.reAdjust();
             isHitObject = true;
         }
@@ -212,7 +206,7 @@ public class GameScreen implements Screen{
         }
         batch.end();
 
-        stage.draw();
+        //stage.draw();
         
 //        uiStage.draw();
 

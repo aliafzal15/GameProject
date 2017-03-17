@@ -17,8 +17,8 @@ import com.chaowang.ddgame.PublicParameter;
  */
 public class Wall extends Rectangle implements Json.Serializable{
 
-    Texture wall;
-    Texture mapTexture;
+    private Texture wall;
+    private Texture mapTexture;
     /**
      * constructor
      */
@@ -36,6 +36,7 @@ public class Wall extends Rectangle implements Json.Serializable{
         this.width = position.x;
         this.height = position.y;
         wall = new Texture(Gdx.files.internal("map/wall.png"));
+        mapTexture = new Texture(Gdx.files.internal("map/wall5.png"));
     }
     /**
      * constructor
@@ -55,7 +56,6 @@ public class Wall extends Rectangle implements Json.Serializable{
      * @param batch
      */
     public void draw(SpriteBatch batch){
-        mapTexture = new Texture(Gdx.files.internal("map/wall1.png"));
         batch.draw(mapTexture, this.x, this.y, this.width, this.height * 1.5f);
     }
     /**
@@ -118,5 +118,6 @@ public class Wall extends Rectangle implements Json.Serializable{
         Vector2 tmp = json.fromJson(Vector2.class, positionStr);
         this.x = tmp.x ;
         this.y = tmp.y;
+        mapTexture = new Texture(Gdx.files.internal("map/wall1.gif"));
     }
 }

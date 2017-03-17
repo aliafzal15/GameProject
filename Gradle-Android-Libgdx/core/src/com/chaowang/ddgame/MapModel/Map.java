@@ -318,7 +318,7 @@ public class Map implements Json.Serializable{
             }
         }
         if (count == 1){
-            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
+            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
         }
         return  count;
     }
@@ -337,7 +337,10 @@ public class Map implements Json.Serializable{
             }
         }
         if(count == 1){
-            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
+            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
+        }
+        if( y == (size - 1)){
+            count = -1;
         }
         return count;
     }
@@ -345,10 +348,10 @@ public class Map implements Json.Serializable{
      * add wall
      */
     public void addWall(){
-        for (int i=0; i< locationMatrix.length ; i++){
+        for (int i =locationMatrix.length-1 ; i>=0 ; i--){
             for (int j = 0; j < locationMatrix[0].length; j++){
                 if(locationMatrix[i][j] == 1 ){
-                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, i* PublicParameter.MAP_PIXEL_SIZE)));
+                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, (size - 1 - i)* PublicParameter.MAP_PIXEL_SIZE)));
                 }
             }
         }
