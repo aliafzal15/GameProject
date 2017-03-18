@@ -17,28 +17,25 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-public class Player implements Serializable{
+public class PlayerEg implements Serializable{
 
     private static final long serialVersionUID = 1L;
     private Vector2 position;
-    //private Texture texture;
-    private String textureLoc;
 
     private static final int col = 4;
     private static final int row = 4;
-    Animation animation;
-    Texture playerTexture;
-    TextureRegion[]  frames;
-    TextureRegion currentFrame;
-    float stateTime;
-    Rectangle bounds;
-    String movement;
+    private Animation animation;
+    private Texture playerTexture;
+    private TextureRegion[]  frames;
+    private TextureRegion currentFrame;
+    private float stateTime;
+    private Rectangle bounds;
+    private String movement;
 
-    public Player(Vector2 position, String textureLoc){
+    public PlayerEg(Vector2 position){
         this.position = position;
         movement = "";
-        //this.texture = new Texture(Gdx.files.internal(textureLoc));
-        playerTexture = new Texture(Gdx.files.internal("android/assets/Reen4x4.png"));
+        playerTexture = new Texture(Gdx.files.internal("arshes.png"));
         TextureRegion[][] tmp = TextureRegion.split(playerTexture,playerTexture.getWidth() / col ,playerTexture.getHeight() / row);
         frames = new TextureRegion[col * row];
 
@@ -86,6 +83,7 @@ public class Player implements Serializable{
             currentFrame = (TextureRegion)animation.getKeyFrame(8 + stateTime);
         }
     }
+
     public void reAdjust(){
         if(movement == "up"){
             position.y -= 2f;
@@ -102,8 +100,8 @@ public class Player implements Serializable{
 
     }
 
-    public static void savePlayer(Player playerposition) throws  IOException{
-        FileHandle file = Gdx.files.local("player.dat");
+    public static void savePlayer(PlayerEg playerposition) throws  IOException{
+        FileHandle file = Gdx.files.local("playerEg.dat");
         OutputStream out = null;
         try {
             file.writeBytes(serialze(playerposition.getPosition()),false);
@@ -112,12 +110,12 @@ public class Player implements Serializable{
         }finally {
             if(out != null) try {out.close();}  catch (Exception ex) {}
         }
-        System.out.println("Saving Player");
+        System.out.println("Saving PlayerEg");
     }
 
     public static Vector2 readPlayer() throws  IOException, ClassNotFoundException{
         Vector2 playerPosition = null;
-        FileHandle file  = Gdx.files.local("player.dat");
+        FileHandle file  = Gdx.files.local("playerEg.dat");
         playerPosition = (Vector2) deserialize(file.readBytes());
         return playerPosition ;
     }
@@ -167,7 +165,7 @@ public class Player implements Serializable{
         this.currentFrame = currentFrame;
     }
 
-    public float getStateTime() {
+    public float getStateTime () {
         return stateTime;
     }
 

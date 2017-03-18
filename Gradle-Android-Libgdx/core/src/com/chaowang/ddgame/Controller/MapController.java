@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.View.MainMenuScreen;
 import com.chaowang.ddgame.View.MapEditorScreen;
 
@@ -201,7 +203,7 @@ public class MapController {
             }
             else{
                 new Dialog("Error", MainMenuScreen.skin, "dialog") {
-                }.text("Map need 1 entry door 1 exit door").button("OK", true).key(Input.Keys.ENTER, true)
+                }.text("Map need 1 entry door 1 exit door, exit door cannot facing bound").button("OK", true).key(Input.Keys.ENTER, true)
                         .show(view.stage);
             }
     	} else{
@@ -310,6 +312,28 @@ public class MapController {
                     return true;
                 }
 
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    int i = getButton() / map.getSize();
+                    int j = getButton() % map.getSize();
+                    switch (map.getLocationMatrix()[i][j]){
+                        case -3:
+                            view.mapItemInfoLabel.setText(map.getEnemyLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, (map.getSize()-1-i) * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                        case -2:
+                            view.mapItemInfoLabel.setText(map.getFriendLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, (map.getSize()-1-i) * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                        case -1:
+                            view.mapItemInfoLabel.setText(map.getItemLocationList().get(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, (map.getSize()-1-i) * PublicParameter.MAP_PIXEL_SIZE)).toString());
+                            break;
+                    }
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    view.mapItemInfoLabel.setText("");
+                }
+
             });
         }
     }
@@ -322,25 +346,25 @@ public class MapController {
 	public void addItemCharctOnSpot(int i, int j) {
 		switch (map.getLocationMatrix()[i][j]){
             case -3:
-                map.removeEnemyLocationList(i,j);
+                map.removeEnemyLocationList(map.getSize() - 1 -i,j);
                 break;
             case -2:
-                map.removeFriendLocationList(i,j);
+                map.removeFriendLocationList(map.getSize() - 1 -i,j);
                 break;
             case -1:
-                map.removeItemLocationList(i,j);
+                map.removeItemLocationList(map.getSize() - 1 -i,j);
                 break;
         }
         map.getLocationMatrix()[i][j] = matrixPointer;
         switch (map.getLocationMatrix()[i][j]){
             case -3:
-                map.addEnemyLocationList(i,j,characterCarrier);
+                map.addEnemyLocationList(map.getSize() - 1 -i,j,characterCarrier);
                 break;
             case -2:
-                map.addFriendLocationList(i,j,characterCarrier);
+                map.addFriendLocationList(map.getSize() - 1 -i,j,characterCarrier);
                 break;
             case -1:
-                map.addItemLocationList(i,j, itemCarrier);
+                map.addItemLocationList(map.getSize() - 1 -i,j, itemCarrier);
                 break;
         }
 	}

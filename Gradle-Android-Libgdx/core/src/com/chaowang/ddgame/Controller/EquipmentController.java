@@ -79,7 +79,8 @@ public class EquipmentController {
         // check if equipment has higher level item need to remove.
         for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = character.getEquipment().entrySet().iterator(); it.hasNext(); ) {
             HashMap.Entry<Item.ItemType, Item> entry = it.next();
-            if(entry.getValue().getLevel() > (1 + character.getLevel()) / 2 ) {
+            if(entry.getValue().getLevel() > (int) Math.ceil(  character.getLevel() / 4.0 )) {
+                character.getBackpack().add(entry.getValue());
                 it.remove();
             }
         }
@@ -148,9 +149,10 @@ public class EquipmentController {
             view.backpackMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (character.getBackpack().get(button).getLevel() <= (1 + character.getLevel()) / 2
+                    if (character.getBackpack().get(button).getLevel() <= (int) Math.ceil(  character.getLevel() / 4.0 )
                             && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
                         loadEquipment(getButton());
+                        view.characterInfoLabel.setText(character.displayAllAtributes());
                         view.equipmentTable.clearChildren();
                         buildEquipmentMatrix();
                         addEquipmentMatrixListener();
@@ -187,6 +189,7 @@ public class EquipmentController {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if(character.getEquipment().containsKey(Item.ItemType.getItemType(getButton()))){
                         character.getBackpack().add(character.removeEquipment(Item.ItemType.getItemType(getButton())));
+                        view.characterInfoLabel.setText(character.displayAllAtributes());
                         view.equipmentTable.clearChildren();
                         buildEquipmentMatrix();
                         addEquipmentMatrixListener();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -65,6 +66,7 @@ public class MainMenuScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
 
         font = new BitmapFont(Gdx.files.internal("Style/default.fnt"),false);
+        font.getData().markupEnabled = true;
         style = new Label.LabelStyle(font, Color.WHITE);
 
         itemInventory = new ItemInventory();
@@ -103,7 +105,7 @@ public class MainMenuScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new GameSelectionScreen(game));
                 return true;
             }
         });
@@ -150,8 +152,14 @@ public class MainMenuScreen implements Screen{
         mapButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.clear();
-                game.setScreen(new MapEditorScreen(game));
+                //stage.clear();
+				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
+					@Override
+					public void run() {
+		                game.setScreen(new MapEditorScreen(game));					
+		                }
+				})));
+
                 return true;
             }
         });
@@ -179,8 +187,6 @@ public class MainMenuScreen implements Screen{
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
 

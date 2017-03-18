@@ -2,6 +2,7 @@ package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.chaowang.ddgame.View.*;
 
@@ -34,6 +35,8 @@ public class DDGame extends Game {
 
 	@Override
 	public void render () {
+		Gdx.gl.glClearColor(0f, 0f, 0f ,1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         super.render();
 	}
 	
