@@ -7,16 +7,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.math.Vector2;
 
 import gdxtesting.GdxTestRunner;
 
 import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.Controller.MapController;
-import com.chaowang.ddgame.ItemModel.EnchantedAbility;
-import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.MapModel.EntryDoor;
 import com.chaowang.ddgame.MapModel.ExitDoor;
 import com.chaowang.ddgame.MapModel.Map;

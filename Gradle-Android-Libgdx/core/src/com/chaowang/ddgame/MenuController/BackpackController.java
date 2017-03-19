@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.Controller;
+package com.chaowang.ddgame.MenuController;
 
 
 import com.badlogic.gdx.Gdx;

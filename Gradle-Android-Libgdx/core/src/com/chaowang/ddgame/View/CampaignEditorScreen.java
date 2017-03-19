@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.Controller.CampaignController;
+import com.chaowang.ddgame.MenuController.CampaignController;
 /**
  * view for campaign editor 
  * @author chao wang

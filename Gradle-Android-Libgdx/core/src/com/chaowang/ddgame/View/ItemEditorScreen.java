@@ -3,7 +3,6 @@ package com.chaowang.ddgame.View;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import com.chaowang.ddgame.Controller.ItemController;
+import com.chaowang.ddgame.MenuController.ItemController;
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.PublicParameter;
 

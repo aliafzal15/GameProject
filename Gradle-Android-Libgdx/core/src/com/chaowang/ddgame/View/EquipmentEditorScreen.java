@@ -3,7 +3,6 @@ package com.chaowang.ddgame.View;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.Controller.EquipmentController;
+import com.chaowang.ddgame.MenuController.EquipmentController;
 import com.chaowang.ddgame.CharacterModel.Character;
 /**
  * view for equipment editor 

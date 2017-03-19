@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.util;
+package com.chaowang.ddgame.GameUI;
 
 
 import com.badlogic.gdx.Gdx;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-public class DialogBox extends Table{
+public class DialogueBox extends Table{
 
     private String targetText = "";
     private float animTimer = 0f;
@@ -26,12 +26,12 @@ public class DialogBox extends Table{
         ;
     }
 
-    public DialogBox(Skin skin){
+    public DialogueBox(Skin skin){
         super(skin);
-        this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
+        this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameUI/dialogBox.png")))));
         //this.setBackground("dialogbox");
         textLabel = new Label("\n", skin);
-        this.add(textLabel).expand().align(Align.left).pad(5f);
+        this.add(textLabel).expand().align(Align.left).pad(12f);
     }
 
     public void animateText(String text){
@@ -65,7 +65,7 @@ public class DialogBox extends Table{
                 animTimer = animationTotalTime;
             }
             String actuallyDisplayText = "";
-            int chatactersToDisplay = (int)(animTimer/animationTotalTime) *targetText.length();
+            int chatactersToDisplay = (int)((animTimer/animationTotalTime) *targetText.length());
             for (int i = 0; i < chatactersToDisplay; i++){
                 actuallyDisplayText += targetText.charAt(i);
             }

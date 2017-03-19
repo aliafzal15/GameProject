@@ -7,15 +7,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import com.badlogic.gdx.Gdx;
+
 import gdxtesting.GdxTestRunner;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.Controller.MapController;
+import com.chaowang.ddgame.MenuController.MapController;
 import com.chaowang.ddgame.ItemModel.EnchantedAbility;
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.MapModel.EntryDoor;
@@ -25,7 +22,6 @@ import com.chaowang.ddgame.util.MazeSolver;
 
 import java.util.Arrays;
 
-import gdxtesting.GdxTestRunner;
 /**
  * the class is Junit test for Map
  * @author chao wang

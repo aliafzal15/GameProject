@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CharacterModel.Abilities;
 import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.Controller.CharacterController;
+import com.chaowang.ddgame.MenuController.CharacterController;
 import com.chaowang.ddgame.PublicParameter;
 
 /**

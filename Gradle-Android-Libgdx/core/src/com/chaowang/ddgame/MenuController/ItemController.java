@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.Controller;
+package com.chaowang.ddgame.MenuController;
 
 /**
  * controller for item
