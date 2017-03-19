@@ -27,6 +27,11 @@ import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.PublicParameter;
 
+/**
+ * class for Game Selection
+ * @author chao wang
+ * @version 2.0
+ */
 public class GameSelectionScreen implements Screen{
 
     private Game game;

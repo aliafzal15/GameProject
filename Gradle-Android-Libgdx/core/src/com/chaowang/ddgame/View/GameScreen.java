@@ -31,6 +31,11 @@ import com.chaowang.ddgame.GameUI.OptionBox;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * View for Game Selection
+ * @author chao wang
+ * @version 2.0
+ */
 public class GameScreen implements Screen{
 
     private Game game;

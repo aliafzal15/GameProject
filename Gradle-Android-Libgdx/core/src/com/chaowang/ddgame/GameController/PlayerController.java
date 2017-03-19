@@ -10,7 +10,11 @@ import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.View.GameScreen;
 
-
+/**
+ * controller for player
+ * @author chao wang
+ * @version 2.0
+ */
 public class PlayerController extends InputAdapter{
 
     private Player player;
@@ -19,6 +23,11 @@ public class PlayerController extends InputAdapter{
     private float stateTime;
     private String movement;
 
+    /**
+     * constructor
+     * @param p
+     * @param screen
+     */
     public PlayerController(Player p, GameScreen screen){
         this.player = p;
         this.gameScreen = screen;
@@ -27,7 +36,9 @@ public class PlayerController extends InputAdapter{
         stateTime = 0f;
     }
 
-
+    /**
+     * use keyboard to control the players' movement
+     */
     public void keyDown(){
 
         if(stateTime < 4 ){
@@ -59,7 +70,9 @@ public class PlayerController extends InputAdapter{
 
 
     }
-    
+    /**
+     * adjust the location of player when moving
+     */
     public void reAdjust(){
         if(movement == "up"){
         	player.move(0,-0.1f);
@@ -75,17 +88,16 @@ public class PlayerController extends InputAdapter{
         }
 
     }
-
-
+    /**
+     * pick items by players themself
+     * @param item different kinds of items
+     */
     public void pickupItem(Item item){
         player.getCharacter().addToBackpack(item);
 
     }
 
-
 }
-
-
 //    @Override
 //    public boolean keyDown(int keycode) {
 //        if(stateTime < 4 ){
