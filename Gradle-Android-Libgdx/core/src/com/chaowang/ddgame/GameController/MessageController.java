@@ -2,12 +2,7 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-
-import com.chaowang.ddgame.DialogueSystem.Dialogue;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode;
-import com.chaowang.ddgame.DialogueSystem.DialogueTraverser;
 import com.chaowang.ddgame.GameUI.DialogueBox;
-import com.chaowang.ddgame.GameUI.OptionBox;
 
 /**
  * Created by Chao on 18/03/2017.

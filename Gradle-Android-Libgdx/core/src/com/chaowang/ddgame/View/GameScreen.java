@@ -19,7 +19,6 @@ import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.DialogueSystem.Dialogue;
 import com.chaowang.ddgame.DialogueSystem.DialogueNode;
 import com.chaowang.ddgame.GameController.DialogueController;
-import com.chaowang.ddgame.GameController.MessageController;
 import com.chaowang.ddgame.GameController.PlayerController;
 import com.chaowang.ddgame.GameUI.DialogueBox;
 import com.chaowang.ddgame.MapModel.Wall;
