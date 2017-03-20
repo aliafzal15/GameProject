@@ -73,18 +73,21 @@ public class PlayerController extends InputAdapter{
     /**
      * adjust the location of player when moving
      */
-    public void reAdjust(){
+    public void reAdjust(float span){
+        if(span <= 0 ){
+            span = 0.1f;
+        }
         if(movement == "up"){
-        	player.move(0,-0.1f);
+        	player.move(0,-1 * span);
         }
         else if(movement == "down"){
-        	player.move(0,0.1f);
+        	player.move(0,1 * span);
         }
         else if(movement == "left"){
-        	player.move(0.1f,0);
+        	player.move(1 * span,0);
         }
         else if(movement == "right"){
-        	player.move(-0.1f,0);
+        	player.move(-1 * span,0);
         }
 
     }

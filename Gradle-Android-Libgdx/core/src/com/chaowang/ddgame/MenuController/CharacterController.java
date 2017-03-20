@@ -311,6 +311,7 @@ public class CharacterController {
 	 */
 	public void initialEditorItem() {
 		view.raceLabel.setText(character.getRaceType().toString());
+		view.fighterTypeLabel.setText(character.getFighterType().toString());
 		view.characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
 		view.levelLabel.setText(Integer.toString(character.getLevel()));
 		view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));

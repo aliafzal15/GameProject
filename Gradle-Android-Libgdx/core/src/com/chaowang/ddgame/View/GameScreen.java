@@ -61,9 +61,22 @@ public class GameScreen implements Screen{
     private boolean isHitObject;
     private static int count=0;
 
-    GameScreen(Game game, Character character,Map map, Campaign camp){
+    GameScreen(Game game, Character character,Map map, Campaign camp) {
+        this(game,new Player(new Vector2(1,1), character),map,camp);
+
+        if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
+            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                    mapModel.getEntryDoor().y - player.getBound().getHeight()));
+        } else {
+            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                    mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
+        }
+    }
+
+    GameScreen(Game game, Player player,Map map, Campaign camp){
         this.game = game;
-        this.player = new Player(new Vector2(1,1), character);
+        this.player = player;
+        //player.setPosition(new Vector2(player.getPosition().x - player.getBound().getWidth() * 1.1f, player.getPosition().y - player.getBound().getHeight() * 1.1f ));
         this.mapModel = map;
         this.campaign = new Campaign(camp);
         batch = new SpriteBatch();
@@ -71,7 +84,6 @@ public class GameScreen implements Screen{
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        fade = new Fade(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.BLACK, Fade.FadeType.FADE_IN, 3000);
-
         initUI();
 
         playerController = new PlayerController(player, this);
@@ -80,7 +92,6 @@ public class GameScreen implements Screen{
         dialogue = new Dialogue();
         DialogueNode node1 = new DialogueNode("Hello Adventurer!\n Welcome to town.", 0);
         DialogueNode node2 = new DialogueNode("How can I help you?", 1);
-;
 
         node1.makeLinear(node2.getID());
         node2.addChoice("Trade", 2);
@@ -88,11 +99,8 @@ public class GameScreen implements Screen{
         dialogue.addNode(node1);
         dialogue.addNode(node2);
 
-        dialogueController.startDialogue(dialogue);
-//        while (dialogueController.getAnswerIndex() != -1){
-//            System.out.println(dialogueController.getAnswerIndex());
-//        }
-
+        // from show
+        mapModel.adjustLevel(player.getCharacter().getLevel());
 
     }
 
@@ -111,22 +119,15 @@ public class GameScreen implements Screen{
         Gdx.input.setInputProcessor(playerController);
         Gdx.input.setInputProcessor(dialogueController);
 
-        mapModel.adjustLevel(player.getCharacter().getLevel());
 
-        if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
-            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
-                    mapModel.getEntryDoor().y - player.getBound().getHeight()));
-        } else {
-            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
-                    mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
-        }
+
         //stage.addActor(fade);
 //        stage.draw();
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta)  {
         isHitObject = false;
 
         renderer.setView(cam);
@@ -137,12 +138,6 @@ public class GameScreen implements Screen{
         cam.update();
         dialogueController.update(delta);
         uiStage.act(delta);
-
-//		  if(Gdx.input.isTouched()){
-//			  System.out.println("Application clicked");
-//		  }
-        //System.out.println("mouse x : "+ Gdx.input.getX() + "mouse y : "+ Gdx.input.getY());
-
 
         batch.begin();
         batch.draw(player.getCurrentFrame(), player.getPosition().x, player.getPosition().y );
@@ -155,7 +150,7 @@ public class GameScreen implements Screen{
             cur.draw(batch);
             if(player.getBound().overlaps(cur)){
                 System.out.println("hit wall");
-                playerController.reAdjust();
+                playerController.reAdjust(0);
                 isHitObject = true;
             }
         }
@@ -183,10 +178,29 @@ public class GameScreen implements Screen{
             Vector2 cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
             if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur)) ){
+                playerController.reAdjust(5);
+                isHitObject = true;
                 dialogueController.startDialogue(dialogue);
-//                while (dialogueController.getAnswerIndex() != -1){
-//                    System.out.println(dialogueController.getAnswerIndex());
-//                }
+                if(!dialogueController.isIndexFlag()) {
+                    System.out.println("looping");
+                } else {
+                    if (dialogueController.getAnswerIndex() == 0) {
+                        game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+                    }
+                }
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        if(! dialogueController.isIndexFlag()){
+//                            System.out.println("looping");
+//                            try{Thread.sleep(500);}
+//                            catch(Exception e){ e.printStackTrace();}
+//                        } else{
+//                            if(dialogueController.getAnswerIndex() ==0 ){
+//                                game.setScreen(new GameSelectionScreen(game));
+//                            }
+//                        }
+//                    }
+//                }).start();
             }
         }
 
@@ -198,7 +212,14 @@ public class GameScreen implements Screen{
             Vector2 cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
             if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur)) ){
-                System.out.println("Is a enemy ");
+                playerController.reAdjust(5);
+                isHitObject = true;
+                if(! mapModel.getEnemyLocationList().get(cur).isDead()){
+                    System.out.println("attack enemy");
+                    mapModel.getEnemyLocationList().get(cur).underAttack();
+                } else{
+                    game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, false));
+                }
             }
         }
 
@@ -226,7 +247,7 @@ public class GameScreen implements Screen{
                     })));
                 }
             } else {
-                playerController.reAdjust();
+                playerController.reAdjust(0);
                 isHitObject = true;
             }
         }
@@ -234,7 +255,7 @@ public class GameScreen implements Screen{
 
         if(player.getBound().overlaps(mapModel.getEntryDoor()) ){
             System.out.println("hit entry door");
-            playerController.reAdjust();
+            playerController.reAdjust(0);
             isHitObject = true;
         }
 
@@ -270,7 +291,7 @@ public class GameScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        uiStage.dispose();
     }
 
 

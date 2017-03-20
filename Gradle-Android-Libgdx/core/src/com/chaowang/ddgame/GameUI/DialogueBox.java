@@ -1,8 +1,12 @@
 package com.chaowang.ddgame.GameUI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 /**
@@ -27,7 +31,7 @@ public class DialogueBox extends Table {
 
     public DialogueBox(Skin skin) {
         super(skin);
-        this.setBackground("dialoguebox");
+        this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameUI/dialogBox.png")))));
         textLabel = new Label("\n", skin);
         this.add(textLabel).expand().align(Align.left).pad(5f);
     }

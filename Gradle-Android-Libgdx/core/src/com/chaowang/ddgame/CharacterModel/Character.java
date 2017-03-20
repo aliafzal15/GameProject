@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.RacesModel.Race.RaceType;
@@ -42,6 +44,7 @@ public class Character extends Rectangle implements Json.Serializable{
     private Texture texture;
     private Texture mapTexture;
 	//boolean isFriendly = true;
+	boolean isDead;
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
@@ -81,6 +84,7 @@ public class Character extends Rectangle implements Json.Serializable{
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
+		this.isDead = false;
     }
 	/**
 	 * 
@@ -99,7 +103,8 @@ public class Character extends Rectangle implements Json.Serializable{
 		this.promotionPoint = promotionPoint;
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
-        updateTexture(raceType);
+		this.isDead = false;
+		updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
@@ -169,6 +174,31 @@ public class Character extends Rectangle implements Json.Serializable{
 //	public void setFriendly(boolean friend) {
 //		isFriendly = friend;
 //	}
+	public void underAttack(){
+		this.hitPoints --;
+		if(isDead()){
+			makeDead();
+		}
+	}
+
+	public void makeDead() {
+		isDead = true;
+		texture = new Texture(Gdx.files.internal("races/dead.png"));
+		setAbilities(new int[]{0,0,0,0,0,0});
+		hitPoints = -1;
+		armorClass = 0;
+		attackBonus = 0 ;
+		damageBonus = 0;
+		for(Iterator<Map.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext();) {
+			Map.Entry<Item.ItemType, Item> entry = it.next();
+			if (backPackisFull()) {
+				backpack.remove(0);
+			}
+			backpack.add(entry.getValue());
+			it.remove();
+		}
+	}
+
 	/**
 	 * change the type of the race
 	 * @return if successfully changed
@@ -327,7 +357,7 @@ public class Character extends Rectangle implements Json.Serializable{
      * @param abilities a array as different abilities
      */
     public void setAbilities(int[] abilities) {
-        this.abilities.setAbilityArr(abilities);;
+        this.abilities.setAbilityArr(abilities);
     }
     /**
      * get image

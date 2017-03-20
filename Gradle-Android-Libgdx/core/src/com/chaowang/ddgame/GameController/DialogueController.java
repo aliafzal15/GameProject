@@ -21,12 +21,14 @@ public class DialogueController extends InputAdapter{
     private DialogueBox messageDialog;
     private OptionBox optionBox;
     private int answerIndex;
+    private boolean indexFlag;
 
     public DialogueController(DialogueBox box, OptionBox optionBox, DialogueBox message) {
         this.dialogueBox = box;
         this.optionBox = optionBox;
         answerIndex = -1;
         messageDialog = message;
+        indexFlag = false;
     }
 
     public int getAnswerIndex() {
@@ -39,6 +41,14 @@ public class DialogueController extends InputAdapter{
             return true;
         }
         return false;
+    }
+
+    public boolean isIndexFlag() {
+        return indexFlag;
+    }
+
+    public void setIndexFlag(boolean indexFlag) {
+        this.indexFlag = indexFlag;
     }
 
     @Override
@@ -61,7 +71,10 @@ public class DialogueController extends InputAdapter{
                 progress(0);
             } else if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE) {
                 answerIndex = optionBox.getIndex();
-                System.out.println("in root, answer index is " + answerIndex);
+                if( answerIndex == 0){
+                    indexFlag = true;
+                    System.out.println("in root, answer index is " + answerIndex);
+                }
                 optionBox.setVisible(false);
                 dialogueBox.setVisible(false);
                 return true;
@@ -80,7 +93,7 @@ public class DialogueController extends InputAdapter{
 
     public void update(float delta) {
         if (dialogueBox.isFinished() && traverser != null) {
-            if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE && answerIndex == -1) {
+            if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE && answerIndex == -1 ) {
                 optionBox.setVisible(true);
             }
         }
