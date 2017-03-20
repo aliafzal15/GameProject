@@ -112,7 +112,7 @@ public class GameItemExchangeScreen implements Screen{
         NPCbackpackTable = new Table();
 
         NPCbackpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
-        NPCbackpackTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
+        NPCbackpackTable.setPosition( Gdx.graphics.getWidth() / 100 , Gdx.graphics.getHeight() * 1 / 3);
 
         NPCbackpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
         controller.buildNpcBackpackMatrix();

@@ -165,7 +165,7 @@ public class GameScreen implements Screen{
             if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
                 System.out.println("hit item");
                 playerController.pickupItem(mapModel.getItemLocationList().get(cur));
-                dialogueController.animateText("Item " + mapModel.getItemLocationList().get(cur).toString()+" found!");
+                dialogueController.animateText(mapModel.getItemLocationList().get(cur).toString()+"  found!");
                 keySetIterator.remove();
             }
         }
