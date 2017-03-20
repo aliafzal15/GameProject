@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Set;
 
 import com.chaowang.ddgame.ItemModel.Item;
@@ -26,7 +27,7 @@ import com.badlogic.gdx.utils.JsonValue;
  * @author chao Wang
  * @version 1.0
  */
-public class Character extends Rectangle implements Json.Serializable{
+public class Character extends Observable implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
 	private FighterType fighterType;
@@ -45,6 +46,7 @@ public class Character extends Rectangle implements Json.Serializable{
     private Texture mapTexture;
 	//boolean isFriendly = true;
 	boolean isDead;
+	Rectangle bound;
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
@@ -70,6 +72,8 @@ public class Character extends Rectangle implements Json.Serializable{
 	 * @param raceType the raceType of the character
 	 */
 	public Character(String name, int level, RaceType raceType, FighterType fighterType) {
+//		this.bound = new Rectangle(1, 1, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3);
+		this.bound = new Rectangle();
 		this.setName(name);
 		this.fighterType = fighterType;
 		this.raceType  = raceType;
@@ -96,7 +100,8 @@ public class Character extends Rectangle implements Json.Serializable{
 	 * @param abilityBonus the abilityBonus of the character
 	 */
     public Character(String name, int level,int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonus) {
-        this.setName(name);
+		this.bound = new Rectangle();
+    	this.setName(name);
 		this.fighterType = fighterType;
         this.raceType  = raceType;
 		this.level = level;
@@ -831,20 +836,26 @@ public class Character extends Rectangle implements Json.Serializable{
 	}
 	
 	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
-		this.x = cur.x;
-		this.y = cur.y;
+		this.bound.x = cur.x;
+		this.bound.y = cur.y;
 		if(isFriendly == true){
-			this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
-			this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
+			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
 			mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
-	        batch.draw(mapTexture, this.x , this.y, this.width, this.height );
+	        batch.draw(mapTexture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
 		} else{
-			this.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
-			this.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
-	        batch.draw(texture, this.x , this.y, this.width, this.height );
+			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
+			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
+	        batch.draw(texture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
 		}
-
 	}
-
+	
+	public Rectangle getBound() {
+		return bound;
+	}
+	
+	public void setBound(Rectangle bound) {
+		this.bound = bound;
+	}
 
 }

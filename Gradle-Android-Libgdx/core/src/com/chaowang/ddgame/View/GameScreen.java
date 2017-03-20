@@ -28,6 +28,8 @@ import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.GameUI.OptionBox;
 
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 /**
@@ -35,7 +37,7 @@ import java.util.Set;
  * @author chao wang
  * @version 2.0
  */
-public class GameScreen implements Screen{
+public class GameScreen implements Observer, Screen{
 
     private Game game;
     private SpriteBatch batch;
@@ -177,7 +179,7 @@ public class GameScreen implements Screen{
         while(keySetIterator.hasNext()){
             Vector2 cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
-            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur)) ){
+            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(5);
                 isHitObject = true;
                 dialogueController.startDialogue(dialogue);
@@ -211,7 +213,7 @@ public class GameScreen implements Screen{
         while(keySetIterator.hasNext()){
             Vector2 cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
-            if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur)) ){
+            if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(5);
                 isHitObject = true;
                 if(! mapModel.getEnemyLocationList().get(cur).isDead()){
@@ -321,6 +323,12 @@ public class GameScreen implements Screen{
 
         root.add(dialogTable).expand().align(Align.bottom);
     }
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }
