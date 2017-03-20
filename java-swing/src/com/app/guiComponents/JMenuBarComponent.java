@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -18,11 +19,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.app.controller.CharacterEditorMenuController;
+import com.app.controller.PlayGameController;
 import com.app.mapValidation.MapFinalValidation;
 import com.app.menus.CampaignEditorMenu;
 import com.app.menus.CharacterEditorMainMenu;
 import com.app.menus.ItemEditorMainMenu;
 import com.app.menus.MapEditor;
+import com.app.menus.PlayCampaignMenu;
 import com.app.models.MapModel;
 import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
@@ -262,7 +265,18 @@ public class JMenuBarComponent {
 							
 					
 				}//else if(e.getSource().equals(menuItemEditor))
-				
+				else if(e.getSource().equals(menuItemPlay)){
+					
+					PlayCampaignMenu campMenu=new PlayCampaignMenu();
+					try {
+						PlayGameController temp=new PlayGameController(campMenu);
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
+							
+					
+				}//else if(e.getSource().equals(menuItemEditor))
 				
 				
 				
@@ -277,6 +291,7 @@ public class JMenuBarComponent {
 	menuItemCharacterEditor.addActionListener(new menuItemAction());
 	menuItemOpenMap.addActionListener(new menuItemAction());
 	menuItemCampaignEditor.addActionListener(new menuItemAction());
+	menuItemPlay.addActionListener(new menuItemAction());
 ///******************************************************************************		
 	
 	return menuBar;

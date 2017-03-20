@@ -1,0 +1,29 @@
+package com.app.observer;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import com.app.menus.RunTimAbilityScores;
+import com.app.models.CharacterModel;
+
+public class CharacterView implements Observer{
+	
+	private RunTimAbilityScores abilityScoreMenu;
+
+	
+	public CharacterView(CharacterModel mainPlyr){
+		
+		abilityScoreMenu=new RunTimAbilityScores(mainPlyr);
+		
+	}
+
+	@Override
+	public void update(Observable character, Object x) {
+		
+		abilityScoreMenu.initialize();	
+		abilityScoreMenu.lblStrVal.setText(Integer.toString(((CharacterModel) character).abilityScores.get(0)));
+		abilityScoreMenu.lblDexVal.setText(Integer.toString(((CharacterModel) character).abilityScores.get(1)));
+		abilityScoreMenu.lblConsVal.setText(Integer.toString(((CharacterModel) character).abilityScores.get(2)));	
+	}
+
+}

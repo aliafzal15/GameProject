@@ -77,7 +77,7 @@ public class MapEditor extends JFrame {
 		
 		this.setJMenuBar((new JMenuBarComponent()).getMapEditorJMenuBar(new_mapModel, this));
 		// -- Load GridEditor Panel From Components
-		this.setContentPane((new JPanelComponent()).getMapEditorGridPanel(mapModel, mapEditorMode));
+		this.setContentPane((new JPanelComponent()).getMapEditorGridPanel(mapModel, mapEditorMode,null));
 		
 		System.out.println("Testing");
 

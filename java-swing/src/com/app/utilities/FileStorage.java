@@ -253,7 +253,8 @@ public void SaveCharInFile(ArrayList <CharacterModel> chars) throws IOException{
 		   out.write(Integer.toString(chars.get(i).getDamageBonus()));
 		   out.write(";");
 		   out.write(Integer.toString(chars.get(i).getArmorClass()));
-		   
+		   out.write(";");
+		   out.write(chars.get(i).getFightingType());
 		   out.write(System.lineSeparator());
 		   
 			
@@ -329,7 +330,7 @@ if(filename.exists()){
 	  			tempChar.setAttackBonus(Integer.parseInt(tempChars[i+9]));
 	  			tempChar.setDamageBonus(Integer.parseInt(tempChars[i+10]));
 	  			tempChar.setArmorClass(Integer.parseInt(tempChars[i+11]));
-	  			  						
+	  			tempChar.setFightingType(tempChars[i+12]);  						
 	  			newChars.add(tempChar);
 	  			tempChars=null;
 	  			tempChar=null;

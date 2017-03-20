@@ -101,8 +101,7 @@ public boolean bolIsEmpty;
 	
 		 charEditr.btnCreateZombie.addActionListener(new ActionListener() {
 			@Override
-            public void actionPerformed(ActionEvent e) 
-			{
+            public void actionPerformed(ActionEvent e) {
 				
 				if (toBeAddedInFile(characterList,"Zombie")){ //&& (isFighter.equals("Y"))){	
 				 charObj=new CharacterModel("Zombie");

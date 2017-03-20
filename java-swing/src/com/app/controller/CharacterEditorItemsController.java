@@ -1037,6 +1037,7 @@ public void updateAblities(){
 	tempMainMenu.lblfAttackBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getAttackBonus()));
 	tempMainMenu.lblfStrModVal.setText(Integer.toString(this.characterList.get(plyrIndex).getStrMod()));
 	tempMainMenu.lblfDamageBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getDamageBonus()));
+	
 	}
 	
 	else if(plyrType.equals("Zombie")){
@@ -1046,6 +1047,7 @@ public void updateAblities(){
 		tempMainMenu.lblzAttackBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getAttackBonus()));
 		tempMainMenu.lblzStrModVal.setText(Integer.toString(this.characterList.get(plyrIndex).getStrMod()));
 		tempMainMenu.lblzDamageBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getDamageBonus()));
+		
 	}
 }
 
@@ -1180,11 +1182,6 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 		armorClassEnchanment=armorClassEnchanment+Integer.parseInt(bonus);
 		armorClassEnchanment=armorClassEnchanment+10+this.characterList.get(this.plyrIndex).getDexMod();
 		this.characterList.get(this.plyrIndex).increaseArmorClass(armorClassEnchanment);	
-		
-		
-		 
-		
-	
 	}
 	
 	else if(getEnchanementType(type).equals("StrengthClass")){
@@ -1193,7 +1190,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 		this.characterList.get(this.plyrIndex).increaseStrength(strengthClassEnchanment);
 		int tempMod=this.characterList.get(this.plyrIndex).calculateModifier(this.characterList.get(this.plyrIndex).getStrength());
 		this.characterList.get(this.plyrIndex).setStrMod(tempMod);
-		this.characterList.get(this.plyrIndex).calculateDamageBonus();
+		this.characterList .get(this.plyrIndex).calculateDamageBonus();
 		
 		
 	}
@@ -1215,6 +1212,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 			armorClassEnchanment=armorClassEnchanment-Integer.parseInt(bonus);
 			armorClassEnchanment=armorClassEnchanment-10-this.characterList.get(this.plyrIndex).getDexMod();
 			this.characterList.get(this.plyrIndex).increaseArmorClass(armorClassEnchanment);	
+			
 		
 		}
 		
@@ -1224,7 +1222,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 			this.characterList.get(this.plyrIndex).increaseStrength(strengthClassEnchanment);
 			int tempMod=this.characterList.get(this.plyrIndex).calculateModifier(this.characterList.get(this.plyrIndex).getStrength());
 			this.characterList.get(this.plyrIndex).setStrMod(tempMod);
-			this.characterList.get(this.plyrIndex).calculateDamageBonus();
+			this.characterList .get(this.plyrIndex).calculateDamageBonus();
 			
 		}
 		else if(getEnchanementType(type).equals("AttackBonusClass")){

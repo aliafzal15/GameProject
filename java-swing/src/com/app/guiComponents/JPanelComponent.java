@@ -40,7 +40,10 @@ public class JPanelComponent {
 
 	//public BottomGamePanelView bottomGamePanel;
 	public JButton[][] buttons;
-	public String elementaVal;
+	public JButton[][] gamePlayButtons;
+	public String elementaVal;	
+	public MapPanel mapPanel;
+	
 
 	// -- Map Editor window Create and Open map mode
 	
@@ -49,16 +52,37 @@ public class JPanelComponent {
 	 * plain grid layout with buttons on it.
 	 *
 	 */
-	public JPanel getMapEditorGridPanel(final MapModel mapModel, E_MapEditorMode mapEditorMode) {
+	public JPanel getMapEditorGridPanel(final MapModel mapModel, E_MapEditorMode mapEditorMode,Dimension new_parentDimension) {
+		
+		JPanel panel;
+		GridLayout gridLayout;
+		
+		
 		if (E_MapEditorMode.Create == mapEditorMode) {
 			mapModel.mapGridSelection = new int[mapModel.getMapHeight()][mapModel.getMapWidth()];
 		}
+		
+		
+		if (E_MapEditorMode.Play == mapEditorMode) {
 
-		
-		JPanel panel = new JPanel();
-		GridLayout gridLayout = new GridLayout(mapModel.getMapHeight(), mapModel.getMapWidth(), 3, 3);
+			panel = new MapPanel(mapModel);
+			gridLayout = new GridLayout(mapModel.getMapHeight(), mapModel.getMapWidth(), 0, 0);
+			panel.setLayout(gridLayout);
+
+			mapPanel = (MapPanel) panel; // CHANGE Ulan
+
+			if (new_parentDimension != null) {
+				panel.setPreferredSize(
+						new Dimension(new_parentDimension.width, new_parentDimension.height * 3 / 4 - 10));
+				panel.setMaximumSize(new Dimension(new_parentDimension.width, new_parentDimension.height * 3 / 4 - 10));
+				panel.setMinimumSize(new Dimension(new_parentDimension.width, new_parentDimension.height * 3 / 4 - 10));
+			} 
+
+		} else {
+		panel = new JPanel();
+		gridLayout = new GridLayout(mapModel.getMapHeight(), mapModel.getMapWidth(), 3, 3);
 		panel.setLayout(gridLayout);
-		
+		}
 		
 		JButton b[][] = new JButton[mapModel.getMapHeight()][mapModel.getMapWidth()];
 
@@ -85,9 +109,10 @@ public class JPanelComponent {
 				if (E_MapEditorMode.Create == mapEditorMode) {
 					mapModel.mapGridSelection[i][j] = 0;
 					b[i][j].setBackground(Color.green);
+					panel.add(b[i][j]);
 				} 
 				
-				else {
+				else if (E_MapEditorMode.Open== mapEditorMode){
 					if (mapModel.mapGridSelection[i][j] == 1) {
 						b[i][j].setBackground(Color.red);
 					} else if (mapModel.mapGridSelection[i][j] == 2) {
@@ -126,7 +151,10 @@ public class JPanelComponent {
 					} else {
 						b[i][j].setBackground(Color.green);
 					}
+					
+					panel.add(b[i][j]);
 				}
+				
 				
 				
 				b[i][j].addActionListener(new ActionListener() {
@@ -153,14 +181,83 @@ public class JPanelComponent {
 
 				});
 				
-				panel.add(b[i][j]);
 			}
 		}//for
 		// this.setContentPane(panel);
 		
+				
+				
+		if (E_MapEditorMode.Play == mapEditorMode){
+			
+			this.gamePlayButtons = new JButton[mapModel.getMapHeight()][mapModel.getMapWidth()];
+			
+			for (int i = 0; i < mapModel.getMapHeight(); i++) {
+				for (int j = 0; j < mapModel.getMapWidth(); j++) {
+					gamePlayButtons[i][j] = new JButton();
+					int value = 0;
+					int multiple = 0;
+
+					multiple = mapModel.getMapWidth();
+
+					if (i == 0 && j == 0){
+						value = 0;
+					}
+					else{
+						value = 1 + j + (i * multiple);
+					   }
+					gamePlayButtons[i][j].setName(value + ":" + i + ":" + j);
+					
+		
+			
+						if (mapModel.mapGridSelection[i][j] == 1) {
+								gamePlayButtons[i][j].setBackground(Color.red);
+					 } else if (mapModel.mapGridSelection[i][j] == 2) {
+						 gamePlayButtons[i][j].setBackground(Color.yellow);
+						 gamePlayButtons[i][j].setText("F");
+					 } else if (mapModel.mapGridSelection[i][j] == 3) {
+						 gamePlayButtons[i][j].setBackground(Color.orange);
+						 gamePlayButtons[i][j].setText("Z");
+					 } else if (mapModel.mapGridSelection[i][j] == 4) {
+						 gamePlayButtons[i][j].setBackground(Color.white);
+						 gamePlayButtons[i][j].setText("O");
+					 } else if (mapModel.mapGridSelection[i][j] == 5) {
+						 gamePlayButtons[i][j].setBackground(Color.gray);
+						 gamePlayButtons[i][j].setText("E");
+					 } else if (mapModel.mapGridSelection[i][j] == 6) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IW");
+					 } else if (mapModel.mapGridSelection[i][j] == 7) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IS");
+					 } else if (mapModel.mapGridSelection[i][j] == 8) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IA");
+					 } else if (mapModel.mapGridSelection[i][j] == 9) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IBO");
+					 } else if (mapModel.mapGridSelection[i][j] == 10) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IBL");
+					 } else if (mapModel.mapGridSelection[i][j] == 11) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IR");
+					 } else if (mapModel.mapGridSelection[i][j] == 12) {
+						 gamePlayButtons[i][j].setBackground(Color.blue);
+						 gamePlayButtons[i][j].setText("IH");
+					 } else {
+						 gamePlayButtons[i][j].setBackground(Color.green);
+					 }			
+						
+					panel.add(gamePlayButtons[i][j]);
+				}
+			}	
+			
+			
+	   }//	if (E_MapEditorMode.Play 
+				
+
 		return panel;
 	}
-	
 
 }
 

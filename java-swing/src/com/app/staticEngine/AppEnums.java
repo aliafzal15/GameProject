@@ -10,7 +10,7 @@ package com.app.staticEngine;
 public class AppEnums {
 	
 	public enum E_MapEditorMode {
-	    Create,Open
+	    Create,Open,Play
 	}
 	
 	public enum E_MapValidationDirecton {
