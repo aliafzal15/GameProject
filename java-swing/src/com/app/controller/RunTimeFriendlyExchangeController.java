@@ -10,10 +10,31 @@ import com.app.menus.RunTimeFriendlyExchangeItems;
 import com.app.models.CharacterModel;
 import com.app.models.ItemsModel;
 
+
+/**
+ * This class is for the exchange of items with the friendly character
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class RunTimeFriendlyExchangeController {
 	
 	RunTimeFriendlyExchangeItems exchangeMenu;
 	
+	
+	/**
+	 * This is parameterized constructor
+	 * 
+	 * @param playerText
+	 * 			Type String
+	 * @param plyrBagItems
+	 * 			Type ItemsModel
+	 * @param friendBagItems
+	 * 			Type ArrayList<ItemsModel>
+	 * @param gameChar
+	 * 			Type CharacterModel
+	 *
+	 */
 	public RunTimeFriendlyExchangeController(String playerText,ArrayList<ItemsModel> plyrBagItems,
 																		final ArrayList <ItemsModel> friendBagItems,final CharacterModel gameChar){
 			
@@ -44,7 +65,13 @@ public class RunTimeFriendlyExchangeController {
 	}
 	
 	
-	
+	/**
+	 * This Method populates the combo boxes
+	 * 
+	 * @param plyrBag
+	 * 			Type ArrayList<ItemsModel>
+	 *
+	 */
 	public void populatePlayerItems(ArrayList<ItemsModel> plyrBag){
 		
 		for(int i=0;i<plyrBag.size();i++){
@@ -53,6 +80,18 @@ public class RunTimeFriendlyExchangeController {
 		}		
 	}
 	
+	
+	
+	/**
+	 * This Method exchange items
+	 * 
+	 * @param gamePlyr
+	 * 			Type CharacterModel
+	 * 
+	 * @param friendBag
+	 * 			Type ArrayList<ItemsModel>
+	 *
+	 */
 	public void exchangePlayerItems(CharacterModel gamePlyr,ArrayList<ItemsModel> friendBag){
 		
 			int comboInx=exchangeMenu.comboBox.getSelectedIndex();

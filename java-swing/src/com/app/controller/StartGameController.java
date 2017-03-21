@@ -14,6 +14,13 @@ import com.app.models.ItemsModel;
 import com.app.models.MapModel;
 import com.app.utilities.FileStorage;
 
+
+/**
+ * This class is for setting up the campaign map for the first view 
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class StartGameController {
 	
 	public ArrayList<CharacterModel> gameCharacters;
@@ -40,6 +47,25 @@ public class StartGameController {
 	public CharacterModel gamecharacter;
 	public int mapIndex;
 
+	
+	
+	/**
+	 * This is parameterized Constructor
+	 * 
+	 * @param camp
+	 * 			Type CampaignModel
+	 * @param maps
+	 * 			Type ArrayList<MapModel>
+	 * @param currMap
+	 * 			Type MapModel
+	 * @param gameChar
+	 * 			Type CharacterModel
+	 * @param playWindow
+	 * 			Type RunTimeGameMenu
+	 * @param mapInx
+	 * 			Type int
+	 * 
+	 */	
 	public	StartGameController(CampaignModel camp,ArrayList<MapModel> maps, MapModel currMap,CharacterModel gameChar,RunTimeGameMenu playWindow,int mapInx) throws IOException{
 	
 		FileStorage objFSO=new FileStorage();
@@ -82,10 +108,24 @@ public class StartGameController {
 		new RunTimeGameController(camp,maps,currMap,gamecharacter,playWindow,this,mapIndex);
 	}
 
+	
+	/**
+	 * This is Default Constructor
+	 *
+	 */
 	public StartGameController() {
 		
 	}
 
+	/**
+	 * This Method sets hostile and friendly characters on the map
+	 * 
+	 * @param mapChars
+	 * 			Type ArrayList<CharacterModel>
+	 * @param mainPlyr
+	 * 			Type CharacterModel
+	 *
+	 */
 	public void setHostileFriendlyChars(ArrayList<CharacterModel> mapChars,CharacterModel mainPlyr){
 		
 			for(int i=0;i<mapChars.size();i++){
@@ -101,7 +141,17 @@ public class StartGameController {
 			}		
 	}
 	
-	
+	/**
+	 * This Method sets adaptability of all the elements on the map to the character level
+	 * 
+	 * @param friendlyChars
+	 * 			Type ArrayList<CharacterModel>
+	 * @param hostileChars
+	 * 			Type ArrayList<CharacterModel>
+	 * @param mainPlyr
+	 * 			Type CharacterModel
+	 *
+	 */
 	public void setLevelAdaptability(ArrayList<CharacterModel> friendlyChars,
 												ArrayList<CharacterModel> hostileChars, CharacterModel mainPlyr){
 		
@@ -123,7 +173,15 @@ public class StartGameController {
 				
 	}
 	
-	
+	/**
+	 * This Method sets enchantment of items of hostile and friendly characters
+	 * 
+	 * @param mainPlyr
+	 * 			Type CharacterModel
+	 * @param plyrItems
+	 * 			Type ArrayList<ItemsModel>
+	 *
+	 */
 	public void setHostFriendEnchanements(CharacterModel mainPlyr, ArrayList<ItemsModel> plyrItems){
 		
 			if(mainPlyr.getCharLevel()<5){			
@@ -139,6 +197,16 @@ public class StartGameController {
 			}
 	}
 	
+	
+	/**
+	 * This Method sets items array of hostile and friendly characters
+	 * 
+	 * @param friendChars
+	 * 			Type ArrayList<CharacterModel>
+	 * @param hostChars
+	 * 			Type ArrayList<CharacterModel>
+	 *
+	 */
 	public void setItemsArraysOfHostileFriendly(ArrayList<CharacterModel> friendChars, ArrayList<CharacterModel> hostChars){
 		
 			if(friendChars.size()>0){
@@ -173,6 +241,15 @@ public class StartGameController {
 					
   }
 
+	/**
+	 * This Method sets items to new enchantment
+	 * 
+	 * @param plyrItems
+	 * 			Type ArrayList<ItemsModel>
+	 * @param newEnch
+	 * 			Type int
+	 *
+	 */
  public void setEnchanement(ArrayList<ItemsModel> plyrItems,int newEnch){
 	 
 	 if(plyrItems.size()>0){
@@ -183,6 +260,20 @@ public class StartGameController {
 	 
  }
  
+	/**
+	 * This Method sets player on the entry point of the map
+	 * 
+	 * @param mainPlyr
+	 * 			Type CharacterModel
+	 * @param curMap
+	 * 			Type MapModel
+	 * 
+	 * @param gameMapGrid[][]
+	 * 			Type int
+	 * 
+	 * @param gameBtns[][]
+	 * 			Type JButton
+	 */
 public void setPlayerOnEntryPoint(CharacterModel mainPlyr,MapModel curMap, int gameMapGrid [][],JButton gameBtns[][]){
 	 
 	
@@ -203,6 +294,12 @@ public void setPlayerOnEntryPoint(CharacterModel mainPlyr,MapModel curMap, int g
 	 
  }
 
+/**
+ * This Method sets player locations text
+ * 
+ * @param mainPlyr
+ * 			Type CharacterModel
+ */
 public void setPlayerLocTxt(CharacterModel mainPlyr) throws IOException{
 	
 	FileStorage objFSO=new FileStorage();
@@ -237,11 +334,19 @@ public void setPlayerLocTxt(CharacterModel mainPlyr) throws IOException{
 	
 }
 
+/**
+ * This Method sets  the map items and sets the items adaptability as well.
+ * 
+ * @param curMapItems 
+ * 			Type ArrayList<ItemsModel>
+ */
 public void  setMapItems(ArrayList<ItemsModel> curMapItems){	
 	
 		for(int i=0;i<curMapItems.size();i++){
 			this.runTimeMapItems.add(curMapItems.get(i));
 		}	
+		
+		setHostFriendEnchanements(gamecharacter,this.runTimeMapItems);
 }
  
 	

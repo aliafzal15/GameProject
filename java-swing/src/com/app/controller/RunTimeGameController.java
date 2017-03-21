@@ -27,6 +27,14 @@ import com.app.models.MapModel;
 import com.app.staticEngine.AppStatics;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
 
+
+
+/**
+ * This class is for  the play mode on the game map
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class RunTimeGameController implements ActionListener, KeyListener {
 	
 	private RunTimeGameMenu mainGameWindow;
@@ -48,11 +56,34 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 	private int btnX;
 	private int btnY;
 	
-	
+	/**
+	 * This is the default constructor
+	 * 
+	 *
+	 */
 	public RunTimeGameController(){
 		
 	}
 
+	/**
+	 * This is the parameterized constructor
+	 * 
+	 * @param camp
+	 * 			Type CampaignModel
+	 * @param maps
+	 * 			Type ArrayList<MapModel>
+	 * @param currMap
+	 * 			Type MapModel
+	 * @param gameChar
+	 * 			Type CharacterModel
+	 * @param playWindow
+	 * 			Type RunTimeGameMenu
+	 * @param startController
+	 * 			Type StartGameController
+	 * @param mapInx
+	 * 			Type int
+	 * 
+	 */	
 	public RunTimeGameController(CampaignModel camp,ArrayList<MapModel> maps, final MapModel currMap,
 					CharacterModel gameChar,RunTimeGameMenu playWindow,StartGameController startController,int mapInx){
 		
@@ -100,8 +131,12 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 
 
 
-
-
+	/**
+	 * This Method captures the keystroke event and adds and subtracts in the x or y of the player location.
+	 * @param e
+	 * 		 Type KeyEvent
+	 *
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 	
@@ -173,8 +208,14 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		
 	}
 
-
-
+	/**
+	 * This Method captures the action on the map buttons and perform the operations to trigger observer pattern for
+	 * ability scores view and inventory view.
+	 *
+	 * @param e
+	 * 		 Type ActionEvent
+	 *
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -200,6 +241,15 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		
 	}
 
+	/**
+	 * This Method operates the movement of the player on the map
+	 *
+	 * @param x
+	 * 		 Type int
+	 * @param y
+	 * 		 Type int
+	 *
+	 */
 	public void move(int x,int y){
 				
 		setPrevState(x,y);
@@ -288,6 +338,16 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 				
 	}
 	
+	
+	/**
+	 * This Method sets the map state when a character is moved
+	 *
+	 * @param mapModel
+	 * 		 Type MapModel
+	 * @param b[][]
+	 * 		 Type JButton
+	 *
+	 */
 	public void setMapState(MapModel mapModel,JButton[][] b){
 		
 		for(int i=0;i<b.length;i++){
@@ -368,6 +428,17 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 	    }
 	}
 	
+	
+	/**
+	 * This Method sets the previous state of the cell on the map
+	 *
+	 * @param x
+	 * 		 Type int
+	 * @param y
+	 * 		 Type int
+	 *
+	 *
+	 */
 	public void setPrevState(int x, int y){
 		
 		prevState=gameMap.mapGridSelection[x][y];
@@ -378,6 +449,11 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		
 	}
 	
+	/**
+	 * This Method loots the hostile items
+	 *
+	 *
+	 */
  public void  lootHostileItems(){
 	 
 	 		
@@ -406,7 +482,13 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		
   }
  
- 
+	/**
+	 * This Method captures the items on the map
+	 *
+	 * @param itmeType
+	 * 		 Type String
+	 *
+	 */
  public ItemsModel getMapItem(String itemType){
 	 
 	 for(int i=0;i<tempStartController.runTimeMapItems.size();i++){

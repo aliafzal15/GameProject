@@ -4,23 +4,46 @@ import java.util.ArrayList;
 
 import com.app.models.CharacterModel;
 
+
+/**
+ * This is abstract class is the builder class for builder pattern
+ * 
+ * @author AliAfzal
+ */
 public abstract class CharacterBuilder {
 	
 	protected CharacterModel charModel;
 	protected int [] scores;
 
 	
+	/**
+	 * This Method returns the character
+	 * 	
+	 * @return Character- of type CharacterModel
+	 * 		
+	 */
 	public CharacterModel getCharacterModel(){
 		
 		return charModel;
 	}
 	
+	/**
+	 * This Method sets the character for the builder pattern and assign the ability scores
+	 * 	
+	 * @param newModel
+	 * 			Type CharacterModel
+	 */
 	public void createNewCharacter(CharacterModel newModel){
 		this.charModel=newModel;
 		//this.charModel.generateAbilityScores();
 		arrangeScroesAscending();
 	}	
 	
+	
+	/**
+	 * This Method arranges the ability scores in the ascending order
+	 * 	
+	 */
 	public void arrangeScroesAscending(){
 		
 		
@@ -41,7 +64,10 @@ public abstract class CharacterBuilder {
 		
 	}
 	
-	
+	/**
+	 * This Method sorts and array in ascending order 
+	 * 	@param input Array of type int
+	 */
 	public static int[] doInsertionSort(int[] input){
         
         int temp;

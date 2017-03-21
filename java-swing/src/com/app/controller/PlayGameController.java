@@ -26,6 +26,14 @@ import com.app.staticEngine.AppEnums.E_JFileChooserrMode;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
 import com.app.utilities.FileStorage;
 
+
+
+/**
+ * This class is for the initialization of game.
+ * 
+ * @author Ali Afzal
+ *
+ */
 public class PlayGameController {
 	
 	private MapModel playMap;
@@ -37,7 +45,13 @@ public class PlayGameController {
 	private ArrayList<CharacterModel> fileCharacters;
 	private CharacterModel mainPlayer;
 	
-	
+	/**
+	 * This is parameterized constructor.
+	 * 
+	 * @param playGameCamp
+	 * 			Type CampaignModel
+	 *
+	 */
 	public PlayGameController(final PlayCampaignMenu playGameCamp) throws IOException{
 		
 		

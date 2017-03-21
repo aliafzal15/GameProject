@@ -43,14 +43,10 @@ private int removeBagIndex;
 	 * 
 	 *This Constructor holds all the action listeners for Item Inventory Menu
 	 *
-	 *@param characterLists
-	 *			ArrayList of all characters in the file and their properties
-	 *@param objIndex
-	 *			index in the ArrayList which holds the character properties 
-	 *@param plyrType
-	 *			Type of the character
-	 *@param mainMenu
-	 *			CharacterEditorMainMenu object to manipulate GUI elements
+	 *@param gameChar
+	 *			Type CharacterModel
+	 *@param invenMenu
+	 *			Type RunTimeIneventory
 	 */
 	public RunTimeInventroyController(final CharacterModel gameChar,RunTimeIneventory invenMenu){
 		
@@ -150,8 +146,6 @@ private void setAllItemsCombo(){
 /**
  * 
  *This Method populates Worn Items Combo
- *@param objInx
- *			index of the character object in characterLists ArrayList
  *				
  */
 public void populateWornItemsCombo() {
@@ -170,10 +164,7 @@ public void populateWornItemsCombo() {
 
 /**
  * 
- *This Method populates Bag Pack Items Combo
- *@param objInx
- *			index of the character in the characterLists
- *						
+ *This Method populates Bag Pack Items Combo				
  */
 public void populateBagItemsCombo() {
 	
@@ -190,7 +181,13 @@ public void populateBagItemsCombo() {
 }
 
 
-
+/**
+ * 
+ *This Method checks if the item is in bag
+ *@param items
+ *			Type ArrayList<ItemsModel> items
+ *						
+ */
 public boolean checkIfItemInBagRmv(ArrayList<ItemsModel> items){
 	
 	if(items.size()>0){
@@ -216,9 +213,6 @@ public boolean checkIfItemInBagRmv(ArrayList<ItemsModel> items){
 /**
  * 
  *This Method adds item to worn from bag list
- *@param objInx
- *			index of the character in the characterLists
- *			
  *				
  */
 public void addWornToBag(){
@@ -283,10 +277,7 @@ public void setAllCombosNull(){
 
 /**
  * 
- *This Method checks if bag item already in worn list
- *@param items
- *		   All items ArrayList				
- *				
+ *This Method checks if bag item already in worn list			
  */
 public void getBagItemIndex(){
 	
