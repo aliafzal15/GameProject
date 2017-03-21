@@ -84,28 +84,21 @@ private int removeBagIndex;
 			@Override
             public void actionPerformed(ActionEvent e) {
 				
-			if(checkIfBagItemInWorn()==false){
+			if(checkIfItemInWorn(runTimeCharacter.getWornItems())){
 				
-				String temp=(String) runTimeInvenWindow.comboBagPack.getSelectedItem();
-				
+				String temp=(String) runTimeInvenWindow.comboBagPack.getSelectedItem();		
 				String[] item=temp.split(":");
 				
 				ItemsModel objItem=new ItemsModel();
 				objItem.itemType=item[0];
 				objItem.itemBonus=item[1];
-				
-				
-				
-				if(runTimeCharacter.setWornItem(objItem)){
-					
-					setEnchanementValues(item[0],item[1],"Add");		
-													
-				}
-				
-				runTimeCharacter.getWornItems();
-				
-				runTimeCharacter.getBagItems().remove(removeBagIndex);
-				
+							
+					if(runTimeCharacter.setWornItem(objItem)){					
+						setEnchanementValues(item[0],item[1],"Add");																					
+						runTimeCharacter.getWornItems();
+						getBagItemIndex();				
+						runTimeCharacter.getBagItems().remove(removeBagIndex);				
+					}
 				
 				
 				//11 feb itemInv.comboItemsWorn.addItem(objItem.itemType+":"+objItem.itemBonus);
@@ -114,10 +107,11 @@ private int removeBagIndex;
 				objItem=null;
 				
 				runTimeInvenWindow.frame.dispose();
-									
-				
-			}
+													
+			
 		 }
+			
+	    }
 						
         });	
 		
@@ -294,26 +288,22 @@ public void setAllCombosNull(){
  *		   All items ArrayList				
  *				
  */
-public boolean checkIfBagItemInWorn(){
+public void getBagItemIndex(){
 	
 if(runTimeCharacter.getBagItems().size()>0){
 		
 		String temp=(String) runTimeInvenWindow.comboBagPack.getSelectedItem();
 		
 		  for(int i=0;i<runTimeCharacter.getBagItems().size();i++){
-			  		String tempVal=runTimeCharacter.getBagItems().get(i).itemType+":"+runTimeCharacter.getBagItems().get(i).itemBonus;
+			  		String tempVal=runTimeCharacter.getBagItems().get(i).itemType+":"+runTimeCharacter.getWornItems().get(i).itemBonus;
 			  	if(tempVal.equals(temp)){
-			  		this.removeBagIndex=i;
-			  		//JOptionPane.showMessageDialog (null, "Item Already in the Worn List!!!","Error", 
-					//		JOptionPane.ERROR_MESSAGE);
-			  		return false;
-			  	}			  				  
-		  }
-				
+			  		this.removeBagIndex= i;	  		
+			  	}		  					  
+		  }			
 	}
-	return true;
-		
 }
+		
+
 
 /**
  * 
@@ -553,6 +543,28 @@ public boolean checkIfItemInWornRmv(ArrayList<ItemsModel> items){
 }
 
 
+public boolean checkIfItemInWorn(ArrayList<ItemsModel> items){
+	
+	if(items.size()>0){
+		
+		String temp=(String) runTimeInvenWindow.comboBagPack.getSelectedItem();
+		
+		  for(int i=0;i<items.size();i++){
+			  		String tempVal=items.get(i).itemType+":"+items.get(i).itemBonus;
+			  	if(tempVal.equals(temp)){
+			  		this.removeIndex=i;
+			  		 //JOptionPane.showMessageDialog (null, "Item Already in the Worn List!!!","Error", 
+					//			JOptionPane.ERROR_MESSAGE);
+			  		return false;
+			  	}
+			  	
+			  		
+			  
+		  }
+				
+	}
+	return true;
+}
 
 }
 

@@ -288,5 +288,17 @@ public class MapModel {
 	public void addItemMAp(ItemsModel item){
 		this.mapItems.add(item);		
 	}
+	
+	
+	/**
+	 * this method returns the items in map
+	 * 
+	 * @return mapItems: items in the map
+	 *           
+	 */
+	public ArrayList<ItemsModel> getMapItems(){
+		
+			return this.mapItems;
+	}
 
 }

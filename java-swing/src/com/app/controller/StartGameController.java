@@ -24,6 +24,7 @@ public class StartGameController {
 	public ArrayList<ItemsModel> gameMapItems;
 	public ArrayList<CharacterModel> hostileCharacters;
 	public ArrayList<CharacterModel> friendlyCharacters;
+	public ArrayList<ItemsModel> runTimeMapItems;
 	public int gamePlayGridSelection [][];
 	public String plyrBtnTxt;
 	public String enemyBtnTxt;
@@ -54,6 +55,7 @@ public class StartGameController {
 		gamePlayGridSelection=currMap.getMapGridSelection();
 		gameCharWornItems=new ArrayList();
 		gameCharBagItems=new ArrayList<>();
+		runTimeMapItems=new ArrayList<>();
 		this.gamecharacter=gameChar;
 		this.mapIndex=mapInx;
 		
@@ -68,7 +70,8 @@ public class StartGameController {
 		
 		setHostileFriendlyChars(currMap.getMapCharacters(),gamecharacter);
 		setLevelAdaptability(friendlyCharacters, hostileCharacters,gamecharacter);
-		setItemsArraysOfHostileFriendly(friendlyCharacters, hostileCharacters);	
+		setItemsArraysOfHostileFriendly(friendlyCharacters, hostileCharacters);
+		setMapItems(currMap.getMapItems());
 		setPlayerLocTxt(gamecharacter);
 		setPlayerOnEntryPoint(gamecharacter,currMap,gamePlayGridSelection,playWindow.runGameButtons);
 		
@@ -77,6 +80,10 @@ public class StartGameController {
 		
 		 
 		new RunTimeGameController(camp,maps,currMap,gamecharacter,playWindow,this,mapIndex);
+	}
+
+	public StartGameController() {
+		
 	}
 
 	public void setHostileFriendlyChars(ArrayList<CharacterModel> mapChars,CharacterModel mainPlyr){
@@ -230,7 +237,12 @@ public void setPlayerLocTxt(CharacterModel mainPlyr) throws IOException{
 	
 }
 
-
+public void  setMapItems(ArrayList<ItemsModel> curMapItems){	
+	
+		for(int i=0;i<curMapItems.size();i++){
+			this.runTimeMapItems.add(curMapItems.get(i));
+		}	
+}
  
 	
 }

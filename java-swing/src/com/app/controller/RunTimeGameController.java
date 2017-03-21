@@ -22,6 +22,7 @@ import com.app.menus.GameWindow;
 import com.app.menus.RunTimeGameMenu;
 import com.app.models.CampaignModel;
 import com.app.models.CharacterModel;
+import com.app.models.ItemsModel;
 import com.app.models.MapModel;
 import com.app.staticEngine.AppStatics;
 import com.app.staticEngine.AppEnums.E_MapEditorMode;
@@ -29,7 +30,7 @@ import com.app.staticEngine.AppEnums.E_MapEditorMode;
 public class RunTimeGameController implements ActionListener, KeyListener {
 	
 	private RunTimeGameMenu mainGameWindow;
-	private StartGameController tempStartController;
+	public StartGameController tempStartController;
 	private boolean isHostileAlive;
 	private boolean isPlyrAlive;
 	private int numOfHostile;
@@ -46,6 +47,11 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 	private ArrayList<MapModel> runMaps;
 	private int btnX;
 	private int btnY;
+	
+	
+	public RunTimeGameController(){
+		
+	}
 
 	public RunTimeGameController(CampaignModel camp,ArrayList<MapModel> maps, final MapModel currMap,
 					CharacterModel gameChar,RunTimeGameMenu playWindow,StartGameController startController,int mapInx){
@@ -201,11 +207,23 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		btnX=x;
 		btnY=y;
 		setMapState(gameMap,mainGameWindow.runGameButtons);
+		
+		
 			if(prevState==tempStartController.enemyBtnId){
 				isHostileAlive=false;
 				lootHostileItems();
 				gameMap.mapGridSelection[x][y]=14;				
 			}
+			
+			if(prevState==7 && getMapItem("Shield")!=null){
+				
+					if(tempStartController.gamecharacter.setBagItem(getMapItem("Shield"))){						
+						prevState=0;
+						gameMap.mapGridSelection[x][y]=0;							
+					}
+						
+			}
+			
 			
 				if(prevState==5 && isHostileAlive==false){
 					
@@ -234,6 +252,8 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 								gameWindow.frameRunGame.setVisible(true);
 								mainGameWindow=gameWindow;
 								
+								tempStartController.gamecharacter.setCharLevel(tempStartController.gamecharacter.getCharLevel()+1);
+								
 								
 								try {
 									new StartGameController(runCampaign,runMaps, runCampaign.getCampaignMaps().get(runMapIndex),tempStartController.gamecharacter,gameWindow,runMapIndex);
@@ -245,11 +265,10 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 								
 							  }else{
 									
-									JOptionPane.showMessageDialog (null, "Game Over. Campaign Finished !!!");
+									JOptionPane.showMessageDialog (null, "Game Over. All Zombies Dead. Campaign Finished !!!");
 									mainGameWindow.frameRunGame.dispose();
 									//Game newGame=new Game();
-									
-									
+																		
 								}
 					
 					
@@ -385,5 +404,23 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 						
 	}
 		
-    }
+  }
+ 
+ 
+ public ItemsModel getMapItem(String itemType){
+	 
+	 for(int i=0;i<tempStartController.runTimeMapItems.size();i++){
+		 
+		 	if(tempStartController.runTimeMapItems.get(i).itemType.equals(itemType)){
+		 		
+		 		return tempStartController.runTimeMapItems.get(i);
+		 	}
+		 
+	 }
+	 
+	 return null;
+ }
+ 
+ 
+ 
 }

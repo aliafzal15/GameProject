@@ -319,7 +319,8 @@ public class CharacterEditorItemsController {
 					
 					setEnchanementValues(item[0],item[1],"Add");		
 													
-				}
+				
+				getBagRemoveIndex(characterList.get(objIndex).getBagItems());
 				
 				objWornItemsFighter=characterList.get(objIndex).getWornItems();
 				
@@ -342,7 +343,7 @@ public class CharacterEditorItemsController {
 					e1.printStackTrace();
 				}
 				
-				
+			 }
 				
 				//11 feb itemInv.comboItemsWorn.addItem(objItem.itemType+":"+objItem.itemBonus);
 				render();
@@ -372,8 +373,8 @@ public class CharacterEditorItemsController {
 					
 					setEnchanementValues(item[0],item[1],"Add");		
 											
-				}
 				
+				getBagRemoveIndex(characterList.get(objIndex).getBagItems());
 				
 				objWornItemsZombie=characterList.get(objIndex).getWornItems();
 				
@@ -394,7 +395,7 @@ public class CharacterEditorItemsController {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-								
+		     }					
 				//11 feb itemInv.comboItemsWorn.addItem(objItem.itemType+":"+objItem.itemBonus);
 				render();
 				
@@ -674,14 +675,9 @@ public boolean checkIfItemInWornRmv(ArrayList<ItemsModel> items){
 		  for(int i=0;i<items.size();i++){
 			  		String tempVal=items.get(i).itemType+":"+items.get(i).itemBonus;
 			  	if(tempVal.equals(temp)){
-			  		this.removeIndex=i;
-			  			  		
-			  		
-			  		
+			  		this.removeIndex=i;  		
 			  		return false;
-			  	}
-			  	
-			  		
+			  	}		  		
 			  
 		  }
 				
@@ -1010,6 +1006,28 @@ if(items.size()>0){
 	return true;
 		
 }
+
+
+public void getBagRemoveIndex(ArrayList<ItemsModel> items){
+	
+if(items.size()>0){
+		
+		String temp=(String) itemInv.comboBagPack.getSelectedItem();
+		
+		  for(int i=0;i<items.size();i++){
+			  		String tempVal=items.get(i).itemType+":"+items.get(i).itemBonus;
+			  	if(tempVal.equals(temp)){
+			  		this.removeBagIndex=i;
+			  		//JOptionPane.showMessageDialog (null, "Item Already in the Worn List!!!","Error", 
+					//		JOptionPane.ERROR_MESSAGE);
+			  
+			  	}			  				  
+		  }
+				
+	}
+		
+}
+
 
 /**
  * 
