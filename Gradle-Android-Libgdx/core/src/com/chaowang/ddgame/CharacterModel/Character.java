@@ -181,6 +181,7 @@ public class Character extends Observable implements Json.Serializable{
 //	}
 	public void underAttack(){
 		this.hitPoints --;
+		System.out.println("Hp -1 ");
 		if(isDead()){
 			makeDead();
 		}
@@ -858,4 +859,8 @@ public class Character extends Observable implements Json.Serializable{
 		this.bound = bound;
 	}
 
+	public void previewAllAttribute(){
+		setChanged();
+		notifyObservers(this);
+	}
 }
