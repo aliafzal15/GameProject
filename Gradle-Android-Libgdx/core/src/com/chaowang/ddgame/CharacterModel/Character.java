@@ -180,21 +180,20 @@ public class Character extends Observable implements Json.Serializable{
 //		isFriendly = friend;
 //	}
 	public void underAttack(){
-		this.hitPoints --;
-		System.out.println("Hp -1 ");
+		if(!isDead()){
+			this.hitPoints --;
+			System.out.println(this.getHitPoints() + "Hp -1 ");
+		}
 		if(isDead()){
 			makeDead();
 		}
 	}
 
 	public void makeDead() {
-		isDead = true;
-		texture = new Texture(Gdx.files.internal("races/dead.png"));
+		this.isDead = true;
+		this.texture = new Texture(Gdx.files.internal("races/dead.png"));
 		setAbilities(new int[]{0,0,0,0,0,0});
-		hitPoints = -1;
-		armorClass = 0;
-		attackBonus = 0 ;
-		damageBonus = 0;
+		
 		for(Iterator<Map.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<Item.ItemType, Item> entry = it.next();
 			if (backPackisFull()) {
@@ -203,6 +202,11 @@ public class Character extends Observable implements Json.Serializable{
 			backpack.add(entry.getValue());
 			it.remove();
 		}
+		
+		this.hitPoints = -1;
+		this.armorClass = 0;
+		this.attackBonus = 0 ;
+		this.damageBonus = 0;
 	}
 
 	/**

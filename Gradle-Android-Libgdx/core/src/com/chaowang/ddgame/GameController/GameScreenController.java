@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.View.GameScreen;
 
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  * Created by Chao on 20/03/2017.
@@ -71,6 +73,19 @@ public class GameScreenController {
         }
 
 
+    }
+    
+    public boolean isEnemyAllDead(){
+    	if(mapModel.getEnemyLocationList().size() == 0){
+    		return true;
+    	}
+    	for (Entry<Vector2, Character> entry: mapModel.getEnemyLocationList().entrySet()){
+    		if(! entry.getValue().isDead()){
+    			return false;
+    		}
+    	}
+    	return true;
+    	
     }
 
 

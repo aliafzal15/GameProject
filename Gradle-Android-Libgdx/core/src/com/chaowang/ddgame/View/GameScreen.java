@@ -107,7 +107,9 @@ public class GameScreen implements Observer, Screen{
         dialogue.addNode(node2);
 
         // from show
-        mapModel.adjustLevel(player.getCharacter().getLevel());
+        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+            mapModel.adjustLevel(player.getCharacter().getLevel());
+        }
 
     }
 
@@ -228,27 +230,33 @@ public class GameScreen implements Observer, Screen{
 
         if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
             if (player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f) {
-                if (campaign.getMapPack().size == count + 1) {
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new MainMenuScreen(game));
-                        }
-                    })));
-                } else {
-                    player.getCharacter().promoteUp();
-                    count++;
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            //campaign.getMapPack().removeIndex(0);
-                            System.out.println("loading map number "+count);
-                            game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
-                        }
-                    })));
-                }
+            	if(screenController.isEnemyAllDead()){
+                    if (campaign.getMapPack().size == count + 1) {
+                        player.setPosition(new Vector2(-1000,-1000));
+                        uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.setScreen(new MainMenuScreen(game));
+                            }
+                        })));
+                    } else {
+                        player.getCharacter().promoteUp();
+                        count++;
+                        player.setPosition(new Vector2(-1000,-1000));
+                        uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                //campaign.getMapPack().removeIndex(0);
+                                System.out.println("loading map number "+count);
+                                game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
+                            }
+                        })));
+                    }
+            	}else{
+                    dialogueController.animateText("There are still hostile monsters survive on the map");
+                    playerController.reAdjust(5);
+                    isHitObject = true;
+            	}
             } else {
                 playerController.reAdjust(0);
                 isHitObject = true;
