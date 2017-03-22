@@ -36,7 +36,8 @@ public class RunTimeFriendlyExchangeController {
 	 *
 	 */
 	public RunTimeFriendlyExchangeController(String playerText,ArrayList<ItemsModel> plyrBagItems,
-																		final ArrayList <ItemsModel> friendBagItems,final CharacterModel gameChar){
+																		final ArrayList <ItemsModel> friendBagItems,final CharacterModel gameChar,
+																		final ArrayList <CharacterModel> friendChars){
 			
 		exchangeMenu=new RunTimeFriendlyExchangeItems();
 		
@@ -51,6 +52,9 @@ public class RunTimeFriendlyExchangeController {
 					exchangePlayerItems(gameChar,friendBagItems);
 				}
 				
+				else if(friendChars.get(0).getWornItems().size()>0){
+					exchangePlayerItems(gameChar,friendChars.get(0).getWornItems());
+				}
 				else{
 					JOptionPane.showMessageDialog (null, "No Friendly Items to Exchange");
 							

@@ -1,1 +1,7 @@
 Helmet;2
+Armor;1
+Shield;2
+Ring;2
+Belt;1
+Boots;2
+Weapon;3

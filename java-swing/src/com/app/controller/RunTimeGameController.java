@@ -265,8 +265,7 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 				gameMap.mapGridSelection[x][y]=14;				
 			}
 			
-			if(prevState==7 && getMapItem("Shield")!=null){
-				
+			if (prevState==7 && getMapItem("Shield")!=null){				
 					if(tempStartController.gamecharacter.setBagItem(getMapItem("Shield"))){						
 						prevState=0;
 						gameMap.mapGridSelection[x][y]=0;							
@@ -274,10 +273,53 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 						
 			}
 			
+			if(prevState==6 && getMapItem("Weapon")!=null){				
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Weapon"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}
 			
-				if(prevState==5 && isHostileAlive==false){
-					
-						int tempMapIndex=runMapIndex+1;
+			if	(prevState==8 && getMapItem("Armor")!=null){			
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Armor"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}
+			
+			
+			if	(prevState==12 && getMapItem("Helmet")!=null){			
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Helmet"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}
+			
+			if	(prevState==9 && getMapItem("Boots")!=null){			
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Boots"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}
+			
+			if	(prevState==10 && getMapItem("Belt")!=null){				
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Belt"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}	
+			
+			if	(prevState==11 && getMapItem("Ring")!=null){			
+				if(tempStartController.gamecharacter.setBagItem(getMapItem("Ring"))){						
+					prevState=0;
+					gameMap.mapGridSelection[x][y]=0;							
+				}					
+		}	
+			
+			
+				if(prevState==5 && isHostileAlive==false){				
+						
+					int tempMapIndex=runMapIndex+1;
 							if(tempMapIndex<runCampaign.getCampaignMaps().size()){
 								runMapIndex=runMapIndex+1;
 								
@@ -331,7 +373,7 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 				if(prevState==tempStartController.friendlyBtnId){
 					
 					new RunTimeFriendlyExchangeController(tempStartController.plyrBtnTxt,tempStartController.gamecharacter.getBagItems(),
-												tempStartController.hostileCharacters.get(0).getBagItems(),tempStartController.gamecharacter);
+												tempStartController.friendlyCharacters.get(0).getBagItems(),tempStartController.gamecharacter,tempStartController.friendlyCharacters);
 									
 						
 				  }

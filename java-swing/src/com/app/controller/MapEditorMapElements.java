@@ -90,6 +90,10 @@ public class MapEditorMapElements {
 		this.tempMapItemIndicator=0;
 		this.tempMapItemName=null;
 		
+				if(newMapModel.mapCharacters==null){
+					newMapModel.mapCharacters=new ArrayList();
+				}
+		
 		
 		
 		btnSaveElement.addActionListener(new ActionListener() {
