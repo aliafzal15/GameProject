@@ -548,7 +548,9 @@ public class Character extends Observable implements Json.Serializable{
 			entry = it.next();
 			int difference  = entry.getValue().getLevel() - (int) Math.ceil( level / 4.0 );
 			entry.getValue().setLevel((int) Math.ceil( level / 4.0 ));
-			abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
+			if(entry.getValue().getEnchantedAbility().getIndex() <6){
+				abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
+			}
 		}
 		for(Item item : backpack) {
 			item.setLevel((int) Math.ceil( level / 4.0 ));
@@ -862,9 +864,25 @@ public class Character extends Observable implements Json.Serializable{
 	public void setBound(Rectangle bound) {
 		this.bound = bound;
 	}
-
 	public void previewAllAttribute(){
 		setChanged();
-		notifyObservers(this);
+		notifyObservers(0);
+	}
+
+	public void previewLoadEquipment(int index){
+		if(index >= 0 && index < backpack.size() ){
+			Item itemtmp = backpack.remove(index);
+			loadEquipment(itemtmp);
+		}
+		setChanged();
+		notifyObservers(1);
+	}
+
+	public void previewUnloadEquipment(int index){
+		if(index >= 0 ){
+			getBackpack().add(removeEquipment(Item.ItemType.getItemType(index)));
+		}
+		setChanged();
+		notifyObservers(1);
 	}
 }

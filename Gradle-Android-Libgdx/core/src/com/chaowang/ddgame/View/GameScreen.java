@@ -4,16 +4,23 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
@@ -24,11 +31,13 @@ import com.chaowang.ddgame.GameController.DialogueController;
 import com.chaowang.ddgame.GameController.GameScreenController;
 import com.chaowang.ddgame.GameController.PlayerController;
 import com.chaowang.ddgame.GameUI.DialogueBox;
+import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.MapModel.Wall;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.MapModel.Map;
 
 import com.chaowang.ddgame.GameUI.OptionBox;
+import com.chaowang.ddgame.PublicParameter;
 
 import java.util.Iterator;
 import java.util.Observable;
@@ -58,7 +67,9 @@ public class GameScreen implements Observer, Screen{
     private PlayerController playerController;
     private GameScreenController screenController;
 //    private Fade fade;
-    private Label abilityLabel;
+    private Label abilityLabel, itemInfoLabel;
+    private Image[] backpackMatrix, equipmentMatrix;
+
 
     private Player player;
     private Map mapModel;
@@ -124,9 +135,9 @@ public class GameScreen implements Observer, Screen{
     @Override
     public void show() {
 
-        Gdx.input.setInputProcessor(uiStage);
         Gdx.input.setInputProcessor(playerController);
         Gdx.input.setInputProcessor(dialogueController);
+        Gdx.input.setInputProcessor(uiStage);
 
         //stage.addActor(fade);
 //        stage.draw();
@@ -316,11 +327,13 @@ public class GameScreen implements Observer, Screen{
         root.setFillParent(true);
         uiStage.addActor(root);
 
-        Table previewTable = constructPreviewTable();
+        Table itemTable = constructItemTable();
+        Table abilityTable = constructAbilityTable();
         Table dialogTable = constructDialogTable();
 
-        root.add(previewTable).expand().align(Align.center).padBottom(20f).bottom().row();
-        root.add(dialogTable).expand().align(Align.center).top().maxHeight(260);
+        root.add(itemTable).expand().align(Align.right).bottom(); //.padBottom(20f);
+        root.add(abilityTable).expand().align(Align.left).bottom().row();
+        root.add(dialogTable).colspan(2).align(Align.center).top().maxHeight(360);
     }
 
     private Table constructDialogTable() {
@@ -332,31 +345,94 @@ public class GameScreen implements Observer, Screen{
         optionBox.setVisible(false);
 
         Table dialogTable = new Table();
-        dialogTable.add(messageDialog).expand().top().row();
+        dialogTable.add(messageDialog).colspan(2).top().row();
         dialogTable.add(dialogBox).expand().bottom();
         dialogTable.add(optionBox).width(Gdx.graphics.getWidth() / 5);
         return dialogTable;
     }
 
-    private Table constructPreviewTable() {
-        //abilityHeaderLabel = new Label("Strength： \nDexterity： \nConstitution： \nWisdom： \nIntelligence： \nCharisma： ",MainMenuScreen.skin);
-        //abilityHeaderLabel.setVisible(false);
+    private Table constructItemTable(){
+        equipmentMatrix = new Image[PublicParameter.ITEM_TYPE_COUNT];
+        backpackMatrix = new Image[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
+
+        Table itemTable = new Table();
+        for (int i = 0; i < PublicParameter.ITEM_TYPE_COUNT; i++) {
+            equipmentMatrix[i] = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+            equipmentMatrix[i].setVisible(false);
+            itemTable.add(equipmentMatrix[i]).width(PublicParameter.ITEM_CELL_WIDTH / 2).height(PublicParameter.ITEM_CELL_HEIGHT / 2).fill().space(5);
+        }
+        itemTable.row();
+        Image tempPointer;
+        for (int i = 0; i < PublicParameter.ITEM_BACKPACK_ROW; i++) {
+            for (int j = 0; j < PublicParameter.ITEM_BACKPACK_COLUMN; j++) {
+                backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j] = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+                backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j].setVisible(false);
+                tempPointer = backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j];
+                itemTable.add(tempPointer).width(PublicParameter.ITEM_CELL_WIDTH / 2).height(PublicParameter.ITEM_CELL_HEIGHT / 2).fill().space(5);
+            }
+            itemTable.row();
+        }
+
+        return itemTable;
+    }
+
+    private Table constructAbilityTable() {
         abilityLabel = new Label("",MainMenuScreen.skin);
         abilityLabel.setVisible(false);
         abilityLabel.setFontScale(.8f);
 
-        Table previewTable = new Table();
-        //previewTable.add(abilityHeaderLabel).expand();
-        previewTable.add(abilityLabel).expand();
-        return previewTable;
+        Table abilityTable = new Table();
+        abilityTable.add(abilityLabel).expand();
+        return abilityTable;
     }
 
     @Override
 	public void update(Observable arg0, Object arg1) {
-        abilityLabel.setVisible(true);
-        abilityLabel.setText(((Character)arg0).displayAllAtributes());
+        if((Integer)arg1 == 0){
+            abilityLabel.setVisible(true);
+            abilityLabel.setText(((Character)arg0).displayAllAtributes());
+        }
+        if((Integer)arg1 == 1){
+            updateBackpackMatrix(arg0, arg1);
+            updateEquipmentMatrix(arg0, arg1);
+            for(Image image : backpackMatrix){
+                image.setVisible(true);
+            }
+            for(Image image : equipmentMatrix){
+                image.setVisible(true);
+            }
+        }
 	}
 
+    /**
+     *
+     * update matrix structure for equipment
+     */
+    public void updateEquipmentMatrix(Observable arg0, Object arg1) {
+        for (int i = 0; i < PublicParameter.ITEM_TYPE_COUNT; i++) {
+            if(((Character)arg0).getEquipment().get(Item.ItemType.getItemType(i)) != null){
+                equipmentMatrix[i].setDrawable(new TextureRegionDrawable(new TextureRegion(((Character)arg0).getEquipment().get(Item.ItemType.getItemType(i)).getTexture())));
+            }else{
+                equipmentMatrix[i].setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+            }
+        }
+    }
+
+    /**
+     *
+     * update matrix structure for backpack
+     */
+    public void updateBackpackMatrix(Observable arg0, Object arg1) {
+        for (int i = 0; i < PublicParameter.ITEM_BACKPACK_ROW; i++) {
+            for (int j = 0; j < PublicParameter.ITEM_BACKPACK_COLUMN; j++) {
+                if ((i * PublicParameter.ITEM_BACKPACK_COLUMN) + j < ((Character)arg0).getBackpack().size()) {
+                    backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j].setDrawable(new TextureRegionDrawable(new TextureRegion(((Character)arg0).getBackpack().get(i * PublicParameter.ITEM_BACKPACK_COLUMN + j).getTexture())));
+                } else {
+                    backpackMatrix[(i * PublicParameter.ITEM_BACKPACK_COLUMN) + j].setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png"))))); //= new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("items/unknown.png")))));
+                }
+            }
+        }
+    }
 
     public OrthographicCamera getCam() {
         return cam;
@@ -364,5 +440,13 @@ public class GameScreen implements Observer, Screen{
 
     public Label getAbilityLabel() {
         return abilityLabel;
+    }
+
+    public Image[] getBackpackMatrix() {
+        return backpackMatrix;
+    }
+
+    public Image[] getEquipmentMatrix() {
+        return equipmentMatrix;
     }
 }

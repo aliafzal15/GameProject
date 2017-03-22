@@ -54,7 +54,7 @@ public class EquipmentController {
      */
     public void buildBackpackMatrix() {
         for (int i = 0; i < character.getBackpack().size(); i++) {
-            if (character.getBackpack().get(i).getLevel() > (1 + character.getLevel()) / 2) {
+            if (character.getBackpack().get(i).getLevel() > (int) Math.ceil(  character.getLevel() / 4.0 )) {
                 character.getBackpack().remove(i);
             }
         }
