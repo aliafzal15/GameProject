@@ -8,11 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-/**
- * class for Fade
- * @author chao wang
- * @version 2.0
- */
+
 public class Fade extends Actor {
 
     public enum FadeType{
