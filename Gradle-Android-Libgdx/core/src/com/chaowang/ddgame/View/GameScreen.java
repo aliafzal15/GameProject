@@ -13,12 +13,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -57,7 +60,6 @@ public class GameScreen implements Observer, Screen{
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera cam;
     // followed from video
-//    private int uiScale = 2;
     private Stage uiStage;
     private Table root;
     private OptionBox optionBox;
@@ -66,9 +68,9 @@ public class GameScreen implements Observer, Screen{
     private DialogueController dialogueController;
     private PlayerController playerController;
     private GameScreenController screenController;
-//    private Fade fade;
     private Label abilityLabel, itemInfoLabel;
     private Image[] backpackMatrix, equipmentMatrix;
+    private TextButton playerEditorBtn;
 
 
     private Player player;
@@ -100,7 +102,6 @@ public class GameScreen implements Observer, Screen{
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        fade = new Fade(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.BLACK, Fade.FadeType.FADE_IN, 3000);
         initUI();
 
         playerController = new PlayerController(player, this);
@@ -135,8 +136,8 @@ public class GameScreen implements Observer, Screen{
     @Override
     public void show() {
 
-        Gdx.input.setInputProcessor(playerController);
-        Gdx.input.setInputProcessor(dialogueController);
+//        Gdx.input.setInputProcessor(playerController);
+//        Gdx.input.setInputProcessor(dialogueController);
         Gdx.input.setInputProcessor(uiStage);
 
         //stage.addActor(fade);
@@ -239,6 +240,7 @@ public class GameScreen implements Observer, Screen{
             }
         }
 
+        //draw player on screen
         if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
             if (player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f) {
             	if(screenController.isEnemyAllDead()){
@@ -285,7 +287,7 @@ public class GameScreen implements Observer, Screen{
         }
         batch.end();
 
-
+        dialogueController.keyUp();
         uiStage.draw();
         screenController.onClickListen();
 
@@ -320,7 +322,7 @@ public class GameScreen implements Observer, Screen{
     private void initUI(){
         uiStage = new Stage(new ScreenViewport());
         uiStage.getViewport().update(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
-        //uiStage.setDebugAll(true);
+        uiStage.setDebugAll(true);
 
         root = new Table();
         //root.setSize(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
@@ -330,10 +332,21 @@ public class GameScreen implements Observer, Screen{
         Table itemTable = constructItemTable();
         Table abilityTable = constructAbilityTable();
         Table dialogTable = constructDialogTable();
+        Table playerEditTable = new Table();
+        playerEditorBtn =new TextButton("I", MainMenuScreen.buttonStyle);
+        playerEditorBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new GamePlayerEditorScreen(game, player, mapModel, campaign));
+                return true;
+            }
+        });
+        playerEditTable.add(playerEditorBtn).left().top().width(60).height(80);
 
         root.add(itemTable).expand().align(Align.right).bottom(); //.padBottom(20f);
         root.add(abilityTable).expand().align(Align.left).bottom().row();
         root.add(dialogTable).colspan(2).align(Align.center).top().maxHeight(360);
+        root.add(playerEditTable).right().bottom().width(60).height(80);
     }
 
     private Table constructDialogTable() {
@@ -354,6 +367,9 @@ public class GameScreen implements Observer, Screen{
     private Table constructItemTable(){
         equipmentMatrix = new Image[PublicParameter.ITEM_TYPE_COUNT];
         backpackMatrix = new Image[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
+        itemInfoLabel = new Label("", MainMenuScreen.skin);
+        itemInfoLabel.setFontScale(.5f);
+        itemInfoLabel.setVisible(false);
 
         Table itemTable = new Table();
         for (int i = 0; i < PublicParameter.ITEM_TYPE_COUNT; i++) {
@@ -372,7 +388,7 @@ public class GameScreen implements Observer, Screen{
             }
             itemTable.row();
         }
-
+        itemTable.add(itemInfoLabel).colspan(7);
         return itemTable;
     }
 
@@ -401,6 +417,8 @@ public class GameScreen implements Observer, Screen{
             for(Image image : equipmentMatrix){
                 image.setVisible(true);
             }
+            abilityLabel.setText(((Character)arg0).displayAllAtributes());
+            itemInfoLabel.setVisible(true);
         }
 	}
 
@@ -449,4 +467,9 @@ public class GameScreen implements Observer, Screen{
     public Image[] getEquipmentMatrix() {
         return equipmentMatrix;
     }
+
+	public Label getItemInfoLabel() {
+		return itemInfoLabel;
+	}
+    
 }

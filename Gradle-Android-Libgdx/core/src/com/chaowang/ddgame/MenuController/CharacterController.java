@@ -160,7 +160,7 @@ public class CharacterController {
 				character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
 				character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity() + character.getDexterityBonus()));
 				character.setAttackBonus(CharacterScoreModifier.attachBonusCalculator(character.getStrength() + character.getStrengthBonus(),
-						character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
 				character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength() + character.getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 				view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));

@@ -380,28 +380,29 @@ public class Map implements Json.Serializable{
 
     public void adjustLevel(int level){
     	this.level = level;
-        Set<Vector2> vectorKeySet = itemLocationList.keySet();
-        Iterator<Vector2> keySetIterator = vectorKeySet.iterator();
+        Iterator<Vector2> keySetIterator = itemLocationList.keySet().iterator();
         Vector2 cur;
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             itemLocationList.get(cur).setLevel((int) Math.ceil( level / 4.0 ));
         }
 
-        vectorKeySet = enemyLocationList.keySet();
-        keySetIterator = vectorKeySet.iterator();
+        keySetIterator = enemyLocationList.keySet().iterator();
 
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            enemyLocationList.get(cur).setLevel(level);
+            if(enemyLocationList.get(cur).getLevel() != level){
+                enemyLocationList.get(cur).setLevel(level);
+            }
         }
 
-        vectorKeySet = friendLocationList.keySet();
-        keySetIterator = vectorKeySet.iterator();
+        keySetIterator = friendLocationList.keySet().iterator();
 
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            friendLocationList.get(cur).setLevel(level);
+            if(friendLocationList.get(cur).getLevel() != level){
+                friendLocationList.get(cur).setLevel(level);
+            }
         }
     }
 	/**

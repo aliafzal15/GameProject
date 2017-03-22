@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -63,6 +64,7 @@ public class GameScreenController {
             for(Image image : view.getEquipmentMatrix()){
                 image.setVisible(false);
             }
+            view.getItemInfoLabel().setVisible(false);
         }
 
         if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.I )){
@@ -70,31 +72,7 @@ public class GameScreenController {
             view.getCam().unproject(touch);
             if(player.getBound().contains(touch.x,touch.y)){
                 player.getCharacter().previewLoadEquipment(-1);
-                for (int i = 0; i < view.getBackpackMatrix().length ; i++) {
-                    view.getBackpackMatrix()[i].addListener(new ClickListener(i) {
-                        @Override
-                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            System.out.println("getbutton" + getButton());
-                            if ( getButton() < player.getCharacter().getBackpack().size()  && !player.getCharacter().getEquipment().containsKey(player.getCharacter().getBackpack().get(getButton()).getItemType())) {
-                                player.getCharacter().previewLoadEquipment(getButton());
-                            }
-                            return true;
-                        }
-
-                    });
-                }
-
-                for (int i = 0; i < view.getEquipmentMatrix().length ; i++){
-                    view.getEquipmentMatrix()[i].addListener(new ClickListener(i) {
-                        @Override
-                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            if(player.getCharacter().getEquipment().containsKey(Item.ItemType.getItemType(getButton()))){
-                                player.getCharacter().previewUnloadEquipment(getButton());
-                            }
-                            return true;
-                        }
-                    });
-                }
+                enableItemPreviewTouch();
             }
 
             Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
@@ -102,6 +80,7 @@ public class GameScreenController {
                 pointer = keySetIterator.next();
                 if(mapModel.getEnemyLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
                     mapModel.getEnemyLocationList().get(pointer).previewLoadEquipment(-1);
+                    disableItemPreviewTouch();
                 }
             }
             keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
@@ -109,14 +88,12 @@ public class GameScreenController {
                 pointer = keySetIterator.next();
                 if(mapModel.getFriendLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
                     mapModel.getFriendLocationList().get(pointer).previewLoadEquipment(-1);
+                    disableItemPreviewTouch();
                 }
             }
         } else if(Gdx.input.isTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             view.getCam().unproject(touch);
-//            System.out.println("Screen coordinates translated to world coordinates: "
-//                    + "X: " + touch.x + " Y: " + touch.y);
-//            System.out.println("player x:" + player.getPosition().x + " player y: "+ player.getPosition().y);
             if(player.getBound().contains(touch.x,touch.y)){
                 player.getCharacter().previewAllAttribute();
             }
@@ -136,6 +113,66 @@ public class GameScreenController {
             }
         }
     }
+
+	public void enableItemPreviewTouch() {
+		for (int i = 0; i < view.getBackpackMatrix().length ; i++) {
+			view.getBackpackMatrix()[i].setTouchable(Touchable.enabled);
+		    view.getBackpackMatrix()[i].addListener(new ClickListener(i) {
+		        @Override
+		        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		            if ( getButton() < player.getCharacter().getBackpack().size()  
+		            		&& !player.getCharacter().getEquipment().containsKey(player.getCharacter().getBackpack().get(getButton()).getItemType())) {
+		                player.getCharacter().previewLoadEquipment(getButton());
+		            }
+		            return true;
+		        }
+		        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		            if ( getButton() < player.getCharacter().getBackpack().size())  {
+		                view.getItemInfoLabel().setText(player.getCharacter().getBackpack().get(getButton()).toString());
+		            }
+		        }
+
+		        @Override
+		        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+		        	view.getItemInfoLabel().setText("");
+		        }
+
+		    });
+		}
+
+		for (int i = 0; i < view.getEquipmentMatrix().length ; i++){
+			view.getEquipmentMatrix()[i].setTouchable(Touchable.enabled);
+		    view.getEquipmentMatrix()[i].addListener(new ClickListener(i) {
+		        @Override
+		        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		            if(player.getCharacter().getEquipment().containsKey(Item.ItemType.getItemType(getButton()))){
+		                player.getCharacter().previewUnloadEquipment(getButton());
+		            }
+		            return true;
+		        }
+		        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		            if(player.getCharacter().getEquipment().containsKey(Item.ItemType.getItemType(getButton()))){
+		                view.getItemInfoLabel().setText(player.getCharacter().getEquipment().get(Item.ItemType.getItemType(getButton())).toString());
+		            }
+		        }
+
+		        @Override
+		        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+		            view.getItemInfoLabel().setText("");
+		        }
+		    });
+		}
+	}
+
+	public void disableItemPreviewTouch() {
+		for(Image image : view.getBackpackMatrix()){
+		    image.setTouchable(Touchable.disabled);
+		}
+		for(Image image : view.getEquipmentMatrix()){
+		    image.setTouchable(Touchable.disabled);
+		}
+		view.getItemInfoLabel().setVisible(false);
+	}
 
     public boolean isEnemyAllDead(){
     	if(mapModel.getEnemyLocationList().size() == 0){

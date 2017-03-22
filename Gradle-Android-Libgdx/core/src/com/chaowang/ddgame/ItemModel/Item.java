@@ -201,7 +201,7 @@ public class Item extends Rectangle implements Json.Serializable {
      * switch to the string type
      */
 	public  String toString(){
-        return "Item Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
+        return "Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
     }
 	/**
 	 * switch to next ability type

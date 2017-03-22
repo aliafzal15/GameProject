@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.GameController.ItemExchangeController;
 import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.MenuController.EquipmentController;
-import com.chaowang.ddgame.MenuController.ItemExchangeController;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 
@@ -78,12 +78,6 @@ public class GameItemExchangeScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(mapModel.getEnemyLocationList().containsKey(NPCposition)){
-                    mapModel.getEnemyLocationList().put(NPCposition,NPCcharacter);
-                }
-                if(mapModel.getFriendLocationList().containsKey(NPCposition)){
-                    mapModel.getFriendLocationList().put(NPCposition,NPCcharacter);
-                }
                 game.setScreen(new GameScreen(game, player, mapModel, campaign));
                 return true;
             }

@@ -1,5 +1,6 @@
 package com.chaowang.ddgame.GameController;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.chaowang.ddgame.DialogueSystem.Dialogue;
@@ -51,18 +52,17 @@ public class DialogueController extends InputAdapter{
         this.indexFlag = indexFlag;
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
+    public boolean keyUp() {
         if (optionBox.isVisible()) {
-            if (keycode == Input.Keys.UP) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP )) {
                 optionBox.moveUp();
                 return true;
-            } else if (keycode == Input.Keys.DOWN) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN )) {
                 optionBox.moveDown();
                 return true;
             }
         }
-        if (traverser != null && keycode == Input.Keys.ENTER && dialogueBox.isFinished()) { // continue through tree
+        if (traverser != null && Gdx.input.isKeyPressed(Input.Keys.ENTER ) && dialogueBox.isFinished()) { // continue through tree
             if (traverser.getType() == NODE_TYPE.END) {
                 traverser = null;
                 dialogueBox.setVisible(false);
@@ -84,7 +84,7 @@ public class DialogueController extends InputAdapter{
         if (dialogueBox.isVisible()) {
             return true;
         }
-        if ( keycode == Input.Keys.ESCAPE && messageDialog.isFinished()) { // continue through tree
+        if ( Gdx.input.isKeyPressed(Input.Keys.ESCAPE ) && messageDialog.isFinished()) { // continue through tree
             messageDialog.setVisible(false);
             return true;
         }
