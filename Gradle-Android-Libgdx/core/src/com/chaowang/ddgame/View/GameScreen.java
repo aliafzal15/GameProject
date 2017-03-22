@@ -9,8 +9,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -19,6 +21,7 @@ import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.DialogueSystem.Dialogue;
 import com.chaowang.ddgame.DialogueSystem.DialogueNode;
 import com.chaowang.ddgame.GameController.DialogueController;
+import com.chaowang.ddgame.GameController.GameScreenController;
 import com.chaowang.ddgame.GameController.PlayerController;
 import com.chaowang.ddgame.GameUI.DialogueBox;
 import com.chaowang.ddgame.MapModel.Wall;
@@ -53,7 +56,9 @@ public class GameScreen implements Observer, Screen{
     private Dialogue dialogue;
     private DialogueController dialogueController;
     private PlayerController playerController;
+    private GameScreenController screenController;
 //    private Fade fade;
+    private Label abilityLabel;
 
     private Player player;
     private Map mapModel;
@@ -78,7 +83,6 @@ public class GameScreen implements Observer, Screen{
     GameScreen(Game game, Player player,Map map, Campaign camp){
         this.game = game;
         this.player = player;
-        //player.setPosition(new Vector2(player.getPosition().x - player.getBound().getWidth() * 1.1f, player.getPosition().y - player.getBound().getHeight() * 1.1f ));
         this.mapModel = map;
         this.campaign = new Campaign(camp);
         batch = new SpriteBatch();
@@ -90,6 +94,7 @@ public class GameScreen implements Observer, Screen{
 
         playerController = new PlayerController(player, this);
         dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
+        screenController = new GameScreenController(this,this.mapModel, this.player);
 
         dialogue = new Dialogue();
         DialogueNode node1 = new DialogueNode("Hello Adventurer!\n Welcome to town.", 0);
@@ -102,7 +107,9 @@ public class GameScreen implements Observer, Screen{
         dialogue.addNode(node2);
 
         // from show
-        mapModel.adjustLevel(player.getCharacter().getLevel());
+        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+            mapModel.adjustLevel(player.getCharacter().getLevel());
+        }
 
     }
 
@@ -120,8 +127,6 @@ public class GameScreen implements Observer, Screen{
         Gdx.input.setInputProcessor(uiStage);
         Gdx.input.setInputProcessor(playerController);
         Gdx.input.setInputProcessor(dialogueController);
-
-
 
         //stage.addActor(fade);
 //        stage.draw();
@@ -141,6 +146,7 @@ public class GameScreen implements Observer, Screen{
         dialogueController.update(delta);
         uiStage.act(delta);
 
+
         batch.begin();
         batch.draw(player.getCurrentFrame(), player.getPosition().x, player.getPosition().y );
 
@@ -151,7 +157,6 @@ public class GameScreen implements Observer, Screen{
         for(Wall cur : mapModel.getWallLocationList() ){
             cur.draw(batch);
             if(player.getBound().overlaps(cur)){
-                System.out.println("hit wall");
                 playerController.reAdjust(0);
                 isHitObject = true;
             }
@@ -165,7 +170,6 @@ public class GameScreen implements Observer, Screen{
             Vector2 cur = keySetIterator.next();
             mapModel.getItemLocationList().get(cur).draw(batch, cur);
             if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
-                System.out.println("hit item");
                 playerController.pickupItem(mapModel.getItemLocationList().get(cur));
                 dialogueController.animateText(mapModel.getItemLocationList().get(cur).toString()+"  found!");
                 keySetIterator.remove();
@@ -217,7 +221,6 @@ public class GameScreen implements Observer, Screen{
                 playerController.reAdjust(5);
                 isHitObject = true;
                 if(! mapModel.getEnemyLocationList().get(cur).isDead()){
-                    System.out.println("attack enemy");
                     mapModel.getEnemyLocationList().get(cur).underAttack();
                 } else{
                     game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, false));
@@ -227,27 +230,33 @@ public class GameScreen implements Observer, Screen{
 
         if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
             if (player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f) {
-                if (campaign.getMapPack().size == count + 1) {
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new MainMenuScreen(game));
-                        }
-                    })));
-                } else {
-                    player.getCharacter().promoteUp();
-                    count++;
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            //campaign.getMapPack().removeIndex(0);
-                            System.out.println(count);
-                            game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
-                        }
-                    })));
-                }
+            	if(screenController.isEnemyAllDead()){
+                    if (campaign.getMapPack().size == count + 1) {
+                        player.setPosition(new Vector2(-1000,-1000));
+                        uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.setScreen(new MainMenuScreen(game));
+                            }
+                        })));
+                    } else {
+                        player.getCharacter().promoteUp();
+                        count++;
+                        player.setPosition(new Vector2(-1000,-1000));
+                        uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                //campaign.getMapPack().removeIndex(0);
+                                System.out.println("loading map number "+count);
+                                game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
+                            }
+                        })));
+                    }
+            	}else{
+                    dialogueController.animateText("There are still hostile monsters survive on the map");
+                    playerController.reAdjust(5);
+                    isHitObject = true;
+            	}
             } else {
                 playerController.reAdjust(0);
                 isHitObject = true;
@@ -256,7 +265,6 @@ public class GameScreen implements Observer, Screen{
 
 
         if(player.getBound().overlaps(mapModel.getEntryDoor()) ){
-            System.out.println("hit entry door");
             playerController.reAdjust(0);
             isHitObject = true;
         }
@@ -268,12 +276,13 @@ public class GameScreen implements Observer, Screen{
 
 
         uiStage.draw();
+        screenController.onClickListen();
 
     }
 
     @Override
     public void resize(int width, int height) {
-
+        uiStage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -303,32 +312,57 @@ public class GameScreen implements Observer, Screen{
         //uiStage.setDebugAll(true);
 
         root = new Table();
-        root.setSize(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() / 2 );
-//        root.setFillParent(true);
+        //root.setSize(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
+        root.setFillParent(true);
         uiStage.addActor(root);
 
+        Table previewTable = constructPreviewTable();
+        Table dialogTable = constructDialogTable();
+
+        root.add(previewTable).expand().align(Align.center).padBottom(20f).bottom().row();
+        root.add(dialogTable).expand().align(Align.center).top().maxHeight(260);
+    }
+
+    private Table constructDialogTable() {
         messageDialog = new DialogueBox(MainMenuScreen.skin);
         messageDialog.setVisible(false);
-
         dialogBox = new DialogueBox(MainMenuScreen.skin);
         dialogBox.setVisible(false);
-
         optionBox = new OptionBox(MainMenuScreen.skin);
         optionBox.setVisible(false);
 
         Table dialogTable = new Table();
-        dialogTable.add(messageDialog).expand().align(Align.right).space(8f).row();
-        dialogTable.add(dialogBox).expand().align(Align.bottomLeft).space(8f);
-        dialogTable.add(optionBox).width(Gdx.graphics.getWidth() / 5).align(Align.bottomRight).space(8f);
-
-        root.add(dialogTable).expand().align(Align.bottom);
+        dialogTable.add(messageDialog).expand().top().row();
+        dialogTable.add(dialogBox).expand().bottom();
+        dialogTable.add(optionBox).width(Gdx.graphics.getWidth() / 5);
+        return dialogTable;
     }
 
-	@Override
+    private Table constructPreviewTable() {
+        //abilityHeaderLabel = new Label("Strength： \nDexterity： \nConstitution： \nWisdom： \nIntelligence： \nCharisma： ",MainMenuScreen.skin);
+        //abilityHeaderLabel.setVisible(false);
+        abilityLabel = new Label("",MainMenuScreen.skin);
+        abilityLabel.setVisible(false);
+        abilityLabel.setFontScale(.8f);
+
+        Table previewTable = new Table();
+        //previewTable.add(abilityHeaderLabel).expand();
+        previewTable.add(abilityLabel).expand();
+        return previewTable;
+    }
+
+    @Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
+        abilityLabel.setVisible(true);
+        abilityLabel.setText(((Character)arg0).displayAllAtributes());
 	}
 
 
+    public OrthographicCamera getCam() {
+        return cam;
+    }
+
+    public Label getAbilityLabel() {
+        return abilityLabel;
+    }
 }

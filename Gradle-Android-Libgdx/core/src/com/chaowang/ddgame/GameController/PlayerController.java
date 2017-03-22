@@ -75,7 +75,7 @@ public class PlayerController extends InputAdapter{
      */
     public void reAdjust(float span){
         if(span <= 0 ){
-            span = 0.8f;
+            span = 0.5f;
         }
         if(movement == "up"){
         	player.move(0,-1 * span);
