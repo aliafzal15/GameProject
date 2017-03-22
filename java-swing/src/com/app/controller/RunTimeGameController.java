@@ -232,7 +232,8 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		  else if(gameMap.mapGridSelection[_i][_j]==tempStartController.friendlyBtnId){
 			  tempStartController.friendlyCharacters.get(0).getAbilityScores();
 		  }
-		  else if(gameMap.mapGridSelection[_i][_j]==tempStartController.enemyBtnId){
+		  else if(gameMap.mapGridSelection[_i][_j]==tempStartController.enemyBtnId ||
+				  															gameMap.mapGridSelection[_i][_j] == 14){
 			  tempStartController.hostileCharacters.get(0).getAbilityScores();
 		  }	
 		

@@ -215,12 +215,15 @@ public class StartGameController {
 						  if(friendChars.get(0).getCharType().equals("Fighter")){
 						  	friendChars.get(i).setWornItemList(gameFighterWornItems);
 						  	friendChars.get(i).setBagItemList(gameFighterBagItems);
-						  	setHostFriendEnchanements(friendChars.get(i),friendChars.get(i).getWornItems());
+						  	setHostFriendEnchanements(gamecharacter,friendChars.get(i).getWornItems());
+						  	setHostFriendEnchanements(gamecharacter,friendChars.get(i).getBagItems());
 						  	
 						  }	else{
 								 friendChars.get(i).setWornItemList(gameZombieWornItems);
 								 friendChars.get(i).setBagItemList(gameZombieBagItems);
-						  }		 setHostFriendEnchanements(friendChars.get(i),friendChars.get(i).getWornItems());		 	
+								 setHostFriendEnchanements(gamecharacter,friendChars.get(i).getBagItems());
+								 setHostFriendEnchanements(gamecharacter,friendChars.get(i).getWornItems());
+						  }				 	
 				     } 
 	     	}
 			
@@ -230,11 +233,14 @@ public class StartGameController {
 					  if(hostChars.get(0).getCharType().equals("Fighter")){
 					  	hostChars.get(i).setWornItemList(gameFighterWornItems);
 					  	hostChars.get(i).setBagItemList(gameFighterBagItems);
-					  	setHostFriendEnchanements(hostChars.get(i),hostChars.get(i).getWornItems());
+					  	setHostFriendEnchanements(gamecharacter,hostChars.get(i).getBagItems());
+						setHostFriendEnchanements(gamecharacter,hostChars.get(i).getWornItems());
+						
 					  }	else{
 							 hostChars.get(i).setWornItemList(gameZombieWornItems);
 							 hostChars.get(i).setBagItemList(gameZombieBagItems);
-							 setHostFriendEnchanements(hostChars.get(i),hostChars.get(i).getWornItems());
+							 setHostFriendEnchanements(gamecharacter,hostChars.get(i).getBagItems());
+							 setHostFriendEnchanements(gamecharacter,hostChars.get(i).getWornItems());
 					  }				 	
 			     } 
     	}
