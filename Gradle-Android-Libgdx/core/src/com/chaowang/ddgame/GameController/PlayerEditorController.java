@@ -37,7 +37,7 @@ public class PlayerEditorController {
     /**
      * constructor
      * @param gamePlayerEditorScreen
-     * @param model
+     * @param gamePlayer
      */
     public PlayerEditorController(GamePlayerEditorScreen gamePlayerEditorScreen, Player gamePlayer){
         this.view = gamePlayerEditorScreen;
@@ -264,7 +264,9 @@ public class PlayerEditorController {
 		player.getCharacter().loadEquipment(itemtmp);
 	}
 	
-
+	/**
+	 * update abilities UI
+	 */
 	public void updateAbilitiesUI() {
 		view.strengthLabel.setText(Integer.toString(player.getCharacter().getStrength()));
 		view.dexterityLabel.setText(Integer.toString(player.getCharacter().getDexterity()));

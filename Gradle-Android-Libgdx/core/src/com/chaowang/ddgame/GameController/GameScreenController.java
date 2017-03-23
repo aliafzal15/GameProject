@@ -27,7 +27,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 /**
- * Created by Chao on 20/03/2017.
+ * controller for game screen
+ * @author chao wang
+ * @version 2.0
  */
 
 public class GameScreenController {
@@ -37,7 +39,12 @@ public class GameScreenController {
     private Player player;
     private Vector3 touch;
     private Vector2 pointer;
-
+    /**
+     * construct
+     * @param screen
+     * @param map
+     * @param role
+     */
     public GameScreenController(GameScreen screen, Map map ,Player role){
         this.view = screen;
         this.mapModel = map;
@@ -53,7 +60,9 @@ public class GameScreenController {
         }
         touch = new Vector3();
     }
-
+    /**
+     * listener to monitor any changes
+     */
     public void onClickListen(){
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE )){
@@ -113,7 +122,9 @@ public class GameScreenController {
             }
         }
     }
-
+    /**
+     * implement characters
+     */
 	public void enableItemPreviewTouch() {
 		for (int i = 0; i < view.getBackpackMatrix().length ; i++) {
 			view.getBackpackMatrix()[i].setTouchable(Touchable.enabled);
@@ -163,7 +174,9 @@ public class GameScreenController {
 		    });
 		}
 	}
-
+	/**
+	 * stop implementing items
+	 */
 	public void disableItemPreviewTouch() {
 		for(Image image : view.getBackpackMatrix()){
 		    image.setTouchable(Touchable.disabled);
@@ -173,7 +186,10 @@ public class GameScreenController {
 		}
 		view.getItemInfoLabel().setVisible(false);
 	}
-
+	/**
+	 * decide game state
+	 * @return
+	 */
     public boolean isEnemyAllDead(){
     	if(mapModel.getEnemyLocationList().size() == 0){
     		return true;

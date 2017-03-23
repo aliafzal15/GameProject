@@ -1,9 +1,15 @@
 package com.chaowang.ddgame.ClassesModel;
 
 import com.chaowang.ddgame.CharacterModel.Abilities;
-
+/**
+ * model to fighter class 
+ * @author chao wang
+ * @version 2.0
+ */
 public class Fighter extends Class {
-
+	/**
+	 * enum type to set fighters' initial values
+	 */
     public enum FighterType {
         BULLY(0, new int[]{Abilities.AbilityType.STRENGTH.getIndex(), Abilities.AbilityType.CONSTITUTION.getIndex(),
                 Abilities.AbilityType.DEXTERITY.getIndex(), Abilities.AbilityType.INTELLIGENCE.getIndex(),
