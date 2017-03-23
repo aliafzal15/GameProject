@@ -11,7 +11,9 @@ import com.chaowang.ddgame.GameUI.OptionBox;
 import com.chaowang.ddgame.DialogueSystem.DialogueNode.NODE_TYPE;
 
 /**
- * Created by Chao on 18/03/2017.
+ * controller for dialogue table
+ * @author chao wang
+ * @version 2.0
  */
 
 public class DialogueController extends InputAdapter{
@@ -23,7 +25,12 @@ public class DialogueController extends InputAdapter{
     private OptionBox optionBox;
     private int answerIndex;
     private boolean indexFlag;
-
+    /**
+     * construct
+     * @param box
+     * @param optionBox
+     * @param message
+     */
     public DialogueController(DialogueBox box, OptionBox optionBox, DialogueBox message) {
         this.dialogueBox = box;
         this.optionBox = optionBox;
@@ -31,11 +38,16 @@ public class DialogueController extends InputAdapter{
         messageDialog = message;
         indexFlag = false;
     }
-
+    /**
+     * get index
+     * @return
+     */
     public int getAnswerIndex() {
         return answerIndex;
     }
-
+    /**
+     * choose answer options
+     */
     @Override
     public boolean keyDown(int keycode) {
         if (dialogueBox.isVisible()) {
@@ -43,15 +55,24 @@ public class DialogueController extends InputAdapter{
         }
         return false;
     }
-
+    /**
+     * index flag
+     * @return
+     */
     public boolean isIndexFlag() {
         return indexFlag;
     }
-
+    /**
+     * set index flag
+     * @param indexFlag
+     */
     public void setIndexFlag(boolean indexFlag) {
         this.indexFlag = indexFlag;
     }
-
+    /**
+     * choose answer option
+     * @return
+     */
     public boolean keyUp() {
         if (optionBox.isVisible()) {
             if (Gdx.input.isKeyPressed(Input.Keys.UP )) {
@@ -90,7 +111,10 @@ public class DialogueController extends InputAdapter{
         }
         return false;
     }
-
+    /**
+     * update answer
+     * @param delta
+     */
     public void update(float delta) {
         if (dialogueBox.isFinished() && traverser != null) {
             if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE && answerIndex == -1 ) {
@@ -98,7 +122,10 @@ public class DialogueController extends InputAdapter{
             }
         }
     }
-
+    /**
+     * start dialogue
+     * @param dialogue
+     */
     public void startDialogue(Dialogue dialogue) {
         traverser = new DialogueTraverser(dialogue);
         dialogueBox.setVisible(true);
@@ -110,12 +137,18 @@ public class DialogueController extends InputAdapter{
             }
         }
     }
-
+    /**
+     * animate text
+     * @param message
+     */
     public void animateText(String message) {
         messageDialog.setVisible(true);
         messageDialog.animateText(message);
     }
-
+    /**
+     * process text
+     * @param index
+     */
     private void progress(int index) {
         optionBox.setVisible(false);
         DialogueNode nextNode = traverser.getNextNode(index);
@@ -127,7 +160,10 @@ public class DialogueController extends InputAdapter{
             }
         }
     }
-
+    /**
+     * show dialogue
+     * @return
+     */
     public boolean isDialogueShowing() {
         return dialogueBox.isVisible();
     }

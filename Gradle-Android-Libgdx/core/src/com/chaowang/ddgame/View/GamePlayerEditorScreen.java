@@ -28,7 +28,11 @@ import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.MenuController.CharacterController;
 import com.chaowang.ddgame.MenuController.EquipmentController;
 import com.chaowang.ddgame.PlayModel.Player;
-
+/**
+ * view for editor screen
+ * @author chao wang 
+ * @version 2.0
+ */
 public class GamePlayerEditorScreen implements Screen{
 
     private Game game;
@@ -264,22 +268,38 @@ public class GamePlayerEditorScreen implements Screen{
     public void dispose() {
         stage.dispose();
     }
+    /**
+     * get backpack matrix
+     * @return
+     */
 	public ImageButton[] getBackpackMatrix() {
 		return backpackMatrix;
 	}
-
+	/**
+	 * get equipment matrix
+	 * @return
+	 */
 	public ImageButton[] getEquipmentMatrix() {
 		return equipmentMatrix;
 	}
-
+	/**
+	 * get backpack table
+	 * @return
+	 */
 	public Table getBackpackTable() {
 		return backpackTable;
 	}
-
+	/**
+	 * get equipment table
+	 * @return
+	 */
 	public Table getEquipmentTable() {
 		return equipmentTable;
 	}
-
+	/**
+	 * get backpack information table
+	 * @return
+	 */
 	public Label getBackpackItemInfoLabel() {
 		return backpackItemInfoLabel;
 	}

@@ -24,7 +24,11 @@ import com.chaowang.ddgame.MenuController.EquipmentController;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 
-
+/**
+ * View for Exchange Items
+ * @author chao wang
+ * @version 2.0
+ */
 public class GameItemExchangeScreen implements Screen{
 
     private Game game;

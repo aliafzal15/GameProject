@@ -80,7 +80,13 @@ public class GameScreen implements Observer, Screen{
     private Iterator<Vector2> keySetIterator ;
     private boolean isHitObject;
     private static int count=0;
-
+    /**
+     * constructor
+     * @param game
+     * @param character
+     * @param map
+     * @param camp
+     */
     GameScreen(Game game, Character character,Map map, Campaign camp) {
         this(game,new Player(new Vector2(1,1), character),map,camp);
 
@@ -92,7 +98,13 @@ public class GameScreen implements Observer, Screen{
                     mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
         }
     }
-
+    /**
+     * constructor
+     * @param game
+     * @param player
+     * @param map
+     * @param camp
+     */
     GameScreen(Game game, Player player,Map map, Campaign camp){
         this.game = game;
         this.player = player;
@@ -124,15 +136,23 @@ public class GameScreen implements Observer, Screen{
         }
 
     }
-
+    /**
+     * get map
+     * @return
+     */
     public TiledMap getMap() {
         return map;
     }
-
+    /**
+     * set map
+     * @param map
+     */
     public void setMap(TiledMap map) {
         this.map = map;
     }
-
+    /**
+     * show map on screen
+     */
     @Override
     public void show() {
 
@@ -144,7 +164,9 @@ public class GameScreen implements Observer, Screen{
 //        stage.draw();
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
     }
-
+    /**
+     * set background
+     */
     @Override
     public void render(float delta)  {
         isHitObject = false;
@@ -292,7 +314,9 @@ public class GameScreen implements Observer, Screen{
         screenController.onClickListen();
 
     }
-
+    /**
+     * update the size of map
+     */
     @Override
     public void resize(int width, int height) {
         uiStage.getViewport().update(width, height, true);
@@ -318,7 +342,9 @@ public class GameScreen implements Observer, Screen{
         uiStage.dispose();
     }
 
-
+    /**
+     * initial map view
+     */
     private void initUI(){
         uiStage = new Stage(new ScreenViewport());
         uiStage.getViewport().update(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
@@ -348,7 +374,10 @@ public class GameScreen implements Observer, Screen{
         root.add(dialogTable).colspan(2).align(Align.center).top().maxHeight(360);
         root.add(playerEditTable).right().bottom().width(60).height(80);
     }
-
+    /**
+     * construct dialog table
+     * @return
+     */
     private Table constructDialogTable() {
         messageDialog = new DialogueBox(MainMenuScreen.skin);
         messageDialog.setVisible(false);
@@ -363,7 +392,10 @@ public class GameScreen implements Observer, Screen{
         dialogTable.add(optionBox).width(Gdx.graphics.getWidth() / 5);
         return dialogTable;
     }
-
+    /**
+     * construct item table
+     * @return
+     */
     private Table constructItemTable(){
         equipmentMatrix = new Image[PublicParameter.ITEM_TYPE_COUNT];
         backpackMatrix = new Image[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
@@ -391,7 +423,10 @@ public class GameScreen implements Observer, Screen{
         itemTable.add(itemInfoLabel).colspan(7);
         return itemTable;
     }
-
+    /**
+     * construct ability table
+     * @return
+     */
     private Table constructAbilityTable() {
         abilityLabel = new Label("",MainMenuScreen.skin);
         abilityLabel.setVisible(false);
@@ -401,7 +436,9 @@ public class GameScreen implements Observer, Screen{
         abilityTable.add(abilityLabel).expand();
         return abilityTable;
     }
-
+    /**
+     * update the whole view
+     */
     @Override
 	public void update(Observable arg0, Object arg1) {
         if((Integer)arg1 == 0){

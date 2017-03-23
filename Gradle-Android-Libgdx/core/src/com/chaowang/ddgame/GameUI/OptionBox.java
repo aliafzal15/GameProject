@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chao on 18/03/2017.
+ * View for option box
+ * @author chao wang
+ * @version 2.0
  */
 
 public class OptionBox extends Table {
@@ -24,14 +26,20 @@ public class OptionBox extends Table {
     private List<Image> arrows = new ArrayList<Image>();
     private List<Label> options = new ArrayList<Label>();
     private Table uiContainer;
-
+    /**
+     * construct
+     * @param skin
+     */
     public OptionBox(Skin skin){
         super(skin);
         this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameUI/dialogBox.png")))));
         uiContainer = new Table();
         this.add(uiContainer).expand().align(Align.left).pad(12f);
     }
-
+    /**
+     * add selection option
+     * @param option
+     */
     public void addOption(String option){
         Label optionLabel = new Label(option, this.getSkin());
         options.add(optionLabel);
@@ -50,7 +58,9 @@ public class OptionBox extends Table {
 
         calcArrowVisibility();
     }
-
+    /**
+     * get arrow visibility
+     */
     private void calcArrowVisibility(){
         for (int i= 0 ; i < arrows.size(); i++){
             if (i == selectorIndex){
@@ -60,7 +70,9 @@ public class OptionBox extends Table {
             }
         }
     }
-
+    /**
+     * up direction move
+     */
     public void moveUp() {
         selectorIndex--;
         if (selectorIndex < 0) {
@@ -68,7 +80,9 @@ public class OptionBox extends Table {
         }
         calcArrowVisibility();
     }
-
+    /**
+     * down direction move
+     */
     public void moveDown(){
         selectorIndex ++;
         if(selectorIndex >= options.size() ){
@@ -77,14 +91,19 @@ public class OptionBox extends Table {
         calcArrowVisibility();
 
     }
-
+    /**
+     * clear up choices
+     */
     public void clearChoices(){
         uiContainer.clearChildren();
         arrows.clear();
         options.clear();
         selectorIndex = 0;
     }
-
+    /**
+     * get index
+     * @return
+     */
     public int getIndex() {
         return selectorIndex;
     }
