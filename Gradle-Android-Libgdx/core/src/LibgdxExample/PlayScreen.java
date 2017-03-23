@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package LibgdxExample;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,10 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.chaowang.ddgame.MapModel.Tree;
-
-import LibgdxExample.EnemyEg;
-import LibgdxExample.PlayerEg;
-import LibgdxExample.Tile;
 
 /**
  * view for playing game(not for current build)

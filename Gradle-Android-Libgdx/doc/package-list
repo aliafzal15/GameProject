@@ -3,11 +3,15 @@ com.chaowang.ddgame
 com.chaowang.ddgame.CampaignModel
 com.chaowang.ddgame.CharacterModel
 com.chaowang.ddgame.ClassesModel
-com.chaowang.ddgame.Controller
+com.chaowang.ddgame.DialogueSystem
+com.chaowang.ddgame.GameController
+com.chaowang.ddgame.GameUI
 com.chaowang.ddgame.ItemModel
 com.chaowang.ddgame.MapModel
+com.chaowang.ddgame.MenuController
+com.chaowang.ddgame.PlayModel
 com.chaowang.ddgame.RacesModel
 com.chaowang.ddgame.View
 com.chaowang.ddgame.util
 gdxtesting
-gdxtesting.Deliverable1
+gdxtesting.Deliverable2

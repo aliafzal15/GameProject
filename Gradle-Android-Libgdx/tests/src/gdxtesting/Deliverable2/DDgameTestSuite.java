@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({CampaignEditorTest.class,
         CharacterEditorTest.class,
-        GameTest.class,
+        GameScreenTest.class,
         ItemEditorTest.class,
         ItemExchangeTest.class,
         MapEditorTest.class

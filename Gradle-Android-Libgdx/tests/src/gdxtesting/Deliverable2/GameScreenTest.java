@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 @RunWith(GdxTestRunner.class)
-public class GameTest {
+public class GameScreenTest {
     private Map map;
     private Item item;
     private Character character;
