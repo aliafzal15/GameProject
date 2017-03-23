@@ -1,5 +1,7 @@
 package com.chaowang.ddgame.ClassesModel;
 
-public class Class {
-	public enum ClassType {FIGHTER}
+public interface  Class {
+	public enum ClassType {FIGHTER, BARBARIAN, MONK, PALADIN, RANGER, WARLOCK};
+	public ClassType classType();
+
 }

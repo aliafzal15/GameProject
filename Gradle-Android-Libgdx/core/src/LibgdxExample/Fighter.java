@@ -1,12 +1,13 @@
-package com.chaowang.ddgame.ClassesModel;
+package LibgdxExample;
 
 import com.chaowang.ddgame.CharacterModel.Abilities;
+import com.chaowang.ddgame.ClassesModel.DDgameClass;
 /**
  * model to fighter class 
  * @author chao wang
  * @version 2.0
  */
-public class Fighter extends Class {
+public class Fighter {
 	/**
 	 * enum type to set fighters' initial values
 	 */

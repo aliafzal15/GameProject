@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.chaowang.ddgame.ClassesModel.Fighter.FighterType;
+import LibgdxExample.Fighter;
 import com.chaowang.ddgame.PublicParameter;
-
+import LibgdxExample.Fighter.FighterType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
