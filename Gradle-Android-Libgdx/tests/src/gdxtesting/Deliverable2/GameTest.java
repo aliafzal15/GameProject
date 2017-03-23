@@ -1,13 +1,10 @@
-package gdxtesting.Deliverable1;
+package gdxtesting.Deliverable2;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.DDGame;
-import com.chaowang.ddgame.GameController.GameScreenController;
-import com.chaowang.ddgame.GameController.ItemExchangeController;
 import com.chaowang.ddgame.GameController.PlayerController;
 import com.chaowang.ddgame.ItemModel.EnchantedAbility;
 import com.chaowang.ddgame.ItemModel.Item;
@@ -17,7 +14,6 @@ import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.MenuController.MapController;
 import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.GameItemExchangeScreen;
 import com.chaowang.ddgame.View.GameScreen;
 
 import org.junit.Before;
@@ -29,7 +25,6 @@ import java.util.Iterator;
 import gdxtesting.GdxTestRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -153,23 +148,6 @@ public class GameTest {
                 && player.getCharacter().getEquipment().get(Item.ItemType.ARMOR).getLevel() == 2);
     }
 
-    /**
-     * Test if player can echange item with NPC, since it is random exchange
-     * we exchange player & NPC sharing the same character, and same backpack item
-     * assert criteria, is either exchange a different item, or exchange the same item,
-     * NPC's same item remain at the same position
-     */
-    @Test
-    public void testExchangeItem(){
-        Game game = new DDGame();
-        Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
-        GameItemExchangeScreen screen = new GameItemExchangeScreen(game, player, map, campaign, enemyPosition, false);
-        ItemExchangeController controller = new ItemExchangeController(screen, player, map.getEnemyLocationList().get(enemyPosition));
-        Item.ItemType type = player.getCharacter().getBackpack().get( player.getCharacter().getBackpack().size()-1).getItemType();
-        controller.exchangeItem(player.getCharacter().getBackpack().size()-1);
-        assertTrue(player.getCharacter().getBackpack().get(player.getCharacter().getBackpack().size()-1).getItemType() != type
-                    || map.getEnemyLocationList().get(enemyPosition).getBackpack().get(map.getEnemyLocationList().get(enemyPosition).getBackpack().size() -1 ).getItemType() == type);
-    }
 
     /**
      * Test if player can loot a chest, and put chest item is in backpack

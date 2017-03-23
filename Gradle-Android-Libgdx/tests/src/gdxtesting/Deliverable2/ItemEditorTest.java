@@ -1,5 +1,5 @@
 
-package gdxtesting.Deliverable1;
+package gdxtesting.Deliverable2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import com.badlogic.gdx.Gdx;
+
 import gdxtesting.GdxTestRunner;
 
 import com.chaowang.ddgame.ItemModel.EnchantedAbility;
