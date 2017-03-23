@@ -3,7 +3,7 @@ package com.chaowang.ddgame.ClassesModel;
 import com.chaowang.ddgame.CharacterModel.Abilities;
 import com.chaowang.ddgame.ClassesModel.Class.ClassType;
 /**
- * model to fighter class 
+ * interface to fighter class
  * @author chao wang
  * @version 2.0
  */
