@@ -55,6 +55,7 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 	private ArrayList<MapModel> runMaps;
 	private int btnX;
 	private int btnY;
+	public boolean patternController;
 	
 	/**
 	 * This is the default constructor
@@ -110,9 +111,7 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 		playWindow.runGameButtons[rowPlyr][colPlyr].setFocusable(true);
 		playWindow.runGameButtons[rowPlyr][colPlyr].setFocusTraversalKeysEnabled(false);
 		
-		new AbilityViewDriver(gameChar);
-		new AbilityViewDriver(tempStartController.hostileCharacters.get(0));
-		new AbilityViewDriver(tempStartController.friendlyCharacters.get(0));
+	
 				
 		for(int i=0;i<playWindow.runGameButtons.length;i++){
 			for(int j=0;j<playWindow.runGameButtons.length;j++){				
@@ -125,7 +124,14 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 			}while (numOfHostile > 0 && isExitDone==false);*/		
 		
 		System.out.println("in constructor Run Time");
-					
+		
+		patternController=false;
+		new AbilityViewDriver(gameChar,this);
+		new AbilityViewDriver(tempStartController.hostileCharacters.get(0),this);
+		new AbilityViewDriver(tempStartController.friendlyCharacters.get(0),this);
+		new PlayerInventoryViewDriver(gameChar,this);	
+		new PlayerInventoryViewDriver(tempStartController.hostileCharacters.get(0),this);
+		new PlayerInventoryViewDriver(tempStartController.friendlyCharacters.get(0),this);			
 	}
 
 
@@ -218,6 +224,8 @@ public class RunTimeGameController implements ActionListener, KeyListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		this.patternController=false;
 		
 		JButton btn = ((JButton) e.getSource());		
 		String[] nameArry = btn.getName().split(":");

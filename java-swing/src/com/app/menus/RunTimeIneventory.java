@@ -45,7 +45,7 @@ public class RunTimeIneventory {
 	public RunTimeIneventory()
 	{	
 		
-		initialize();
+		//initialize();
 	}
 
 	/**

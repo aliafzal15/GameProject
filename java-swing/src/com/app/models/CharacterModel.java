@@ -665,6 +665,12 @@ public String getFightingType(){
 	return this.fightingType;
 }
 
+
+/**
+ * This Method triggers the observer pattern for character view
+ * 
+ * 	
+ */
 public void getAbilityScores(){
 	
 	this.abilityScores=new ArrayList();
@@ -679,6 +685,12 @@ public void getAbilityScores(){
 			
 }
 
+
+/**
+ * This Method triggers the observer pattern for inventory view
+ * 
+ * 	
+ */
 public void getInventory(){
 		
 	this.setChanged();	

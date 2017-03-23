@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.app.controller.RunTimeGameController;
 import com.app.controller.RunTimeInventroyController;
 import com.app.models.CharacterModel;
 
@@ -23,9 +24,12 @@ public class RunTimAbilityScores {
 
 	private CharacterModel gameChar;
 	
-	public RunTimAbilityScores(CharacterModel gamePlyr) {
+	private RunTimeGameController runtimeCntrlr;
+	
+	public RunTimAbilityScores(CharacterModel gamePlyr, RunTimeGameController tempRunController) {
 		
 		this.gameChar=gamePlyr;
+		this.runtimeCntrlr=tempRunController;
 	}
 
 	/**
@@ -79,10 +83,12 @@ public class RunTimAbilityScores {
 			public void actionPerformed(ActionEvent e) {
 				frameAbilityScores.dispose();
 				
-				RunTimeIneventory invenMenu=new RunTimeIneventory();
-				new RunTimeInventroyController(gameChar,invenMenu);
-				//new InventoryViewDriver(gameChar);
-				//gameChar.getInventory();
+				//RunTimeIneventory invenMenu=new RunTimeIneventory();
+				//new RunTimeInventroyController(gameChar,invenMenu);
+				//new PlayerInventoryView(gameChar);				//new InventoryViewDriver(gameChar);
+				runtimeCntrlr.patternController=true;
+				gameChar.getInventory();
+				runtimeCntrlr.patternController=false;
 				
 				
 			}

@@ -1,5 +1,6 @@
 package com.app.controller;
 
+
 import com.app.menus.RunTimeIneventory;
 import com.app.models.CharacterModel;
 import com.app.observer.CharacterView;
@@ -12,11 +13,11 @@ import com.app.observer.ItemInventoryView;
  * @author Ali Afzal
  *
  */
-public class AbilityViewDriver {
+public class PlayerInventoryViewDriver {
 	
-	public CharacterModel charViewDriver;
-	public CharacterView  viewCharacter;
+	public CharacterModel charInvenViewDriver;
 	public ItemInventoryView viewInventory;
+	public RunTimeGameController runTimeCont;
 	
 	/**
 	 * This is the parameterized constructor
@@ -25,13 +26,13 @@ public class AbilityViewDriver {
 	 * 			Type CharacterModel
 	 *
 	 */
-	public AbilityViewDriver(CharacterModel newChar, RunTimeGameController runTimeGameContrlr){
+	public PlayerInventoryViewDriver(CharacterModel newChar,RunTimeGameController runTimeCtrl){
 		
+		runTimeCont=runTimeCtrl;
+		charInvenViewDriver=newChar;
+		viewInventory=new ItemInventoryView(newChar,runTimeCont);	
+		charInvenViewDriver.addObserver(viewInventory);
 		
-		charViewDriver=newChar;
-		viewCharacter=new CharacterView(newChar,runTimeGameContrlr);
-		charViewDriver.addObserver(viewCharacter);
-
 	}
 	
 
