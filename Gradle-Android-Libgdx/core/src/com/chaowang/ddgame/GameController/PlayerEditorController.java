@@ -227,11 +227,14 @@ public class PlayerEditorController {
 			}
 			if (sum <= player.getCharacter().getPromotePointofLevel()) {
 				player.getCharacter().setPromotionPoint(player.getCharacter().getPromotePointofLevel() - sum);
+                int constitutionBonus = player.getCharacter().getConstitutionBonus();
 				for (int i = 0; i < view.bonusField.length; i++) {
 					player.getCharacter().getAbilityBonusArr()[i] = Integer.valueOf(view.bonusField[i].getText());
 					view.bonusField[i].setDisabled(true);
 				}
-				player.getCharacter().setHitPoints(CharacterScoreModifier.hitPointCalculator(player.getCharacter().getConstitution() + player.getCharacter().getConstitutionBonus(), player.getCharacter().getLevel()));
+				if(constitutionBonus != player.getCharacter().getConstitutionBonus()){
+                    player.getCharacter().setHitPoints(CharacterScoreModifier.hitPointCalculator(player.getCharacter().getConstitution() + player.getCharacter().getConstitutionBonus(), player.getCharacter().getLevel()));
+                }
 				player.getCharacter().setArmorClass(CharacterScoreModifier.armorClassCalculator(player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus()));
 				player.getCharacter().setAttackBonus(CharacterScoreModifier.attachBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
 						player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus(), player.getCharacter().getLevel()));

@@ -293,11 +293,15 @@ public class Item extends Rectangle implements Json.Serializable {
      * @param batch
      */
     public void draw(SpriteBatch batch, Vector2 cur){
+        updateBound(cur);
+        batch.draw(textureOnMap, this.x , this.y, this.width, this.height );
+    }
+
+    public void updateBound(Vector2 cur) {
         this.x = cur.x;
         this.y = cur.y;
         this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
         this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
-        batch.draw(textureOnMap, this.x , this.y, this.width, this.height );
     }
 
 }

@@ -76,12 +76,11 @@ public class GameScreen implements Observer, Screen{
     private Player player;
     private Map mapModel;
     private Campaign campaign;
-    private Set<Vector2> vectorKeySet ;
     private Iterator<Vector2> keySetIterator ;
     private boolean isHitObject;
     private static int count=0;
 
-    GameScreen(Game game, Character character,Map map, Campaign camp) {
+    public GameScreen(Game game, Character character,Map map, Campaign camp) {
         this(game,new Player(new Vector2(1,1), character),map,camp);
 
         if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
@@ -93,7 +92,23 @@ public class GameScreen implements Observer, Screen{
         }
     }
 
-    GameScreen(Game game, Player player,Map map, Campaign camp){
+    public GameScreen(Game game, Player player,Map map){
+        this.game = game;
+        this.player = player;
+        this.mapModel = map;
+        this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
+
+        playerController = new PlayerController(player, this);
+        dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
+        screenController = new GameScreenController(this,this.mapModel, this.player);
+
+        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+            mapModel.adjustLevel(player.getCharacter().getLevel());
+        }
+
+    }
+
+    public GameScreen(Game game, Player player,Map map, Campaign camp){
         this.game = game;
         this.player = player;
         this.mapModel = map;
@@ -175,11 +190,11 @@ public class GameScreen implements Observer, Screen{
         }
 
         // draw items on screen
-        vectorKeySet = mapModel.getItemLocationList().keySet();
-        keySetIterator = vectorKeySet.iterator();
+        keySetIterator = mapModel.getItemLocationList().keySet().iterator();
+        Vector2 cur;
 
         while(keySetIterator.hasNext()){
-            Vector2 cur = keySetIterator.next();
+            cur = keySetIterator.next();
             mapModel.getItemLocationList().get(cur).draw(batch, cur);
             if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
                 playerController.pickupItem(mapModel.getItemLocationList().get(cur));
@@ -189,11 +204,10 @@ public class GameScreen implements Observer, Screen{
         }
 
         // draw NPC on screen
-        vectorKeySet = mapModel.getFriendLocationList().keySet();
-        keySetIterator = vectorKeySet.iterator();
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
 
         while(keySetIterator.hasNext()){
-            Vector2 cur = keySetIterator.next();
+             cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
             if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(5);
@@ -223,11 +237,10 @@ public class GameScreen implements Observer, Screen{
         }
 
         // draw enemy on screen
-        vectorKeySet = mapModel.getEnemyLocationList().keySet();
-        keySetIterator = vectorKeySet.iterator();
+        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
 
         while(keySetIterator.hasNext()){
-            Vector2 cur = keySetIterator.next();
+            cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
             if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(5);
@@ -322,7 +335,7 @@ public class GameScreen implements Observer, Screen{
     private void initUI(){
         uiStage = new Stage(new ScreenViewport());
         uiStage.getViewport().update(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
-        uiStage.setDebugAll(true);
+        //uiStage.setDebugAll(true);
 
         root = new Table();
         //root.setSize(Gdx.graphics.getWidth() , Gdx.graphics.getHeight() );
@@ -471,5 +484,8 @@ public class GameScreen implements Observer, Screen{
 	public Label getItemInfoLabel() {
 		return itemInfoLabel;
 	}
-    
+
+    public Map getMapModel() {
+        return mapModel;
+    }
 }

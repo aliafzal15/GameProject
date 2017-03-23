@@ -128,7 +128,7 @@ public class CharacterController {
      */
 	public void controlLevelRightButton() {
 		character.resetPromotePoint();
-		character.levelUp();
+		character.promoteUp();
 		view.levelLabel.setText(Integer.toString(character.getLevel()));
 		view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 		view.confirmButton.setTouchable(Touchable.enabled);

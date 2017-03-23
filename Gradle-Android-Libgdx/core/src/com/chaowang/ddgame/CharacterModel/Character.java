@@ -264,17 +264,6 @@ public class Character extends Observable implements Json.Serializable{
 		}
 	}
 	/**
-	 * increase the level of the character
-	 */
-	public void levelUp(){
-		if (level < PublicParameter.CHARACTER_MAX_LEVEL ){
-			level ++;
-			if(promotionPoint < 9){
-				promotionPoint++;
-			}
-		}
-	}
-	/**
 	 * set different kind of extra bonus
 	 * @param bonus
 	 */
@@ -550,6 +539,10 @@ public class Character extends Observable implements Json.Serializable{
 	public void setLevel(int level) {
 		this.level = level;
 		resetPromotePoint();
+		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+		setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 		HashMap.Entry<Item.ItemType, Item> entry;
 		for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext(); ) {
 			entry = it.next();
@@ -563,19 +556,20 @@ public class Character extends Observable implements Json.Serializable{
 					setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
 					setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 				} else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE){
-					
+					this.setArmorClass(getArmorClass() - difference);
+				}else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE+1){
+					this.setAttackBonus(getAttackBonus() - difference);
+				}else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE+2){
+					this.setDamageBonus(getDamageBonus() - difference);
 				}
-			} else{
-				setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
-				setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
-				setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
-				setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 			}
 		}
 		for(Item item : backpack) {
-			item.setLevel((int) Math.ceil( level / 4.0 ));
+			int difference  = item.getLevel() - (int) Math.ceil( level / 4.0 );
+			if(difference != 0) {
+				item.setLevel((int) Math.ceil(level / 4.0));
+			}
 		}
-
 	}
 
 
@@ -595,20 +589,6 @@ public class Character extends Observable implements Json.Serializable{
 		return level;
 	}
 
-	/**
-	 * set hitPoints
-	 * @param hitPoints the hit points 
-	 */
-	public void setHP(int hitPoints) {
-		this.hitPoints = hitPoints;
-	}
-	/**
-	 * get hitPoints
-	 * @return the hit points 
-	 */
-	public int getHP() {
-		return hitPoints ;
-	}
 	/**
 	 * switch to string type
 	 */
@@ -653,7 +633,7 @@ public class Character extends Observable implements Json.Serializable{
      * @return true or false
      */
     public boolean isDead() {
-		return getHP() <= 0;
+		return getHitPoints() <= 0;
 	}
     /**
      * get Strength

@@ -40,7 +40,7 @@ public class MapEditorTest {
      * initilize map, its character, items, controller
      */
     @Before public void createMapSet(){
-        map = new Map(1,3,"name",new EntryDoor(new Vector2(0,0)), new ExitDoor(new Vector2(2,2)));
+        map = new Map(1,4,"name",new EntryDoor(new Vector2(0,0)), new ExitDoor(new Vector2(2,2)));
 		item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS);
         character = new Character();
         mapMatrix = new int[map.getSize()][map.getSize()];
@@ -54,7 +54,7 @@ public class MapEditorTest {
      */
     @Test
     public void testMapConstructor() {
-        assertEquals(map.getSize(), 3);
+        assertEquals(map.getSize(), 4);
     }
 
     /**
@@ -83,6 +83,20 @@ public class MapEditorTest {
     public void testMapValidatorPath(){
         MazeSolver maze = new MazeSolver(map.getLocationMatrix());
         assertFalse("Cannot find way to exit",maze.solveMaze());
+    }
+    /**
+     * validator 4, exit door cannot put at bottom matrix
+     */
+    @Test
+    public void testMapValidatorExitDoor(){
+        map.setExitDoor(new ExitDoor(new Vector2(3,3)) );
+        buildLocationMatrix();
+        map.setLocationMatrix(mapMatrix);
+        int[] doorArr = new int[2];
+        doorArr[0] = map.validateEntryDoor();
+        doorArr[1]=map.validateExitDoor();
+        int[] expectedResult = {1,-1};
+        assertEquals(Arrays.toString(doorArr) , Arrays.toString(expectedResult) );
     }
     /**
      * test if we can add character to map

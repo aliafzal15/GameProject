@@ -35,6 +35,9 @@ public class PlayerController extends InputAdapter{
         mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
         stateTime = 0f;
     }
+    public PlayerController(Player p){
+        this.player = p;
+    }
 
     /**
      * use keyboard to control the players' movement

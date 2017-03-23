@@ -112,14 +112,7 @@ public class ItemExchangeController {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (character.getBackpack().size() != 0 && !character.isDead()) {
-                        character.getBackpack().add(player.getCharacter().getBackpack().get(getButton()));
-                        int randomNum =  (int)(Math.random() * ( character.getBackpack().size() -1 ));
-                        System.out.println("random number is "+ randomNum);
-                        Item tmp = character.getBackpack().get(randomNum);
-                        player.getCharacter().getBackpack().add(tmp);
-                        // remove item for both
-                        character.getBackpack().remove(randomNum);
-                        player.getCharacter().getBackpack().remove(getButton());
+                        exchangeItem(getButton());
                         view.playerBackpackTable.clearChildren();
                         buildPlayerBackpackMatrix();
                         addPlayerBackpackMatrixListener();
@@ -146,6 +139,17 @@ public class ItemExchangeController {
                 }
             });
         }
+    }
+
+    public void exchangeItem(int index ) {
+        character.getBackpack().add(player.getCharacter().getBackpack().get(index));
+        int randomNum =  (int)(Math.random() * ( character.getBackpack().size() -1 ));
+        System.out.println("random number is "+ randomNum);
+        Item tmp = character.getBackpack().get(randomNum);
+        player.getCharacter().getBackpack().add(tmp);
+        // remove item for both
+        character.getBackpack().remove(randomNum);
+        player.getCharacter().getBackpack().remove(index);
     }
 
     /**
