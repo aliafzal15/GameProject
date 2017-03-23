@@ -455,7 +455,7 @@ public class GameScreen implements Observer, Screen{
         return abilityTable;
     }
     /**
-     * update the whole view
+     * update for observer
      */
     @Override
 	public void update(Observable arg0, Object arg1) {
@@ -507,26 +507,46 @@ public class GameScreen implements Observer, Screen{
         }
     }
 
+    /**
+     * getter for Camera
+     * @return
+     */
     public OrthographicCamera getCam() {
         return cam;
     }
 
+    /**
+     * getter for ability label
+     * @return
+     */
     public Label getAbilityLabel() {
         return abilityLabel;
     }
-
+    /**
+     * getter for Backpack Image[]
+     * @return
+     */
     public Image[] getBackpackMatrix() {
         return backpackMatrix;
     }
-
+    /**
+     * getter for equipment Image[]
+     * @return
+     */
     public Image[] getEquipmentMatrix() {
         return equipmentMatrix;
     }
-
+    /**
+     * getter for item Information Label
+     * @return
+     */
 	public Label getItemInfoLabel() {
 		return itemInfoLabel;
 	}
-
+    /**
+     * getter for Game map
+     * @return
+     */
     public Map getMapModel() {
         return mapModel;
     }

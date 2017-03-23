@@ -270,14 +270,14 @@ public class GamePlayerEditorScreen implements Screen{
     }
     /**
      * get backpack matrix
-     * @return
+     * @return ImageButton[]
      */
 	public ImageButton[] getBackpackMatrix() {
 		return backpackMatrix;
 	}
 	/**
 	 * get equipment matrix
-	 * @return
+	 * @return ImageButton[] 
 	 */
 	public ImageButton[] getEquipmentMatrix() {
 		return equipmentMatrix;
@@ -291,14 +291,14 @@ public class GamePlayerEditorScreen implements Screen{
 	}
 	/**
 	 * get equipment table
-	 * @return
+	 * @return Table
 	 */
 	public Table getEquipmentTable() {
 		return equipmentTable;
 	}
 	/**
 	 * get backpack information table
-	 * @return
+	 * @return Label
 	 */
 	public Label getBackpackItemInfoLabel() {
 		return backpackItemInfoLabel;

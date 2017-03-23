@@ -123,7 +123,7 @@ public class GameScreenController {
         }
     }
     /**
-     * implement characters
+     * add listener for preview item images
      */
 	public void enableItemPreviewTouch() {
 		for (int i = 0; i < view.getBackpackMatrix().length ; i++) {

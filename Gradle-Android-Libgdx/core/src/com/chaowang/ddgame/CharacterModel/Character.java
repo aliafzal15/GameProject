@@ -88,6 +88,7 @@ public class Character extends Observable implements Json.Serializable{
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
+        mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
 		this.isDead = false;
     }
 	/**
@@ -518,7 +519,7 @@ public class Character extends Observable implements Json.Serializable{
 	}
 
 	/**
-	 * increase the level of the character
+	 * increase the level of the character only for player
 	 */
 	public void promoteUp(){
 		if (level < PublicParameter.CHARACTER_MAX_LEVEL ){
@@ -533,7 +534,7 @@ public class Character extends Observable implements Json.Serializable{
 		}
 	}
 	/**
-	 * set level
+	 * set level for enemy and NPC
 	 * @param level the level for the character
 	 */
 	public void setLevel(int level) {
@@ -544,6 +545,7 @@ public class Character extends Observable implements Json.Serializable{
 		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 		HashMap.Entry<Item.ItemType, Item> entry;
+		// adjust NPC's equipment items level
 		for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext(); ) {
 			entry = it.next();
 			int difference  = entry.getValue().getLevel() - (int) Math.ceil( level / 4.0 );
@@ -564,6 +566,7 @@ public class Character extends Observable implements Json.Serializable{
 				}
 			}
 		}
+		// adjust NPC's backpack items level
 		for(Item item : backpack) {
 			int difference  = item.getLevel() - (int) Math.ceil( level / 4.0 );
 			if(difference != 0) {
@@ -573,7 +576,11 @@ public class Character extends Observable implements Json.Serializable{
 	}
 
 
-
+	/**
+	 * add item to backpack
+	 * @param item
+	 * @return boolean
+	 */
 	public boolean addToBackpack(Item item){
 		if(backPackisFull()){
 			backpack.remove(0);
@@ -752,6 +759,10 @@ public class Character extends Observable implements Json.Serializable{
         return attributeArr;
     }
 
+	/**
+	 * check if backpack max size reached
+	 * @return
+	 */
     public boolean backPackisFull(){
 		return backpack.size() >= 10;
 	}
@@ -839,13 +850,19 @@ public class Character extends Observable implements Json.Serializable{
 
 	}
 	
+	/**
+	 * draw texture on the game screen for NPC, and player
+	 * @param batch
+	 * @param cur  NPC, or player location
+	 * @param isFriendly
+	 */
 	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
 		this.bound.x = cur.x;
 		this.bound.y = cur.y;
 		if(isFriendly == true){
 			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
 			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
-			mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
+		   // is friendly NPC use unified image
 	        batch.draw(mapTexture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
 		} else{
 			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
@@ -854,18 +871,30 @@ public class Character extends Observable implements Json.Serializable{
 		}
 	}
 	
+	/**
+	 * get character rectangle bound
+	 * @return
+	 */
 	public Rectangle getBound() {
 		return bound;
 	}
-	
+	/**
+	 * setter for character bound
+	 * @param bound
+	 */
 	public void setBound(Rectangle bound) {
 		this.bound = bound;
 	}
+	/**
+	 * observerable method to preview ability points
+	 */
 	public void previewAllAttribute(){
 		setChanged();
 		notifyObservers(0);
 	}
-
+	/**
+	 * observerable method to preview all items, and change equipment
+	 */
 	public void previewLoadEquipment(int index){
 		if(index >= 0 && index < backpack.size() ){
 			Item itemtmp = backpack.remove(index);
@@ -874,7 +903,9 @@ public class Character extends Observable implements Json.Serializable{
 		setChanged();
 		notifyObservers(1);
 	}
-
+	/**
+	 * observerable method to preview all items, and change equipment
+	 */
 	public void previewUnloadEquipment(int index){
 		if(index >= 0 ){
 			getBackpack().add(removeEquipment(Item.ItemType.getItemType(index)));
