@@ -224,7 +224,7 @@ public class CharacterController {
 	private void sortAbilityArrToDisplay(Integer[] arrTmp) {
 		Arrays.sort(arrTmp, Collections.reverseOrder());
 		for ( int i = 0 ; i < arrTmp.length; i++ ){
-            character.getAbilities().getAbilityArr()[character.getFighterType().getAbilityImportance()[i]] = arrTmp[i];
+            character.getAbilities().getAbilityArr()[character.getFighter().getAbilityImportance()[i]] = arrTmp[i];
         }
 		view.strengthLabel.setText(Integer.toString(character.getStrength()));
 		view.dexterityLabel.setText(Integer.toString(character.getDexterity()));
