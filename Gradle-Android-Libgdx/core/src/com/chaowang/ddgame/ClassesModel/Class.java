@@ -1,9 +1,10 @@
 package com.chaowang.ddgame.ClassesModel;
 
-public class Class {
-	public enum ClassType {FIGHTER}
+/**
+ * Class for all different type in d &d
+ */
+public interface  Class {
+	public enum ClassType {FIGHTER, BARBARIAN, MONK, PALADIN, RANGER, WARLOCK};
+	public ClassType classType();
 
-	public int getHPModifier() {
-		return 5;
-	}
 }

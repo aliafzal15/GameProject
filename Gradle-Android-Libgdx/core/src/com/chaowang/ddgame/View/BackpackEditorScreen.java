@@ -3,7 +3,6 @@ package com.chaowang.ddgame.View;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.Controller.BackpackController;
+import com.chaowang.ddgame.MenuController.BackpackController;
 /**
  * view for backpack editor 
  * @author chao wang
@@ -111,8 +110,8 @@ public class BackpackEditorScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        Gdx.gl.glClearColor(1, 1, 1, 1);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Gdx.input.setInputProcessor(stage);
         stage.act();
@@ -124,6 +123,7 @@ public class BackpackEditorScreen implements Screen {
         stage.getBatch().end();
 
         stage.draw();
+
 
         //stage.setDebugAll(true);
         batch.end();

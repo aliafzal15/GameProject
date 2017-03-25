@@ -62,7 +62,7 @@ public class ItemInventory {
      * @throws IOException
      */
     public  void readFile() throws IOException {
-        File file = new File("itemInventory.json");
+        File file = new File("data" + File.separator + "itemInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
         Scanner scanner = new Scanner(file);
@@ -80,7 +80,7 @@ public class ItemInventory {
      * write files for itemInventory information
      */
     public void saveToFile(){
-        FileHandle file = Gdx.files.local("itemInventory.json");
+        FileHandle file = Gdx.files.local("data" + File.separator + "itemInventory.json");
         file.write(false);
         Json json = new Json();
         String context;

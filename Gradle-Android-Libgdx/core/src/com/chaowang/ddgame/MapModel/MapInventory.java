@@ -64,7 +64,7 @@ public class MapInventory {
      * @throws IOException
      */
     public  void readFile() throws IOException {
-        File file = new File("mapInventory.json");
+        File file = new File("data" + File.separator + "mapInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
         Scanner scanner = new Scanner(file);
@@ -84,7 +84,7 @@ public class MapInventory {
      */
     public void saveToFile(){
 
-        FileHandle file = Gdx.files.local("mapInventory.json");
+        FileHandle file = Gdx.files.local("data" + File.separator + "mapInventory.json");
         file.write(false);
         Json json = new Json();
         String context;

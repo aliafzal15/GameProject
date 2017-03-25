@@ -3,7 +3,6 @@ package com.chaowang.ddgame.View;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.Controller.EquipmentController;
+import com.chaowang.ddgame.MenuController.EquipmentController;
 import com.chaowang.ddgame.CharacterModel.Character;
 /**
  * view for equipment editor 
@@ -37,7 +36,7 @@ public class EquipmentEditorScreen implements Screen{
     public Table backpackTable, equipmentTable;
     private Character character;
     private EquipmentController controller;
-    public Label equipmentItemInfoLabel, backpackItemInfoLabel;
+    public Label equipmentItemInfoLabel, backpackItemInfoLabel, characterInfoLabel;
 
     /**
      * constructor
@@ -81,6 +80,10 @@ public class EquipmentEditorScreen implements Screen{
         equipmentItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 20), (Gdx.graphics.getHeight() / 8));
         stage.addActor(equipmentItemInfoLabel);
 
+        characterInfoLabel = new Label(character.displayAllAtributes(), MainMenuScreen.style);
+        characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 4), (Gdx.graphics.getHeight() / 3));
+        stage.addActor(characterInfoLabel);
+
         backpackTable = new Table();
         backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
         backpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
@@ -110,9 +113,9 @@ public class EquipmentEditorScreen implements Screen{
      */
     @Override
     public void render(float delta) {
-
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//
+//        Gdx.gl.glClearColor(1, 1, 1, 1);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Gdx.input.setInputProcessor(stage);
         stage.act();

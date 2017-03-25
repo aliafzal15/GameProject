@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.CharacterModel.Character;
@@ -132,6 +133,7 @@ public class Map implements Json.Serializable{
      * @param character
      */
     public void addFriendLocationList(int i, int j, Character character ){
+//    	character.setFriendly(true);
         friendLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
@@ -150,7 +152,7 @@ public class Map implements Json.Serializable{
      * @param character
      */
     public void addEnemyLocationList(int i, int j, Character character ){
-    	character.setFriendly(false);
+//    	character.setFriendly(false);
         enemyLocationList.put(new Vector2(j * PublicParameter.MAP_PIXEL_SIZE, i * PublicParameter.MAP_PIXEL_SIZE), character);
     }
     /**
@@ -316,7 +318,7 @@ public class Map implements Json.Serializable{
             }
         }
         if (count == 1){
-            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
+            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
         }
         return  count;
     }
@@ -335,7 +337,10 @@ public class Map implements Json.Serializable{
             }
         }
         if(count == 1){
-            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, y * PublicParameter.MAP_PIXEL_SIZE));
+            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
+        }
+        if( y == (size - 1)){
+            count = -1;
         }
         return count;
     }
@@ -343,10 +348,10 @@ public class Map implements Json.Serializable{
      * add wall
      */
     public void addWall(){
-        for (int i=0; i< locationMatrix.length ; i++){
+        for (int i =locationMatrix.length-1 ; i>=0 ; i--){
             for (int j = 0; j < locationMatrix[0].length; j++){
                 if(locationMatrix[i][j] == 1 ){
-                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, i* PublicParameter.MAP_PIXEL_SIZE)));
+                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, (size - 1 - i)* PublicParameter.MAP_PIXEL_SIZE)));
                 }
             }
         }
@@ -356,7 +361,7 @@ public class Map implements Json.Serializable{
      * @return distance
      */
     public Vector2 getDistanceOfEntryExit(){
-        return new Vector2( Math.abs(entryDoor.getPosition().x - exitDoor.getPosition().x), Math.abs(entryDoor.getPosition().y - exitDoor.getPosition().y));
+        return new Vector2( Math.abs(entryDoor.x - exitDoor.x), Math.abs(entryDoor.y - exitDoor.y));
     }
     /**
      * switch to string type
@@ -365,6 +370,41 @@ public class Map implements Json.Serializable{
 	public String toString() {
 		return name + " [" + size + " x " + size +"]";
 	}
+    /**
+     * @return  string detail information in the map
+     */
+    public String getMapInfo() {
+        return "Name: "+this.name + "| items : " + this.itemLocationList.size() + "| NPC : " + this.friendLocationList.size() +
+                "| enemies: "+this.enemyLocationList.size();
+    }
+
+    public void adjustLevel(int level){
+    	this.level = level;
+        Iterator<Vector2> keySetIterator = itemLocationList.keySet().iterator();
+        Vector2 cur;
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            itemLocationList.get(cur).setLevel((int) Math.ceil( level / 4.0 ));
+        }
+
+        keySetIterator = enemyLocationList.keySet().iterator();
+
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(enemyLocationList.get(cur).getLevel() != level){
+                enemyLocationList.get(cur).setLevel(level);
+            }
+        }
+
+        keySetIterator = friendLocationList.keySet().iterator();
+
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(friendLocationList.get(cur).getLevel() != level){
+                friendLocationList.get(cur).setLevel(level);
+            }
+        }
+    }
 	/**
 	 * write files for map information
 	 */
@@ -437,6 +477,39 @@ public class Map implements Json.Serializable{
             }
         }
 
+        pointer = jsonData.child.next.next.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Character friend;
+            JsonValue dataValue;
+            while(dataIterator.hasNext()){
+                dataValue= dataIterator.next();
+                context = dataValue.name();
+                location = new Vector2(Float.parseFloat(context.substring(context.indexOf("(")+1,dataValue.name.indexOf(",")))
+                        , Float.parseFloat(context.substring(context.indexOf(",")+1,dataValue.name.indexOf(")"))));
+                context = dataValue.toString();
+                context = context.substring(context.indexOf("{")-1);
+                friend = json.fromJson(Character.class, context);
+                friendLocationList.put(location,friend);
+            }
+        }
+        
+        pointer = jsonData.child.next.next.next.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Character enemy;
+            JsonValue dataValue;
+            while(dataIterator.hasNext()){
+                dataValue= dataIterator.next();
+                context = dataValue.name();
+                location = new Vector2(Float.parseFloat(context.substring(context.indexOf("(")+1,dataValue.name.indexOf(",")))
+                        , Float.parseFloat(context.substring(context.indexOf(",")+1,dataValue.name.indexOf(")"))));
+                context = dataValue.toString();
+                context = context.substring(context.indexOf("{")-1);
+                enemy = json.fromJson(Character.class, context);
+                enemyLocationList.put(location,enemy);
+            }
+        }
 
     }
 }

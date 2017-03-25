@@ -63,7 +63,7 @@ public class CampaignInventory {
 	 * @throws IOException
 	 */
     public  void readFile() throws IOException {
-        File file = new File("CampaignInventory.json");
+        File file = new File("data" + File.separator + "CampaignInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
         Scanner scanner = new Scanner(file);
@@ -83,7 +83,7 @@ public class CampaignInventory {
      */
     public void saveToFile(){
 
-        FileHandle file = Gdx.files.local("CampaignInventory.json");
+        FileHandle file = Gdx.files.local("data" + File.separator + "CampaignInventory.json");
         file.write(false);
         Json json = new Json();
         String context;

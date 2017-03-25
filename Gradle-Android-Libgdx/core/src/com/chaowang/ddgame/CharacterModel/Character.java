@@ -2,17 +2,24 @@ package com.chaowang.ddgame.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import LibgdxExample.Fighter;
 import com.chaowang.ddgame.PublicParameter;
-
+import LibgdxExample.Fighter.FighterType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Set;
 
-import com.chaowang.ddgame.ClassesModel.Class.ClassType;
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.RacesModel.Race.RaceType;
-import com.chaowang.ddgame.util.AbilityModifier;
+import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 /**
@@ -20,10 +27,10 @@ import com.badlogic.gdx.utils.JsonValue;
  * @author chao Wang
  * @version 1.0
  */
-public class Character implements Json.Serializable{
+public class Character extends Observable implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
-	private ClassType classType;
+	private FighterType fighterType;
 	private RaceType raceType;
 	private String name;
 	private int level;
@@ -36,7 +43,10 @@ public class Character implements Json.Serializable{
 	private int promotionPoint;
 	private int[] abilityBonusArr;
     private Texture texture;
-	boolean isFriendly = true;
+    private Texture mapTexture;
+	//boolean isFriendly = true;
+	boolean isDead;
+	Rectangle bound;
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
@@ -52,7 +62,7 @@ public class Character implements Json.Serializable{
 	 * @param name the name of the character
 	 */
 	public Character(String name) {
-		this(name, 1, RaceType.HUMAN);
+		this(name, 1, RaceType.HUMAN, FighterType.BULLY);
 	}
 	/**
 	 * 
@@ -61,9 +71,11 @@ public class Character implements Json.Serializable{
 	 * @param level the level of the character
 	 * @param raceType the raceType of the character
 	 */
-	public Character(String name, int level, RaceType raceType) {
+	public Character(String name, int level, RaceType raceType, FighterType fighterType) {
+//		this.bound = new Rectangle(1, 1, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3);
+		this.bound = new Rectangle();
 		this.setName(name);
-		this.classType = ClassType.FIGHTER;
+		this.fighterType = fighterType;
 		this.raceType  = raceType;
 		this.hitPoints = 0;
 		this.attackBonus = 0;
@@ -73,9 +85,11 @@ public class Character implements Json.Serializable{
 		this.abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		this.level = level;
 		this.promotionPoint = level - 1;
-		this.backpack = new ArrayList<Item>();
+		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
+        mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
+		this.isDead = false;
     }
 	/**
 	 * 
@@ -86,22 +100,24 @@ public class Character implements Json.Serializable{
 	 * @param abilityArr the abilityArr of the character
 	 * @param abilityBonus the abilityBonus of the character
 	 */
-    public Character(String name, int level,int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonus) {
-        this.setName(name);
-        this.classType = ClassType.FIGHTER;
+    public Character(String name, int level,int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonus) {
+		this.bound = new Rectangle();
+    	this.setName(name);
+		this.fighterType = fighterType;
         this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
-		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_COLUMN * PublicParameter.ITEM_BACKPACK_ROW);
+		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
-        updateTexture(raceType);
+		this.isDead = false;
+		updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
-        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+0]);
+        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE]);
         this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
         this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+2]);
-        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+3]);
+        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+3]);
 		abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		System.arraycopy(abilityBonus, 0, abilityBonusArr, 0, abilityBonus.length );
     }
@@ -116,8 +132,8 @@ public class Character implements Json.Serializable{
      * @param backpack the backpack of the character
      * @param equipment the equipment of the character
      */
-    public Character(String name, int level, int promotionPoint, RaceType raceType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType, Item> equipment) {
-        this(name,level,promotionPoint,raceType,abilityArr, abilityBonusArr);
+    public Character(String name, int level, int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonusArr, ArrayList<Item> backpack, HashMap<Item.ItemType, Item> equipment) {
+        this(name,level,promotionPoint,raceType, fighterType,abilityArr, abilityBonusArr);
         this.backpack = backpack;
 		this.equipment = equipment;
     }
@@ -128,7 +144,7 @@ public class Character implements Json.Serializable{
     private void updateTexture(RaceType raceType) {
         switch (raceType){
             case HUMAN:
-                texture = new Texture(Gdx.files.internal("races/human.jpg"));
+                texture = new Texture(Gdx.files.internal("races/human.png"));
                 break;
             case DWARF:
                 texture = new Texture(Gdx.files.internal("races/dwarf.png"));
@@ -150,20 +166,50 @@ public class Character implements Json.Serializable{
                 break;
         }
     }
-    /**
-     * decide the character is friendly or hostile 
-     * @return true or false
-     */
-	public boolean getFriendly() {
-		return isFriendly;
+//    /**
+//     * decide the character is friendly or hostile 
+//     * @return true or false
+//     */
+//	public boolean getFriendly() {
+//		return isFriendly;
+//	}
+//	/**
+//	 * set the character is friendly or hostile 
+//	 * @param friend friendly or hostile 
+//	 */
+//	public void setFriendly(boolean friend) {
+//		isFriendly = friend;
+//	}
+	public void underAttack(){
+		if(!isDead()){
+			this.hitPoints --;
+			System.out.println(this.getHitPoints() + "Hp -1 ");
+		}
+		if(isDead()){
+			makeDead();
+		}
 	}
-	/**
-	 * set the character is friendly or hostile 
-	 * @param friend friendly or hostile 
-	 */
-	public void setFriendly(boolean friend) {
-		isFriendly = friend;
+
+	public void makeDead() {
+		this.isDead = true;
+		this.texture = new Texture(Gdx.files.internal("races/dead.png"));
+		setAbilities(new int[]{0,0,0,0,0,0});
+		
+		for(Iterator<Map.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext();) {
+			Map.Entry<Item.ItemType, Item> entry = it.next();
+			if (backPackisFull()) {
+				backpack.remove(0);
+			}
+			backpack.add(entry.getValue());
+			it.remove();
+		}
+		
+		this.hitPoints = -1;
+		this.armorClass = 0;
+		this.attackBonus = 0 ;
+		this.damageBonus = 0;
 	}
+
 	/**
 	 * change the type of the race
 	 * @return if successfully changed
@@ -179,6 +225,19 @@ public class Character implements Json.Serializable{
         }
     }
 	/**
+	 * change the type of the fighter
+	 * @return if successfully changed
+	 */
+	public boolean nextFighterType(){
+		if(fighterType.getIndex() >= 2 ){
+			return false;
+		}
+		else{
+			this.fighterType = fighterType.getFighterType(this.fighterType.getIndex()+1);
+			return true;
+		}
+	}
+	/**
 	 * reset promote point for the character
 	 */
 	public void resetPromotePoint(){
@@ -186,6 +245,13 @@ public class Character implements Json.Serializable{
 		for (int i : abilityBonusArr){
 			i = 0;
 		}
+	}
+	
+	/**
+	 * reset promote point for the character
+	 */
+	public int getPromotePointofLevel(){
+		return level -1;
 	}
 	/**
 	 * lower the level of the character
@@ -195,17 +261,6 @@ public class Character implements Json.Serializable{
 			level --;
 			if(promotionPoint > 0){
 				promotionPoint --;
-			}
-		}
-	}
-	/**
-	 * increase the level of the character
-	 */
-	public void levelUp(){
-		if (level < 10 ){
-			level ++;
-			if(promotionPoint < 9){
-				promotionPoint++;
 			}
 		}
 	}
@@ -243,6 +298,19 @@ public class Character implements Json.Serializable{
             return true;
         }
     }
+	/**
+	 * change back to previous race
+	 * @return if successfully changed to previous race
+	 */
+	public boolean previousFighterType(){
+		if(fighterType.getIndex() <=0 ){
+			return false;
+		}
+		else{
+			this.fighterType = fighterType.getFighterType(this.getFighterType().getIndex() -1);
+			return true;
+		}
+	}
     /**
      * get promotion point 
      * @return promotion point 
@@ -296,7 +364,7 @@ public class Character implements Json.Serializable{
      * @param abilities a array as different abilities
      */
     public void setAbilities(int[] abilities) {
-        this.abilities.setAbilityArr(abilities);;
+        this.abilities.setAbilityArr(abilities);
     }
     /**
      * get image
@@ -345,14 +413,14 @@ public class Character implements Json.Serializable{
     	equipment.put(item.getItemType(), item);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
-    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
-    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
-    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] + item.getLevel());
-			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
-			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
-			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
         	this.setArmorClass(getArmorClass() + item.getLevel());
@@ -373,14 +441,14 @@ public class Character implements Json.Serializable{
     	Item item = equipment.remove(itemType);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
-    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
-    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
-    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] - item.getLevel());
-			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
-			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
-			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
         	this.setArmorClass(getArmorClass() - item.getLevel());
@@ -449,12 +517,76 @@ public class Character implements Json.Serializable{
 	public void setDamageBonus(int damageBonus) {
 		this.damageBonus = damageBonus;
 	}
+
 	/**
-	 * set level
+	 * increase the level of the character only for player
+	 */
+	public void promoteUp(){
+		if (level < PublicParameter.CHARACTER_MAX_LEVEL ){
+			level ++;
+			if(promotionPoint < 9){
+				promotionPoint++;
+			}
+			setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
+			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+		}
+	}
+	/**
+	 * set level for enemy and NPC
 	 * @param level the level for the character
 	 */
 	public void setLevel(int level) {
 		this.level = level;
+		resetPromotePoint();
+		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+		setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
+		HashMap.Entry<Item.ItemType, Item> entry;
+		// adjust NPC's equipment items level
+		for(Iterator<HashMap.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext(); ) {
+			entry = it.next();
+			int difference  = entry.getValue().getLevel() - (int) Math.ceil( level / 4.0 );
+			if(difference != 0){
+				entry.getValue().setLevel((int) Math.ceil( level / 4.0 ));
+				if(entry.getValue().getEnchantedAbility().getIndex() < Abilities.ABILITYSIZE){
+					abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
+					setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
+					setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
+					setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+					setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+				} else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE){
+					this.setArmorClass(getArmorClass() - difference);
+				}else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE+1){
+					this.setAttackBonus(getAttackBonus() - difference);
+				}else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE+2){
+					this.setDamageBonus(getDamageBonus() - difference);
+				}
+			}
+		}
+		// adjust NPC's backpack items level
+		for(Item item : backpack) {
+			int difference  = item.getLevel() - (int) Math.ceil( level / 4.0 );
+			if(difference != 0) {
+				item.setLevel((int) Math.ceil(level / 4.0));
+			}
+		}
+	}
+
+
+	/**
+	 * add item to backpack
+	 * @param item
+	 * @return boolean
+	 */
+	public boolean addToBackpack(Item item){
+		if(backPackisFull()){
+			backpack.remove(0);
+		}
+		backpack.add(item);
+		return true;
 	}
 	/**
 	 * get level
@@ -465,20 +597,6 @@ public class Character implements Json.Serializable{
 	}
 
 	/**
-	 * set hitPoints
-	 * @param hitPoints the hit points 
-	 */
-	public void setHP(int hitPoints) {
-		this.hitPoints = hitPoints;
-	}
-	/**
-	 * get hitPoints
-	 * @return the hit points 
-	 */
-	public int getHP() {
-		return hitPoints ;
-	}
-	/**
 	 * switch to string type
 	 */
     public  String toString(){
@@ -486,8 +604,35 @@ public class Character implements Json.Serializable{
 		for (int i = 0 ; i < tmp.length; i++){
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
-        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp);
+        return "Name: "+this.name + "| Race: " + this.raceType.toString()+  "| " + this.fighterType.toString() +
+				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp)+"| HP: "+ hitPoints;
     }
+    
+	/**
+	 * Display personal full abilities and attributes
+	 */
+    public  String displayAllAtributes(){
+		int[] tmp = this.getBaseAttributes();
+		for (int i = 0 ; i < tmp.length; i++){
+			if(i < abilityBonusArr.length){
+				tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
+			}
+		}
+        return "Name: "+this.name + "\n" +
+        		"Race Type: " + this.raceType.toString()+ "\n" +
+				"Fighter Type: " + this.fighterType.toString()+ "\n" +
+				"Level: "+this.level+ "\n" +
+        		"Strength: " + tmp[0] + "\n" +
+        		"Dexterity: " + tmp[1] + "\n" +
+        		"Constitution: " + tmp[2] + "\n" +
+        		"Wisdom: " + tmp[3] + "\n" +
+        		"Intelligence: " + tmp[4] + "\n" +
+        		"Charisma: " + tmp[5] + "\n" +
+        		"Hit Point : " + tmp[6] + "\n" +
+				"Attach Bonus : " + tmp[7] + "\n" +
+				"Damage Bonus : " + tmp[8] + "\n" +
+				"Armor Class : " + tmp[9] ;
+	}
 
     /**
      * 
@@ -495,7 +640,7 @@ public class Character implements Json.Serializable{
      * @return true or false
      */
     public boolean isDead() {
-		return getHP() <= 0;
+		return getHitPoints() <= 0;
 	}
     /**
      * get Strength
@@ -590,30 +735,37 @@ public class Character implements Json.Serializable{
      * get the type of the class
      * @return classType
      */
-    public ClassType getClassType() {
-		return classType;
+    public FighterType getFighterType() {
+		return fighterType;
 	}
     /**
      * set the type of the class
-     * @param classType  the type of the class
+     * @param fighterType  the type of the class
      */
-	public void setClassType(ClassType classType) {
-		this.classType = classType;
+	public void setFighterType(FighterType fighterType) {
+		this.fighterType = fighterType;
 	}
 	/**
 	 * get all attributes of item
 	 * @return a array as attribute
 	 */
-	public int[] getAllAttributes(){
+	public int[] getBaseAttributes(){
         int[] attributeArr = new int[Abilities.ABILITYSIZE + Character.FIGHTATTRUBUTESIZE];
         System.arraycopy(abilities.getAbilityArr(), 0 , attributeArr , 0, Abilities.ABILITYSIZE);
-        attributeArr[Abilities.ABILITYSIZE ] = armorClass;
+        attributeArr[Abilities.ABILITYSIZE ] = hitPoints;
         attributeArr[Abilities.ABILITYSIZE + 1] = attackBonus;
         attributeArr[Abilities.ABILITYSIZE + 2] = damageBonus;
-        attributeArr[Abilities.ABILITYSIZE + 3] = hitPoints;
+        attributeArr[Abilities.ABILITYSIZE + 3] = armorClass;
         return attributeArr;
     }
 
+	/**
+	 * check if backpack max size reached
+	 * @return
+	 */
+    public boolean backPackisFull(){
+		return backpack.size() >= 10;
+	}
 	/**
 	 * get the type of the race
 	 * @return the race type
@@ -633,16 +785,16 @@ public class Character implements Json.Serializable{
 	 */
 	@Override
 	public void write(Json json) {
-		json.writeValue("ClassType", classType);
+		json.writeValue("FighterType", fighterType);
 		json.writeValue("RaceType", raceType);
 		json.writeValue("Name", name);
 		json.writeValue("Level", level);
 		json.writeValue("abilities", abilities);
+		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("attackBonus", attackBonus);
 		json.writeValue("damageBonus", damageBonus);
-		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("armorClass", armorClass);
-		json.writeValue("isFriendly", isFriendly);
+//		json.writeValue("isFriendly", isFriendly);
 		json.writeValue("equipment", equipment, HashMap.class, Item.class);
 		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
 		json.writeValue("PromoPoint", promotionPoint);
@@ -653,18 +805,18 @@ public class Character implements Json.Serializable{
 	 */
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		classType = ClassType.valueOf(jsonData.child.asString());
+		fighterType = FighterType.valueOf(jsonData.child.asString());
 		raceType = RaceType.valueOf(jsonData.child.next.asString());
 		updateTexture(raceType);
 		name = jsonData.child.next.next.asString();
 		level = jsonData.child.next.next.next.asInt();
 		setAbilities(jsonData.child.next.next.next.next.child.asIntArray());
-		attackBonus = jsonData.child.next.next.next.next.next.asInt();
-		damageBonus = jsonData.child.next.next.next.next.next.next.asInt();
-		hitPoints = jsonData.child.next.next.next.next.next.next.next.asInt();
+		hitPoints = jsonData.child.next.next.next.next.next.asInt();
+		attackBonus = jsonData.child.next.next.next.next.next.next.asInt();
+		damageBonus = jsonData.child.next.next.next.next.next.next.next.asInt();
 		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();
-		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
-		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
+//		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
+		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next;
 		if(equipmentPointer != null){
 			Iterator<JsonValue> dataIterator = equipmentPointer.iterator();
 			Item item;
@@ -679,7 +831,7 @@ public class Character implements Json.Serializable{
 			}
 		}
 
-		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next.next;
+		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
 		if(backPackPointer != null){
 			Iterator<JsonValue> dataIterator = backPackPointer.iterator();
 			Item item;
@@ -693,10 +845,72 @@ public class Character implements Json.Serializable{
 			}
 		}
 
-		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asInt();
-		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
+		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.asInt();
+		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
 
 	}
-
-
+	
+	/**
+	 * draw texture on the game screen for NPC, and player
+	 * @param batch
+	 * @param cur  NPC, or player location
+	 * @param isFriendly
+	 */
+	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
+		this.bound.x = cur.x;
+		this.bound.y = cur.y;
+		if(isFriendly == true){
+			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
+		   // is friendly NPC use unified image
+	        batch.draw(mapTexture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
+		} else{
+			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
+			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
+	        batch.draw(texture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
+		}
+	}
+	
+	/**
+	 * get character rectangle bound
+	 * @return
+	 */
+	public Rectangle getBound() {
+		return bound;
+	}
+	/**
+	 * setter for character bound
+	 * @param bound
+	 */
+	public void setBound(Rectangle bound) {
+		this.bound = bound;
+	}
+	/**
+	 * observerable method to preview ability points
+	 */
+	public void previewAllAttribute(){
+		setChanged();
+		notifyObservers(0);
+	}
+	/**
+	 * observerable method to preview all items, and change equipment
+	 */
+	public void previewLoadEquipment(int index){
+		if(index >= 0 && index < backpack.size() ){
+			Item itemtmp = backpack.remove(index);
+			loadEquipment(itemtmp);
+		}
+		setChanged();
+		notifyObservers(1);
+	}
+	/**
+	 * observerable method to preview all items, and change equipment
+	 */
+	public void previewUnloadEquipment(int index){
+		if(index >= 0 ){
+			getBackpack().add(removeEquipment(Item.ItemType.getItemType(index)));
+		}
+		setChanged();
+		notifyObservers(1);
+	}
 }

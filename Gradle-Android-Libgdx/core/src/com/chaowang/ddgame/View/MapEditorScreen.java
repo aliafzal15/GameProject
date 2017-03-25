@@ -3,7 +3,6 @@ package com.chaowang.ddgame.View;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.Controller.MapController;
+import com.chaowang.ddgame.MenuController.MapController;
 import com.chaowang.ddgame.MapModel.Map;
 /**
  * view for map editor
@@ -37,7 +36,7 @@ public class MapEditorScreen implements Screen{
 	public ImageButton[] mapMatrix, elementList;
 	public Table mapTable, elementTable, inputTable;
 	public SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox, mapSelectBox;
-
+	public Label mapItemInfoLabel;
 	private Map map;
 	private MapController mapController;
 
@@ -127,6 +126,10 @@ public class MapEditorScreen implements Screen{
 
 		});
 		stage.addActor(saveButton);
+
+		mapItemInfoLabel = new Label("", MainMenuScreen.style);
+		mapItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 5), (Gdx.graphics.getHeight() / 30));
+		stage.addActor(mapItemInfoLabel);
 	}
     /**
      * put image on background
@@ -134,8 +137,8 @@ public class MapEditorScreen implements Screen{
 	@Override
 	public void render(float delta) {
 
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//		Gdx.gl.glClearColor(1, 1, 1, 1);
+//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		Gdx.input.setInputProcessor(stage);
 		stage.act();
