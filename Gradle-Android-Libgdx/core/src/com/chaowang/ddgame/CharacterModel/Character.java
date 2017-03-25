@@ -2,20 +2,23 @@ package com.chaowang.ddgame.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import LibgdxExample.Fighter;
+import com.chaowang.ddgame.ClassesModel.Fighter;
+import com.chaowang.ddgame.ClassesModel.FighterBuilder;
+import com.chaowang.ddgame.ClassesModel.FighterBuilderDirector;
+import com.chaowang.ddgame.ClassesModel.FighterBullyBuilder;
+import com.chaowang.ddgame.ClassesModel.FighterNimbleBuilder;
+import com.chaowang.ddgame.ClassesModel.FighterTankBuilder;
 import com.chaowang.ddgame.PublicParameter;
-import LibgdxExample.Fighter.FighterType;
+import com.chaowang.ddgame.ClassesModel.Fighter.FighterType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Set;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.RacesModel.Race.RaceType;
@@ -30,7 +33,6 @@ import com.badlogic.gdx.utils.JsonValue;
 public class Character extends Observable implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
-	private FighterType fighterType;
 	private RaceType raceType;
 	private String name;
 	private int level;
@@ -50,7 +52,11 @@ public class Character extends Observable implements Json.Serializable{
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
-    
+
+	private Fighter fighter;
+	private FighterBuilder fighterBuilder;
+	private FighterBuilderDirector director;
+
     /**
      * constructor for the class
      */
@@ -72,10 +78,10 @@ public class Character extends Observable implements Json.Serializable{
 	 * @param raceType the raceType of the character
 	 */
 	public Character(String name, int level, RaceType raceType, FighterType fighterType) {
-//		this.bound = new Rectangle(1, 1, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3);
+		createFighterBasedOnType(fighterType);
+		this.fighter = director.getFighter();
 		this.bound = new Rectangle();
 		this.setName(name);
-		this.fighterType = fighterType;
 		this.raceType  = raceType;
 		this.hitPoints = 0;
 		this.attackBonus = 0;
@@ -91,6 +97,7 @@ public class Character extends Observable implements Json.Serializable{
         mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
 		this.isDead = false;
     }
+
 	/**
 	 * 
 	 * constructor for the class
@@ -103,8 +110,9 @@ public class Character extends Observable implements Json.Serializable{
     public Character(String name, int level,int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonus) {
 		this.bound = new Rectangle();
     	this.setName(name);
-		this.fighterType = fighterType;
-        this.raceType  = raceType;
+		createFighterBasedOnType(fighterType);
+		this.fighter = director.getFighter();
+		this.raceType  = raceType;
 		this.level = level;
 		this.promotionPoint = promotionPoint;
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
@@ -229,11 +237,12 @@ public class Character extends Observable implements Json.Serializable{
 	 * @return if successfully changed
 	 */
 	public boolean nextFighterType(){
-		if(fighterType.getIndex() >= 2 ){
+		if(fighter.getFighterTypeIndex() >= 2 ){
 			return false;
 		}
 		else{
-			this.fighterType = fighterType.getFighterType(this.fighterType.getIndex()+1);
+			createFighterBasedOnType(fighter.getFighterType().getFighterTypeFromIndex(fighter.getFighterTypeIndex()+1));
+			this.fighter = director.getFighter();
 			return true;
 		}
 	}
@@ -303,11 +312,12 @@ public class Character extends Observable implements Json.Serializable{
 	 * @return if successfully changed to previous race
 	 */
 	public boolean previousFighterType(){
-		if(fighterType.getIndex() <=0 ){
+		if(fighter.getFighterTypeIndex() <=0 ){
 			return false;
 		}
 		else{
-			this.fighterType = fighterType.getFighterType(this.getFighterType().getIndex() -1);
+			createFighterBasedOnType(this.fighter.getFighterType().getFighterTypeFromIndex(this.fighter.getFighterTypeIndex()-1));
+			this.fighter = director.getFighter();
 			return true;
 		}
 	}
@@ -604,7 +614,7 @@ public class Character extends Observable implements Json.Serializable{
 		for (int i = 0 ; i < tmp.length; i++){
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
-        return "Name: "+this.name + "| Race: " + this.raceType.toString()+  "| " + this.fighterType.toString() +
+        return "Name: "+this.name + "| Race: " + this.raceType.toString()+  "| " + this.fighter.getFighterType().toString() +
 				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp)+"| HP: "+ hitPoints;
     }
     
@@ -620,7 +630,7 @@ public class Character extends Observable implements Json.Serializable{
 		}
         return "Name: "+this.name + "\n" +
         		"Race Type: " + this.raceType.toString()+ "\n" +
-				"Fighter Type: " + this.fighterType.toString()+ "\n" +
+				"Fighter Type: " + this.fighter.getFighterType().toString()+ "\n" +
 				"Level: "+this.level+ "\n" +
         		"Strength: " + tmp[0] + "\n" +
         		"Dexterity: " + tmp[1] + "\n" +
@@ -736,14 +746,15 @@ public class Character extends Observable implements Json.Serializable{
      * @return classType
      */
     public FighterType getFighterType() {
-		return fighterType;
+		return fighter.getFighterType();
 	}
     /**
      * set the type of the class
      * @param fighterType  the type of the class
      */
 	public void setFighterType(FighterType fighterType) {
-		this.fighterType = fighterType;
+		createFighterBasedOnType(fighterType);
+		this.fighter = director.getFighter();
 	}
 	/**
 	 * get all attributes of item
@@ -785,7 +796,7 @@ public class Character extends Observable implements Json.Serializable{
 	 */
 	@Override
 	public void write(Json json) {
-		json.writeValue("FighterType", fighterType);
+		json.writeValue("FighterType", fighter.getFighterType());
 		json.writeValue("RaceType", raceType);
 		json.writeValue("Name", name);
 		json.writeValue("Level", level);
@@ -805,7 +816,8 @@ public class Character extends Observable implements Json.Serializable{
 	 */
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		fighterType = FighterType.valueOf(jsonData.child.asString());
+		createFighterBasedOnType(FighterType.valueOf(jsonData.child.asString()));
+		this.fighter = director.getFighter();
 		raceType = RaceType.valueOf(jsonData.child.next.asString());
 		updateTexture(raceType);
 		name = jsonData.child.next.next.asString();
@@ -912,5 +924,34 @@ public class Character extends Observable implements Json.Serializable{
 		}
 		setChanged();
 		notifyObservers(1);
+	}
+
+
+	private void createFighterBasedOnType(FighterType type) {
+		director = new FighterBuilderDirector();
+		switch (type){
+			case BULLY:
+				fighterBuilder = new FighterBullyBuilder();
+				break;
+			case NIMBLE:
+				fighterBuilder = new FighterNimbleBuilder();
+				break;
+			case TANK:
+				fighterBuilder = new FighterTankBuilder();
+				break;
+			default:
+				fighterBuilder = new FighterBullyBuilder();
+				break;
+		}
+		director.setBuilder(fighterBuilder);
+		director.constructFighter();
+	}
+
+	public Fighter getFighter() {
+		return fighter;
+	}
+
+	public void setFighter(Fighter fighter) {
+		this.fighter = fighter;
 	}
 }
