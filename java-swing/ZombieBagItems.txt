@@ -1,0 +1,2 @@
+Shield:1
+Helmet:2

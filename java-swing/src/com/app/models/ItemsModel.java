@@ -1,5 +1,6 @@
 package com.app.models;
 
+import java.util.Observable;
 
 /**
  * This class is for Item Model
@@ -78,5 +79,8 @@ public class ItemsModel {
 	private String getItemBonus(String itemBonus){
 		return this.itemBonus;	
 	}	
+	
+	
+	
 		
 }

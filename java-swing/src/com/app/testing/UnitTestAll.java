@@ -260,7 +260,7 @@ public class UnitTestAll {
 	 * 
 	 */	
 		
-	@Test
+	/*@Test
 	public void testSetEnchanementValues() {
 		
 				
@@ -286,7 +286,7 @@ public class UnitTestAll {
 		assertEquals(0,characters.get(0).getArmorClass());
 				
 	}
-	
+	*/
 		
 	/**
 	 *  

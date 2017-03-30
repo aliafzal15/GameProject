@@ -319,7 +319,8 @@ public class CharacterEditorItemsController {
 					
 					setEnchanementValues(item[0],item[1],"Add");		
 													
-				}
+				
+				getBagRemoveIndex(characterList.get(objIndex).getBagItems());
 				
 				objWornItemsFighter=characterList.get(objIndex).getWornItems();
 				
@@ -342,7 +343,7 @@ public class CharacterEditorItemsController {
 					e1.printStackTrace();
 				}
 				
-				
+			 }
 				
 				//11 feb itemInv.comboItemsWorn.addItem(objItem.itemType+":"+objItem.itemBonus);
 				render();
@@ -372,8 +373,8 @@ public class CharacterEditorItemsController {
 					
 					setEnchanementValues(item[0],item[1],"Add");		
 											
-				}
 				
+				getBagRemoveIndex(characterList.get(objIndex).getBagItems());
 				
 				objWornItemsZombie=characterList.get(objIndex).getWornItems();
 				
@@ -394,7 +395,7 @@ public class CharacterEditorItemsController {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-								
+		     }					
 				//11 feb itemInv.comboItemsWorn.addItem(objItem.itemType+":"+objItem.itemBonus);
 				render();
 				
@@ -674,14 +675,9 @@ public boolean checkIfItemInWornRmv(ArrayList<ItemsModel> items){
 		  for(int i=0;i<items.size();i++){
 			  		String tempVal=items.get(i).itemType+":"+items.get(i).itemBonus;
 			  	if(tempVal.equals(temp)){
-			  		this.removeIndex=i;
-			  			  		
-			  		
-			  		
+			  		this.removeIndex=i;  		
 			  		return false;
-			  	}
-			  	
-			  		
+			  	}		  		
 			  
 		  }
 				
@@ -1011,6 +1007,28 @@ if(items.size()>0){
 		
 }
 
+
+public void getBagRemoveIndex(ArrayList<ItemsModel> items){
+	
+if(items.size()>0){
+		
+		String temp=(String) itemInv.comboBagPack.getSelectedItem();
+		
+		  for(int i=0;i<items.size();i++){
+			  		String tempVal=items.get(i).itemType+":"+items.get(i).itemBonus;
+			  	if(tempVal.equals(temp)){
+			  		this.removeBagIndex=i;
+			  		//JOptionPane.showMessageDialog (null, "Item Already in the Worn List!!!","Error", 
+					//		JOptionPane.ERROR_MESSAGE);
+			  
+			  	}			  				  
+		  }
+				
+	}
+		
+}
+
+
 /**
  * 
  *This Method updates all ability scores
@@ -1037,6 +1055,7 @@ public void updateAblities(){
 	tempMainMenu.lblfAttackBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getAttackBonus()));
 	tempMainMenu.lblfStrModVal.setText(Integer.toString(this.characterList.get(plyrIndex).getStrMod()));
 	tempMainMenu.lblfDamageBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getDamageBonus()));
+	
 	}
 	
 	else if(plyrType.equals("Zombie")){
@@ -1046,6 +1065,7 @@ public void updateAblities(){
 		tempMainMenu.lblzAttackBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getAttackBonus()));
 		tempMainMenu.lblzStrModVal.setText(Integer.toString(this.characterList.get(plyrIndex).getStrMod()));
 		tempMainMenu.lblzDamageBonusVal.setText(Integer.toString(this.characterList.get(plyrIndex).getDamageBonus()));
+		
 	}
 }
 
@@ -1180,11 +1200,6 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 		armorClassEnchanment=armorClassEnchanment+Integer.parseInt(bonus);
 		armorClassEnchanment=armorClassEnchanment+10+this.characterList.get(this.plyrIndex).getDexMod();
 		this.characterList.get(this.plyrIndex).increaseArmorClass(armorClassEnchanment);	
-		
-		
-		 
-		
-	
 	}
 	
 	else if(getEnchanementType(type).equals("StrengthClass")){
@@ -1193,7 +1208,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 		this.characterList.get(this.plyrIndex).increaseStrength(strengthClassEnchanment);
 		int tempMod=this.characterList.get(this.plyrIndex).calculateModifier(this.characterList.get(this.plyrIndex).getStrength());
 		this.characterList.get(this.plyrIndex).setStrMod(tempMod);
-		this.characterList.get(this.plyrIndex).calculateDamageBonus();
+		this.characterList .get(this.plyrIndex).calculateDamageBonus();
 		
 		
 	}
@@ -1215,6 +1230,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 			armorClassEnchanment=armorClassEnchanment-Integer.parseInt(bonus);
 			armorClassEnchanment=armorClassEnchanment-10-this.characterList.get(this.plyrIndex).getDexMod();
 			this.characterList.get(this.plyrIndex).increaseArmorClass(armorClassEnchanment);	
+			
 		
 		}
 		
@@ -1224,7 +1240,7 @@ public void setEnchanementValues(String type,String bonus,String Opr){
 			this.characterList.get(this.plyrIndex).increaseStrength(strengthClassEnchanment);
 			int tempMod=this.characterList.get(this.plyrIndex).calculateModifier(this.characterList.get(this.plyrIndex).getStrength());
 			this.characterList.get(this.plyrIndex).setStrMod(tempMod);
-			this.characterList.get(this.plyrIndex).calculateDamageBonus();
+			this.characterList .get(this.plyrIndex).calculateDamageBonus();
 			
 		}
 		else if(getEnchanementType(type).equals("AttackBonusClass")){

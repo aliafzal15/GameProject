@@ -94,7 +94,7 @@ public class CampaignEditorController {
 							}
 							
 						}else{
-							JOptionPane.showMessageDialog(null, "Invalid Camapign. Make sure that exit point of one map is the entry point of the second map and so on.");
+							JOptionPane.showMessageDialog(null, "Invalid Camapign. Make sure that exit point of one map is the entry point of the second map and so on. Character on One Map must be same as the Character on the other Maps.");
 						}
 										
 					
@@ -150,7 +150,7 @@ public class CampaignEditorController {
 							
 							
 					  } else{
-						JOptionPane.showMessageDialog(null, "Unable to .ddc open File");
+						JOptionPane.showMessageDialog(null, "Unable to open .ddc open File");
 						campaign=null;
 					   }				
 				
@@ -186,6 +186,16 @@ public class CampaignEditorController {
 					camp.setIsValidated(false);
 					
 				}
+				
+				if((camp.getCampaignMaps().get(i).isFighterPlaced==true && camp.getCampaignMaps().get(i-1).isFighterPlaced==true) ||
+												(camp.getCampaignMaps().get(i).isZombiePlaced==true && camp.getCampaignMaps().get(i-1).isZombiePlaced==true)){
+					
+					camp.setIsValidated(true);
+				}else{
+					
+					camp.setIsValidated(false);
+				}
+					
 			}
 			
 			return camp.getIsValidated();

@@ -4,6 +4,7 @@ import java.math.RoundingMode;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author Ali Afzal
  *
  */
-public class CharacterModel {
+public class CharacterModel extends Observable{
 
 private int plyrStrength;
 private int plyrDexterity;
@@ -29,8 +30,10 @@ private int dexModifier;
 private int constModifier;
 private int attackBonus;
 private int damageBonus;
+private String fightingType;
 private ArrayList<ItemsModel> plyrWornItems;
 private ArrayList<ItemsModel> plyrItemsBagPack;
+public ArrayList<Integer> abilityScores;
 
 private String charType;
 
@@ -59,6 +62,7 @@ private boolean isEditable;
 		this.setArrayWorn();
 		this.setArrayBag();
 		this.plyrArmorClass=0;
+		this.fightingType="None";
 		
 	}
 
@@ -95,8 +99,8 @@ private boolean isEditable;
 	 * This Method calculates the value for attack bonus.
 	 *
 	 */
-	public void calculateAttackBonus(){			
-			this.attackBonus=this.plyrLevel;		
+	public void calculateAttackBonus(){
+			this.attackBonus=this.plyrLevel;	
 	}
 	
 	
@@ -504,8 +508,8 @@ public boolean setWornItem(ItemsModel obj){
 	
 	else{
 		
-		JOptionPane.showMessageDialog (null,"Item could not be added.Worn Items Bag is Full.","Error !!!", 
-				JOptionPane.ERROR_MESSAGE); 
+		//JOptionPane.showMessageDialog (null,"Item could not be added.Worn Items Bag is Full.","Error !!!", 
+		//		JOptionPane.ERROR_MESSAGE); 
 		return false;
 	}
 }
@@ -575,8 +579,8 @@ public boolean setBagItem(ItemsModel obj){
 	
 	else{
 		
-		JOptionPane.showMessageDialog (null,"Item could not be added.Items Bag Pack is Full.","Error !!!", 
-				JOptionPane.ERROR_MESSAGE); 
+		//JOptionPane.showMessageDialog (null,"Item could not be added.Items Bag Pack is Full.","Error !!!", 
+		//		JOptionPane.ERROR_MESSAGE); 
 		return false;
 	}
 }
@@ -639,6 +643,59 @@ public void increaseAttackBonus(int ench){
 	this.attackBonus=ench;
 }
 
+/**
+ * This Method sets the Fighting Type.
+ * 
+ * @param  type
+ * 			 Value of type such Bully,Nimble,Tank or None;
+ * 	
+ */
+public void setFightingType(String type){
+	this.fightingType=type;
+}
 
+/**
+ * This Method retruns the Fighting Type.
+ * 
+ * @return  fightingType:-
+ * 			 Value of type such Bully,Nimble,Tank or None;
+ * 	
+ */
+public String getFightingType(){
+	return this.fightingType;
+}
+
+
+/**
+ * This Method triggers the observer pattern for character view
+ * 
+ * 	
+ */
+public void getAbilityScores(){
+	
+	this.abilityScores=new ArrayList();
+	
+	abilityScores.add(this.getStrength());
+	abilityScores.add(this.getDexterity());
+	abilityScores.add(this.getConstitution());
+	
+	this.setChanged();
+	
+	this.notifyObservers(this);
+			
+}
+
+
+/**
+ * This Method triggers the observer pattern for inventory view
+ * 
+ * 	
+ */
+public void getInventory(){
+		
+	this.setChanged();	
+	this.notifyObservers(this);
+	
+}
 
 }

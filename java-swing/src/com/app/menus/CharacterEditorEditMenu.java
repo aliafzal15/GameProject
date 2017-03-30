@@ -19,6 +19,9 @@ public class CharacterEditorEditMenu {
 	public JComboBox comboLevel;
 	public JButton btnSaveLevel;
 	public JFrame frame;
+	public JButton btnMakeBully;
+	public JButton btnMakeNimble;
+	public JButton btnMakeTank;
 	
 	
 	
@@ -36,7 +39,7 @@ public class CharacterEditorEditMenu {
 	 */	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 326, 147);
+		frame.setBounds(100, 100, 447, 183);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -54,7 +57,19 @@ public class CharacterEditorEditMenu {
 		btnSaveLevel.setBounds(160, 48, 89, 23);
 		frame.getContentPane().add(btnSaveLevel);
 		
-		frame.setTitle("Level Editor");
+		btnMakeBully = new JButton("Make Bully");
+		btnMakeBully.setBounds(10, 102, 117, 23);
+		frame.getContentPane().add(btnMakeBully);
+		
+		btnMakeNimble = new JButton("Make Nimble");
+		btnMakeNimble.setBounds(148, 102, 123, 23);
+		frame.getContentPane().add(btnMakeNimble);
+		
+		btnMakeTank = new JButton("Make Tank");
+		btnMakeTank.setBounds(292, 102, 117, 23);
+		frame.getContentPane().add(btnMakeTank);
+		
+		frame.setTitle("Character Editor");
 		
 		frame.setVisible(true);
 	}
