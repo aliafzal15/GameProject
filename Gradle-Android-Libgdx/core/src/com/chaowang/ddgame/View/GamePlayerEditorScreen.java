@@ -38,7 +38,7 @@ public class GamePlayerEditorScreen implements Screen{
     private Game game;
     public Stage stage;
     private SpriteBatch batch;
-    public TextButton backwardButton, confirmButton;
+    public TextButton backwardButton, confirmButton, saveButton;
     private Texture backgroundTexture;
 
     private ImageButton[] backpackMatrix, equipmentMatrix;
@@ -79,6 +79,20 @@ public class GamePlayerEditorScreen implements Screen{
 
         controller = new PlayerEditorController(this,this.player);
 
+        saveButton = new TextButton("Save Game", MainMenuScreen.buttonStyle);
+        saveButton.setWidth(Gdx.graphics.getWidth() / 8 );
+        saveButton.setHeight(Gdx.graphics.getHeight() / 9);
+        saveButton.setPosition((Gdx.graphics.getWidth() * 7 /10 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
+        saveButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // ali's method: save player, mapModel, campaign.
+                return true;
+            }
+        });
+        stage.addActor(saveButton);
+        
+        
         backwardButton = new TextButton("<--", MainMenuScreen.buttonStyle);
         backwardButton.setWidth(Gdx.graphics.getWidth() / 20 );
         backwardButton.setHeight(Gdx.graphics.getHeight() / 10);
@@ -86,6 +100,7 @@ public class GamePlayerEditorScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
                 game.setScreen(new GameScreen(game, player, mapModel, campaign));
                 return true;
             }
