@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.CharacterModel;
+package com.chaowang.ddgame.MenuModel.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameView.GamePlayerEditorScreen;

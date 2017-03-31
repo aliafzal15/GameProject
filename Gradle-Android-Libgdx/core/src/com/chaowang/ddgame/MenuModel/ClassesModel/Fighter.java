@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.ClassesModel;
+package com.chaowang.ddgame.MenuModel.ClassesModel;
 
 /**
  * model to fighter class
@@ -6,7 +6,7 @@ package com.chaowang.ddgame.ClassesModel;
  * @author chao wang
  * @version 2.0
  */
-public class Fighter implements Class{
+public class Fighter implements Class {
 	/**
 	 * enum type to set fighters' initial values
 	 */

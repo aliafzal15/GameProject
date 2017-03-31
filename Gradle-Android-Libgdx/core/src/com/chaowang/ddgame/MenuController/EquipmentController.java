@@ -18,8 +18,8 @@ import com.chaowang.ddgame.PublicParameter;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 /**
  * controller for equipment
  * @author chao wang

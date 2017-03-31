@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.CharacterModel;
+package com.chaowang.ddgame.MenuModel.CharacterModel;
 
 /**
  * all ability types for characters

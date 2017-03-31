@@ -12,10 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 
 import gdxtesting.GdxTestRunner;
 
-import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.MapModel.EntryDoor;
-import com.chaowang.ddgame.MapModel.ExitDoor;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
+import com.chaowang.ddgame.MenuModel.MapModel.EntryDoor;
+import com.chaowang.ddgame.MenuModel.MapModel.ExitDoor;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 /**
  * the class is Junit test for Campaign
  * @author chao wang

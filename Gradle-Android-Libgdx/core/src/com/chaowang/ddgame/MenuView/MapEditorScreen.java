@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.MenuController.MapController;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 /**
  * view for map editor
  * @author chao wang

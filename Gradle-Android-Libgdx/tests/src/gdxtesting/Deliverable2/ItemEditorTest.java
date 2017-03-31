@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 
 import gdxtesting.GdxTestRunner;
 
-import com.chaowang.ddgame.ItemModel.EnchantedAbility;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.EnchantedAbility;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 
 /**
  * the class is Junit test for Item

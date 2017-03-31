@@ -23,9 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 

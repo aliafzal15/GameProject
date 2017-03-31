@@ -11,13 +11,13 @@ import org.junit.runner.RunWith;
 import gdxtesting.GdxTestRunner;
 
 import com.badlogic.gdx.math.Vector2;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuController.MapController;
-import com.chaowang.ddgame.ItemModel.EnchantedAbility;
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.MapModel.EntryDoor;
-import com.chaowang.ddgame.MapModel.ExitDoor;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.ItemModel.EnchantedAbility;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.MapModel.EntryDoor;
+import com.chaowang.ddgame.MenuModel.MapModel.ExitDoor;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.util.MazeSolver;
 
 import java.util.Arrays;

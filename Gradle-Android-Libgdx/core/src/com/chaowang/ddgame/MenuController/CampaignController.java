@@ -15,8 +15,8 @@ import com.chaowang.ddgame.MenuView.CampaignEditorScreen;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 /**
  * controller for campaign
  * @author chao wang

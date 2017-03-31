@@ -2,7 +2,7 @@ package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Gdx;
 
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 
 /**
  * class for storing public parameters

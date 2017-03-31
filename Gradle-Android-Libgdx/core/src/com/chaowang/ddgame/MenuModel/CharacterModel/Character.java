@@ -1,18 +1,18 @@
-package com.chaowang.ddgame.CharacterModel;
+package com.chaowang.ddgame.MenuModel.CharacterModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.chaowang.ddgame.ClassesModel.Fighter;
-import com.chaowang.ddgame.ClassesModel.FighterBuilder;
-import com.chaowang.ddgame.ClassesModel.FighterBuilderDirector;
-import com.chaowang.ddgame.ClassesModel.FighterBullyBuilder;
-import com.chaowang.ddgame.ClassesModel.FighterNimbleBuilder;
-import com.chaowang.ddgame.ClassesModel.FighterTankBuilder;
+import com.chaowang.ddgame.MenuModel.ClassesModel.Fighter;
+import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBuilder;
+import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBuilderDirector;
+import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBullyBuilder;
+import com.chaowang.ddgame.MenuModel.ClassesModel.FighterNimbleBuilder;
+import com.chaowang.ddgame.MenuModel.ClassesModel.FighterTankBuilder;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.ClassesModel.Fighter.FighterType;
+import com.chaowang.ddgame.MenuModel.ClassesModel.Fighter.FighterType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.RacesModel.Race.RaceType;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.RacesModel.Race.RaceType;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;

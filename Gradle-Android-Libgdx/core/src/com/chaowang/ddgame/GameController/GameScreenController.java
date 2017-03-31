@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 

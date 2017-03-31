@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 

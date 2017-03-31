@@ -19,10 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.CharacterModel.Abilities;
+import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
 import com.chaowang.ddgame.GameController.PlayerEditorController;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameModel.Player;
 /**
  * view for editor screen

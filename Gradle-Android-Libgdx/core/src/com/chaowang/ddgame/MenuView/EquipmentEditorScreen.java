@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.MenuController.EquipmentController;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 /**
  * view for equipment editor 
  * @author chao wang

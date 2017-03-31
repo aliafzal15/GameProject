@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuController.BackpackController;
 /**
  * view for backpack editor 

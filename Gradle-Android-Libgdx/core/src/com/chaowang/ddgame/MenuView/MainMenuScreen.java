@@ -17,14 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import com.chaowang.ddgame.CampaignModel.CampaignInventory;
+import com.chaowang.ddgame.MenuModel.CampaignModel.CampaignInventory;
 
 import java.io.IOException;
 
 import com.chaowang.ddgame.GameView.GameSelectionScreen;
-import com.chaowang.ddgame.ItemModel.ItemInventory;
-import com.chaowang.ddgame.CharacterModel.CharacterInventory;
-import com.chaowang.ddgame.MapModel.MapInventory;
+import com.chaowang.ddgame.MenuModel.ItemModel.ItemInventory;
+import com.chaowang.ddgame.MenuModel.CharacterModel.CharacterInventory;
+import com.chaowang.ddgame.MenuModel.MapModel.MapInventory;
 
 /**
  * view for main menu

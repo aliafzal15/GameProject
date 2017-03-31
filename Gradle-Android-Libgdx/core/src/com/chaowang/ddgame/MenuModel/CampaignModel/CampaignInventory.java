@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.CampaignModel;
+package com.chaowang.ddgame.MenuModel.CampaignModel;
 
 import java.io.File;
 import java.io.IOException;

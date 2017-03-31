@@ -15,8 +15,8 @@ import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuView.BackpackEditorScreen;
 
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 /**
  * controller for backpack
  * @author chao wang

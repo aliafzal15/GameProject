@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.chaowang.ddgame.MenuController.ItemController;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.PublicParameter;
 
 /**

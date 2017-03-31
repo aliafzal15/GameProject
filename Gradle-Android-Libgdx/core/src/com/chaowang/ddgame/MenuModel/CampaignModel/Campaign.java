@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.CampaignModel;
+package com.chaowang.ddgame.MenuModel.CampaignModel;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.chaowang.ddgame.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 
 /**
  * class for campaign editor

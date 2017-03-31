@@ -21,7 +21,7 @@ import com.chaowang.ddgame.MenuView.ItemEditorScreen;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 /**
  * controller for items
  * @author chao wang

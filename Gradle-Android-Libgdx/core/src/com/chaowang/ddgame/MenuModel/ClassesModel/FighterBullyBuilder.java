@@ -1,6 +1,6 @@
-package com.chaowang.ddgame.ClassesModel;
+package com.chaowang.ddgame.MenuModel.ClassesModel;
 
-import com.chaowang.ddgame.CharacterModel.Abilities;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
 
 /**
  * Created by Chao on 25/03/2017.

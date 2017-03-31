@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.ItemModel;
+package com.chaowang.ddgame.MenuModel.ItemModel;
 
 /**
  * enchanted ability for items

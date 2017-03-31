@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.RacesModel;
+package com.chaowang.ddgame.MenuModel.RacesModel;
 
 /**
  * class for races

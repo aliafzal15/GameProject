@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.ClassesModel;
+package com.chaowang.ddgame.MenuModel.ClassesModel;
 
 /**
  * Created by Chao on 25/03/2017.
@@ -18,7 +18,7 @@ public class FighterBuilderDirector {
         builder.buildFighterType();
     }
 
-    public Fighter getFighter(){
+    public com.chaowang.ddgame.MenuModel.ClassesModel.Fighter getFighter(){
         return  builder.getFighter();
     }
 }

@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.MapModel;
+package com.chaowang.ddgame.MenuModel.MapModel;
 
 import com.chaowang.ddgame.PublicParameter;
 import com.badlogic.gdx.math.Vector2;
@@ -7,10 +7,9 @@ import com.badlogic.gdx.utils.JsonValue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 /**
  * class for map editor
  * @author chao wang
@@ -22,8 +21,8 @@ public class Map implements Json.Serializable{
     private int size;
     private String name;
     private EntryDoor entryDoor;
-    private ExitDoor exitDoor;
-    private ArrayList<Wall> wallLocationList;
+    private com.chaowang.ddgame.MenuModel.MapModel.ExitDoor exitDoor;
+    private ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall> wallLocationList;
     private HashMap<Vector2,Item> itemLocationList;
     private HashMap<Vector2,Character> friendLocationList;
     private HashMap<Vector2,Character> enemyLocationList;
@@ -41,7 +40,7 @@ public class Map implements Json.Serializable{
         itemLocationList = new HashMap<Vector2, Item>();
         friendLocationList = new HashMap<Vector2, Character>();
         enemyLocationList = new HashMap<Vector2, Character>();
-        wallLocationList = new ArrayList<Wall>();
+        wallLocationList = new ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall>();
     }
     /**
      * 
@@ -59,7 +58,7 @@ public class Map implements Json.Serializable{
             for (int j =0; j < size; j++)
                 locationMatrix[i][j] = 0;
         }
-        wallLocationList = new ArrayList<Wall>(size);
+        wallLocationList = new ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall>(size);
         itemLocationList = new HashMap<Vector2, Item>();
         friendLocationList = new HashMap<Vector2, Character>();
         enemyLocationList = new HashMap<Vector2, Character>();
@@ -72,7 +71,7 @@ public class Map implements Json.Serializable{
      * @param entryEntryDoor the information about entry door
      * @param exitEntryDoor the information about exit door
      */
-    public Map(int level, int size, String name, EntryDoor entryEntryDoor, ExitDoor exitEntryDoor) {
+    public Map(int level, int size, String name, EntryDoor entryEntryDoor, com.chaowang.ddgame.MenuModel.MapModel.ExitDoor exitEntryDoor) {
         this(level, size, name);
         this.entryDoor = entryEntryDoor;
         this.exitDoor = exitEntryDoor;
@@ -92,7 +91,7 @@ public class Map implements Json.Serializable{
      * @param j
      */
     public void addWallLocationList(int i, int j){
-        Wall wall = new Wall(new Vector2(j* PublicParameter.MAP_PIXEL_SIZE, i*PublicParameter.MAP_PIXEL_SIZE));
+        com.chaowang.ddgame.MenuModel.MapModel.Wall wall = new com.chaowang.ddgame.MenuModel.MapModel.Wall(new Vector2(j* PublicParameter.MAP_PIXEL_SIZE, i*PublicParameter.MAP_PIXEL_SIZE));
         wallLocationList.add(wall);
     }
     /**
@@ -182,7 +181,7 @@ public class Map implements Json.Serializable{
             for (int j =0; j < size; j++)
                 locationMatrix[i][j] = 0;
         }
-        wallLocationList = new ArrayList<Wall>(size);
+        wallLocationList = new ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall>(size);
     }
     /**
      * get the name
@@ -230,28 +229,28 @@ public class Map implements Json.Serializable{
      * get the exit door information
      * @return exit door information
      */
-    public ExitDoor getExitDoor() {
+    public com.chaowang.ddgame.MenuModel.MapModel.ExitDoor getExitDoor() {
         return exitDoor;
     }
     /**
      * set the exit door information
      * @param exitDoor exit door information
      */
-    public void setExitDoor( ExitDoor exitDoor) {
+    public void setExitDoor( com.chaowang.ddgame.MenuModel.MapModel.ExitDoor exitDoor) {
         this.exitDoor = exitDoor;
     }
     /**
      * get wall locations
      * @return wall locations
      */
-    public ArrayList<Wall> getWallLocationList() {
+    public ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall> getWallLocationList() {
         return wallLocationList;
     }
     /**
      * set wall locations
      * @param wallLocationList wall locations information
      */
-    public void setWallLocationList(ArrayList<Wall> wallLocationList) {
+    public void setWallLocationList(ArrayList<com.chaowang.ddgame.MenuModel.MapModel.Wall> wallLocationList) {
         this.wallLocationList = wallLocationList;
     }
     /**
@@ -337,7 +336,7 @@ public class Map implements Json.Serializable{
             }
         }
         if(count == 1){
-            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
+            exitDoor = new com.chaowang.ddgame.MenuModel.MapModel.ExitDoor(new Vector2( x * PublicParameter.MAP_PIXEL_SIZE, (size -1 - y) * PublicParameter.MAP_PIXEL_SIZE));
         }
         if( y == (size - 1)){
             count = -1;
@@ -351,7 +350,7 @@ public class Map implements Json.Serializable{
         for (int i =locationMatrix.length-1 ; i>=0 ; i--){
             for (int j = 0; j < locationMatrix[0].length; j++){
                 if(locationMatrix[i][j] == 1 ){
-                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, (size - 1 - i)* PublicParameter.MAP_PIXEL_SIZE)));
+                    wallLocationList.add(new com.chaowang.ddgame.MenuModel.MapModel.Wall(new Vector2( j * PublicParameter.MAP_PIXEL_SIZE, (size - 1 - i)* PublicParameter.MAP_PIXEL_SIZE)));
                 }
             }
         }
@@ -414,9 +413,9 @@ public class Map implements Json.Serializable{
         json.writeValue("Level", level);
         json.writeValue("Size", size);
         json.writeValue("EntryDoor", entryDoor, EntryDoor.class);
-        json.writeValue("ExitDoor", exitDoor, ExitDoor.class);
+        json.writeValue("ExitDoor", exitDoor, com.chaowang.ddgame.MenuModel.MapModel.ExitDoor.class);
         json.writeValue("LocationMatrix", locationMatrix);
-        json.writeValue("wallLocationList", wallLocationList, ArrayList.class, Wall.class);
+        json.writeValue("wallLocationList", wallLocationList, ArrayList.class, com.chaowang.ddgame.MenuModel.MapModel.Wall.class);
         json.writeValue("itemLocationList", itemLocationList, HashMap.class, Item.class);
         json.writeValue("friendLocationList", friendLocationList, HashMap.class, Character.class);
         json.writeValue("enemyLocationList", enemyLocationList, HashMap.class, Character.class);
@@ -436,7 +435,7 @@ public class Map implements Json.Serializable{
         entryDoor = json.fromJson(EntryDoor.class, context);
         context = jsonData.child.next.next.next.next.toString();
         context = context.substring(context.indexOf("{")-1);
-        exitDoor = json.fromJson(ExitDoor.class, context);
+        exitDoor = json.fromJson(com.chaowang.ddgame.MenuModel.MapModel.ExitDoor.class, context);
 
         Iterator<JsonValue> dataIterator;
         JsonValue pointer = jsonData.child.next.next.next.next.next;
@@ -451,10 +450,10 @@ public class Map implements Json.Serializable{
         pointer = jsonData.child.next.next.next.next.next.next;
         if(pointer != null){
             dataIterator = pointer.iterator();
-            Wall wall;
+            com.chaowang.ddgame.MenuModel.MapModel.Wall wall;
             while(dataIterator.hasNext()){
                 context = dataIterator.next().toString();
-                wall = json.fromJson(Wall.class, context);
+                wall = json.fromJson(com.chaowang.ddgame.MenuModel.MapModel.Wall.class, context);
                 wallLocationList.add(wall);
             }
         }

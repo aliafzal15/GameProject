@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.MapModel;
+package com.chaowang.ddgame.MenuModel.MapModel;
 
 
 import com.badlogic.gdx.Gdx;

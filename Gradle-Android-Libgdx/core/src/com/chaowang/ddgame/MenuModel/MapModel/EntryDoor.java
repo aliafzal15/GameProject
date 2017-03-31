@@ -1,6 +1,4 @@
-package com.chaowang.ddgame.MapModel;
-
-import java.util.Vector;
+package com.chaowang.ddgame.MenuModel.MapModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

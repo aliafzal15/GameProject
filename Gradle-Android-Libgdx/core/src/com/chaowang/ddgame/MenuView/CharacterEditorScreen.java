@@ -20,8 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.chaowang.ddgame.CharacterModel.Abilities;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuController.CharacterController;
 import com.chaowang.ddgame.PublicParameter;
 

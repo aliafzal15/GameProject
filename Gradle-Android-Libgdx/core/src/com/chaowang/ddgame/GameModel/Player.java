@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.PublicParameter;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+
 /**
  * the model class for Player
  * @author chao wang

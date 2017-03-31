@@ -1,6 +1,4 @@
-package com.chaowang.ddgame.ClassesModel;
-
-import java.util.Queue;
+package com.chaowang.ddgame.MenuModel.ClassesModel;
 
 /**
  * Created by Chao on 25/03/2017.

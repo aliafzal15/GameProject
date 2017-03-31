@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.ClassesModel;
+package com.chaowang.ddgame.MenuModel.ClassesModel;
 
 /**
  * Class for all different type in d &d

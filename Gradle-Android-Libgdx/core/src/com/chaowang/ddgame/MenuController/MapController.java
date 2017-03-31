@@ -24,9 +24,9 @@ import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.MenuView.MapEditorScreen;
 
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.MapModel.Map;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.util.MazeSolver;
 /**
  * controller for maps
