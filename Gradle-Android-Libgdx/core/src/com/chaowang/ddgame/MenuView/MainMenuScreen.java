@@ -44,7 +44,7 @@ public class MainMenuScreen implements Screen{
     TextureAtlas buttonAtlas;
     private Texture backgroundTexture;
     public static TextButton.TextButtonStyle buttonStyle;
-    private TextButton playButton, characterButton, mapButton, itemButton, campaignButton;
+    private TextButton playButton, continueButton, characterButton, mapButton, itemButton, campaignButton;
     public static Skin skin;
 
     private SpriteBatch batch;
@@ -95,10 +95,30 @@ public class MainMenuScreen implements Screen{
         buttonStyle.down = skin.getDrawable("buttonOff");
         buttonStyle.font = font;
 
-        playButton = new TextButton("PLAY", buttonStyle);
-        playButton.setWidth(Gdx.graphics.getWidth() / 6 );
+        continueButton = new TextButton("Continue", buttonStyle);
+        continueButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        continueButton.setHeight(Gdx.graphics.getHeight() / 9);
+        continueButton.setPosition((Gdx.graphics.getWidth()  * 3 / 4  ) - continueButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + (2 * continueButton.getHeight()));
+
+        stage.addActor(continueButton);
+
+        continueButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
+                // player = readPLayer();
+                // mapModel = readMapModel():
+                // campaign = readCampaign();
+                //ali's code, something like: game.setScreen(new GameScreen(game, player, mapModel, campaign));
+                return true;
+            }
+        });
+        
+        
+        playButton = new TextButton("New Game", buttonStyle);
+        playButton.setWidth(Gdx.graphics.getWidth() / 3 );
         playButton.setHeight(Gdx.graphics.getHeight() / 9);
-        playButton.setPosition((Gdx.graphics.getWidth()  * 3 / 4  ) - playButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + (2* playButton.getHeight()));
+        playButton.setPosition((Gdx.graphics.getWidth()  * 3 / 4  ) - playButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + (0.8f * playButton.getHeight()));
 
         stage.addActor(playButton);
 
@@ -114,7 +134,7 @@ public class MainMenuScreen implements Screen{
         characterButton = new TextButton("Character Editor", buttonStyle);
         characterButton.setWidth(Gdx.graphics.getWidth() / 3 );
         characterButton.setHeight(Gdx.graphics.getHeight() / 9);
-        characterButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - characterButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + characterButton.getHeight() / 2);
+        characterButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - characterButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) - 0.4f *characterButton.getHeight());
 
         stage.addActor(characterButton);
 
@@ -130,7 +150,7 @@ public class MainMenuScreen implements Screen{
         itemButton = new TextButton("Item Editor", buttonStyle);
         itemButton.setWidth(Gdx.graphics.getWidth() / 3 );
         itemButton.setHeight(Gdx.graphics.getHeight() / 9);
-        itemButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - itemButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) -  itemButton.getHeight());
+        itemButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - itemButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) -  1.6f * itemButton.getHeight());
 
         stage.addActor(itemButton);
 
@@ -146,7 +166,7 @@ public class MainMenuScreen implements Screen{
         mapButton = new TextButton("Map Editor", buttonStyle);
         mapButton.setWidth(Gdx.graphics.getWidth() / 3 );
         mapButton.setHeight(Gdx.graphics.getHeight() / 9);
-        mapButton.setPosition((Gdx.graphics.getWidth() * 3 / 4  ) - mapButton.getWidth() / 2 , (Gdx.graphics.getHeight() /3 ) - mapButton.getHeight());
+        mapButton.setPosition((Gdx.graphics.getWidth() * 3 / 4  ) - mapButton.getWidth() / 2 , (Gdx.graphics.getHeight() /2 - mapButton.getHeight() * 2.8f ) );
 
         stage.addActor(mapButton);
 
@@ -168,7 +188,7 @@ public class MainMenuScreen implements Screen{
         campaignButton = new TextButton("Campaign Editor", buttonStyle);
         campaignButton.setWidth(Gdx.graphics.getWidth() / 3 );
         campaignButton.setHeight(Gdx.graphics.getHeight() / 9);
-        campaignButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - campaignButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 6 ) - campaignButton.getHeight());
+        campaignButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - campaignButton.getWidth() / 2 , (Gdx.graphics.getHeight() /2 - mapButton.getHeight() * 4 )  );
 
         stage.addActor(campaignButton);
 
