@@ -12,9 +12,9 @@ import com.chaowang.ddgame.MapModel.EntryDoor;
 import com.chaowang.ddgame.MapModel.ExitDoor;
 import com.chaowang.ddgame.MapModel.Map;
 import com.chaowang.ddgame.MenuController.MapController;
-import com.chaowang.ddgame.PlayModel.Player;
+import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.GameScreen;
+import com.chaowang.ddgame.GameView.GameScreen;
 
 import org.junit.Before;
 import org.junit.Test;

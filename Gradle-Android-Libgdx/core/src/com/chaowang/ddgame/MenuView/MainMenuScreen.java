@@ -1,10 +1,9 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.MenuView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,9 +21,11 @@ import com.chaowang.ddgame.CampaignModel.CampaignInventory;
 
 import java.io.IOException;
 
+import com.chaowang.ddgame.GameView.GameSelectionScreen;
 import com.chaowang.ddgame.ItemModel.ItemInventory;
 import com.chaowang.ddgame.CharacterModel.CharacterInventory;
 import com.chaowang.ddgame.MapModel.MapInventory;
+
 /**
  * view for main menu
  * @author chao wang
@@ -156,7 +157,7 @@ public class MainMenuScreen implements Screen{
 				stage.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
 					@Override
 					public void run() {
-		                game.setScreen(new MapEditorScreen(game));					
+		                game.setScreen(new MapEditorScreen(game));
 		                }
 				})));
 

@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.MenuView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -20,6 +20,7 @@ import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuController.CampaignController;
+
 /**
  * view for campaign editor 
  * @author chao wang

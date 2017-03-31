@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.DialogueSystem;
+package com.chaowang.ddgame.GameModel.DialogueSystem;
 import java.util.ArrayList;
 import java.util.List;
 

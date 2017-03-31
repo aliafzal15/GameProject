@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.MenuView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,20 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.chaowang.ddgame.CampaignModel.Campaign;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.GameController.ItemExchangeController;
-import com.chaowang.ddgame.MapModel.Map;
-import com.chaowang.ddgame.MenuController.EquipmentController;
-import com.chaowang.ddgame.PlayModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 
+import com.chaowang.ddgame.MenuController.EquipmentController;
+import com.chaowang.ddgame.CharacterModel.Character;
 /**
- * View for Exchange Items
+ * view for equipment editor 
  * @author chao wang
- * @version 2.0
+ * @version 1.0
  */
-public class GameItemExchangeScreen implements Screen{
+public class EquipmentEditorScreen implements Screen{
 
     private Game game;
     public Stage stage;
@@ -37,31 +32,20 @@ public class GameItemExchangeScreen implements Screen{
     public TextButton backwardButton;
     private Texture backgroundTexture;
 
-    public ImageButton[] playerBackpackMatrix, NPCbackpackMatrix;
-    public Table playerBackpackTable, NPCbackpackTable;
-    private Player player;
-    private Character NPCcharacter;
-    private Vector2 NPCposition;
-    private Map mapModel;
-    private Campaign campaign;
-    private ItemExchangeController controller;
-    public Label NPCItemInfoLabel, backpackItemInfoLabel;
+    public ImageButton[] backpackMatrix, equipmentMatrix;
+    public Table backpackTable, equipmentTable;
+    private Character character;
+    private EquipmentController controller;
+    public Label equipmentItemInfoLabel, backpackItemInfoLabel, characterInfoLabel;
 
     /**
      * constructor
      * @param game
+     * @param character
      */
-    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, boolean isFriend) {
+    public EquipmentEditorScreen (Game game, Character character) {
         this.game = game;
-        this.player = player;
-        this.mapModel = map;
-        this.campaign = camp;
-        this.NPCposition = NPCposition;
-        if(isFriend == true){
-            this.NPCcharacter = mapModel.getFriendLocationList().get(NPCposition);
-        } else{
-            this.NPCcharacter = mapModel.getEnemyLocationList().get(NPCposition);
-        }
+        this.character = character;
     }
     /**
      * show whole equipment editor on screen
@@ -73,7 +57,7 @@ public class GameItemExchangeScreen implements Screen{
         backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
 
-        controller = new ItemExchangeController(this,this.player, this.NPCcharacter);
+        controller = new EquipmentController(this, this.character);
 
         backwardButton = new TextButton("<--", MainMenuScreen.buttonStyle);
         backwardButton.setWidth(Gdx.graphics.getWidth() / 20 );
@@ -82,7 +66,7 @@ public class GameItemExchangeScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game, player, mapModel, campaign));
+                game.setScreen(new CharacterEditorScreen(game, character));
                 return true;
             }
         });
@@ -92,31 +76,36 @@ public class GameItemExchangeScreen implements Screen{
         backpackItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 2), (Gdx.graphics.getHeight() / 8));
         stage.addActor(backpackItemInfoLabel);
 
-        NPCItemInfoLabel = new Label("", MainMenuScreen.style);
-        NPCItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 20), (Gdx.graphics.getHeight() / 8));
-        stage.addActor(NPCItemInfoLabel);
+        equipmentItemInfoLabel = new Label("", MainMenuScreen.style);
+        equipmentItemInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 20), (Gdx.graphics.getHeight() / 8));
+        stage.addActor(equipmentItemInfoLabel);
 
-        playerBackpackTable = new Table();
-        playerBackpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
-        playerBackpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
-        playerBackpackTable.setPosition(Gdx.graphics.getWidth() * 3 / 7, Gdx.graphics.getHeight() * 1 / 3);
+        characterInfoLabel = new Label(character.displayAllAtributes(), MainMenuScreen.style);
+        characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 4), (Gdx.graphics.getHeight() / 3));
+        stage.addActor(characterInfoLabel);
 
-        playerBackpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
-        controller.buildPlayerBackpackMatrix();
-        controller.addPlayerBackpackMatrixListener();
+        backpackTable = new Table();
+        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("backpackBackground.png")))));
+        backpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
+        backpackTable.setPosition(Gdx.graphics.getWidth() * 3 / 7, Gdx.graphics.getHeight() * 1 / 3);
 
-        stage.addActor(playerBackpackTable);
+        backpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
+        controller.buildBackpackMatrix();
+        controller.addBackpackMatrixListener();
 
-        NPCbackpackTable = new Table();
+        stage.addActor(backpackTable);
 
-        NPCbackpackTable.setSize(Gdx.graphics.getWidth() / 2 , Gdx.graphics.getHeight() * 1 / 3);
-        NPCbackpackTable.setPosition( Gdx.graphics.getWidth() / 100 , Gdx.graphics.getHeight() * 1 / 3);
+        equipmentTable = new Table();
 
-        NPCbackpackMatrix = new ImageButton[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
-        controller.buildNpcBackpackMatrix();
-        controller.addNpcBackpackMatrixListener();
+        equipmentTable.setSize(Gdx.graphics.getWidth() / 8 , Gdx.graphics.getHeight() * 1 / 3);
+        equipmentTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
+        equipmentTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("MaleHumanUnderwear.png")))));
 
-        stage.addActor(NPCbackpackTable);
+        equipmentMatrix = new ImageButton[PublicParameter.ITEM_TYPE_COUNT];
+        controller.buildEquipmentMatrix();
+        controller.addEquipmentMatrixListener();
+
+        stage.addActor(equipmentTable);
 
     }
     /**
@@ -168,5 +157,7 @@ public class GameItemExchangeScreen implements Screen{
     public void dispose() {
         stage.dispose();
     }
+
+
 
 }

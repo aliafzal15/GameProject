@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.PlayModel;
+package com.chaowang.ddgame.GameModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

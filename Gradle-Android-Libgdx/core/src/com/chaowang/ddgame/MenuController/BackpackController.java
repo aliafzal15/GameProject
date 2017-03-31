@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.BackpackEditorScreen;
+import com.chaowang.ddgame.MenuView.BackpackEditorScreen;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.CharacterModel.Character;

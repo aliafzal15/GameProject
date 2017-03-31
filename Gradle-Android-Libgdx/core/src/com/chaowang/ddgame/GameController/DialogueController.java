@@ -3,12 +3,12 @@ package com.chaowang.ddgame.GameController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.chaowang.ddgame.DialogueSystem.Dialogue;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode;
-import com.chaowang.ddgame.DialogueSystem.DialogueTraverser;
-import com.chaowang.ddgame.GameUI.DialogueBox;
-import com.chaowang.ddgame.GameUI.OptionBox;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode.NODE_TYPE;
+import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueTraverser;
+import com.chaowang.ddgame.GameUtl.DialogueBox;
+import com.chaowang.ddgame.GameUtl.OptionBox;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode.NODE_TYPE;
 
 /**
  * controller for dialogue table

@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.MenuView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

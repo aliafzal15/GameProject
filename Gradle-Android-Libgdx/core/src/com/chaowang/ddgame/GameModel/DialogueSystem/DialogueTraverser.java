@@ -1,7 +1,6 @@
-package com.chaowang.ddgame.DialogueSystem;
+package com.chaowang.ddgame.GameModel.DialogueSystem;
 
 import java.util.List;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode.NODE_TYPE;
 
 /**
  * @author hydrozoa
@@ -9,7 +8,7 @@ import com.chaowang.ddgame.DialogueSystem.DialogueNode.NODE_TYPE;
 public class DialogueTraverser {
 
     private Dialogue dialogue;
-    private DialogueNode currentNode;
+    private com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode currentNode;
     /**
      * set dialogue values
      * @param dialogue
@@ -23,8 +22,8 @@ public class DialogueTraverser {
      * @param pointerIndex
      * @return
      */
-    public DialogueNode getNextNode(int pointerIndex) {
-        DialogueNode nextNode = dialogue.getNode(currentNode.getPointers().get(pointerIndex));
+    public com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode getNextNode(int pointerIndex) {
+        com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode nextNode = dialogue.getNode(currentNode.getPointers().get(pointerIndex));
         currentNode = nextNode;
         return nextNode;
     }
@@ -47,7 +46,7 @@ public class DialogueTraverser {
      * get type
      * @return
      */
-    public NODE_TYPE getType() {
+    public com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode.NODE_TYPE getType() {
         return currentNode.getType();
     }
     /**
@@ -55,7 +54,7 @@ public class DialogueTraverser {
      * set type
      * @param type
      */
-    public void  setType (NODE_TYPE type) {
+    public void  setType (com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode.NODE_TYPE type) {
         currentNode.setType(type);
     }
 }

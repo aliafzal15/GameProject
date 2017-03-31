@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.MenuView;
 
 
 import com.badlogic.gdx.Game;
@@ -75,7 +75,7 @@ public class CharacterEditorScreen implements Screen {
         backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
 
-        mainPageButton = new TextButton("<--", MainMenuScreen.buttonStyle);
+        mainPageButton = new TextButton("<--", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         mainPageButton.setWidth(Gdx.graphics.getWidth() / 20 );
         mainPageButton.setHeight(Gdx.graphics.getHeight() / 10);
         mainPageButton.setPosition((Gdx.graphics.getWidth() * 1 /30 ) , (Gdx.graphics.getHeight() * 9 / 10 ) );
@@ -83,7 +83,7 @@ public class CharacterEditorScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new com.chaowang.ddgame.MenuView.MainMenuScreen(game));
                 return true;
             }
         });
@@ -93,19 +93,19 @@ public class CharacterEditorScreen implements Screen {
             character = new Character();
         }
         controller = new CharacterController(this, this.character);
-        nameText = new TextField(character.getName(), MainMenuScreen.skin);
+        nameText = new TextField(character.getName(), com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
 
         if(character.getStrength() > 0){
-            levelLabel = new Label(Integer.toString(character.getLevel()), MainMenuScreen.style);
+            levelLabel = new Label(Integer.toString(character.getLevel()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
         }
         else{
-            levelLabel = new Label("1", MainMenuScreen.style);
+            levelLabel = new Label("1", com.chaowang.ddgame.MenuView.MainMenuScreen.style);
         }
 
-        raceLabel = new Label(character.getRaceType().toString(), MainMenuScreen.style);
+        raceLabel = new Label(character.getRaceType().toString(), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
         characterImage = new Image(character.getTexture());
 
-        raceLeftButton = new TextButton("<", MainMenuScreen.buttonStyle);
+        raceLeftButton = new TextButton("<", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         raceLeftButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -114,7 +114,7 @@ public class CharacterEditorScreen implements Screen {
             }
         });
 
-        raceRightButton = new TextButton(">", MainMenuScreen.buttonStyle);
+        raceRightButton = new TextButton(">", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         raceRightButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -123,9 +123,9 @@ public class CharacterEditorScreen implements Screen {
             }
         });
 
-        fighterTypeLabel = new Label(character.getFighterType().toString(), MainMenuScreen.style);
+        fighterTypeLabel = new Label(character.getFighterType().toString(), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
 
-        fighterLeftButton = new TextButton("<", MainMenuScreen.buttonStyle);
+        fighterLeftButton = new TextButton("<", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         fighterLeftButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -134,7 +134,7 @@ public class CharacterEditorScreen implements Screen {
             }
         });
 
-        fighterRightButton = new TextButton(">", MainMenuScreen.buttonStyle);
+        fighterRightButton = new TextButton(">", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         fighterRightButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -144,7 +144,7 @@ public class CharacterEditorScreen implements Screen {
         });
 
 
-        levelLeftButton = new TextButton("<", MainMenuScreen.buttonStyle);
+        levelLeftButton = new TextButton("<", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         levelLeftButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -154,7 +154,7 @@ public class CharacterEditorScreen implements Screen {
         });
         levelLeftButton.setTouchable(Touchable.disabled);
 
-        levelRightButton = new TextButton(">", MainMenuScreen.buttonStyle);
+        levelRightButton = new TextButton(">", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         levelRightButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -164,7 +164,7 @@ public class CharacterEditorScreen implements Screen {
         });
         levelRightButton.setTouchable(Touchable.disabled);
 
-        confirmButton = new TextButton("OK", MainMenuScreen.buttonStyle);
+        confirmButton = new TextButton("OK", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         confirmButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -174,21 +174,21 @@ public class CharacterEditorScreen implements Screen {
         });
         confirmButton.setTouchable(Touchable.disabled);
 
-        promotePointLabel = new Label(Integer.toString(character.getPromotionPoint()), MainMenuScreen.style);
-        strengthLabel = new Label(Integer.toString(character.getStrength()), MainMenuScreen.style);
-        dexterityLabel = new Label(Integer.toString(character.getDexterity()), MainMenuScreen.style);
-        constitutionLabel = new Label(Integer.toString(character.getConstitution()), MainMenuScreen.style);
-        wisdomLabel = new Label(Integer.toString(character.getWisdom()), MainMenuScreen.style);
-        intellegenceLabel = new Label(Integer.toString(character.getIntelligence()), MainMenuScreen.style);
-        charismaLabel = new Label(Integer.toString(character.getCharisma()), MainMenuScreen.style);
-        hitpointLabel = new Label(Integer.toString(character.getHitPoints()), MainMenuScreen.style);
-        attackBonusLabel  = new Label(Integer.toString(character.getAttackBonus()), MainMenuScreen.style);
-        damageBonusLaber  = new Label(Integer.toString(character.getDamageBonus()), MainMenuScreen.style);
-        armorClassLabel  = new Label(Integer.toString(character.getArmorClass()), MainMenuScreen.style);
+        promotePointLabel = new Label(Integer.toString(character.getPromotionPoint()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        strengthLabel = new Label(Integer.toString(character.getStrength()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        dexterityLabel = new Label(Integer.toString(character.getDexterity()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        constitutionLabel = new Label(Integer.toString(character.getConstitution()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        wisdomLabel = new Label(Integer.toString(character.getWisdom()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        intellegenceLabel = new Label(Integer.toString(character.getIntelligence()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        charismaLabel = new Label(Integer.toString(character.getCharisma()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        hitpointLabel = new Label(Integer.toString(character.getHitPoints()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        attackBonusLabel  = new Label(Integer.toString(character.getAttackBonus()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        damageBonusLaber  = new Label(Integer.toString(character.getDamageBonus()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
+        armorClassLabel  = new Label(Integer.toString(character.getArmorClass()), com.chaowang.ddgame.MenuView.MainMenuScreen.style);
 
         bonusField = new TextField[Abilities.ABILITYSIZE];
         for (int i = 0;  i < bonusField.length ; i ++){
-            bonusField[i] =  new TextField(Integer.toString(character.getAbilityBonusArr()[i]), MainMenuScreen.skin);
+            bonusField[i] =  new TextField(Integer.toString(character.getAbilityBonusArr()[i]), com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
             bonusField[i].setDisabled(true);
         }
 
@@ -197,10 +197,10 @@ public class CharacterEditorScreen implements Screen {
         editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() );
         editorTable.setPosition(Gdx.graphics.getWidth() / 10, 2);
 
-        editorTable.add(new Label("", MainMenuScreen.style)).width(80);
+        editorTable.add(new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.style)).width(80);
         editorTable.add(characterImage).maxSize(250, 250).center();
         editorTable.row();
-        editorTable.add(new Label("Name", MainMenuScreen.style));
+        editorTable.add(new Label("Name", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(nameText);
         editorTable.row();
         editorTable.add(levelLeftButton).size(50, 50);
@@ -215,50 +215,50 @@ public class CharacterEditorScreen implements Screen {
         editorTable.add(fighterTypeLabel).center();
         editorTable.add(fighterRightButton).size(50, 50).expandX();
         editorTable.row();
-        editorTable.add(new Label("Promo Point", MainMenuScreen.style));
+        editorTable.add(new Label("Promo Point", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(promotePointLabel);
         editorTable.add(confirmButton).size(50, 50).expandX();
         editorTable.row();
-        editorTable.add(new Label("strength", MainMenuScreen.style));
+        editorTable.add(new Label("strength", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(strengthLabel);
         editorTable.add(bonusField[0]).width(30);
         editorTable.row();
-        editorTable.add(new Label("dexterity", MainMenuScreen.style));
+        editorTable.add(new Label("dexterity", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(dexterityLabel);
         editorTable.add(bonusField[1]).width(30);
         editorTable.row();
-        editorTable.add(new Label("constitution", MainMenuScreen.style));
+        editorTable.add(new Label("constitution", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(constitutionLabel);
         editorTable.add(bonusField[2]).width(30);
         editorTable.row();
-        editorTable.add(new Label("wisdom", MainMenuScreen.style));
+        editorTable.add(new Label("wisdom", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(wisdomLabel);
         editorTable.add(bonusField[3]).width(30);
         editorTable.row();
-        editorTable.add(new Label("intelligence", MainMenuScreen.style));
+        editorTable.add(new Label("intelligence", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(intellegenceLabel);
         editorTable.add(bonusField[4]).width(30);
         editorTable.row();
-        editorTable.add(new Label("charisma", MainMenuScreen.style));
+        editorTable.add(new Label("charisma", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(charismaLabel);
         editorTable.add(bonusField[5]).width(30);
         editorTable.row();
-        editorTable.add(new Label("hit point", MainMenuScreen.style));
+        editorTable.add(new Label("hit point", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(hitpointLabel);
         editorTable.row();
-        editorTable.add(new Label("armor class", MainMenuScreen.style));
+        editorTable.add(new Label("armor class", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(armorClassLabel);
         editorTable.row();
-        editorTable.add(new Label("attach bonus", MainMenuScreen.style));
+        editorTable.add(new Label("attach bonus", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(attackBonusLabel);
         editorTable.row();
-        editorTable.add(new Label("damage bonus", MainMenuScreen.style));
+        editorTable.add(new Label("damage bonus", com.chaowang.ddgame.MenuView.MainMenuScreen.style));
         editorTable.add(damageBonusLaber);
         editorTable.row();
 
         stage.addActor(editorTable);
 
-        characterSaveButton = new TextButton("SAVE", MainMenuScreen.buttonStyle);
+        characterSaveButton = new TextButton("SAVE", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         characterSaveButton.setWidth(Gdx.graphics.getWidth() / 9);
         characterSaveButton.setHeight(Gdx.graphics.getHeight() / 9);
         characterSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 2) + 50 , (Gdx.graphics.getHeight() / 20));
@@ -296,7 +296,7 @@ public class CharacterEditorScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^")) {
                     controller.controlSwitchPageButton();
-                    game.setScreen(new BackpackEditorScreen(game, controller.getCharacter()));
+                    game.setScreen(new com.chaowang.ddgame.MenuView.BackpackEditorScreen(game, controller.getCharacter()));
                 }
                 return true;
             }
@@ -317,7 +317,7 @@ public class CharacterEditorScreen implements Screen {
         stage.addActor(diceButton);
 
         // Right hand side
-        characterInfoLabel = new Label("", MainMenuScreen.style);
+        characterInfoLabel = new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.style);
         characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 3 / 7), (Gdx.graphics.getHeight() * 1 / 5));
         stage.addActor(characterInfoLabel);
 

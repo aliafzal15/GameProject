@@ -21,8 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.MainMenuScreen;
-import com.chaowang.ddgame.View.MapEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.MapEditorScreen;
 
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.MapModel.Map;

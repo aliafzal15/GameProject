@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.DialogueSystem;
+package com.chaowang.ddgame.GameModel.DialogueSystem;
 
 import java.util.HashMap;
 import java.util.Map;

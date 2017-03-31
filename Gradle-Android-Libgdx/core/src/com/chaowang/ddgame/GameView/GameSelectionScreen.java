@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.GameView;
 
 
 import com.badlogic.gdx.Game;
@@ -25,6 +25,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 /**

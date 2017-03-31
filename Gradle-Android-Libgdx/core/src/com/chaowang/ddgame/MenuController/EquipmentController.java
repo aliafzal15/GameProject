@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.View.EquipmentEditorScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.EquipmentEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.util.HashMap;

@@ -13,13 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.chaowang.ddgame.CharacterModel.Abilities;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
-import com.chaowang.ddgame.View.CharacterEditorScreen;
+import com.chaowang.ddgame.MenuView.CharacterEditorScreen;
 
 import java.util.Arrays;
 import java.util.Collections;

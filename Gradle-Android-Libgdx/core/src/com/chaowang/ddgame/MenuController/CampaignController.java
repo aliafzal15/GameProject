@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.chaowang.ddgame.View.CampaignEditorScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.CampaignEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import com.chaowang.ddgame.CampaignModel.Campaign;

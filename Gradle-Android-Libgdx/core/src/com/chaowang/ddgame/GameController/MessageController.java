@@ -2,7 +2,7 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.chaowang.ddgame.GameUI.DialogueBox;
+import com.chaowang.ddgame.GameUtl.DialogueBox;
 
 /**
  * controller for message delivering

@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.View;
+package com.chaowang.ddgame.GameView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,41 +11,36 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.CampaignModel.Campaign;
 import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.DialogueSystem.Dialogue;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode;
+import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode;
 import com.chaowang.ddgame.GameController.DialogueController;
 import com.chaowang.ddgame.GameController.GameScreenController;
 import com.chaowang.ddgame.GameController.PlayerController;
-import com.chaowang.ddgame.GameUI.DialogueBox;
+import com.chaowang.ddgame.GameUtl.DialogueBox;
 import com.chaowang.ddgame.ItemModel.Item;
 import com.chaowang.ddgame.MapModel.Wall;
-import com.chaowang.ddgame.PlayModel.Player;
+import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.MapModel.Map;
 
-import com.chaowang.ddgame.GameUI.OptionBox;
+import com.chaowang.ddgame.GameUtl.OptionBox;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
 /**
  * View for Game Selection
@@ -289,7 +284,7 @@ public class GameScreen implements Observer, Screen{
                         uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                game.setScreen(new MainMenuScreen(game));
+                                game.setScreen(new com.chaowang.ddgame.MenuView.MainMenuScreen(game));
                             }
                         })));
                     } else {
@@ -377,7 +372,7 @@ public class GameScreen implements Observer, Screen{
         Table abilityTable = constructAbilityTable();
         Table dialogTable = constructDialogTable();
         Table playerEditTable = new Table();
-        playerEditorBtn =new TextButton("I", MainMenuScreen.buttonStyle);
+        playerEditorBtn =new TextButton("I", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         playerEditorBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -397,11 +392,11 @@ public class GameScreen implements Observer, Screen{
      * @return
      */
     private Table constructDialogTable() {
-        messageDialog = new DialogueBox(MainMenuScreen.skin);
+        messageDialog = new DialogueBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
         messageDialog.setVisible(false);
-        dialogBox = new DialogueBox(MainMenuScreen.skin);
+        dialogBox = new DialogueBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
         dialogBox.setVisible(false);
-        optionBox = new OptionBox(MainMenuScreen.skin);
+        optionBox = new OptionBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
         optionBox.setVisible(false);
 
         Table dialogTable = new Table();
@@ -417,7 +412,7 @@ public class GameScreen implements Observer, Screen{
     private Table constructItemTable(){
         equipmentMatrix = new Image[PublicParameter.ITEM_TYPE_COUNT];
         backpackMatrix = new Image[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
-        itemInfoLabel = new Label("", MainMenuScreen.skin);
+        itemInfoLabel = new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
         itemInfoLabel.setFontScale(.5f);
         itemInfoLabel.setVisible(false);
 
@@ -446,7 +441,7 @@ public class GameScreen implements Observer, Screen{
      * @return
      */
     private Table constructAbilityTable() {
-        abilityLabel = new Label("",MainMenuScreen.skin);
+        abilityLabel = new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
         abilityLabel.setVisible(false);
         abilityLabel.setFontScale(.8f);
 

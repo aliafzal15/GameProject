@@ -1,27 +1,18 @@
 package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.chaowang.ddgame.CharacterModel.Character;
 import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.PlayModel.Player;
+import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.EquipmentEditorScreen;
-import com.chaowang.ddgame.View.GameItemExchangeScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
+import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 
 /**
  * controller for equipment

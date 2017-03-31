@@ -13,17 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.PlayModel.Player;
+import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.EquipmentEditorScreen;
-import com.chaowang.ddgame.View.GameItemExchangeScreen;
-import com.chaowang.ddgame.View.GamePlayerEditorScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.GameView.GamePlayerEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * controller for equipment
