@@ -1,4 +1,9 @@
 package com.chaowang.ddgame.util;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
+
 /**
  * class for dice
  * @author chao wang
@@ -34,6 +39,8 @@ public class Dice {
 	 */
 	public static int roll(int numberOfDice, int sides, int extra) {
 		int roll = 0;
+		//Gdx.app.log("MyTag", "my informative message");
+		MainMenuScreen.logArea.appendText("rolling "+numberOfDice+" dices with"+sides+" sides and " + extra +" extra\n");
 		for(int die = 1; die <= numberOfDice; die++) {
 			roll += roll(sides);
 		}

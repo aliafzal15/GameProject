@@ -36,6 +36,7 @@ import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 
 import com.chaowang.ddgame.GameUtl.OptionBox;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.util.Iterator;
@@ -177,6 +178,10 @@ public class GameScreen implements Observer, Screen{
 
         //stage.addActor(fade);
 //        stage.draw();
+
+        MainMenuScreen.logArea.setPosition(Gdx.graphics.getWidth()/80,Gdx.graphics.getHeight() /80 );
+        MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
+        uiStage.addActor(MainMenuScreen.logArea);
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
     }
     /**
@@ -232,7 +237,7 @@ public class GameScreen implements Observer, Screen{
              cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
             if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(5);
+                playerController.reAdjust(0);
                 isHitObject = true;
                 dialogueController.startDialogue(dialogue);
                 if(!dialogueController.isIndexFlag()) {
@@ -265,9 +270,10 @@ public class GameScreen implements Observer, Screen{
             cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
             if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(5);
+                playerController.reAdjust(0);
                 isHitObject = true;
                 if(! mapModel.getEnemyLocationList().get(cur).isDead()){
+                    MainMenuScreen.logArea.appendText(player.getCharacter().getName() + " attack with point 1 \n");
                     mapModel.getEnemyLocationList().get(cur).underAttack();
                 } else{
                     game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, false));
@@ -284,6 +290,7 @@ public class GameScreen implements Observer, Screen{
                         uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
                             @Override
                             public void run() {
+                                MainMenuScreen.logArea.clear();
                                 game.setScreen(new com.chaowang.ddgame.MenuView.MainMenuScreen(game));
                             }
                         })));
@@ -296,13 +303,14 @@ public class GameScreen implements Observer, Screen{
                             public void run() {
                                 //campaign.getMapPack().removeIndex(0);
                                 System.out.println("loading map number "+count);
+                                MainMenuScreen.logArea.clear();
                                 game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
                             }
                         })));
                     }
             	}else{
                     dialogueController.animateText("There are still hostile monsters survive on the map");
-                    playerController.reAdjust(5);
+                    playerController.reAdjust(0);
                     isHitObject = true;
             	}
             } else {
@@ -317,9 +325,9 @@ public class GameScreen implements Observer, Screen{
             isHitObject = true;
         }
 
-        if(! isHitObject ){
+        //if(! isHitObject ){
             playerController.keyDown();
-        }
+        //}
         batch.end();
 
         dialogueController.keyUp();

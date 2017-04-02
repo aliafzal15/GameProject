@@ -11,6 +11,7 @@ import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBuilderDirector;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBullyBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterNimbleBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterTankBuilder;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuModel.ClassesModel.Fighter.FighterType;
 import java.util.ArrayList;
@@ -191,7 +192,7 @@ public class Character extends Observable implements Json.Serializable{
 	public void underAttack(){
 		if(!isDead()){
 			this.hitPoints --;
-			System.out.println(this.getHitPoints() + "Hp -1 ");
+			MainMenuScreen.logArea.appendText(this.getName() + " Hp -1 : "+this.getHitPoints()+"\n");
 		}
 		if(isDead()){
 			makeDead();
@@ -216,6 +217,7 @@ public class Character extends Observable implements Json.Serializable{
 		this.armorClass = 0;
 		this.attackBonus = 0 ;
 		this.damageBonus = 0;
+		MainMenuScreen.logArea.appendText(this.getName() + " is dead \n");
 	}
 
 	/**

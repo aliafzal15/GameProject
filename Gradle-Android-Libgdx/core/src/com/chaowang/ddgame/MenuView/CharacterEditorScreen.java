@@ -74,6 +74,11 @@ public class CharacterEditorScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         backgroundTexture = new Texture(Gdx.files.internal("EditorBackground.jpg"));
         batch = new SpriteBatch();
+        //log label
+
+        MainMenuScreen.logArea.setPosition(Gdx.graphics.getWidth()*3/4,Gdx.graphics.getHeight() /40 );
+        MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/5,Gdx.graphics.getHeight()/8);
+        stage.addActor(MainMenuScreen.logArea);
 
         mainPageButton = new TextButton("<--", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
         mainPageButton.setWidth(Gdx.graphics.getWidth() / 20 );

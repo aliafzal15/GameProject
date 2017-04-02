@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -36,6 +38,7 @@ public class MainMenuScreen implements Screen{
     private Stage stage;
 
     public static Label.LabelStyle style;
+    public static TextArea logArea;
     public static BitmapFont font;
     public static ItemInventory itemInventory;
     public static CharacterInventory characterInventory;
@@ -94,6 +97,11 @@ public class MainMenuScreen implements Screen{
         buttonStyle.over = skin.getDrawable("buttonOff");
         buttonStyle.down = skin.getDrawable("buttonOff");
         buttonStyle.font = font;
+
+        //log label
+        logArea = new TextArea("",skin);
+        logArea.setColor(new Color(0, 1, 0, 0.4f));
+        logArea.setDisabled(true);
 
         continueButton = new TextButton("Continue", buttonStyle);
         continueButton.setWidth(Gdx.graphics.getWidth() / 3 );

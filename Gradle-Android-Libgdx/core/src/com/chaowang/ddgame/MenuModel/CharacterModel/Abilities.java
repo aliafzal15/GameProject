@@ -36,7 +36,7 @@ public class Abilities  {
 		 * @param index which specific type
 		 * @return the specific ability type
 		 */
-		public AbilityType getAbility (int index) {
+		public static AbilityType getAbility (int index) {
 			switch (index) {
 				case 0:
 					return STRENGTH;
@@ -53,7 +53,6 @@ public class Abilities  {
 			}
 			return WISDOM;
 		}
-
 	};
 	
 	/**

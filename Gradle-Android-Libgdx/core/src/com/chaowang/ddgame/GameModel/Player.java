@@ -47,6 +47,7 @@ public class Player extends Actor{
         currentFrame = (TextureRegion) animation.getKeyFrame(0);
         bound = new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
+
     /**
      * get bound of player
      * @return
