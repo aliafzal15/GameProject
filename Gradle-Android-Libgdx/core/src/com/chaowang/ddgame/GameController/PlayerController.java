@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
@@ -42,7 +44,7 @@ public class PlayerController extends InputAdapter{
     /**
      * use keyboard to control the players' movement
      */
-    public void keyDown(){
+    public void keyDown(Vector3 destination){
 
         if(stateTime < 4 ){
             stateTime += Gdx.graphics.getDeltaTime() ;
@@ -50,27 +52,26 @@ public class PlayerController extends InputAdapter{
             stateTime = 0;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W ) && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
+        if(player.getPosition().y <destination.y && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
             player.move(0,1);
             movement = "up";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S ) && player.getPosition().y > mapBound.getY() ){
+        else if(player.getPosition().y >destination.y && player.getPosition().y > mapBound.getY() ){
             player.move(0,-1);
             movement = "down";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.A ) && player.getPosition().x > mapBound.getX()){
+        else if(player.getPosition().x > destination.x && player.getPosition().x > mapBound.getX()){
             player.move(-1,0);
             movement = "left";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D ) && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()){
-            player.move(1,0);
+        else if(player.getPosition().x < destination.x && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()) {
+            player.move(1, 0);
             movement = "right";
-            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime *4) % 4));
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime * 4) % 4));
         }
-
 
     }
     /**

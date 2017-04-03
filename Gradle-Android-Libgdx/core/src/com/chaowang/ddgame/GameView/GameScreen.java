@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -70,6 +71,8 @@ public class GameScreen implements Observer, Screen{
 
 
     private Player player;
+    private Vector2 origin;
+    private Vector3 destination;
     private Map mapModel;
     private Campaign campaign;
     private Iterator<Vector2> keySetIterator ;
@@ -137,14 +140,16 @@ public class GameScreen implements Observer, Screen{
         screenController = new GameScreenController(this,this.mapModel, this.player);
 
         dialogue = new Dialogue();
-        DialogueNode node1 = new DialogueNode("Hello Adventurer!\n Welcome to town.", 0);
-        DialogueNode node2 = new DialogueNode("How can I help you?", 1);
+        DialogueNode node1 = new DialogueNode("How do you want your move ?", 0);
+        DialogueNode node2 = new DialogueNode("How do you want your move ?", 1);
 
         node1.makeLinear(node2.getID());
         node2.addChoice("Trade", 2);
-        node2.addChoice("Leave", 3);
+        node2.addChoice("Move", 3);
+        node2.addChoice("Fight",4);
         dialogue.addNode(node1);
         dialogue.addNode(node2);
+        dialogueController.startDialogue(dialogue);
 
         // from show
         if(mapModel.getLevel() != player.getCharacter().getLevel()){
@@ -179,6 +184,9 @@ public class GameScreen implements Observer, Screen{
         //stage.addActor(fade);
 //        stage.draw();
 
+        origin = new Vector2(player.getPosition());
+        destination = new Vector3(player.getPosition().x,player.getPosition().y, .0f);
+
         MainMenuScreen.logArea.setPosition(Gdx.graphics.getWidth()/80,Gdx.graphics.getHeight() /80 );
         MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
         uiStage.addActor(MainMenuScreen.logArea);
@@ -206,6 +214,7 @@ public class GameScreen implements Observer, Screen{
 
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
+
 
         //draw walls on screen
         for(Wall cur : mapModel.getWallLocationList() ){
@@ -239,27 +248,6 @@ public class GameScreen implements Observer, Screen{
             if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(0);
                 isHitObject = true;
-                dialogueController.startDialogue(dialogue);
-                if(!dialogueController.isIndexFlag()) {
-                    System.out.println("looping");
-                } else {
-                    if (dialogueController.getAnswerIndex() == 0) {
-                        game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
-                    }
-                }
-//                new Thread(new Runnable() {
-//                    public void run() {
-//                        if(! dialogueController.isIndexFlag()){
-//                            System.out.println("looping");
-//                            try{Thread.sleep(500);}
-//                            catch(Exception e){ e.printStackTrace();}
-//                        } else{
-//                            if(dialogueController.getAnswerIndex() ==0 ){
-//                                game.setScreen(new GameSelectionScreen(game));
-//                            }
-//                        }
-//                    }
-//                }).start();
             }
         }
 
@@ -325,9 +313,41 @@ public class GameScreen implements Observer, Screen{
             isHitObject = true;
         }
 
-        //if(! isHitObject ){
-            playerController.keyDown();
-        //}
+        if(!dialogueController.isIndexFlag()) {
+            //System.out.println("looping");
+        } else {
+            if (dialogueController.getAnswerIndex() == 0) {
+                System.out.println("search for trade");
+                dialogueController.setIndexFlag(false);
+                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+            }
+            else if (dialogueController.getAnswerIndex() == 1) {
+                System.out.println("click to move");
+                dialogueController.setIndexFlag(false);
+                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+            }
+            else if (dialogueController.getAnswerIndex() == 2) {
+                System.out.println("fight monster");
+                dialogueController.setIndexFlag(false);
+                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+            }
+        }
+        if(! isHitObject && Gdx.input.isTouched() && dialogueController.getAnswerIndex() == 1 ){
+            origin.set(player.getX(), player.getY());
+            destination.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            getCam().unproject(destination);
+            int count= 0;
+            while( count <100){
+                    //(int)player.getPosition().x != (int)destination.x && (int)player.getPosition().y != (int)destination.y) {
+                playerController.keyDown(destination);
+                count++;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         batch.end();
 
         dialogueController.keyUp();
