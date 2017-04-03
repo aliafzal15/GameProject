@@ -332,24 +332,31 @@ public class GameScreen implements Observer, Screen{
                 //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
             }
         }
-        if(! isHitObject && Gdx.input.isTouched() && dialogueController.getAnswerIndex() == 1 ){
-            origin.set(player.getX(), player.getY());
-            destination.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            getCam().unproject(destination);
-            int count= 0;
-            while( count <100){
-                    //(int)player.getPosition().x != (int)destination.x && (int)player.getPosition().y != (int)destination.y) {
-                playerController.keyDown(destination);
-                count++;
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        
+        
+        if(! isHitObject && dialogueController.getAnswerIndex() == 1 ){
+            origin.set(player.getPosition().x, player.getPosition().y);
+        	if(Gdx.input.isTouched()){
+                destination.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                getCam().unproject(destination);
+                if(origin.dst(destination.x, destination.y) > PublicParameter.GAME_PIXEL_SIZE*3){
+                	float distance = origin.dst(destination.x, destination.y);
+                	destination.set(origin.x+ (destination.x-origin.x)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance,
+                			origin.y+ (destination.y-origin.y)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance, 0);
+                	System.out.println(destination.toString());
                 }
-            }
+                playerController.keyDown(destination);
+        	}
+        	if((int)origin.y >= (int)destination.y-1 && (int)origin.y <= (int)destination.y+1
+        			&&(int)origin.x >= (int)destination.x-1 && (int)origin.x <= (int)destination.x+1 ){
+        		//dialogueController.setAnswerIndex(-1);
+        	}else{
+            	System.out.println(origin.toString());
+        		playerController.keyDown(destination);
+        	}
         }
-        batch.end();
 
+        batch.end();
         dialogueController.keyUp();
         uiStage.draw();
         screenController.onClickListen();

@@ -76,7 +76,8 @@ public class OptionBox extends Table {
     public void moveUp() {
         selectorIndex--;
         if (selectorIndex < 0) {
-            selectorIndex = 0;
+            //selectorIndex = 0;
+        	selectorIndex = options.size()-1;
         }
         calcArrowVisibility();
     }
@@ -86,7 +87,8 @@ public class OptionBox extends Table {
     public void moveDown(){
         selectorIndex ++;
         if(selectorIndex >= options.size() ){
-            selectorIndex = options.size()-1 ;
+            //selectorIndex = options.size()-1 ;
+            selectorIndex = 0;
         }
         calcArrowVisibility();
 

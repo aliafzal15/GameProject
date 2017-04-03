@@ -52,12 +52,12 @@ public class PlayerController extends InputAdapter{
             stateTime = 0;
         }
 
-        if(player.getPosition().y <destination.y && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
+        if((int)player.getPosition().y <(int)destination.y && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
             player.move(0,1);
             movement = "up";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
         }
-        else if(player.getPosition().y >destination.y && player.getPosition().y > mapBound.getY() ){
+        else if((int)player.getPosition().y >(int)destination.y && player.getPosition().y > mapBound.getY() ){
             player.move(0,-1);
             movement = "down";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));

@@ -38,8 +38,16 @@ public class DialogueController extends InputAdapter{
         messageDialog = message;
         indexFlag = false;
     }
+    
     /**
-     * get index
+     * setter AnswerIndex
+     * @return
+     */
+    public void setAnswerIndex(int index) {
+        answerIndex = index;
+    }
+    /**
+     * getter AnswerIndex
      * @return
      */
     public int getAnswerIndex() {
