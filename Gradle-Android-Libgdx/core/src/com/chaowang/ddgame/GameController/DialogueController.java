@@ -118,7 +118,6 @@ public class DialogueController extends InputAdapter{
                     dialogueBox.setVisible(false);
                     System.out.println("in root, answer index is " + answerIndex+ "which means trade");
                 }
-
                 return true;
             }
             return true;

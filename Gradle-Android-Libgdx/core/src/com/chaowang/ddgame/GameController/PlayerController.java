@@ -57,17 +57,17 @@ public class PlayerController extends InputAdapter{
             movement = "up";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
         }
-        else if((int)player.getPosition().y >(int)destination.y && player.getPosition().y > mapBound.getY() ){
+        else if((int)player.getPosition().y >(int)destination.y+2.1f && player.getPosition().y > mapBound.getY() ){
             player.move(0,-1);
             movement = "down";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
         }
-        else if(player.getPosition().x > destination.x && player.getPosition().x > mapBound.getX()){
+        else if((int)player.getPosition().x > (int)destination.x+2.1f && player.getPosition().x > mapBound.getX()){
             player.move(-1,0);
             movement = "left";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
         }
-        else if(player.getPosition().x < destination.x && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()) {
+        else if((int)player.getPosition().x < (int)destination.x && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()) {
             player.move(1, 0);
             movement = "right";
             player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime * 4) % 4));

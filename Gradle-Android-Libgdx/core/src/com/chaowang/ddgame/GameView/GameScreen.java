@@ -185,7 +185,8 @@ public class GameScreen implements Observer, Screen{
 //        stage.draw();
 
         origin = new Vector2(player.getPosition());
-        destination = new Vector3(player.getPosition().x,player.getPosition().y, .0f);
+        //destination = new Vector3(player.getPosition().x,player.getPosition().y, .0f);
+        destination = new Vector3(1000f,1000f, 0f);
 
         MainMenuScreen.logArea.setPosition(Gdx.graphics.getWidth()/80,Gdx.graphics.getHeight() /80 );
         MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
@@ -336,24 +337,25 @@ public class GameScreen implements Observer, Screen{
         
         if(! isHitObject && dialogueController.getAnswerIndex() == 1 ){
             origin.set(player.getPosition().x, player.getPosition().y);
-        	if(Gdx.input.isTouched()){
+            // capture destination by click on screen
+        	if(Gdx.input.justTouched()){
                 destination.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 getCam().unproject(destination);
+                // if destination too far, adjust
                 if(origin.dst(destination.x, destination.y) > PublicParameter.GAME_PIXEL_SIZE*3){
                 	float distance = origin.dst(destination.x, destination.y);
                 	destination.set(origin.x+ (destination.x-origin.x)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance,
                 			origin.y+ (destination.y-origin.y)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance, 0);
                 	System.out.println(destination.toString());
                 }
+                //dialogueController.setAnswerIndex(-2);   // set -2, since -1 will bring the option box on
+            }
+            // second render and after, player keep moving
+        	if(!( (int)origin.y >= (int)destination.y-1 && (int)origin.y <= (int)destination.y+1
+        			&&(int)origin.x >= (int)destination.x-1 && (int)origin.x <= (int)destination.x+1 )
+                    && destination.y < Gdx.graphics.getHeight()){
                 playerController.keyDown(destination);
-        	}
-        	if((int)origin.y >= (int)destination.y-1 && (int)origin.y <= (int)destination.y+1
-        			&&(int)origin.x >= (int)destination.x-1 && (int)origin.x <= (int)destination.x+1 ){
-        		//dialogueController.setAnswerIndex(-1);
-        	}else{
-            	System.out.println(origin.toString());
-        		playerController.keyDown(destination);
-        	}
+            }
         }
 
         batch.end();
