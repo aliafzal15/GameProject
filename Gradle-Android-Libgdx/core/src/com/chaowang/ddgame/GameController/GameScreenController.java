@@ -2,6 +2,7 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,6 +32,8 @@ public class GameScreenController {
     private Player player;
     private Vector3 touch;
     private Vector2 pointer;
+    private Iterator<Vector2> keySetIterator ;
+    private Rectangle playerTradeRange;
     /**
      * construct
      * @param screen
@@ -51,6 +54,7 @@ public class GameScreenController {
             mapModel.getFriendLocationList().get(keySetIterator.next()).addObserver(view);
         }
         touch = new Vector3();
+        playerTradeRange = new Rectangle();
     }
     /**
      * listener to monitor any changes
@@ -194,4 +198,17 @@ public class GameScreenController {
     	return true;
     	
     }
+	public Vector2 tradeWithFriend() {
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+        playerTradeRange.set(player.getBound().x - 30, player.getBound().y -30, player.getBound().width +30, player.getBound().height +30);
+        Vector2 cur;
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(playerTradeRange.overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
+            	return cur;
+            }
+        }
+		return null;
+		
+	}
 }

@@ -140,13 +140,13 @@ public class GameScreen implements Observer, Screen{
         screenController = new GameScreenController(this,this.mapModel, this.player);
 
         dialogue = new Dialogue();
-        DialogueNode node1 = new DialogueNode("How do you want your move ?", 0);
+        DialogueNode node1 = new DialogueNode("Your Turn starts", 0);
         DialogueNode node2 = new DialogueNode("How do you want your move ?", 1);
 
         node1.makeLinear(node2.getID());
-        node2.addChoice("Trade", 2);
-        node2.addChoice("Move", 3);
-        node2.addChoice("Fight",4);
+        node2.addChoice("Move", 2);
+        node2.addChoice("Fight",3);
+        node2.addChoice("Trade", 4);
         dialogue.addNode(node1);
         dialogue.addNode(node2);
         dialogueController.startDialogue(dialogue);
@@ -247,7 +247,7 @@ public class GameScreen implements Observer, Screen{
              cur = keySetIterator.next();
             mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
             if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(0);
+                playerController.reAdjust(5);
                 isHitObject = true;
             }
         }
@@ -259,7 +259,7 @@ public class GameScreen implements Observer, Screen{
             cur = keySetIterator.next();
             mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
             if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(0);
+                playerController.reAdjust(5);
                 isHitObject = true;
                 if(! mapModel.getEnemyLocationList().get(cur).isDead()){
                     MainMenuScreen.logArea.appendText(player.getCharacter().getName() + " attack with point 1 \n");
@@ -270,7 +270,7 @@ public class GameScreen implements Observer, Screen{
             }
         }
 
-        //draw player on screen
+        //draw exit door on screen, exit mechanism
         if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
             if (player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f) {
             	if(screenController.isEnemyAllDead()){
@@ -299,7 +299,7 @@ public class GameScreen implements Observer, Screen{
                     }
             	}else{
                     dialogueController.animateText("There are still hostile monsters survive on the map");
-                    playerController.reAdjust(0);
+                    playerController.reAdjust(5);
                     isHitObject = true;
             	}
             } else {
@@ -314,49 +314,26 @@ public class GameScreen implements Observer, Screen{
             isHitObject = true;
         }
 
+        // if index flag is false, which means the dialog is displaying, don't allow player do any action untill dialog is finished
         if(!dialogueController.isIndexFlag()) {
-            //System.out.println("looping");
+            //System.out.println("dialog is still displaying");
         } else {
             if (dialogueController.getAnswerIndex() == 0) {
-                System.out.println("search for trade");
-                dialogueController.setIndexFlag(false);
-                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+                playerController.movePlayer();
             }
             else if (dialogueController.getAnswerIndex() == 1) {
-                System.out.println("click to move");
-                dialogueController.setIndexFlag(false);
+            	Vector2 friendLocation = screenController.tradeWithFriend();
+            	if(friendLocation !=null){
+            		game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, friendLocation, true));
+            	}
                 //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
             }
             else if (dialogueController.getAnswerIndex() == 2) {
-                System.out.println("fight monster");
-                dialogueController.setIndexFlag(false);
+                System.out.println("search for trade");
                 //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
             }
         }
-        
-        
-        if(! isHitObject && dialogueController.getAnswerIndex() == 1 ){
-            origin.set(player.getPosition().x, player.getPosition().y);
-            // capture destination by click on screen
-        	if(Gdx.input.justTouched()){
-                destination.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                getCam().unproject(destination);
-                // if destination too far, adjust
-                if(origin.dst(destination.x, destination.y) > PublicParameter.GAME_PIXEL_SIZE*3){
-                	float distance = origin.dst(destination.x, destination.y);
-                	destination.set(origin.x+ (destination.x-origin.x)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance,
-                			origin.y+ (destination.y-origin.y)* (PublicParameter.GAME_PIXEL_SIZE*3) / distance, 0);
-                	System.out.println(destination.toString());
-                }
-                //dialogueController.setAnswerIndex(-2);   // set -2, since -1 will bring the option box on
-            }
-            // second render and after, player keep moving
-        	if(!( (int)origin.y >= (int)destination.y-1 && (int)origin.y <= (int)destination.y+1
-        			&&(int)origin.x >= (int)destination.x-1 && (int)origin.x <= (int)destination.x+1 )
-                    && destination.y < Gdx.graphics.getHeight()){
-                playerController.keyDown(destination);
-            }
-        }
+
 
         batch.end();
         dialogueController.keyUp();
@@ -582,4 +559,13 @@ public class GameScreen implements Observer, Screen{
     public Map getMapModel() {
         return mapModel;
     }
+
+	public boolean isHitObject() {
+		return isHitObject;
+	}
+
+	public void setHitObject(boolean isHitObject) {
+		this.isHitObject = isHitObject;
+	}
+    
 }

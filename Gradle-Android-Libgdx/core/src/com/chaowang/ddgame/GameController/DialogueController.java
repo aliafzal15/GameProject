@@ -104,19 +104,19 @@ public class DialogueController extends InputAdapter{
                     indexFlag = true;
                     optionBox.setVisible(false);
                     dialogueBox.setVisible(false);
-                    System.out.println("in root, answer index is " + answerIndex+ " which means trade");
+                    System.out.println("in DialogController, answer index is " + answerIndex+ " which means move");
                 }
                 else if(answerIndex ==1){
                     indexFlag = true;
                     optionBox.setVisible(false);
                     dialogueBox.setVisible(false);
-                    System.out.println("in root, answer index is " + answerIndex+ "which means move");
+                    System.out.println("in DialogController, answer index is " + answerIndex+ "which means fight");
                 }
                 else if(answerIndex ==2){
                     indexFlag = true;
                     optionBox.setVisible(false);
                     dialogueBox.setVisible(false);
-                    System.out.println("in root, answer index is " + answerIndex+ "which means trade");
+                    System.out.println("in DialogController, answer index is " + answerIndex+ "which means trade");
                 }
                 return true;
             }
