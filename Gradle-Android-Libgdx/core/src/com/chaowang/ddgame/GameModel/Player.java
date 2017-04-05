@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.chaowang.ddgame.GameModel.StrategyPattern.Strategy;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 
 /**
@@ -25,6 +26,8 @@ public class Player extends Actor{
     private Texture playerTexture;
     private TextureRegion[]  frames;
     private TextureRegion currentFrame;
+    // for strategy
+    private Strategy strategy;
     
     /**
      * constructor
@@ -164,4 +167,22 @@ public class Player extends Actor{
             }
         }
     }
+    
+    
+    public void setStrategy(Strategy strategy){
+    	this.strategy = strategy;
+    }
+    
+    public void executeSetupCameraStategy(){
+    	this.strategy.setupCamera();
+    }
+
+	public void renderInteraction() {
+    	this.strategy.renderInteraction();
+	}
+    
+	public void updateDialogueStage(float delta){
+		this.strategy.updateDialogueStage(delta);
+	}
+    
 }

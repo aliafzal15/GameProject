@@ -91,7 +91,7 @@ public class DialogueController extends InputAdapter{
                 return true;
             }
         }
-        if (traverser != null && Gdx.input.isKeyPressed(Input.Keys.ENTER ) && dialogueBox.isFinished()) { // continue through tree
+        if (traverser != null && Gdx.input.isKeyPressed(Input.Keys.ENTER ) && dialogueBox.isFinished() && dialogueBox.isVisible()) { // continue through tree
             if (traverser.getType() == NODE_TYPE.END) {
                 traverser = null;
                 dialogueBox.setVisible(false);

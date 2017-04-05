@@ -228,12 +228,13 @@ public class GameScreenController {
         keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
         meleeAttackRangeX.set(player.getBound().x - player.getBound().width, player.getBound().y, player.getBound().width *3 , player.getBound().height);
         meleeAttackRangeY.set(player.getBound().x, player.getBound().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
-        renderMeleeArea();
+
         Vector2 cur;
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             if(meleeAttackRangeX.overlaps(mapModel.getEnemyLocationList().get(cur).getBound())
                     || meleeAttackRangeY.overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
+                renderMeleeArea();
                 if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
                     touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                     view.getCam().unproject(touch);
@@ -243,6 +244,9 @@ public class GameScreenController {
                         view.getDialogueController().startDialogue(view.getDialogue());
                     }
                 }
+            } else{
+            	view.getDialogueController().setAnswerIndex(0);
+            	view.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");
             }
         }
     }
