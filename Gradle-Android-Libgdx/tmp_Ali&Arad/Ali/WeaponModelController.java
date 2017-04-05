@@ -6,6 +6,7 @@ public class WeaponModelController {
 	private Character gameCharacter;
 	private int newAttackBonus;
 	private int newDamageBouns;
+	private int attackPower;
 	
 	public WeaponModelController(WeaponModel newWeaponModel,Player newPlayer){
 		
@@ -22,7 +23,7 @@ public class WeaponModelController {
 	public void calculateNewAttackDamageBonus(Character gameChar){
 		
 		
-		if(weaponModel.getWeaponType().equals("Melee")){
+		if(weaponModel.getWeaponType().equals("MeleeAttack")){
 			
 			int strMod= gameChar.getStrengthBonus();
 			int prevAttackBonus= gameChar.getAttackBonus();			
@@ -30,12 +31,12 @@ public class WeaponModelController {
 			
 			int d20=rollOneD20();
 			
-			this.newDamageBouns=d20+this.newAttackBonus;
+			this.attackPower=d20+this.newAttackBonus;
 			
 
 		}
 		
-		else if (weaponModel.getWeaponType().equals("Ranged")){
+		else if (weaponModel.getWeaponType().equals("RangedAttack")){
 			
 			int dexMod= gameChar.getDexterityBonus();
 			int prevAttackBonus= gameChar.getAttackBonus();
@@ -44,8 +45,9 @@ public class WeaponModelController {
 			
 			int d20=rollOneD20();
 			
-			this.newDamageBouns=d20+this.newAttackBonus;
+			this.attackPower=d20+this.newAttackBonus;
 		}
+
 	
 	
 	}
