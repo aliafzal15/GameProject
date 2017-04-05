@@ -240,18 +240,6 @@ public class GameScreen implements Observer, Screen{
             }
         }
 
-        // draw NPC on screen
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-
-        while(keySetIterator.hasNext()){
-             cur = keySetIterator.next();
-            mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
-            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(5);
-                isHitObject = true;
-            }
-        }
-
         // draw enemy on screen
         keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
 
@@ -261,12 +249,22 @@ public class GameScreen implements Observer, Screen{
             if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
                 playerController.reAdjust(5);
                 isHitObject = true;
-                if(! mapModel.getEnemyLocationList().get(cur).isDead()){
-                    MainMenuScreen.logArea.appendText(player.getCharacter().getName() + " attack with point 1 \n");
-                    mapModel.getEnemyLocationList().get(cur).underAttack();
-                } else{
+                if(mapModel.getEnemyLocationList().get(cur).isDead()){
                     game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, false));
                 }
+            }
+        }
+
+
+        // draw NPC on screen
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+
+        while(keySetIterator.hasNext()){
+             cur = keySetIterator.next();
+            mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
+            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
+                playerController.reAdjust(5);
+                isHitObject = true;
             }
         }
 
@@ -315,21 +313,21 @@ public class GameScreen implements Observer, Screen{
         }
 
         // if index flag is false, which means the dialog is displaying, don't allow player do any action untill dialog is finished
-        if(!dialogueController.isIndexFlag()) {
+        if(!dialogueController.isDialogStopRolling()) {
             //System.out.println("dialog is still displaying");
         } else {
             if (dialogueController.getAnswerIndex() == 0) {
+                //playerController.setStartToMove(false);   //not move yet
                 playerController.movePlayer();
             }
             else if (dialogueController.getAnswerIndex() == 1) {
-            	Vector2 friendLocation = screenController.tradeWithFriend();
-            	if(friendLocation !=null){
-            		game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, friendLocation, true));
-            	}
-                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
+                screenController.attackEnemy();
             }
             else if (dialogueController.getAnswerIndex() == 2) {
-                System.out.println("search for trade");
+                Vector2 friendLocation = screenController.tradeWithFriend();
+                if(friendLocation !=null){
+                    game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, friendLocation, true));
+                }
                 //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
             }
         }
@@ -567,5 +565,12 @@ public class GameScreen implements Observer, Screen{
 	public void setHitObject(boolean isHitObject) {
 		this.isHitObject = isHitObject;
 	}
-    
+
+    public Dialogue getDialogue() {
+        return dialogue;
+    }
+
+    public DialogueController getDialogueController() {
+        return dialogueController;
+    }
 }

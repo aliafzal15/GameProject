@@ -136,4 +136,32 @@ public class Player extends Actor{
     public void setPlayerTexture(Texture playerTexture) {
         this.playerTexture = playerTexture;
     }
+
+    public void changeFacingDirection(Vector2 target){
+        if(target.x > position.x && target.y > position.y){
+            if( (target.x - position.x) < (target.y - position.y)){
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(12));
+            }else{
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(8));
+            }
+        } else if( target.x < position.x && target.y > position.y){
+            if( (position.x - target.x) < (target.y - position.y)){
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(12));
+            }else{
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(4));
+            }
+        } else if(target.x < position.x && target.y < position.y){
+            if( (position.x - target.x) < (position.y - target.y)){
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(0));
+            }else{
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(4));
+            }
+        } else if (target.x > position.x && target.y < position.y){
+            if( (target.x - position.x) < (position.y - target.y)){
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(0));
+            }else{
+                setCurrentFrame((TextureRegion)animation.getKeyFrame(8));
+            }
+        }
+    }
 }

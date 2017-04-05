@@ -2,6 +2,10 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -15,6 +19,8 @@ import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
+import com.chaowang.ddgame.PublicParameter;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -33,7 +39,9 @@ public class GameScreenController {
     private Vector3 touch;
     private Vector2 pointer;
     private Iterator<Vector2> keySetIterator ;
-    private Rectangle playerTradeRange;
+    private Rectangle playerTradeRange, meleeAttackRangeX, meleeAttackRangeY;
+    private ShapeRenderer shapeRenderer;
+    private Circle rangelAttackrange;
     /**
      * construct
      * @param screen
@@ -55,6 +63,10 @@ public class GameScreenController {
         }
         touch = new Vector3();
         playerTradeRange = new Rectangle();
+        meleeAttackRangeX = new Rectangle();
+        meleeAttackRangeY = new Rectangle();
+        rangelAttackrange =new Circle();
+        shapeRenderer = new ShapeRenderer();
     }
     /**
      * listener to monitor any changes
@@ -200,15 +212,53 @@ public class GameScreenController {
     }
 	public Vector2 tradeWithFriend() {
         keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        playerTradeRange.set(player.getBound().x - 30, player.getBound().y -30, player.getBound().width +30, player.getBound().height +30);
+        playerTradeRange.set(player.getBound().x - 20, player.getBound().y -20, player.getBound().width +50, player.getBound().height +50);
         Vector2 cur;
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             if(playerTradeRange.overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
+                player.changeFacingDirection(cur);
             	return cur;
             }
         }
 		return null;
-		
 	}
+
+    public void attackEnemy(){
+        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        meleeAttackRangeX.set(player.getBound().x - player.getBound().width, player.getBound().y, player.getBound().width *3 , player.getBound().height);
+        meleeAttackRangeY.set(player.getBound().x, player.getBound().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
+        renderMeleeArea();
+        Vector2 cur;
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(meleeAttackRangeX.overlaps(mapModel.getEnemyLocationList().get(cur).getBound())
+                    || meleeAttackRangeY.overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
+                if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
+                    touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    view.getCam().unproject(touch);
+                    if(mapModel.getEnemyLocationList().get(cur).getBound().contains(touch.x,touch.y)){
+                        MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(cur).getName() + " is underattack");
+                        mapModel.getEnemyLocationList().get(cur).underAttack();
+                        view.getDialogueController().startDialogue(view.getDialogue());
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    public void renderMeleeArea() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(view.getCam().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.rect(meleeAttackRangeX.x, meleeAttackRangeX.y, meleeAttackRangeX.width, meleeAttackRangeX.height);
+        shapeRenderer.rect(meleeAttackRangeY.x, meleeAttackRangeY.y, meleeAttackRangeY.width, meleeAttackRangeY.height);
+        shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
 }

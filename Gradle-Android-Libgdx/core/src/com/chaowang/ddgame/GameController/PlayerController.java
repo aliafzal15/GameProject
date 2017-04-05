@@ -66,8 +66,10 @@ public class PlayerController extends InputAdapter{
     	}else{
     		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ||  //player.getPosition().dst(positionBeforeMove)
     				decideToStop){
-    			keyDown(false);  // player does not move if out of area, or hit F
-    		} else{
+                isStartToMove=false;
+                keyDown(false);  // player does not move if out of area, or hit F
+                gameScreen.getDialogueController().startDialogue(gameScreen.getDialogue());
+            } else{
         		renderMovementArea(positionBeforeMove);    //draw movement area
     			if(!gameScreen.isHitObject()){				//passed from GameScreen, if iteration says player hit someone,
         			keyDown(true);
@@ -75,7 +77,8 @@ public class PlayerController extends InputAdapter{
     			if(Gdx.input.isKeyPressed(Input.Keys.F )){
     				isStartToMove=false;
     				decideToStop = true;
-    			}
+                    gameScreen.getDialogueController().startDialogue(gameScreen.getDialogue());
+                }
     		}
     	}
     }
@@ -159,6 +162,11 @@ public class PlayerController extends InputAdapter{
         player.getCharacter().addToBackpack(item);
 
     }
+
+    public void setStartToMove(boolean startToMove) {
+        isStartToMove = startToMove;
+    }
+
 
 }
 //    @Override
