@@ -27,6 +27,7 @@ import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
 import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode;
+import com.chaowang.ddgame.GameModel.StrategyPattern.ComputerPlayerStrategy;
 import com.chaowang.ddgame.GameModel.StrategyPattern.HumanPlayerStrategy;
 import com.chaowang.ddgame.GameController.DialogueController;
 import com.chaowang.ddgame.GameController.GameScreenController;
@@ -74,9 +75,8 @@ public class GameScreen implements Observer, Screen{
     private Player player;
     private Map mapModel;
     private Campaign campaign;
-    private Iterator<Vector2> keySetIterator, enemyIterator ;
-    private Vector2 enemyPointer;
-    private boolean isHitObject;
+    private Iterator<Vector2> keySetIterator ;
+    private boolean isHitObject, isUserPlay;
     private static int count=0;
 
     /**
@@ -86,10 +86,10 @@ public class GameScreen implements Observer, Screen{
      * @param map
      * @param camp
      */
-    public GameScreen(Game game, Character character,Map map, Campaign camp) {
+    public GameScreen(Game game, Character character,Map map, Campaign camp, boolean isUserPlay) {
 
-        this(game,new Player(new Vector2(1,1), character),map,camp);
-
+        this(game,new Player(new Vector2(1,1), character),map,camp, isUserPlay);
+        
         if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
             player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
                     mapModel.getEntryDoor().y - player.getBound().getHeight()));
@@ -98,22 +98,22 @@ public class GameScreen implements Observer, Screen{
                     mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
         }
     }
-
-    public GameScreen(Game game, Player player,Map map){
-        this.game = game;
-        this.player = player;
-        this.mapModel = map;
-        this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
-
-        playerController = new PlayerController(player, this);
-        dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
-        screenController = new GameScreenController(this,this.mapModel, this.player);
-
-        if(mapModel.getLevel() != player.getCharacter().getLevel()){
-            mapModel.adjustLevel(player.getCharacter().getLevel());
-        }
-
-    }
+//
+//    public GameScreen(Game game, Player player,Map map){
+//        this.game = game;
+//        this.player = player;
+//        this.mapModel = map;
+//        this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
+//
+//        playerController = new PlayerController(player, this);
+//        dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
+//        screenController = new GameScreenController(this,this.mapModel, this.player);
+//
+//        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+//            mapModel.adjustLevel(player.getCharacter().getLevel());
+//        }
+//
+//    }
 
 
     /**
@@ -123,11 +123,12 @@ public class GameScreen implements Observer, Screen{
      * @param map
      * @param camp
      */
-    GameScreen(Game game, Player player,Map map, Campaign camp){
+    public GameScreen(Game game, Player player,Map map, Campaign camp, boolean isUserPlay){
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = new Campaign(camp);
+        this.isUserPlay = isUserPlay;
         batch = new SpriteBatch();
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
@@ -154,7 +155,6 @@ public class GameScreen implements Observer, Screen{
             mapModel.adjustLevel(player.getCharacter().getLevel());
         }
         
-        ////////////////////////////////////////player.setStrategy(new HumanPlayerStrategy(this));
 
     }
     /**
@@ -185,9 +185,18 @@ public class GameScreen implements Observer, Screen{
         MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
         uiStage.addActor(MainMenuScreen.logArea);
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
+        
+        
+        
 
-        enemyIterator = mapModel.getEnemyLocationList().keySet().iterator();
-        enemyPointer = enemyIterator.next();
+        if(isUserPlay){
+            player.setStrategy(new HumanPlayerStrategy(this));
+        } else{
+            player.setStrategy(new ComputerPlayerStrategy(this));
+        }
+
+//        enemyIterator = mapModel.getEnemyLocationList().keySet().iterator();
+//        enemyPointer = enemyIterator.next();
     }
     /**
      * set background
@@ -200,130 +209,128 @@ public class GameScreen implements Observer, Screen{
         renderer.setView(cam);
         renderer.render();
 
-        cam.position.set(player.getPosition().x + (player.getCurrentFrame().getRegionWidth() / 2), player.getPosition().y + player.getCurrentFrame().getRegionHeight() / 2, 0);
-        batch.setProjectionMatrix(cam.combined);
-        cam.update();
-        //////////////////////////////////////////player.executeSetupCameraStategy();
+//        cam.position.set(player.getPosition().x + (player.getCurrentFrame().getRegionWidth() / 2), player.getPosition().y + player.getCurrentFrame().getRegionHeight() / 2, 0);
+//        batch.setProjectionMatrix(cam.combined);
+//        cam.update();
+        player.executeSetupCameraStategy();
 
         batch.begin();
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
+//
+//        batch.draw(player.getCurrentFrame(), player.getPosition().x, player.getPosition().y );
+//        //draw walls on screen
+//        for(Wall wallCur : mapModel.getWallLocationList() ){
+//            wallCur.draw(batch);
+//            if(player.getBound().overlaps(wallCur)){
+//                playerController.reAdjust(0);
+//                isHitObject = true;
+//            }
+//        }
+//
+//
+//        Vector2 cur;
+//            // draw items on screen
+//        keySetIterator = mapModel.getItemLocationList().keySet().iterator();
+//
+//        if(messageDialog.isFinished()){
+//            messageDialog.setVisible(false);
+//        }
+//        while(keySetIterator.hasNext()){
+//            cur = keySetIterator.next();
+//            mapModel.getItemLocationList().get(cur).draw(batch, cur);
+//            if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
+//                playerController.pickupItem(mapModel.getItemLocationList().get(cur));
+//                messageDialog.setVisible(true);
+//                dialogueController.animateText(mapModel.getItemLocationList().get(cur).toString()+"  found!");
+//                keySetIterator.remove();
+//            }
+//        }
+//
+//        // draw enemy on screen
+//        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+//        while(keySetIterator.hasNext()){
+//            cur = keySetIterator.next();
+//            mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
+//            if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
+//                playerController.reAdjust(5);
+//                isHitObject = true;
+//                if(! mapModel.getEnemyLocationList().get(cur).isDead()){
+//                    mapModel.getEnemyLocationList().get(cur).underAttack();
+//                } else{
+//                	playerController.teleport(0, -8);
+//                }
+//            }
+//        }
+//
+//
+//        // draw NPC on screen
+//        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+//
+//        while(keySetIterator.hasNext()){
+//             cur = keySetIterator.next();
+//            mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
+//            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
+//                playerController.reAdjust(5);
+//                isHitObject = true;
+//            }
+//        }
+//
+//        //draw exit door on screen, exit mechanism
+//        if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
+//            if (campaign.getMapPack().size == count + 1) {
+//                player.setPosition(new Vector2(-1000,-1000));
+//                uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        MainMenuScreen.logArea.clear();
+//                        game.setScreen(new MainMenuScreen(game));
+//                    }
+//                })));
+//            } else {
+//                player.getCharacter().promoteUp();
+//                count++;
+//                player.setPosition(new Vector2(-1000,-1000));
+//                uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //campaign.getMapPack().removeIndex(0);
+//                        System.out.println("loading map number "+count);
+//                        MainMenuScreen.logArea.clear();
+//                        game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
+//                    }
+//                })));
+//            }
+//        }
+//
+//
+//        if(player.getBound().overlaps(mapModel.getEntryDoor()) ){
+//            playerController.teleport(0, -5);
+//            playerController.reAdjust(0);
+//            isHitObject = true;
+//        }
+//
+//
+//        if(enemyPointer != null && ! isHitObject && ! mapModel.getEnemyLocationList().get(enemyPointer).isDead() ){
+//            playerController.walkTo(mapModel.getEnemyLocationList().get(enemyPointer).getBound().x, mapModel.getEnemyLocationList().get(enemyPointer).getBound().y);
+//        } else{
+//            if(enemyIterator.hasNext() && mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
+//                enemyPointer = enemyIterator.next();
+//            }
+//            if(!enemyIterator.hasNext()){
+//            	playerController.walkTo(mapModel.getExitDoor().x + player.getBound().x, mapModel.getExitDoor().y - (player.getBound().y * 3 /4));
+//            }
+//        }
 
-        batch.draw(player.getCurrentFrame(), player.getPosition().x, player.getPosition().y );
-        //draw walls on screen
-        for(Wall wallCur : mapModel.getWallLocationList() ){
-            wallCur.draw(batch);
-            if(player.getBound().overlaps(wallCur)){
-                playerController.reAdjust(0);
-                isHitObject = true;
-            }
-        }
-
-
-        Vector2 cur;
-            // draw items on screen
-        keySetIterator = mapModel.getItemLocationList().keySet().iterator();
-
-        if(messageDialog.isFinished()){
-            messageDialog.setVisible(false);
-        }
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            mapModel.getItemLocationList().get(cur).draw(batch, cur);
-            if(player.getBound().overlaps(mapModel.getItemLocationList().get(cur)) ){
-                playerController.pickupItem(mapModel.getItemLocationList().get(cur));
-                messageDialog.setVisible(true);
-                dialogueController.animateText(mapModel.getItemLocationList().get(cur).toString()+"  found!");
-                keySetIterator.remove();
-            }
-        }
-
-        // draw enemy on screen
-        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            mapModel.getEnemyLocationList().get(cur).draw(batch, cur, false);
-            if(player.getBound().overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(5);
-                isHitObject = true;
-                if(! mapModel.getEnemyLocationList().get(cur).isDead()){
-                    mapModel.getEnemyLocationList().get(cur).underAttack();
-                }
-            }
-        }
-
-
-        // draw NPC on screen
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-
-        while(keySetIterator.hasNext()){
-             cur = keySetIterator.next();
-            mapModel.getFriendLocationList().get(cur).draw(batch, cur, true);
-            if(player.getBound().overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
-                playerController.reAdjust(5);
-                isHitObject = true;
-            }
-        }
-
-        //draw exit door on screen, exit mechanism
-        if(player.getBound().overlaps(mapModel.getExitDoor()) ) {
-            if (player.getPosition().y + player.getBound().getHeight() <= mapModel.getExitDoor().y + 1f) {
-                if (campaign.getMapPack().size == count + 1) {
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            MainMenuScreen.logArea.clear();
-                            game.setScreen(new com.chaowang.ddgame.MenuView.MainMenuScreen(game));
-                        }
-                    })));
-                } else {
-                    player.getCharacter().promoteUp();
-                    count++;
-                    player.setPosition(new Vector2(-1000,-1000));
-                    uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            //campaign.getMapPack().removeIndex(0);
-                            System.out.println("loading map number "+count);
-                            MainMenuScreen.logArea.clear();
-                            game.setScreen(new GameScreen(game, player.getCharacter(), campaign.getMapPack().get(count), campaign));
-                        }
-                    })));
-                }
-            } else {
-                //playerController.teleport(0, -5);
-                playerController.reAdjust(0);
-                isHitObject = true;
-            }
-        }
-
-
-        if(player.getBound().overlaps(mapModel.getEntryDoor()) ){
-            playerController.teleport(0, -5);
-            playerController.reAdjust(0);
-            isHitObject = true;
-        }
-
-
-        if(enemyPointer != null && ! isHitObject && ! mapModel.getEnemyLocationList().get(enemyPointer).isDead() ){
-            playerController.walkTo(mapModel.getEnemyLocationList().get(enemyPointer).getBound().x,
-                                        mapModel.getEnemyLocationList().get(enemyPointer).getBound().y);
-        } else{
-            if(enemyIterator.hasNext() && mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
-                enemyPointer = enemyIterator.next();
-            }
-        }
-
-        ///////////////////////////////////player.renderInteraction();
+        player.renderInteraction();
 
         batch.end();
-        ///////////////////////////////////////player.updateDialogueStage(delta);
-    //        dialogueController.update(delta);
-    //        dialogueController.keyUp();
-        uiStage.act(delta);
-        uiStage.draw();
-    //        screenController.onClickListen();
+        player.updateDialogueStage(delta);
+//    //        dialogueController.update(delta);
+//    //        dialogueController.keyUp();
+//        uiStage.act(delta);
+//        uiStage.draw();
+//    //        screenController.onClickListen();
     }
 
     /**
@@ -371,11 +378,11 @@ public class GameScreen implements Observer, Screen{
         Table abilityTable = constructAbilityTable();
         Table dialogTable = constructDialogTable();
         Table playerEditTable = new Table();
-        playerEditorBtn =new TextButton("I", com.chaowang.ddgame.MenuView.MainMenuScreen.buttonStyle);
+        playerEditorBtn =new TextButton("I", MainMenuScreen.buttonStyle);
         playerEditorBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GamePlayerEditorScreen(game, player, mapModel, campaign));
+                game.setScreen(new GamePlayerEditorScreen(game, player, mapModel, campaign, isUserPlay));
                 return true;
             }
         });
@@ -391,11 +398,11 @@ public class GameScreen implements Observer, Screen{
      * @return
      */
     private Table constructDialogTable() {
-        messageDialog = new DialogueBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
+        messageDialog = new DialogueBox(MainMenuScreen.skin);
         messageDialog.setVisible(false);
-        dialogBox = new DialogueBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
+        dialogBox = new DialogueBox(MainMenuScreen.skin);
         dialogBox.setVisible(false);
-        optionBox = new OptionBox(com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
+        optionBox = new OptionBox(MainMenuScreen.skin);
         optionBox.setVisible(false);
 
         Table dialogTable = new Table();
@@ -411,7 +418,7 @@ public class GameScreen implements Observer, Screen{
     private Table constructItemTable(){
         equipmentMatrix = new Image[PublicParameter.ITEM_TYPE_COUNT];
         backpackMatrix = new Image[PublicParameter.ITEM_BACKPACK_ROW * PublicParameter.ITEM_BACKPACK_COLUMN];
-        itemInfoLabel = new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
+        itemInfoLabel = new Label("", MainMenuScreen.skin);
         itemInfoLabel.setFontScale(.5f);
         itemInfoLabel.setVisible(false);
 
@@ -440,7 +447,7 @@ public class GameScreen implements Observer, Screen{
      * @return
      */
     private Table constructAbilityTable() {
-        abilityLabel = new Label("", com.chaowang.ddgame.MenuView.MainMenuScreen.skin);
+        abilityLabel = new Label("", MainMenuScreen.skin);
         abilityLabel.setVisible(false);
         abilityLabel.setFontScale(.8f);
 
@@ -593,8 +600,18 @@ public class GameScreen implements Observer, Screen{
     public DialogueBox getDialogBox() {
         return dialogBox;
     }
+    
 
-    public static int getCount() {
+
+	public boolean isUserPlay() {
+		return isUserPlay;
+	}
+    
+    public DialogueBox getMessageDialog() {
+		return messageDialog;
+	}
+
+	public static int getCount() {
 		return count;
 	}
 
@@ -603,7 +620,5 @@ public class GameScreen implements Observer, Screen{
 	}
 
 
-	
-	
     
 }

@@ -82,17 +82,26 @@ public class PlayerController extends InputAdapter{
     		}
     	}
     }
-    
-	public void renderMovementArea(Vector2 center) {
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		shapeRenderer.setProjectionMatrix(gameScreen.getCam().combined);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.circle(center.x, center.y, PublicParameter.GAME_PIXEL_SIZE*3);
-		shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
-		shapeRenderer.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-	}
+
+
+    public void walkTo(float x, float y){
+    	
+		if(Gdx.input.isKeyPressed(Input.Keys.F )){
+			isStartToMove=true;
+        }
+    	if(isStartToMove==false){
+    		positionBeforeMove.set(player.getPosition());
+            walkingDistance =0f;
+            //		isStartToMove=true;
+    	// moving and terminate move
+    	}else{
+    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
+                isStartToMove=false;
+            } else{
+        		keyDown( x,  y);
+    		}
+    	}
+    }
     
     /**
      * use keyboard to control the players' movement
@@ -135,10 +144,11 @@ public class PlayerController extends InputAdapter{
     }
 
 
+    
     /**
      * use keyboard to control the players' movement
      */
-    public void walkTo(float x, float y){
+    public void keyDown(float x, float y){
 
         if(stateTime < 4 ){
             stateTime += Gdx.graphics.getDeltaTime() ;
@@ -230,6 +240,18 @@ public class PlayerController extends InputAdapter{
         isStartToMove = startToMove;
     }
 
+    
+	public void renderMovementArea(Vector2 center) {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		shapeRenderer.setProjectionMatrix(gameScreen.getCam().combined);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.circle(center.x, center.y, PublicParameter.GAME_PIXEL_SIZE*3);
+		shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+    
 
 }
 //    @Override

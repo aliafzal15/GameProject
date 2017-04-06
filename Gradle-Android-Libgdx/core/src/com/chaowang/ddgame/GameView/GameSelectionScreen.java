@@ -39,7 +39,7 @@ public class GameSelectionScreen implements Screen{
     private Stage stage;
     private SpriteBatch batch;
     private Texture backgroundTexture;
-    private TextButton gameStartButton, backwardButton;
+    private TextButton gameStartButton, backwardButton, userModeButton;
     private Image characterImage;
     public ImageButton[] characterInventoryMatrix;
     private Label[] campaignInventoryMatrix;
@@ -47,9 +47,11 @@ public class GameSelectionScreen implements Screen{
     private Label campaignInfoLabel, characterInfoLabel, campaignLabel;
     private Campaign campaign;
     private Character character;
+    private boolean isUserPlay;
 
     public GameSelectionScreen(Game game) {
         this.game = game;
+        isUserPlay=true;
     }
 
     /**
@@ -134,7 +136,7 @@ public class GameSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(character != null && campaign != null ){
-                    game.setScreen(new GameScreen(game, character,campaign.getMapPack().get(0), campaign));
+                    game.setScreen(new GameScreen(game, character,campaign.getMapPack().get(0), campaign, isUserPlay));
                 }
                 else{
                     new Dialog("Error", MainMenuScreen.skin, "dialog") {
@@ -145,6 +147,26 @@ public class GameSelectionScreen implements Screen{
             }
         });
         stage.addActor(gameStartButton);
+        
+        
+        userModeButton = new TextButton("User", MainMenuScreen.buttonStyle);
+        userModeButton.setWidth(Gdx.graphics.getWidth() / 9);
+        userModeButton.setHeight(Gdx.graphics.getHeight() / 9);
+        userModeButton.setPosition(Gdx.graphics.getWidth() * 7 / 8 , Gdx.graphics.getHeight() * 1 / 30 );
+        userModeButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(isUserPlay){
+                	userModeButton.setText("Computer");
+                }
+                else{
+                	userModeButton.setText("User");
+                }
+            	isUserPlay = !isUserPlay;
+                return true;
+            }
+        });
+        stage.addActor(userModeButton);
 
     }
 

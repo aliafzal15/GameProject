@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.chaowang.ddgame.GameModel.StrategyPattern.Strategy;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 
@@ -15,7 +14,7 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
  * @author chao wang
  * @version 2.0
  */
-public class Player extends Actor{
+public class Player {
     private Vector2 position;
     private Rectangle bound;
     private Character character;

@@ -34,7 +34,7 @@ public class GamePlayerEditorScreen implements Screen{
     private Game game;
     public Stage stage;
     private SpriteBatch batch;
-    public TextButton backwardButton, confirmButton, saveButton;
+    public TextButton backwardButton, confirmButton, saveButton, userModeButton;
     private Texture backgroundTexture;
 
     private ImageButton[] backpackMatrix, equipmentMatrix;
@@ -51,17 +51,19 @@ public class GamePlayerEditorScreen implements Screen{
             strengthLabel, dexterityLabel, constitutionLabel, wisdomLabel, intellegenceLabel, charismaLabel, characterInfoLabel;
     public TextField[] bonusField;
     public Image characterImage;
+    private boolean isUserPlay;
 
 
     /**
      * constructor
      * @param game
      */
-    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp) {
+    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
+        this.isUserPlay = isUserPlay;
     }
     /**
      * show whole equipment editor on screen
@@ -78,7 +80,7 @@ public class GamePlayerEditorScreen implements Screen{
         saveButton = new TextButton("Save Game", MainMenuScreen.buttonStyle);
         saveButton.setWidth(Gdx.graphics.getWidth() / 8 );
         saveButton.setHeight(Gdx.graphics.getHeight() / 9);
-        saveButton.setPosition((Gdx.graphics.getWidth() * 7 /10 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
+        saveButton.setPosition((Gdx.graphics.getWidth() * 13 /12 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
         saveButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -89,6 +91,31 @@ public class GamePlayerEditorScreen implements Screen{
         stage.addActor(saveButton);
         
         
+        userModeButton = new TextButton("", MainMenuScreen.buttonStyle);
+        if(isUserPlay){
+            userModeButton.setText("User");
+        } else{
+            userModeButton.setText("Computer");
+        }
+        userModeButton.setWidth(Gdx.graphics.getWidth() / 12);
+        userModeButton.setHeight(Gdx.graphics.getHeight() / 9);
+        userModeButton.setPosition(Gdx.graphics.getWidth() * 9 / 10 , Gdx.graphics.getHeight() * 1 / 30 );
+        userModeButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(isUserPlay){
+                	userModeButton.setText("Computer");
+                }
+                else{
+                	userModeButton.setText("User");
+                }
+            	isUserPlay = !isUserPlay;
+                return true;
+            }
+        });
+        stage.addActor(userModeButton);
+        
+        
         backwardButton = new TextButton("<--", MainMenuScreen.buttonStyle);
         backwardButton.setWidth(Gdx.graphics.getWidth() / 20 );
         backwardButton.setHeight(Gdx.graphics.getHeight() / 10);
@@ -97,7 +124,7 @@ public class GamePlayerEditorScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new GameScreen(game, player, mapModel, campaign));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, isUserPlay));
                 return true;
             }
         });

@@ -37,8 +37,8 @@ public class GameScreenController {
     private Map mapModel;
     private Player player;
     private Vector3 touch;
-    private Vector2 pointer;
-    private Iterator<Vector2> keySetIterator ;
+    private Vector2 pointer, enemyPointer;
+    private Iterator<Vector2> keySetIterator, enemyIterator ;
     private Rectangle playerTradeRange, meleeAttackRangeX, meleeAttackRangeY;
     private ShapeRenderer shapeRenderer;
     private Circle rangelAttackrange;
@@ -62,6 +62,8 @@ public class GameScreenController {
             mapModel.getFriendLocationList().get(keySetIterator.next()).addObserver(view);
         }
         touch = new Vector3();
+        enemyIterator = screen.getMapModel().getEnemyLocationList().keySet().iterator();
+        enemyPointer = enemyIterator.next();
         playerTradeRange = new Rectangle();
         meleeAttackRangeX = new Rectangle();
         meleeAttackRangeY = new Rectangle();
@@ -225,28 +227,29 @@ public class GameScreenController {
 	}
 
     public void attackEnemy(){
-        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
         meleeAttackRangeX.set(player.getBound().x - player.getBound().width, player.getBound().y, player.getBound().width *3 , player.getBound().height);
         meleeAttackRangeY.set(player.getBound().x, player.getBound().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
 
-        Vector2 cur;
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            if(meleeAttackRangeX.overlaps(mapModel.getEnemyLocationList().get(cur).getBound())
-                    || meleeAttackRangeY.overlaps(mapModel.getEnemyLocationList().get(cur).getBound()) ){
-                renderMeleeArea();
-                if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
-                    touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                    view.getCam().unproject(touch);
-                    if(mapModel.getEnemyLocationList().get(cur).getBound().contains(touch.x,touch.y)){
-                        MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(cur).getName() + " is underattack");
-                        mapModel.getEnemyLocationList().get(cur).underAttack();
-                        view.getDialogueController().startDialogue(view.getDialogue());
-                    }
+        if((meleeAttackRangeX.overlaps(mapModel.getEnemyLocationList().get(enemyPointer).getBound())
+                || meleeAttackRangeY.overlaps(mapModel.getEnemyLocationList().get(enemyPointer).getBound()))
+        		&& !mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
+            renderMeleeArea();
+            if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
+                touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                view.getCam().unproject(touch);
+                if(mapModel.getEnemyLocationList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
+                    MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(enemyPointer).getName() + " is underattack");
+                    mapModel.getEnemyLocationList().get(enemyPointer).underAttack();
+                    view.getDialogueController().startDialogue(view.getDialogue());
                 }
-            } else{
-            	view.getDialogueController().setAnswerIndex(0);
-            	view.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");
+            }
+        } else{
+            if(enemyIterator.hasNext() && mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
+                enemyPointer = enemyIterator.next();
+            }
+            if(!enemyIterator.hasNext()){
+	        	view.getDialogueController().setAnswerIndex(0);
+	        	view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
             }
         }
     }

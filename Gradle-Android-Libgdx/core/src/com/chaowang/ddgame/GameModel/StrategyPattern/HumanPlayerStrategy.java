@@ -16,6 +16,7 @@ public class HumanPlayerStrategy implements Strategy{
     
 	public HumanPlayerStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
+		screen.getDialogueController().startDialogue(screen.getDialogue());
 	}
 
 	@Override
@@ -24,13 +25,11 @@ public class HumanPlayerStrategy implements Strategy{
 				screen.getPlayer().getPosition().y + screen.getPlayer().getCurrentFrame().getRegionHeight() / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
-
 	}
 	
 	public void renderInteraction(){
-        if(!screen.getDialogBox().isVisible()){
-            screen.getDialogueController().startDialogue(screen.getDialogue());
-        }
+//        if(!screen.getDialogBox().isVisible()){
+//        }
 
         screen.getBatch().draw(screen.getPlayer().getCurrentFrame(), screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y );
         //draw walls on screen
@@ -66,7 +65,7 @@ public class HumanPlayerStrategy implements Strategy{
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
                 if(screen.getMapModel().getEnemyLocationList().get(cur).isDead()){
-                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, false));
+                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, false, screen.isUserPlay()));
                 }
             }
         }
@@ -107,7 +106,7 @@ public class HumanPlayerStrategy implements Strategy{
                                 //campaign.getMapPack().removeIndex(0);
                                 System.out.println("loading map number "+GameScreen.getCount());
                                 MainMenuScreen.logArea.clear();
-                                screen.getGame().setScreen(new GameScreen(screen.getGame(), screen.getPlayer().getCharacter(), screen.getCampaign().getMapPack().get(GameScreen.getCount()), screen.getCampaign()));
+                                screen.getGame().setScreen(new GameScreen(screen.getGame(), screen.getPlayer().getCharacter(), screen.getCampaign().getMapPack().get(GameScreen.getCount()), screen.getCampaign(), screen.isUserPlay()));
                             }
                         })));
                     }
@@ -142,7 +141,7 @@ public class HumanPlayerStrategy implements Strategy{
             else if (screen.getDialogueController().getAnswerIndex() == 2) {
                 Vector2 friendLocation = screen.getScreenController().tradeWithFriend();
                 if(friendLocation !=null){
-                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, true));
+                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, true, screen.isUserPlay()));
                 } else{
                 	screen.getDialogueController().setAnswerIndex(0);
                 	screen.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");

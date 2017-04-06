@@ -46,12 +46,13 @@ public class GameItemExchangeScreen implements Screen{
     private Campaign campaign;
     private ItemExchangeController controller;
     public Label NPCItemInfoLabel, backpackItemInfoLabel;
+    private boolean isUserPlay;
 
     /**
      * constructor
      * @param game
      */
-    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, boolean isFriend) {
+    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, boolean isFriend, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
@@ -62,6 +63,7 @@ public class GameItemExchangeScreen implements Screen{
         } else{
             this.NPCcharacter = mapModel.getEnemyLocationList().get(NPCposition);
         }
+        this.isUserPlay = isUserPlay;
     }
     /**
      * show whole equipment editor on screen
@@ -82,7 +84,7 @@ public class GameItemExchangeScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game, player, mapModel, campaign));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, isUserPlay));
                 return true;
             }
         });
