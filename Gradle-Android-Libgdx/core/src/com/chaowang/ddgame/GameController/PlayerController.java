@@ -133,6 +133,45 @@ public class PlayerController extends InputAdapter{
     	}
             
     }
+
+
+    /**
+     * use keyboard to control the players' movement
+     */
+    public void walkTo(float x, float y){
+
+        if(stateTime < 4 ){
+            stateTime += Gdx.graphics.getDeltaTime() ;
+        }else{
+            stateTime = 0;
+        }
+
+        if(player.getPosition().y < y  && player.getPosition().y + player.getCurrentFrame().getRegionHeight()< mapBound.getHeight() ){
+            player.move(0,1);
+            movement = "up";
+            walkingDistance += 1*2f;
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(12 + (stateTime *4) % 4));
+        }
+        if(player.getPosition().y > y && player.getPosition().y > mapBound.getY() ){
+            player.move(0,-1);
+            movement = "down";
+            walkingDistance += 1*2f;
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(0 + (stateTime *4) % 4));
+        }
+        if(player.getPosition().x > x && player.getPosition().x > mapBound.getX()){
+            player.move(-1,0);
+            movement = "left";
+            walkingDistance += 1*2f;
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(4 + (stateTime *4) % 4));
+        }
+        if(player.getPosition().x < x && player.getPosition().x + player.getCurrentFrame().getRegionWidth() < mapBound.getWidth()) {
+            player.move(1, 0);
+            movement = "right";
+            walkingDistance += 1*2f;
+            player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime * 4) % 4));
+        }
+    }
+
     /**
      * adjust the location of player when moving
      */
@@ -153,6 +192,30 @@ public class PlayerController extends InputAdapter{
         	player.move(-1 * span,0);
         }
 
+    }
+    public void teleport(float x, float y){
+        player.move(x,y);
+    }
+
+    /**
+     * adjust the location of player when moving
+     */
+    public void walkReAdjust(float span){
+        if(span <= 0 ){
+            span = 0.5f;
+        }
+        if(movement == "up"){
+            player.move(0,-1 * span);
+        }
+        if(movement == "down"){
+            player.move(0,1 * span);
+        }
+        if(movement == "left"){
+            player.move(1 * span,0);
+        }
+        if(movement == "right"){
+            player.move(-1 * span,0);
+        }
     }
     /**
      * pick items by players themself

@@ -28,8 +28,11 @@ public class HumanPlayerStrategy implements Strategy{
 	}
 	
 	public void renderInteraction(){
+        if(!screen.getDialogBox().isVisible()){
+            screen.getDialogueController().startDialogue(screen.getDialogue());
+        }
 
-		screen.getBatch().draw(screen.getPlayer().getCurrentFrame(), screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y );
+        screen.getBatch().draw(screen.getPlayer().getCurrentFrame(), screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y );
         //draw walls on screen
         for(Wall cur : screen.getMapModel().getWallLocationList() ){
             cur.draw(screen.getBatch());
