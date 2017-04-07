@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
@@ -30,13 +31,13 @@ import java.util.Iterator;
 public class PlayerEditorController {
 
     private GamePlayerEditorScreen view;
-    private Player player;
+    private GameActor player;
     /**
      * constructor
      * @param gamePlayerEditorScreen
      * @param gamePlayer
      */
-    public PlayerEditorController(GamePlayerEditorScreen gamePlayerEditorScreen, Player gamePlayer){
+    public PlayerEditorController(GamePlayerEditorScreen gamePlayerEditorScreen, GameActor gamePlayer){
         this.view = gamePlayerEditorScreen;
         player = gamePlayer;
     }

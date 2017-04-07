@@ -85,7 +85,7 @@ public class PlayerController extends InputAdapter{
 
 
     public void walkTo(float x, float y){
-    	
+
 		if(Gdx.input.isKeyPressed(Input.Keys.F )){
 			isStartToMove=true;
         }
@@ -102,7 +102,7 @@ public class PlayerController extends InputAdapter{
     		}
     	}
     }
-    
+
     /**
      * use keyboard to control the players' movement
      */
@@ -140,11 +140,11 @@ public class PlayerController extends InputAdapter{
                 player.setCurrentFrame((TextureRegion) player.getAnimation().getKeyFrame(8 + (stateTime * 4) % 4));
             }
     	}
-            
+
     }
 
 
-    
+
     /**
      * use keyboard to control the players' movement
      */
@@ -240,7 +240,7 @@ public class PlayerController extends InputAdapter{
         isStartToMove = startToMove;
     }
 
-    
+
 	public void renderMovementArea(Vector2 center) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -251,7 +251,7 @@ public class PlayerController extends InputAdapter{
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
-    
+
 
 }
 //    @Override

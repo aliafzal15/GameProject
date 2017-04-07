@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.chaowang.ddgame.GameModel.StrategyPattern.Strategy;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 
 /**
@@ -14,10 +13,8 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
  * @author chao wang
  * @version 2.0
  */
-public class Player {
-    private Vector2 position;
-    private Rectangle bound;
-    private Character character;
+public class Player extends GameActor{
+
 
     private static final int COL = 4;
     private static final int ROW = 4;
@@ -26,16 +23,14 @@ public class Player {
     private TextureRegion[]  frames;
     private TextureRegion currentFrame;
     // for strategy
-    private Strategy strategy;
-    
+
     /**
      * constructor
      * @param position  position of  player
      * @param character different types of character
      */
     public Player(Vector2 position, Character character){
-        this.position = position;
-        this.character = character;
+        super(position,character);
         playerTexture = new Texture(Gdx.files.internal("arshes.png"));
         TextureRegion[][] tmp = TextureRegion.split(playerTexture,playerTexture.getWidth() / COL ,playerTexture.getHeight() / ROW);
         frames = new TextureRegion[COL * ROW];
@@ -50,13 +45,6 @@ public class Player {
         bound = new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
 
-    /**
-     * get bound of player
-     * @return
-     */
-    public Rectangle getBound() {
-        return bound;
-    }
     /**
      * change of location
      * @param dx
@@ -88,13 +76,7 @@ public class Player {
     public Animation getAnimation() {
         return animation;
     }
-    /**
-     * get player's position
-     * @return
-     */
-    public Vector2 getPosition() {
-        return position;
-    }
+
     /**
      * set player's position
      * @param position
@@ -103,27 +85,7 @@ public class Player {
         this.position = position;
         bound.set(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
-    /**
-     * set bound
-     * @param bound
-     */
-    public void setBound(Rectangle bound) {
-        this.bound = bound;
-    }
-    /**
-     * get current character
-     * @return
-     */
-    public Character getCharacter() {
-        return character;
-    }
-    /**
-     * set character
-     * @param character
-     */
-    public void setCharacter(Character character) {
-        this.character = character;
-    }
+
     /**
      * get player texture
      * @return
@@ -166,22 +128,5 @@ public class Player {
             }
         }
     }
-    
-    
-    public void setStrategy(Strategy strategy){
-    	this.strategy = strategy;
-    }
-    
-    public void executeSetupCameraStategy(){
-    	this.strategy.setupCamera();
-    }
 
-	public void renderInteraction() {
-    	this.strategy.renderInteraction();
-	}
-    
-	public void updateDialogueStage(float delta){
-		this.strategy.updateDialogueStage(delta);
-	}
-    
 }

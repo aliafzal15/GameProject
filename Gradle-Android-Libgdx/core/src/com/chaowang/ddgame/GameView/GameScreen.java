@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
@@ -42,6 +44,7 @@ import com.chaowang.ddgame.GameUtl.OptionBox;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -72,9 +75,10 @@ public class GameScreen implements Observer, Screen{
     private TextButton playerEditorBtn;
 
     // game attributes
-    private Player player;
+    private GameActor player, npc;
     private Map mapModel;
     private Campaign campaign;
+    private HashMap<Vector2,GameActor> npcList;
     private Iterator<Vector2> keySetIterator ;
     private boolean isHitObject, isUserPlay;
     private static int count=0;
@@ -98,23 +102,6 @@ public class GameScreen implements Observer, Screen{
                     mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
         }
     }
-//
-//    public GameScreen(Game game, Player player,Map map){
-//        this.game = game;
-//        this.player = player;
-//        this.mapModel = map;
-//        this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
-//
-//        playerController = new PlayerController(player, this);
-//        dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
-//        screenController = new GameScreenController(this,this.mapModel, this.player);
-//
-//        if(mapModel.getLevel() != player.getCharacter().getLevel()){
-//            mapModel.adjustLevel(player.getCharacter().getLevel());
-//        }
-//
-//    }
-
 
     /**
      * constructor
@@ -123,7 +110,7 @@ public class GameScreen implements Observer, Screen{
      * @param map
      * @param camp
      */
-    public GameScreen(Game game, Player player,Map map, Campaign camp, boolean isUserPlay){
+    public GameScreen(Game game, GameActor player,Map map, Campaign camp, boolean isUserPlay){
         this.game = game;
         this.player = player;
         this.mapModel = map;
@@ -135,9 +122,9 @@ public class GameScreen implements Observer, Screen{
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         initUI();
 
-        playerController = new PlayerController(player, this);
+        playerController = new PlayerController((Player)player, this);
         dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
-        screenController = new GameScreenController(this,this.mapModel, this.player);
+        screenController = new GameScreenController(this,this.mapModel, (Player)this.player);
 
         dialogue = new Dialogue();
         DialogueNode node1 = new DialogueNode("Your Turn starts", 0);
@@ -154,7 +141,20 @@ public class GameScreen implements Observer, Screen{
         if(mapModel.getLevel() != player.getCharacter().getLevel()){
             mapModel.adjustLevel(player.getCharacter().getLevel());
         }
-        
+
+        // extract all the character from map to npcList
+        npcList = new HashMap<Vector2, GameActor>();
+        Vector2 cur;
+        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
+        }
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+             cur = keySetIterator.next();
+            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), true));
+        }
 
     }
     /**
@@ -185,9 +185,7 @@ public class GameScreen implements Observer, Screen{
         MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
         uiStage.addActor(MainMenuScreen.logArea);
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
-        
-        
-        
+
 
         if(isUserPlay){
             player.setStrategy(new HumanPlayerStrategy(this));
@@ -382,7 +380,7 @@ public class GameScreen implements Observer, Screen{
         playerEditorBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GamePlayerEditorScreen(game, player, mapModel, campaign, isUserPlay));
+                game.setScreen(new GamePlayerEditorScreen(game, (Player)player, mapModel, campaign, isUserPlay));
                 return true;
             }
         });
@@ -569,7 +567,7 @@ public class GameScreen implements Observer, Screen{
     }
 
 	public Player getPlayer() {
-		return player;
+		return (Player)player;
 	}
 
 	public SpriteBatch getBatch() {

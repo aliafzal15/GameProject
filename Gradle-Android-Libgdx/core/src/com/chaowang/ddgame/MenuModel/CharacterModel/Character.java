@@ -47,9 +47,7 @@ public class Character extends Observable implements Json.Serializable{
 	private int[] abilityBonusArr;
     private Texture texture;
     private Texture mapTexture;
-	//boolean isFriendly = true;
 	boolean isDead;
-	Rectangle bound;
 
     private HashMap<Item.ItemType, Item> equipment;
     private ArrayList<Item> backpack;
@@ -81,7 +79,6 @@ public class Character extends Observable implements Json.Serializable{
 	public Character(String name, int level, RaceType raceType, FighterType fighterType) {
 		createFighterBasedOnType(fighterType);
 		this.fighter = director.getFighter();
-		this.bound = new Rectangle();
 		this.setName(name);
 		this.raceType  = raceType;
 		this.hitPoints = 0;
@@ -109,7 +106,6 @@ public class Character extends Observable implements Json.Serializable{
 	 * @param abilityBonus the abilityBonus of the character
 	 */
     public Character(String name, int level,int promotionPoint, RaceType raceType, FighterType fighterType, int[] abilityArr, int[] abilityBonus) {
-		this.bound = new Rectangle();
     	this.setName(name);
 		createFighterBasedOnType(fighterType);
 		this.fighter = director.getFighter();
@@ -871,34 +867,14 @@ public class Character extends Observable implements Json.Serializable{
 	 * @param isFriendly
 	 */
 	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
-		this.bound.x = cur.x;
-		this.bound.y = cur.y;
 		if(isFriendly == true){
-			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
-			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
 		   // is friendly NPC use unified image
-	        batch.draw(mapTexture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
+	        batch.draw(mapTexture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3 );
 		} else{
-			this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
-			this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
-	        batch.draw(texture, this.bound.x , this.bound.y, this.bound.width, this.bound.height );
+	        batch.draw(texture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
 		}
 	}
-	
-	/**
-	 * get character rectangle bound
-	 * @return
-	 */
-	public Rectangle getBound() {
-		return bound;
-	}
-	/**
-	 * setter for character bound
-	 * @param bound
-	 */
-	public void setBound(Rectangle bound) {
-		this.bound = bound;
-	}
+
 	/**
 	 * observerable method to preview ability points
 	 */

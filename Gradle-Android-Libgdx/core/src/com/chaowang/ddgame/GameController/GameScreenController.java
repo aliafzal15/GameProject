@@ -62,13 +62,16 @@ public class GameScreenController {
             mapModel.getFriendLocationList().get(keySetIterator.next()).addObserver(view);
         }
         touch = new Vector3();
-        enemyIterator = screen.getMapModel().getEnemyLocationList().keySet().iterator();
-        enemyPointer = enemyIterator.next();
         playerTradeRange = new Rectangle();
         meleeAttackRangeX = new Rectangle();
         meleeAttackRangeY = new Rectangle();
         rangelAttackrange =new Circle();
         shapeRenderer = new ShapeRenderer();
+
+        enemyIterator = view.getMapModel().getEnemyLocationList().keySet().iterator();
+        if(enemyIterator.hasNext()){
+            enemyPointer = enemyIterator.next();
+        }
     }
     /**
      * listener to monitor any changes
@@ -240,16 +243,17 @@ public class GameScreenController {
                 if(mapModel.getEnemyLocationList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
                     MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(enemyPointer).getName() + " is underattack");
                     mapModel.getEnemyLocationList().get(enemyPointer).underAttack();
+                    enemyIterator = view.getMapModel().getEnemyLocationList().keySet().iterator();
+                    enemyPointer = enemyIterator.next();
                     view.getDialogueController().startDialogue(view.getDialogue());
                 }
             }
         } else{
-            if(enemyIterator.hasNext() && mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
+            if(enemyIterator.hasNext()){
                 enemyPointer = enemyIterator.next();
-            }
-            if(!enemyIterator.hasNext()){
+            } else{
 	        	view.getDialogueController().setAnswerIndex(0);
-	        	view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
+                view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
             }
         }
     }
