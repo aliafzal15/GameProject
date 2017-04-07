@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
@@ -56,30 +57,21 @@ public class HumanPlayerStrategy implements Strategy{
         }
 
         // draw enemy on screen
-        keySetIterator = screen.getMapModel().getEnemyLocationList().keySet().iterator();
+        keySetIterator = screen.getNpcList().keySet().iterator();
 
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getMapModel().getEnemyLocationList().get(cur).draw(screen.getBatch(), cur, false);
-            if(screen.getPlayer().getBound().overlaps(screen.getMapModel().getEnemyLocationList().get(cur).getBound()) ){
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, ((NPC)screen.getNpcList().get(cur)).isFriendly());
+            if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
-                if(screen.getMapModel().getEnemyLocationList().get(cur).isDead()){
-                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, false, screen.isUserPlay()));
+                if(!((NPC)screen.getNpcList().get(cur)).isFriendly()){
+                    if(screen.getNpcList().get(cur).getCharacter().isDead()){
+                        screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, false, screen.isUserPlay()));
+                    }
                 }
-            }
-        }
 
 
-        // draw NPC on screen
-        keySetIterator = screen.getMapModel().getFriendLocationList().keySet().iterator();
-
-        while(keySetIterator.hasNext()){
-             cur = keySetIterator.next();
-             screen.getMapModel().getFriendLocationList().get(cur).draw(screen.getBatch(), cur, true);
-            if(screen.getPlayer().getBound().overlaps(screen.getMapModel().getFriendLocationList().get(cur).getBound()) ){
-            	screen.getPlayerController().reAdjust(5);
-                screen.setHitObject(true);
             }
         }
 

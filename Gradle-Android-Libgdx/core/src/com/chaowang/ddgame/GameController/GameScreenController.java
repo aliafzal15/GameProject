@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
@@ -42,6 +44,8 @@ public class GameScreenController {
     private Rectangle playerTradeRange, meleeAttackRangeX, meleeAttackRangeY;
     private ShapeRenderer shapeRenderer;
     private Circle rangelAttackrange;
+    private Vector2 cur;
+
     /**
      * construct
      * @param screen
@@ -53,13 +57,9 @@ public class GameScreenController {
         this.mapModel = map;
         this.player = role;
         player.getCharacter().addObserver(view);
-        Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()) {
-            mapModel.getEnemyLocationList().get(keySetIterator.next()).addObserver(view);
-        }
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()) {
-            mapModel.getFriendLocationList().get(keySetIterator.next()).addObserver(view);
+            view.getNpcList().get(keySetIterator.next()).getCharacter().addObserver(view);
         }
         touch = new Vector3();
         playerTradeRange = new Rectangle();
@@ -68,7 +68,7 @@ public class GameScreenController {
         rangelAttackrange =new Circle();
         shapeRenderer = new ShapeRenderer();
 
-        enemyIterator = view.getMapModel().getEnemyLocationList().keySet().iterator();
+        enemyIterator = view.getNpcList().keySet().iterator();
         if(enemyIterator.hasNext()){
             enemyPointer = enemyIterator.next();
         }
@@ -97,19 +97,11 @@ public class GameScreenController {
                 enableItemPreviewTouch();
             }
 
-            Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+            Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
             while(keySetIterator.hasNext()) {
                 pointer = keySetIterator.next();
-                if(mapModel.getEnemyLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getEnemyLocationList().get(pointer).previewLoadEquipment(-1);
-                    disableItemPreviewTouch();
-                }
-            }
-            keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-            while(keySetIterator.hasNext()) {
-                pointer = keySetIterator.next();
-                if(mapModel.getFriendLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getFriendLocationList().get(pointer).previewLoadEquipment(-1);
+                if(view.getNpcList().get(pointer).getBound().contains(touch.x, touch.y)){
+                    view.getNpcList().get(pointer).getCharacter().previewLoadEquipment(-1);
                     disableItemPreviewTouch();
                 }
             }
@@ -119,18 +111,11 @@ public class GameScreenController {
             if(player.getBound().contains(touch.x,touch.y)){
                 player.getCharacter().previewAllAttribute();
             }
-            Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+            Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
             while(keySetIterator.hasNext()) {
                 pointer = keySetIterator.next();
-                if(mapModel.getEnemyLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getEnemyLocationList().get(pointer).previewAllAttribute();
-                }
-            }
-            keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-            while(keySetIterator.hasNext()) {
-                pointer = keySetIterator.next();
-                if(mapModel.getFriendLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getFriendLocationList().get(pointer).previewAllAttribute();
+                if(view.getNpcList().get(pointer).getBound().contains(touch.x, touch.y)){
+                    view.getNpcList().get(pointer).getCharacter().previewAllAttribute();
                 }
             }
         }
@@ -144,7 +129,7 @@ public class GameScreenController {
 		    view.getBackpackMatrix()[i].addListener(new ClickListener(i) {
 		        @Override
 		        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		            if ( getButton() < player.getCharacter().getBackpack().size()  
+		            if ( getButton() < player.getCharacter().getBackpack().size()
 		            		&& !player.getCharacter().getEquipment().containsKey(player.getCharacter().getBackpack().get(getButton()).getItemType())) {
 		                player.getCharacter().previewLoadEquipment(getButton());
 		            }
@@ -204,24 +189,25 @@ public class GameScreenController {
 	 * @return
 	 */
     public boolean isEnemyAllDead(){
-    	if(mapModel.getEnemyLocationList().size() == 0){
+    	if(view.getNpcList().size() == 0){
     		return true;
     	}
-    	for (Entry<Vector2, Character> entry: mapModel.getEnemyLocationList().entrySet()){
-    		if(! entry.getValue().isDead()){
-    			return false;
-    		}
-    	}
-    	return true;
-    	
-    }
-	public Vector2 tradeWithFriend() {
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        playerTradeRange.set(player.getBound().x - 20, player.getBound().y -20, player.getBound().width +50, player.getBound().height +50);
-        Vector2 cur;
+        keySetIterator = view.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            if(playerTradeRange.overlaps(mapModel.getFriendLocationList().get(cur).getBound()) ){
+            if(! view.getNpcList().get(cur).getCharacter().isDead() && !((NPC)view.getNpcList().get(cur)).isFriendly()){
+                return false;
+            }
+        }
+    	return true;
+
+    }
+	public Vector2 tradeWithFriend() {
+        keySetIterator = view.getNpcList().keySet().iterator();
+        playerTradeRange.set(player.getBound().x - 20, player.getBound().y -20, player.getBound().width +50, player.getBound().height +50);
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(playerTradeRange.overlaps(view.getNpcList().get(cur).getBound()) && ((NPC)view.getNpcList().get(cur)).isFriendly() ){
                 player.changeFacingDirection(cur);
             	return cur;
             }
@@ -233,18 +219,17 @@ public class GameScreenController {
         meleeAttackRangeX.set(player.getBound().x - player.getBound().width, player.getBound().y, player.getBound().width *3 , player.getBound().height);
         meleeAttackRangeY.set(player.getBound().x, player.getBound().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
 
-        if((meleeAttackRangeX.overlaps(mapModel.getEnemyLocationList().get(enemyPointer).getBound())
-                || meleeAttackRangeY.overlaps(mapModel.getEnemyLocationList().get(enemyPointer).getBound()))
-        		&& !mapModel.getEnemyLocationList().get(enemyPointer).isDead()){
+        if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
+                &&(meleeAttackRangeX.overlaps(view.getNpcList().get(enemyPointer).getBound())
+                    || meleeAttackRangeY.overlaps(view.getNpcList().get(enemyPointer).getBound()))
+        		&& ! view.getNpcList().get(enemyPointer).getCharacter().isDead()){
             renderMeleeArea();
             if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
                 touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 view.getCam().unproject(touch);
-                if(mapModel.getEnemyLocationList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
-                    MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(enemyPointer).getName() + " is underattack");
-                    mapModel.getEnemyLocationList().get(enemyPointer).underAttack();
-                    enemyIterator = view.getMapModel().getEnemyLocationList().keySet().iterator();
-                    enemyPointer = enemyIterator.next();
+                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
+                    MainMenuScreen.logArea.appendText(view.getNpcList().get(enemyPointer).getCharacter().getName() + " is under attack");
+                    view.getNpcList().get(enemyPointer).getCharacter().underAttack();
                     view.getDialogueController().startDialogue(view.getDialogue());
                 }
             }
@@ -253,6 +238,8 @@ public class GameScreenController {
                 enemyPointer = enemyIterator.next();
             } else{
 	        	view.getDialogueController().setAnswerIndex(0);
+                enemyIterator = view.getNpcList().keySet().iterator();
+                enemyPointer = enemyIterator.next();
                 view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
             }
         }

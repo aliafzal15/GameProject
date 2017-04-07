@@ -122,6 +122,22 @@ public class GameScreen implements Observer, Screen{
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         initUI();
 
+
+        // extract all the character from map to npcList
+        npcList = new HashMap<Vector2, GameActor>();
+        Vector2 cur;
+        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
+        }
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            npcList.put(cur, new NPC(cur,mapModel.getFriendLocationList().get(cur), true));
+        }
+
+        // instentiate controller
         playerController = new PlayerController((Player)player, this);
         dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
         screenController = new GameScreenController(this,this.mapModel, (Player)this.player);
@@ -142,19 +158,6 @@ public class GameScreen implements Observer, Screen{
             mapModel.adjustLevel(player.getCharacter().getLevel());
         }
 
-        // extract all the character from map to npcList
-        npcList = new HashMap<Vector2, GameActor>();
-        Vector2 cur;
-        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
-        }
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-             cur = keySetIterator.next();
-            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), true));
-        }
 
     }
     /**
@@ -598,10 +601,16 @@ public class GameScreen implements Observer, Screen{
     public DialogueBox getDialogBox() {
         return dialogBox;
     }
-    
 
+    public HashMap<Vector2, GameActor> getNpcList() {
+        return npcList;
+    }
 
-	public boolean isUserPlay() {
+    public void setNpcList(HashMap<Vector2, GameActor> npcList) {
+        this.npcList = npcList;
+    }
+
+    public boolean isUserPlay() {
 		return isUserPlay;
 	}
     
