@@ -1,5 +1,7 @@
 package com.chaowang.ddgame.GameView;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -21,6 +23,7 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameController.ItemExchangeController;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
+import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 
@@ -44,6 +47,7 @@ public class GameItemExchangeScreen implements Screen{
     private Vector2 NPCposition;
     private Map mapModel;
     private Campaign campaign;
+    private HashMap<Vector2, GameActor> npcList;
     private ItemExchangeController controller;
     public Label NPCItemInfoLabel, backpackItemInfoLabel;
     private boolean isUserPlay;
@@ -52,17 +56,14 @@ public class GameItemExchangeScreen implements Screen{
      * constructor
      * @param game
      */
-    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, boolean isFriend, boolean isUserPlay) {
+    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, HashMap<Vector2, GameActor> npcList, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
         this.NPCposition = NPCposition;
-        if(isFriend == true){
-            this.NPCcharacter = mapModel.getFriendLocationList().get(NPCposition);
-        } else{
-            this.NPCcharacter = mapModel.getEnemyLocationList().get(NPCposition);
-        }
+        this.npcList = npcList;
+        this.NPCcharacter = this.npcList.get(NPCposition).getCharacter();
         this.isUserPlay = isUserPlay;
     }
     /**
@@ -84,7 +85,7 @@ public class GameItemExchangeScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game, player, mapModel, campaign, isUserPlay));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, isUserPlay));
                 return true;
             }
         });

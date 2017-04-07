@@ -187,8 +187,8 @@ public class Character extends Observable implements Json.Serializable{
 //	}
 	public void underAttack(){
 		if(!isDead()){
-			this.hitPoints -=10;
-			MainMenuScreen.logArea.appendText(this.getName() + " Hp -10 : "+this.getHitPoints()+"\n");
+			this.hitPoints -=1;
+			MainMenuScreen.logArea.appendText(this.getName() + " Hp -1 : "+this.getHitPoints()+"\n");
 		}
 		if(isDead()){
 			makeDead();

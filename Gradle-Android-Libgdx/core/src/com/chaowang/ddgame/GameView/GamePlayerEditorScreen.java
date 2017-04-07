@@ -1,11 +1,14 @@
 package com.chaowang.ddgame.GameView;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,6 +26,7 @@ import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
 import com.chaowang.ddgame.GameController.PlayerEditorController;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
+import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.Player;
 /**
  * view for editor screen
@@ -42,6 +46,7 @@ public class GamePlayerEditorScreen implements Screen{
     private Player player;
     private Map mapModel;
     private Campaign campaign;
+    private HashMap<Vector2, GameActor> npcList;
     private PlayerEditorController controller;
     private Label backpackItemInfoLabel;
     
@@ -57,12 +62,14 @@ public class GamePlayerEditorScreen implements Screen{
     /**
      * constructor
      * @param game
+     * @param npcList 
      */
-    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, boolean isUserPlay) {
+    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, HashMap<Vector2, GameActor> npcList, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
+        this.npcList = npcList;
         this.isUserPlay = isUserPlay;
     }
     /**
@@ -124,7 +131,7 @@ public class GamePlayerEditorScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new GameScreen(game, player, mapModel, campaign, isUserPlay));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, isUserPlay));
                 return true;
             }
         });

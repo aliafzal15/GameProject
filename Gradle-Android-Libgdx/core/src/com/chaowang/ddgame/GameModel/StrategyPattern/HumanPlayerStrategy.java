@@ -32,7 +32,6 @@ public class HumanPlayerStrategy implements Strategy{
 //        if(!screen.getDialogBox().isVisible()){
 //        }
 
-        screen.getBatch().draw(screen.getPlayer().getCurrentFrame(), screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y );
         //draw walls on screen
         for(Wall cur : screen.getMapModel().getWallLocationList() ){
             cur.draw(screen.getBatch());
@@ -67,7 +66,7 @@ public class HumanPlayerStrategy implements Strategy{
                 screen.setHitObject(true);
                 if(!((NPC)screen.getNpcList().get(cur)).isFriendly()){
                     if(screen.getNpcList().get(cur).getCharacter().isDead()){
-                        screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, false, screen.isUserPlay()));
+                        screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, screen.getNpcList(), screen.isUserPlay()));
                     }
                 }
 
@@ -133,7 +132,7 @@ public class HumanPlayerStrategy implements Strategy{
             else if (screen.getDialogueController().getAnswerIndex() == 2) {
                 Vector2 friendLocation = screen.getScreenController().tradeWithFriend();
                 if(friendLocation !=null){
-                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, true, screen.isUserPlay()));
+                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, screen.getNpcList(), screen.isUserPlay()));
                 } else{
                 	screen.getDialogueController().setAnswerIndex(0);
                 	screen.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");

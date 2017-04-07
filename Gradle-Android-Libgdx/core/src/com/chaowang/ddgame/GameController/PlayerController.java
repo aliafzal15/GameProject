@@ -22,7 +22,7 @@ import com.chaowang.ddgame.GameView.GameScreen;
  * @author chao wang
  * @version 2.0
  */
-public class PlayerController extends InputAdapter{
+public class PlayerController{
 
     private Player player;
     private GameScreen gameScreen;
@@ -146,7 +146,7 @@ public class PlayerController extends InputAdapter{
 
 
     /**
-     * use keyboard to control the players' movement
+     * players' auto movement to position (x,y)
      */
     public void keyDown(float x, float y){
 
@@ -208,7 +208,7 @@ public class PlayerController extends InputAdapter{
     }
 
     /**
-     * adjust the location of player when moving
+     * adjust the location of player when auto moving
      */
     public void walkReAdjust(float span){
         if(span <= 0 ){

@@ -33,7 +33,6 @@ public class ComputerPlayerStrategy implements Strategy{
 	@Override
 	public void renderInteraction() {
 
-        screen.getBatch().draw(screen.getPlayer().getCurrentFrame(), screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y );
         //draw walls on screen
         for(Wall cur : screen.getMapModel().getWallLocationList() ){
             cur.draw(screen.getBatch());
@@ -60,7 +59,7 @@ public class ComputerPlayerStrategy implements Strategy{
             }
         }
 
-        // draw enemy on screen
+        // draw npc on screen
         keySetIterator = screen.getNpcList().keySet().iterator();
 
         while(keySetIterator.hasNext()){

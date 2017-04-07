@@ -43,7 +43,7 @@ public class GameScreenController {
     private Iterator<Vector2> keySetIterator, enemyIterator ;
     private Rectangle playerTradeRange, meleeAttackRangeX, meleeAttackRangeY;
     private ShapeRenderer shapeRenderer;
-    private Circle rangelAttackrange;
+    private Circle rangeAttackrange;
     private Vector2 cur;
 
     /**
@@ -65,7 +65,7 @@ public class GameScreenController {
         playerTradeRange = new Rectangle();
         meleeAttackRangeX = new Rectangle();
         meleeAttackRangeY = new Rectangle();
-        rangelAttackrange =new Circle();
+        rangeAttackrange =new Circle();
         shapeRenderer = new ShapeRenderer();
 
         enemyIterator = view.getNpcList().keySet().iterator();
@@ -216,8 +216,8 @@ public class GameScreenController {
 	}
 
     public void attackEnemy(){
-        meleeAttackRangeX.set(player.getBound().x - player.getBound().width, player.getBound().y, player.getBound().width *3 , player.getBound().height);
-        meleeAttackRangeY.set(player.getBound().x, player.getBound().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
+        meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
+        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
 
         if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
                 &&(meleeAttackRangeX.overlaps(view.getNpcList().get(enemyPointer).getBound())
