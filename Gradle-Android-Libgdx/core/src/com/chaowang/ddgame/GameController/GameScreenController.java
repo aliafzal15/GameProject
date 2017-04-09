@@ -39,12 +39,7 @@ public class GameScreenController {
     private Map mapModel;
     private Player player;
     private Vector3 touch;
-    private Vector2 pointer, enemyPointer;
-    private Iterator<Vector2> keySetIterator, enemyIterator ;
-    private Rectangle playerTradeRange, meleeAttackRangeX, meleeAttackRangeY;
-    private ShapeRenderer shapeRenderer;
-    private Circle rangeAttackrange;
-    private Vector2 cur;
+    private Vector2 pointer;
 
     /**
      * construct
@@ -62,16 +57,6 @@ public class GameScreenController {
             view.getNpcList().get(keySetIterator.next()).getCharacter().addObserver(view);
         }
         touch = new Vector3();
-        playerTradeRange = new Rectangle();
-        meleeAttackRangeX = new Rectangle();
-        meleeAttackRangeY = new Rectangle();
-        rangeAttackrange =new Circle();
-        shapeRenderer = new ShapeRenderer();
-
-        enemyIterator = view.getNpcList().keySet().iterator();
-        if(enemyIterator.hasNext()){
-            enemyPointer = enemyIterator.next();
-        }
     }
     /**
      * listener to monitor any changes
@@ -184,79 +169,5 @@ public class GameScreenController {
 		}
 		view.getItemInfoLabel().setVisible(false);
 	}
-	/**
-	 * decide game state
-	 * @return
-	 */
-    public boolean isEnemyAllDead(){
-    	if(view.getNpcList().size() == 0){
-    		return true;
-    	}
-        keySetIterator = view.getNpcList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            if(! view.getNpcList().get(cur).getCharacter().isDead() && !((NPC)view.getNpcList().get(cur)).isFriendly()){
-                return false;
-            }
-        }
-    	return true;
-
-    }
-	public Vector2 tradeWithFriend() {
-        keySetIterator = view.getNpcList().keySet().iterator();
-        playerTradeRange.set(player.getBound().x - 20, player.getBound().y -20, player.getBound().width +50, player.getBound().height +50);
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            if(playerTradeRange.overlaps(view.getNpcList().get(cur).getBound()) && ((NPC)view.getNpcList().get(cur)).isFriendly() ){
-                player.changeFacingDirection(cur);
-            	return cur;
-            }
-        }
-		return null;
-	}
-
-    public void attackEnemy(){
-        meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
-        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
-
-        if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
-                &&(meleeAttackRangeX.overlaps(view.getNpcList().get(enemyPointer).getBound())
-                    || meleeAttackRangeY.overlaps(view.getNpcList().get(enemyPointer).getBound()))
-        		&& ! view.getNpcList().get(enemyPointer).getCharacter().isDead()){
-            renderMeleeArea();
-            if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
-                touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                view.getCam().unproject(touch);
-                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
-                    MainMenuScreen.logArea.appendText(view.getNpcList().get(enemyPointer).getCharacter().getName() + " is under attack");
-                    view.getNpcList().get(enemyPointer).getCharacter().underAttack();
-                    view.getDialogueController().startDialogue(view.getDialogue());
-                }
-            }
-        } else{
-            if(enemyIterator.hasNext()){
-                enemyPointer = enemyIterator.next();
-            } else{
-	        	view.getDialogueController().setAnswerIndex(0);
-                enemyIterator = view.getNpcList().keySet().iterator();
-                enemyPointer = enemyIterator.next();
-                view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
-            }
-        }
-    }
-
-
-
-    public void renderMeleeArea() {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.setProjectionMatrix(view.getCam().combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(meleeAttackRangeX.x, meleeAttackRangeX.y, meleeAttackRangeX.width, meleeAttackRangeX.height);
-        shapeRenderer.rect(meleeAttackRangeY.x, meleeAttackRangeY.y, meleeAttackRangeY.width, meleeAttackRangeY.height);
-        shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-    }
 
 }

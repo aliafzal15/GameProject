@@ -1,6 +1,7 @@
 package com.chaowang.ddgame.GameView;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -48,6 +49,7 @@ public class GameItemExchangeScreen implements Screen{
     private Map mapModel;
     private Campaign campaign;
     private HashMap<Vector2, GameActor> npcList;
+    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
     private ItemExchangeController controller;
     public Label NPCItemInfoLabel, backpackItemInfoLabel;
     private boolean isUserPlay;
@@ -56,13 +58,14 @@ public class GameItemExchangeScreen implements Screen{
      * constructor
      * @param game
      */
-    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, HashMap<Vector2, GameActor> npcList, boolean isUserPlay) {
+    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, HashMap<Vector2, GameActor> npcList, LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
         this.NPCposition = NPCposition;
         this.npcList = npcList;
+        this.playOrderList = playOrderList;
         this.NPCcharacter = this.npcList.get(NPCposition).getCharacter();
         this.isUserPlay = isUserPlay;
     }
@@ -85,7 +88,7 @@ public class GameItemExchangeScreen implements Screen{
         backwardButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, isUserPlay));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, playOrderList, isUserPlay));
                 return true;
             }
         });

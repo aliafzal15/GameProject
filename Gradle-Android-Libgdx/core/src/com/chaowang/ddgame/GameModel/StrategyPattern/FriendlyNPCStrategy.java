@@ -28,7 +28,7 @@ public class FriendlyNPCStrategy implements Strategy{
 	@Override
 	public void renderInteraction() {
 
-        screen.getBatch().draw(screen.getNpc().getCharacter().getTexture(), screen.getNpc().getPosition().x, screen.getNpc().getPosition().y, screen.getNpc().getBound().width, screen.getNpc().getBound().height);
+        screen.getBatch().draw(screen.getNpc().getCharacter().getFriendlyTexture(), screen.getNpc().getPosition().x, screen.getNpc().getPosition().y, screen.getNpc().getBound().width, screen.getNpc().getBound().height);
         //draw walls on screen
         for(Wall wallCur : screen.getMapModel().getWallLocationList() ){
         	wallCur.draw(screen.getBatch());
@@ -39,7 +39,9 @@ public class FriendlyNPCStrategy implements Strategy{
 
         // draw items on screen
         keySetIterator = screen.getMapModel().getItemLocationList().keySet().iterator();
-
+        if(screen.getMessageDialog().isFinished()){
+            screen.getMessageDialog().setVisible(false);
+        }
         while(keySetIterator.hasNext()){
             npcPointer = keySetIterator.next();
             screen.getMapModel().getItemLocationList().get(npcPointer).draw(screen.getBatch(), npcPointer);
@@ -64,7 +66,9 @@ public class FriendlyNPCStrategy implements Strategy{
         }
 
 
-        if(screen.getNpc().getBound().overlaps(screen.getMapModel().getEntryDoor())|| screen.getNpc().getBound().overlaps(screen.getMapModel().getExitDoor()) ){
+        if(screen.getNpc().getBound().overlaps(screen.getMapModel().getEntryDoor())
+                || screen.getNpc().getBound().overlaps(screen.getMapModel().getExitDoor())
+                || screen.getNpc().getBound().overlaps(screen.getPlayer().getBound())){
         	screen.getNpcController().walkReAdjust(5);
             screen.setHitObject(true);  
         }

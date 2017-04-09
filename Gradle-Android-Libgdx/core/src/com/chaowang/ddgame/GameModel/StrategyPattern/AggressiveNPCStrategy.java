@@ -1,20 +1,25 @@
 package com.chaowang.ddgame.GameModel.StrategyPattern;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
 public class AggressiveNPCStrategy implements Strategy {
 
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator ;
     private Vector2 npcPointer;
-    
-	public AggressiveNPCStrategy(GameScreen gameScreen){
+    private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
+    private Map.Entry<Vector2,GameActor> entry;
+
+
+    public AggressiveNPCStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
 	}
 	
@@ -39,7 +44,9 @@ public class AggressiveNPCStrategy implements Strategy {
 
         // draw items on screen
         keySetIterator = screen.getMapModel().getItemLocationList().keySet().iterator();
-
+        if(screen.getMessageDialog().isFinished()){
+            screen.getMessageDialog().setVisible(false);
+        }
         while(keySetIterator.hasNext()){
             npcPointer = keySetIterator.next();
             screen.getMapModel().getItemLocationList().get(npcPointer).draw(screen.getBatch(), npcPointer);
@@ -52,6 +59,16 @@ public class AggressiveNPCStrategy implements Strategy {
         }
 
         // draw npc on screen
+//        entrySetIterator = screen.getNpcList().entrySet().iterator();
+//        while(entrySetIterator.hasNext()){
+//            entry = entrySetIterator.next();
+//            entry.getValue().getCharacter().draw(screen.getBatch(), entry.getKey(), ((NPC)entry.getValue()).isFriendly());
+//            if(screen.getPlayer().getBound().overlaps(entry.getValue().getBound()) ){
+//                screen.getPlayerController().reAdjust(5);
+//                screen.setHitObject(true);
+//            }
+//        }
+
         keySetIterator = screen.getNpcList().keySet().iterator();
 
         while(keySetIterator.hasNext()){
@@ -59,27 +76,33 @@ public class AggressiveNPCStrategy implements Strategy {
         	screen.getNpcList().get(npcPointer).getCharacter().draw(screen.getBatch(), npcPointer, ((NPC)screen.getNpcList().get(npcPointer)).isFriendly());
             if(screen.getNpc().getBound().overlaps(screen.getNpcList().get(npcPointer).getBound()) ){
             	screen.getNpcController().walkReAdjust(5);
-                screen.setHitObject(true);            
+                screen.setHitObject(true);
             }
         }
 
 
-        if(screen.getNpc().getBound().overlaps(screen.getMapModel().getEntryDoor())|| screen.getNpc().getBound().overlaps(screen.getMapModel().getExitDoor()) ){
+        if(screen.getNpc().getBound().overlaps(screen.getMapModel().getEntryDoor())
+                || screen.getNpc().getBound().overlaps(screen.getMapModel().getExitDoor())
+                || screen.getNpc().getBound().overlaps(screen.getPlayer().getBound())){
         	screen.getNpcController().walkReAdjust(5);
             screen.setHitObject(true);  
         }
 
-        
-        if(screen.getNpcController().findPlayerToAttack() && !screen.getPlayer().getCharacter().isDead()){
-        	screen.getPlayer().getCharacter().underAttack();
-        } else if(screen.getNpcController().findNPCtoAttack() != null){
-        	npcPointer = screen.getNpcController().findNPCtoAttack();
-        	GameActor tmp= screen.getNpcList().remove(npcPointer);
-        	tmp.getCharacter().underAttack();
-        	((NPC)tmp).setFriendly(false);
-        	screen.getNpcList().put(tmp.getPosition(), tmp);
-        } else{
-        	screen.getNpcController().agressivelyWalkTo(screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y);
+        if(!screen.getNpc().getCharacter().isDead()){
+            if(screen.getNpcController().findPlayerToAttack() && !screen.getPlayer().getCharacter().isDead() && screen.getNpcController().isAbleToAttack()){
+                MainMenuScreen.logArea.appendText(screen.getNpc().getCharacter().getName()+ " is attacking you\n");
+                screen.getPlayer().getCharacter().underAttack();
+                screen.startNextRound();
+            } else if(screen.getNpcController().findNPCtoAttack() != null && screen.getNpcController().isAbleToAttack() ){
+                npcPointer = screen.getNpcController().findNPCtoAttack();
+                GameActor tmp= screen.getNpcList().remove(npcPointer);
+                tmp.getCharacter().underAttack();
+                ((NPC)tmp).setFriendly(false);
+                screen.getNpcList().put(tmp.getPosition(), tmp);
+                screen.startNextRound();
+            } else{
+                screen.getNpcController().aggressivelyWalkTo(screen.getPlayer().getPosition().x, screen.getPlayer().getPosition().y);
+            }
         }
 	}
 

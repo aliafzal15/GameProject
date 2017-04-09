@@ -10,8 +10,7 @@ import com.chaowang.ddgame.MenuView.MainMenuScreen;
  */
 public class CharacterScoreModifier {
 
-    private static int abilityModifier(int ability){
-        MainMenuScreen.logArea.appendText("calling ability modifier\n");
+    public static int abilityModifier(int ability){
         return ability / 2 - 5;
     }
 

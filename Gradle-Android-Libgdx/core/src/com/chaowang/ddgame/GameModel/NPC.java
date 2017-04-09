@@ -32,7 +32,7 @@ public class NPC extends GameActor{
     }
 
     public void setFriendly(boolean friendly) {
-    	MainMenuScreen.logArea.appendText(this.character.getName() + "becomes "+ friendly +" friendly");
+    	MainMenuScreen.logArea.appendText(this.character.getName() + "becomes "+ friendly +" friendly\n");
         isFriendly = friendly;
     }
 

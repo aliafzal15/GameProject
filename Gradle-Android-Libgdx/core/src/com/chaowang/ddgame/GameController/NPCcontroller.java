@@ -24,6 +24,7 @@ public class NPCcontroller {
     private Rectangle mapBound;
     private String movement, prevMovement;
     private boolean isStartToMove;  // flag to determine status of start moving
+    private boolean ableToAttack;  // flag to reject attack, while moving
     private float walkingDistance;   // measure the distance for each move
     private Vector2 positionBeforeMove;
     private Circle rangeAttackrange;
@@ -45,6 +46,7 @@ public class NPCcontroller {
         mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
         walkingDistance =0f;
         isStartToMove =false;
+        ableToAttack = true;
         prevMovement = "up";
         if(this.npc != null){
             positionBeforeMove = new Vector2(this.npc.getPosition());
@@ -62,7 +64,8 @@ public class NPCcontroller {
    
     
     public void walkInSquarePattern(){
-    	if(prevMovement.equals("up")){  //walk to left
+
+        if(prevMovement.equals("up")){  //walk to left
     		friendlyWalkTo(this.npc.getPosition().x - PublicParameter.GAME_PIXEL_SIZE* 3f, this.npc.getPosition().y);
     	} else if(prevMovement.equals("left")){ //walk down
     		friendlyWalkTo(this.npc.getPosition().x , this.npc.getPosition().y - PublicParameter.GAME_PIXEL_SIZE* 3f);
@@ -75,17 +78,11 @@ public class NPCcontroller {
     
     private void friendlyWalkTo(float x, float y){
 
-		if(Gdx.input.isKeyPressed(Input.Keys.F )){
-			isStartToMove=true;
-        }
-    	if(isStartToMove==false){
-    		positionBeforeMove.set(npc.getPosition());
-            walkingDistance =0f;
-            //		isStartToMove=true;
-    	// moving and terminate move
-    	}else{
+//		if(Gdx.input.isKeyPressed(Input.Keys.F )){
+//			isStartToMove=true;
+//        }
+    	if(isStartToMove){     	// moving and terminate move
     		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
-                isStartToMove=false;
                 if(x < npc.getPosition().x){
                 	prevMovement = "left";
                 } else if(y < npc.getPosition().y){
@@ -95,28 +92,30 @@ public class NPCcontroller {
                 } else{
                 	prevMovement = "up";
                 }
-                
+                isStartToMove=false;
+                positionBeforeMove.set(npc.getPosition());
+                walkingDistance =0f;
+                // flag isActorPlaying to be true for next player, put npc in queue
+                gameScreen.startNextRound();
             } else{
         		keyDown( x,  y);
     		}
     	}
     }
     
-    public void agressivelyWalkTo(float x, float y){
+    public void aggressivelyWalkTo(float x, float y){
 
-		if(Gdx.input.isKeyPressed(Input.Keys.F )){
-			isStartToMove=true;
-        }
-    	if(isStartToMove==false){
-    		positionBeforeMove.set(npc.getPosition());
-            walkingDistance =0f;
-            //		isStartToMove=true;
-    	// moving and terminate move
-    	}else{
-    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
+    	if(isStartToMove){
+            // moving and terminate move
+            if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
                 isStartToMove=false;
+                ableToAttack = true;
+                positionBeforeMove.set(npc.getPosition());
+                walkingDistance =0f;
+                gameScreen.startNextRound();
             } else{
         		keyDown( x,  y);
+                ableToAttack = false;
     		}
     	}
     }
@@ -198,7 +197,7 @@ public class NPCcontroller {
 
 
 	public boolean findPlayerToAttack() {
-		rangeAttackrange.set(npc.getPosition(), PublicParameter.GAME_PIXEL_SIZE*3);
+		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE);
         
         if(rangeAttackrange.contains(gameScreen.getPlayer().getPosition().x+gameScreen.getPlayer().getBound().width / 2, 
         		gameScreen.getPlayer().getPosition().y+gameScreen.getPlayer().getBound().height / 2)){
@@ -209,10 +208,8 @@ public class NPCcontroller {
 
 
 	public Vector2 findNPCtoAttack() {
-		rangeAttackrange.set(npc.getPosition(), PublicParameter.GAME_PIXEL_SIZE*3);
-        
+        rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*2);
         npcIterator = gameScreen.getNpcList().keySet().iterator();
-        
         while(npcIterator.hasNext()){
         	npcVectorPointer = npcIterator.next();
         	if(rangeAttackrange.contains(npcVectorPointer.x + gameScreen.getNpcList().get(npcVectorPointer).getBound().width /2
@@ -223,16 +220,31 @@ public class NPCcontroller {
         }
 		return null;
 	}
-    
-    
+
     public void renderRangeArea() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(gameScreen.getCam().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.circle(rangeAttackrange.x, rangeAttackrange.y, rangeAttackrange.radius); 
+        shapeRenderer.circle(rangeAttackrange.x, rangeAttackrange.y, rangeAttackrange.radius);
         shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    public boolean isStartToMove() {
+        return isStartToMove;
+    }
+
+    public void setStartToMove(boolean startToMove) {
+        isStartToMove = startToMove;
+    }
+
+    public boolean isAbleToAttack() {
+        return ableToAttack;
+    }
+
+    public void setAbleToAttack(boolean ableToAttack) {
+        this.ableToAttack = ableToAttack;
     }
 }

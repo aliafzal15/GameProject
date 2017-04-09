@@ -40,7 +40,6 @@ public class Dice {
 	public static int roll(int numberOfDice, int sides, int extra) {
 		int roll = 0;
 		//Gdx.app.log("MyTag", "my informative message");
-		MainMenuScreen.logArea.appendText("rolling "+numberOfDice+" dices with"+sides+" sides and " + extra +" extra\n");
 		for(int die = 1; die <= numberOfDice; die++) {
 			roll += roll(sides);
 		}

@@ -46,7 +46,7 @@ public class Character extends Observable implements Json.Serializable{
 	private int promotionPoint;
 	private int[] abilityBonusArr;
     private Texture texture;
-    private Texture mapTexture;
+    private Texture friendlyTexture;
 	boolean isDead;
 
     private HashMap<Item.ItemType, Item> equipment;
@@ -92,7 +92,7 @@ public class Character extends Observable implements Json.Serializable{
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
-        mapTexture = new Texture(Gdx.files.internal("map/friend1.png"));
+        friendlyTexture = new Texture(Gdx.files.internal("map/friend1.png"));
 		this.isDead = false;
     }
 
@@ -187,8 +187,8 @@ public class Character extends Observable implements Json.Serializable{
 //	}
 	public void underAttack(){
 		if(!isDead()){
-			this.hitPoints -=1;
-			MainMenuScreen.logArea.appendText(this.getName() + " Hp -1 : "+this.getHitPoints()+"\n");
+			this.hitPoints -=10;
+			MainMenuScreen.logArea.appendText(this.getName() + " Hp -10 : "+this.getHitPoints()+"\n");
 		}
 		if(isDead()){
 			makeDead();
@@ -374,6 +374,13 @@ public class Character extends Observable implements Json.Serializable{
     public void setAbilities(int[] abilities) {
         this.abilities.setAbilityArr(abilities);
     }
+	/**
+	 * get image
+	 * @return the image
+	 */
+	public Texture getFriendlyTexture() {
+		return friendlyTexture;
+	}
     /**
      * get image
      * @return the image
@@ -869,7 +876,7 @@ public class Character extends Observable implements Json.Serializable{
 	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
 		if(isFriendly == true){
 		   // is friendly NPC use unified image
-	        batch.draw(mapTexture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3 );
+	        batch.draw(friendlyTexture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3 );
 		} else{
 	        batch.draw(texture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
 		}

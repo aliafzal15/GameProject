@@ -55,7 +55,7 @@ public class HumanPlayerStrategy implements Strategy{
             }
         }
 
-        // draw enemy on screen
+        // draw npc on screen
         keySetIterator = screen.getNpcList().keySet().iterator();
 
         while(keySetIterator.hasNext()){
@@ -66,18 +66,16 @@ public class HumanPlayerStrategy implements Strategy{
                 screen.setHitObject(true);
                 if(!((NPC)screen.getNpcList().get(cur)).isFriendly()){
                     if(screen.getNpcList().get(cur).getCharacter().isDead()){
-                        screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, screen.getNpcList(), screen.isUserPlay()));
+                        screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, screen.getNpcList(), screen.getplayOrderList() ,screen.isUserPlay()));
                     }
                 }
-
-
             }
         }
 
         //draw exit door on screen, exit mechanism
         if(screen.getPlayer().getBound().overlaps(screen.getMapModel().getExitDoor()) ) {
             if (screen.getPlayer().getPosition().y + screen.getPlayer().getBound().getHeight() <= screen.getMapModel().getExitDoor().y + 1f) {
-            	if(screen.getScreenController().isEnemyAllDead()){
+            	if(screen.getPlayerController().isEnemyAllDead()){
                     if (screen.getCampaign().getMapPack().size == GameScreen.getCount() + 1) {
                     	screen.getPlayer().setPosition(new Vector2(-1000,-1000));
                     	screen.getUiStage().addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
@@ -90,11 +88,11 @@ public class HumanPlayerStrategy implements Strategy{
                     } else {
                     	screen.getPlayer().getCharacter().promoteUp();
                         GameScreen.setCount(GameScreen.getCount()+1);
+                        screen.getPlayerController().setStartToMove(false);  // does not allow next npc play, in fade out 3 seconds
                         screen.getPlayer().setPosition(new Vector2(-1000,-1000));
                         screen.getUiStage().addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                //campaign.getMapPack().removeIndex(0);
                                 System.out.println("loading map number "+GameScreen.getCount());
                                 MainMenuScreen.logArea.clear();
                                 screen.getGame().setScreen(new GameScreen(screen.getGame(), screen.getPlayer().getCharacter(), screen.getCampaign().getMapPack().get(GameScreen.getCount()), screen.getCampaign(), screen.isUserPlay()));
@@ -112,7 +110,6 @@ public class HumanPlayerStrategy implements Strategy{
             }
         }
 
-
         if(screen.getPlayer().getBound().overlaps(screen.getMapModel().getEntryDoor()) ){
         	screen.getPlayerController().reAdjust(0);
             screen.setHitObject(true);
@@ -127,12 +124,13 @@ public class HumanPlayerStrategy implements Strategy{
             	screen.getPlayerController().movePlayer();
             }
             else if (screen.getDialogueController().getAnswerIndex() == 1) {
-            	screen.getScreenController().attackEnemy() ; // if cannot find enemy in range to attack
+            	screen.getPlayerController().attackEnemy() ; // if cannot find enemy in range to attack
             }
             else if (screen.getDialogueController().getAnswerIndex() == 2) {
-                Vector2 friendLocation = screen.getScreenController().tradeWithFriend();
+                Vector2 friendLocation = screen.getPlayerController().tradeWithFriend();
                 if(friendLocation !=null){
-                	screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, screen.getNpcList(), screen.isUserPlay()));
+                    screen.startNextRound();
+                    screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, screen.getNpcList(), screen.getplayOrderList() ,screen.isUserPlay()));
                 } else{
                 	screen.getDialogueController().setAnswerIndex(0);
                 	screen.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");

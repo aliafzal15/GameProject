@@ -2,6 +2,7 @@ package com.chaowang.ddgame.GameView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.NPC;
+import com.chaowang.ddgame.GameModel.StrategyPattern.AggressiveNPCStrategy;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
@@ -44,11 +46,18 @@ import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameUtl.OptionBox;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
+import com.chaowang.ddgame.util.CharacterScoreModifier;
+import com.chaowang.ddgame.util.Dice;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 
 /**
  * View for Game Selection
@@ -77,12 +86,15 @@ public class GameScreen implements Observer, Screen{
     private TextButton playerEditorBtn;
 
     // game attributes
-    private GameActor player, npc;
+    private GameActor player, npcPointer;
     private Map mapModel;
     private Campaign campaign;
     private HashMap<Vector2,GameActor> npcList;
+    private LinkedList<Entry<Integer,Vector2>> playOrderList;
+    private Entry<Integer,Vector2> currentRollVectorEntry;
     private Iterator<Vector2> keySetIterator ;
-    private boolean isHitObject, isUserPlay;
+    private boolean isHitObject, isUserPlay, isActorPlaying;
+    private int playerOrNPC = -1; //  1 is player, 2 is NPC
     private static int count=0;
 
     /**
@@ -93,15 +105,7 @@ public class GameScreen implements Observer, Screen{
      * @param camp
      */
     public GameScreen(Game game, Character character,Map map, Campaign camp, boolean isUserPlay) {
-        this(game,new Player(new Vector2(1,1), character),map,camp, new HashMap<Vector2, GameActor>(), isUserPlay);
-        
-        if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
-            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
-                    mapModel.getEntryDoor().y - player.getBound().getHeight()));
-        } else {
-            player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
-                    mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
-        }
+        this(game,new Player(new Vector2(1,1), character),map,camp, new HashMap<Vector2, GameActor>(), new LinkedList<Entry<Integer,Vector2>>(), isUserPlay);
     }
 
     /**
@@ -112,58 +116,52 @@ public class GameScreen implements Observer, Screen{
      * @param camp
      * @param actorList 
      */
-    public GameScreen(Game game, GameActor player,Map map, Campaign camp, HashMap<Vector2, GameActor> actorList, boolean isUserPlay){
+    public GameScreen(Game game, GameActor player,Map map, Campaign camp, HashMap<Vector2, GameActor> actorList, LinkedList<Entry<Integer,Vector2>> list , boolean isUserPlay){
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = new Campaign(camp);
         this.npcList = actorList;
+        this.playOrderList = list;
         this.isUserPlay = isUserPlay;
         batch = new SpriteBatch();
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        isActorPlaying = false;
+
+        // re adjust player position, if player enter a new map
+        if(player.getPosition().x ==1){
+            if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
+                player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                        mapModel.getEntryDoor().y - player.getBound().getHeight()));
+            } else {
+                player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                        mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
+            }
+        }
+
         initUI();
 
-
-        // extract all the character from map to npcList
-
-        Vector2 cur;
-        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
+        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+            mapModel.adjustLevel(player.getCharacter().getLevel());
         }
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()){
-            cur = keySetIterator.next();
-            npcList.put(cur, new NPC(cur,mapModel.getFriendLocationList().get(cur), true));
+
+        // extract all the character from map to npcList, queue them in play order list, decide precedence by dice roll
+
+        if(playOrderList.size()==0 ){
+            initializeNpcListAndOrder(player);
         }
         mapModel.getFriendLocationList().clear();
         mapModel.getEnemyLocationList().clear();
 
         // instentiate controller
         playerController = new PlayerController((Player)player, this);
-        npcController = new NPCcontroller((NPC)npc,this);
+        npcController = new NPCcontroller((NPC)npcPointer,this);
         dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
         screenController = new GameScreenController(this,this.mapModel, (Player)this.player);
 
-        dialogue = new Dialogue();
-        DialogueNode node1 = new DialogueNode("Your Turn starts", 0);
-        DialogueNode node2 = new DialogueNode("How do you want your move ?", 1);
-
-        node1.makeLinear(node2.getID());
-        node2.addChoice("Move", 2);
-        node2.addChoice("Fight",3);
-        node2.addChoice("Trade", 4);
-        dialogue.addNode(node1);
-        dialogue.addNode(node2);
-
-        // from show
-        if(mapModel.getLevel() != player.getCharacter().getLevel()){
-            mapModel.adjustLevel(player.getCharacter().getLevel());
-        }
-
+        initializeDialogue();
 
     }
 
@@ -178,25 +176,12 @@ public class GameScreen implements Observer, Screen{
         Gdx.input.setInputProcessor(uiStage);
 
         MainMenuScreen.logArea.setPosition(Gdx.graphics.getWidth()/80,Gdx.graphics.getHeight() /80 );
-        MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/6);
+        MainMenuScreen.logArea.setSize(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/2);
+
         uiStage.addActor(MainMenuScreen.logArea);
         uiStage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(2)));
 
-        keySetIterator = npcList.keySet().iterator();
-        if(keySetIterator.hasNext()){
-        	npc = npcList.remove(keySetIterator.next());
-        }
-        npcController.setNpc((NPC)npc);
-        
-        //npc.setStrategy(new FriendlyNPCStrategy(this));
-        if(isUserPlay){
-            player.setStrategy(new HumanPlayerStrategy(this));
-        } else{
-            player.setStrategy(new ComputerPlayerStrategy(this));
-        }
-
-//        enemyIterator = mapModel.getEnemyLocationList().keySet().iterator();
-//        enemyPointer = enemyIterator.next();
+        isActorPlaying=true; //start to queue and let player NPC play
     }
     /**
      * set background
@@ -205,30 +190,107 @@ public class GameScreen implements Observer, Screen{
     public void render(float delta)  {
 
         isHitObject = false;
+        if(isActorPlaying){
+            isActorPlaying = false;
+            currentRollVectorEntry = playOrderList.poll();
+            if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
+                playerOrNPC =1;
+                if (player.getCharacter().isDead()) {
+                    exitIfPlayerDie();
+                } else{
+                    if(isUserPlay){
+                        player.setStrategy(new HumanPlayerStrategy(this));
+                    } else{
+                        player.setStrategy(new ComputerPlayerStrategy(this));
+                    }
+                    playerController.setStartToMove(true);
+                    MainMenuScreen.logArea.appendText("yourself start to play\n");
+                }
+            } else{
+                playerOrNPC =2;
+//                if(npcPointer == null){
+//                    Iterator<Entry<Vector2,GameActor>> entrySetIterator = npcList.entrySet().iterator();
+//                    npcPointer = entrySetIterator.next().getValue();
+//                    entrySetIterator.remove();
+//                }
+                if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().isDead()){
+                    MainMenuScreen.logArea.appendText(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getName()+ "is dead, skip play\n");
+                    startNextRound();
+                    playerOrNPC = -1;
+                } else{
+                    npcPointer = npcList.remove(currentRollVectorEntry.getValue());
+                    npcController.setNpc((NPC)npcPointer);
+                    if(((NPC)npcPointer).isFriendly()){
+                        npcPointer.setStrategy(new FriendlyNPCStrategy(this));
+                    }else{
+                        npcPointer.setStrategy(new AggressiveNPCStrategy(this));
+                    }
+                    npcController.setStartToMove(true);
+                    MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " start to play\n");
+                }
+            }
+        }
 
         renderer.setView(cam);
         renderer.render();
 
-        player.executeSetupCameraStategy();
-//        npc.executeSetupCameraStategy();
-        
+        if(playerOrNPC ==1){
+            player.executeSetupCameraStategy();
+        } else if(playerOrNPC ==2){
+            npcPointer.executeSetupCameraStategy();
+        }
+
         batch.begin();
         mapModel.getEntryDoor().draw(batch);
         mapModel.getExitDoor().draw(batch);
         batch.draw(((Player)player).getCurrentFrame(), player.getPosition().x, player.getPosition().y );
 
+        if(playerOrNPC ==1){
+            player.renderInteraction();
+        } else if(playerOrNPC ==2){
+            npcPointer.renderInteraction();
+        }
 
-        player.renderInteraction();
-//        npc.renderInteraction();
 
         batch.end();
-//        npc.updateDialogueStage(delta);
-        player.updateDialogueStage(delta);
-
-//        uiStage.act(delta);
-//        uiStage.draw();
+        if(playerOrNPC ==1){
+            player.updateDialogueStage(delta);
+        } else if(playerOrNPC ==2){
+            npcPointer.updateDialogueStage(delta);
+        }
 
     }
+
+    private void exitIfPlayerDie() {
+        if (player.getCharacter().isDead()) {
+            playerController.setStartToMove(false);  // does not allow next npc play, in fade out 3 seconds
+            npcController.setStartToMove(false);  // does not allow next npc play, in fade out 3 seconds
+            player.setPosition(new Vector2(-1000, -1000));
+            uiStage.addAction(Actions.sequence(Actions.fadeOut(3), Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    MainMenuScreen.logArea.clear();
+                    game.setScreen(new MainMenuScreen(game));
+                }
+            })));
+        }
+    }
+
+    public void startNextRound() {
+        if(playerOrNPC==1){
+            currentRollVectorEntry.setValue(player.getPosition());
+            playOrderList.offer(currentRollVectorEntry);
+            isActorPlaying = true;
+        } else if(playerOrNPC == 2){
+            if(npcPointer!= null){
+                currentRollVectorEntry.setValue(npcPointer.getPosition());
+                playOrderList.offer(currentRollVectorEntry);
+                npcList.put(currentRollVectorEntry.getValue(),npcPointer);
+            }
+            isActorPlaying = true;
+        }
+    }
+
 
     /**
      * update the size of map
@@ -258,6 +320,51 @@ public class GameScreen implements Observer, Screen{
         uiStage.dispose();
     }
 
+    private void initializeNpcListAndOrder(GameActor player) {
+        Vector2 cur;
+        int diceRoll;
+        keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            diceRoll = Dice.roll(1, 20)+ CharacterScoreModifier.abilityModifier(mapModel.getEnemyLocationList().get(cur).getDexterity());
+            MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(cur).getName() + " roll dice :"+diceRoll + "\n");
+            playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(cur)));
+            npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
+        }
+        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(mapModel.getFriendLocationList().get(cur).getDexterity());
+            MainMenuScreen.logArea.appendText(mapModel.getFriendLocationList().get(cur).getName() + " roll dice :"+diceRoll + "\n");
+            playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(cur)));
+            npcList.put(cur, new NPC(cur,mapModel.getFriendLocationList().get(cur), true));
+        }
+
+        // add player to play order linked list
+        diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(player.getCharacter().getDexterity()); //dice roll+ deterity ability modifier
+        MainMenuScreen.logArea.appendText("yourself roll dice :"+diceRoll + "\n");
+        playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(player.getPosition())));
+        Collections.sort(playOrderList, new Comparator<Entry<Integer, Vector2>>() {
+            @Override
+            public int compare(Entry<Integer, Vector2> arg0, Entry<Integer, Vector2> arg1) {
+                return arg1.getKey()-arg0.getKey();
+            }
+        });
+    }
+
+    private void initializeDialogue() {
+        dialogue = new Dialogue();
+        DialogueNode node1 = new DialogueNode("Your Turn starts", 0);
+        DialogueNode node2 = new DialogueNode("How do you want your move ?", 1);
+
+        node1.makeLinear(node2.getID());
+        node2.addChoice("Move", 2);
+        node2.addChoice("Fight",3);
+        node2.addChoice("Trade", 4);
+        dialogue.addNode(node1);
+        dialogue.addNode(node2);
+    }
+
     /**
      * initial map view
      */
@@ -279,7 +386,7 @@ public class GameScreen implements Observer, Screen{
         playerEditorBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GamePlayerEditorScreen(game, (Player)player, mapModel, campaign, npcList, isUserPlay));
+                game.setScreen(new GamePlayerEditorScreen(game, (Player)player, mapModel, campaign, npcList, playOrderList, isUserPlay));
                 return true;
             }
         });
@@ -470,7 +577,7 @@ public class GameScreen implements Observer, Screen{
 	}
 
 	public GameActor getNpc() {
-		return npc;
+		return npcPointer;
 	}
 
 	public SpriteBatch getBatch() {
@@ -529,6 +636,18 @@ public class GameScreen implements Observer, Screen{
 	public static void setCount(int count) {
 		GameScreen.count = count;
 	}
+
+    public boolean isActorPlaying() {
+        return isActorPlaying;
+    }
+
+    public void setActorPlaying(boolean actorPlaying) {
+        isActorPlaying = actorPlaying;
+    }
+
+    public LinkedList<Entry<Integer, Vector2>> getplayOrderList() {
+        return playOrderList;
+    }
 
     /**
      * get map

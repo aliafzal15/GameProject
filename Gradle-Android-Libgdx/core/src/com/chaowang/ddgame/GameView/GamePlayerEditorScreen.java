@@ -1,6 +1,7 @@
 package com.chaowang.ddgame.GameView;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -47,6 +48,7 @@ public class GamePlayerEditorScreen implements Screen{
     private Map mapModel;
     private Campaign campaign;
     private HashMap<Vector2, GameActor> npcList;
+    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
     private PlayerEditorController controller;
     private Label backpackItemInfoLabel;
     
@@ -64,12 +66,13 @@ public class GamePlayerEditorScreen implements Screen{
      * @param game
      * @param npcList 
      */
-    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, HashMap<Vector2, GameActor> npcList, boolean isUserPlay) {
+    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, HashMap<Vector2, GameActor> npcList, LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrdeList , boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
         this.npcList = npcList;
+        this.playOrderList = playOrdeList;
         this.isUserPlay = isUserPlay;
     }
     /**
@@ -131,7 +134,7 @@ public class GamePlayerEditorScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, isUserPlay));
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, playOrderList, isUserPlay));
                 return true;
             }
         });
