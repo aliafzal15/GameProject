@@ -8,7 +8,7 @@ package com.chaowang.ddgame.MenuModel.ItemModel;
 
 public enum EnchantedAbility {
 
-    STRENGTH(0), DEXTERITY(1), CONSTITUTION(2), WISDOM(3), INTELLIGENCE(4), CHARISMA(5), ARMORCLASS(6), ATTACKBONUS(7), DAMAGEBONUS(8),MeleeAttack(9),RangedAttack(10);
+    STRENGTH(0), DEXTERITY(1), CONSTITUTION(2), WISDOM(3), INTELLIGENCE(4), CHARISMA(5), ARMORCLASS(6), ATTACKBONUS(7), DAMAGEBONUS(8);
 
     int index;
     /**
@@ -50,10 +50,6 @@ public enum EnchantedAbility {
                 return ATTACKBONUS;
             case 8:
                 return DAMAGEBONUS;
-            case 9:
-                return MeleeAttack;
-            case 10:
-                return RangedAttack;
         }
         return WISDOM;
     }

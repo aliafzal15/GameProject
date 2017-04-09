@@ -1,4 +1,4 @@
-package com.chaowang.ddgame.MenuModel.ItemModel;
+package com.chaowang.ddgame.ItemModel;
 
 
 import com.badlogic.gdx.Gdx;
@@ -23,7 +23,7 @@ public class Item extends Rectangle implements Json.Serializable {
     public enum ItemType {
         HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
         ARMOR(1, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
-        WEAPON(2, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS, EnchantedAbility.DAMAGEBONUS,EnchantedAbility.MeleeAttack,EnchantedAbility.RangedAttack}),
+        WEAPON(2, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS, EnchantedAbility.DAMAGEBONUS}),
         BELT(3, new EnchantedAbility[]{EnchantedAbility.CONSTITUTION, EnchantedAbility.STRENGTH}),
         SHIELD(4, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
         BOOTS(5, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.DEXTERITY}),
@@ -88,13 +88,15 @@ public class Item extends Rectangle implements Json.Serializable {
     private Texture texture;
     private int abilityPointer = 0;
     private Texture textureOnMap;
+    private WeaponModel weaponModel;
+    private String weaponModelType;
     /**
      * constructor
      * @param type
      * @param name
      * @param level
      * @param enchantedAbility
-     */
+     */enchantedAbility
     public Item(ItemType type , String name, int level, EnchantedAbility enchantedAbility) {
         this.itemType = type;
         abilityPointer=0;
@@ -303,5 +305,47 @@ public class Item extends Rectangle implements Json.Serializable {
         this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
         this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
     }
+    
 
-}
+    /**
+     * sets the weapon model type
+     * @param type
+     */
+    public void setWeaponModelType(String type){
+    	this.weaponModelType=type;
+    }
+    
+    /**
+     * returns the weapon model type
+     * @return type
+     */
+    public String getWeaponModelType(){
+    	return this.weaponModelType;
+    }
+    
+    /**
+     * sets the weapon model object
+     * 
+     */
+    public void setWeaponModelObject(){
+    	
+    	if(this.weaponModelType!=null){
+    		this.weaponModel=new WeaponModel(this.weaponModelType,this.enchantedAbility);
+    	}
+    	else{
+    		this.weaponModel=new WeaponModel(null,this.enchantedAbility);
+    	}
+    	    	
+    }
+    
+    /**
+     * gets the weapon model object
+     * 
+     */
+    public WeaponModel getWeaponModelObject(){
+    	return this.weaponModel;
+    }
+    	
+    };
+
+
