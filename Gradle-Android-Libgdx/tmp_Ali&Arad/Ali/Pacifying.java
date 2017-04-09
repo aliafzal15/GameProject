@@ -22,14 +22,12 @@ public class Pacifying extends WeaponDecorator{
 		setEnchantmentStacks();
 	}
 	
-	/**
-	 * This function returns the stacks of enchantment values
-	 * @return enchantmentValueStack
-	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		
+		return this.weaponSpecialEnchantment.getEnchantment();
 	}
+	
 	
 	
 	/**
@@ -38,7 +36,17 @@ public class Pacifying extends WeaponDecorator{
 	 */
 	@Override
 	public void setEnchantmentStacks() {
-		this.enchantmentStack.add("Pacifying");
-		this.enchantmentValueStack.add(this.weaponSpecialEnchantment.item.getLevel()*1000);	
+		int enchantmentPower=this.getItem().getLevel()*1000; //multiplied by 1000 so during combat we can check if its greater than 1000 then we can do pacifying strategy		
+		StackModel temp= new StackModel(enchantmentPower,"Pacifying");
+		this.weaponSpecialEnchantment.getEnchantment().push(temp);	
+	}
+	
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.weaponSpecialEnchantment.getItem();
 	}
 }

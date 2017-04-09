@@ -22,7 +22,7 @@ public class PlainWeapon extends WeaponSpecialEnchantment {
 	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		return this.enchantmentStack;
 	}
 	
 
@@ -33,9 +33,15 @@ public class PlainWeapon extends WeaponSpecialEnchantment {
 	@Override
 	public void setEnchantmentStacks() {
 		this.enchantmentStack=new Stack();
-		this.enchantmentValueStack=new Stack();		
 	}
 
-	
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.item;	
+	}
 	
 }

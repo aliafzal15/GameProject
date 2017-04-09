@@ -20,24 +20,32 @@ public class Frightening extends WeaponDecorator{
 		setEnchantmentStacks();
 	}
 	
-	/**
-	 * This function returns the stacks of enchantment values
-	 * @return enchantmentValueStack
-	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		
+		return this.weaponSpecialEnchantment.getEnchantment();
 	}
 	
 	
-
+	
 	/**
 	 * This function set the stacks of enchantment values and enchantment type
 	 * 
 	 */
 	@Override
 	public void setEnchantmentStacks() {
-		this.enchantmentStack.add("Frightening");
-		this.enchantmentValueStack.add(this.weaponSpecialEnchantment.item.getLevel());	
+		int enchantmentPower=this.getItem().getLevel();		
+		StackModel temp= new StackModel(enchantmentPower,"Frightening");
+		this.weaponSpecialEnchantment.getEnchantment().push(temp);
+	}
+	
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.weaponSpecialEnchantment.getItem();
 	}
 }
+

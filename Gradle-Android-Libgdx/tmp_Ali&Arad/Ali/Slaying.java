@@ -21,25 +21,30 @@ public class Slaying extends WeaponDecorator{
 		setEnchantmentStacks();
 	}
 	
-	/**
-	 * This function returns the stacks of enchantment values
-	 * @return enchantmentValueStack
-	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		
+		return this.weaponSpecialEnchantment.getEnchantment();
 	}
 	
 	
 	
-
 	/**
 	 * This function set the stacks of enchantment values and enchantment type
 	 * 
 	 */
 	@Override
 	public void setEnchantmentStacks() {
-		this.enchantmentStack.add("Slaying");
-		this.enchantmentValueStack.add(this.weaponSpecialEnchantment.item.getLevel()*0);		
+		int enchantmentPower=this.getItem().getLevel()*0;//multiplied by 0 so that during combat we can playing with slaying strategy by checking this power =0	
+		StackModel temp= new StackModel(enchantmentPower,"Slaying");
+		this.weaponSpecialEnchantment.getEnchantment().push(temp);	
+	}
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.weaponSpecialEnchantment.getItem();
 	}
 }

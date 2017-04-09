@@ -27,7 +27,8 @@ public class Burning extends WeaponDecorator{
 	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		
+		return this.weaponSpecialEnchantment.getEnchantment();
 	}
 	
 	
@@ -38,7 +39,17 @@ public class Burning extends WeaponDecorator{
 	 */
 	@Override
 	public void setEnchantmentStacks() {
-		this.enchantmentStack.add("Burning");
-		this.enchantmentValueStack.add(this.weaponSpecialEnchantment.item.getLevel()*5);		
+		int enchantmentPower=this.getItem().getLevel()*5;		
+		StackModel temp= new StackModel(enchantmentPower,"Burning");
+		this.weaponSpecialEnchantment.getEnchantment().push(temp);
+	}
+	
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.weaponSpecialEnchantment.getItem();
 	}
 }

@@ -24,7 +24,16 @@ public abstract class WeaponDecorator extends WeaponSpecialEnchantment {
 	 * 
 	 */
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		return this.weaponSpecialEnchantment.getEnchantment();
+	}
+	
+	/**
+	 * This function set the stacks of enchantment values and enchantment type
+	 * 
+	 */
+	@Override
+	public void setEnchantmentStacks() {
+		this.weaponSpecialEnchantment.getEnchantment();
 	}
 	
 }

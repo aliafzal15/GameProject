@@ -18,6 +18,7 @@ public class Freezing extends WeaponDecorator{
 		
 		super(weaponSpecialEnchantment);
 		this.weaponSpecialEnchantment=weaponSpecialEnchantment;
+		setEnchantmentStacks();
 	}
 	
 
@@ -27,7 +28,8 @@ public class Freezing extends WeaponDecorator{
 	 */
 	@Override
 	public Stack getEnchantment() {		
-		return this.enchantmentValueStack;
+		
+		return this.weaponSpecialEnchantment.getEnchantment();
 	}
 	
 	/**
@@ -36,7 +38,19 @@ public class Freezing extends WeaponDecorator{
 	 */
 	@Override
 	public void setEnchantmentStacks() {
-		this.enchantmentStack.add("Freezing");
-		this.enchantmentValueStack.add(this.weaponSpecialEnchantment.item.getLevel());		
+		
+		int enchantmentPower=this.getItem().getLevel();		
+		StackModel temp= new StackModel(enchantmentPower,"Freezing");
+		this.weaponSpecialEnchantment.getEnchantment().push(temp);
+		
+	}
+	
+	/**
+	 * This function returns the item model object
+	 * 
+	 */
+	@Override
+	public Item getItem() {
+		return this.weaponSpecialEnchantment.getItem();	
 	}
 }
