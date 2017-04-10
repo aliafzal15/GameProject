@@ -292,8 +292,8 @@ public class PlayerController{
     }
 
     public void meleeAttackEnemy(){
-        meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
-        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
+        meleeAttackRangeX.set(player.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().width, player.getPosition().y, player.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1), player.getBound().height);
+        meleeAttackRangeY.set(player.getPosition().x, PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
 
         if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
                 &&(meleeAttackRangeX.overlaps(view.getNpcList().get(enemyPointer).getBound())
@@ -303,7 +303,8 @@ public class PlayerController{
             if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
                 touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 view.getCam().unproject(touch);
-                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
+                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)
+                		&& (meleeAttackRangeX.contains(touch.x,touch.y) || meleeAttackRangeY.contains(touch.x,touch.y))){
                     MainMenuScreen.logArea.appendText(" You are attacking "+view.getNpcList().get(enemyPointer).getCharacter().getName()+"\n");
                     view.getNpcList().get(enemyPointer).getCharacter().underAttack(player.getCharacter());
                     view.startNextRound();
@@ -331,7 +332,8 @@ public class PlayerController{
             if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
                 touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 view.getCam().unproject(touch);
-                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
+                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)
+                		&& rangeAttackrange.contains(touch.x,touch.y)){
                     MainMenuScreen.logArea.appendText(" You are attacking "+view.getNpcList().get(enemyPointer).getCharacter().getName()+"\n");
                     view.getNpcList().get(enemyPointer).getCharacter().underAttack(player.getCharacter());
                     view.startNextRound();
@@ -351,19 +353,8 @@ public class PlayerController{
 
     public Vector2 findEnemyInAttackRange() {
         rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
-        meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
-        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
-
-//        renderRangeArea();
-//        entrySetIterator = view.getNpcList().entrySet().iterator();
-//        while(entrySetIterator.hasNext()){
-//            entry = entrySetIterator.next();
-//            if(rangeAttackrange.contains(entry.getKey().x + entry.getValue().getBound().width /2, entry.getKey().y + entry.getValue().getBound().height /2)
-//                    && !((NPC)entry.getValue()).isFriendly()
-//                    && ! entry.getValue().getCharacter().isDead()){
-//                return entry.getKey();
-//            }
-//        }
+        meleeAttackRangeX.set(player.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().width, player.getPosition().y, player.getBound().width * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , player.getBound().height);
+        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().height, player.getBound().width, player.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
 
         keySetIterator = view.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){

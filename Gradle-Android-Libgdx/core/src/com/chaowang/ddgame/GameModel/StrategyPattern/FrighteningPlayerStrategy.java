@@ -7,27 +7,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.NPC;
-import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-/**
- * strategy pattern for Computer Player
- * @author chao wang
- * @version 3.0
- */
-public class ComputerPlayerStrategy implements Strategy{
+
+public class FrighteningPlayerStrategy implements Strategy{
 
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator, enemyIterator ;
-    private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
     private Vector2 enemyPointer, cur;
-    private Map.Entry<Vector2,GameActor> entry;
     /**
      * construct
      * @param gameScreen
      */
-	public ComputerPlayerStrategy(GameScreen gameScreen){
+	public FrighteningPlayerStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
         enemyIterator = screen.getNpcList().keySet().iterator();
         enemyPointer = enemyIterator.next();
@@ -73,19 +66,6 @@ public class ComputerPlayerStrategy implements Strategy{
             }
         }
 
-        // draw npc on screen
-//        entrySetIterator = screen.getNpcList().entrySet().iterator();
-//        while(entrySetIterator.hasNext()){
-//            entry = entrySetIterator.next();
-//            entry.getValue().getCharacter().draw(screen.getBatch(), entry.getKey(), ((NPC)entry.getValue()).isFriendly());
-//            if(screen.getPlayer().getBound().overlaps(entry.getValue().getBound()) ){
-//                screen.getPlayerController().reAdjust(5);
-//                screen.setHitObject(true);
-//                if(!((NPC)entry.getValue()).isFriendly() && entry.getValue().getCharacter().isDead()){
-//                    screen.getPlayerController().teleport(0, -8);
-//                }
-//            }
-//        }
 
         keySetIterator = screen.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
@@ -122,7 +102,7 @@ public class ComputerPlayerStrategy implements Strategy{
                         @Override
                         public void run() {
                             System.out.println("loading map number "+GameScreen.getCount());
-                            MainMenuScreen.logArea.setText("");
+                            MainMenuScreen.logArea.clear();
                             screen.getGame().setScreen(new GameScreen(screen.getGame(), screen.getPlayer().getCharacter(), screen.getCampaign().getMapPack().get(GameScreen.getCount()), screen.getCampaign(), screen.isUserPlay()));
                         }
                     })));
@@ -141,34 +121,11 @@ public class ComputerPlayerStrategy implements Strategy{
             screen.setHitObject(true);
         }
 
-//        if( !((NPC)screen.getNpcList().get(enemyPointer)).isFriendly()
-//                &&enemyPointer != null && ! screen.isHitObject() && ! screen.getNpcList().get(enemyPointer).getCharacter().isDead() ){
-//        	screen.getPlayerController().walkTo(screen.getNpcList().get(enemyPointer).getPosition().x,screen.getNpcList().get(enemyPointer).getPosition().y );
-//        } else{
-//            if(enemyIterator.hasNext()
-//                    && (((NPC)screen.getNpcList().get(enemyPointer)).isFriendly() || screen.getNpcList().get(enemyPointer).getCharacter().isDead())){
-//                enemyPointer = enemyIterator.next();
-//            }
-//            if(!enemyIterator.hasNext()){
-//            	screen.getPlayerController().walkTo(screen.getMapModel().getExitDoor().x + screen.getPlayer().getBound().width, screen.getMapModel().getExitDoor().y - (screen.getPlayer().getBound().height * 3 /4));
-//            }
-//        }
 
-        if(screen.getPlayerController().findEnemyInAttackRange()!=null && screen.getPlayerController().isAbleToAttack()){
-            enemyPointer = screen.getPlayerController().findEnemyInAttackRange();
-            GameActor tmp= screen.getNpcList().remove(enemyPointer);
-            MainMenuScreen.logArea.appendText("you are attacking "+ tmp.getCharacter().getName()+"\n");
-            tmp.getCharacter().underAttack(screen.getPlayer().getCharacter());
-            screen.getNpcList().put(tmp.getPosition(), tmp);
-            screen.startNextRound();
-        } else{
-            if(screen.getPlayerController().findEnemyToAttack()!=null && ! screen.isHitObject()){
-                screen.getPlayerController().walkTo(screen.getNpcList().get(enemyPointer).getPosition().x,screen.getNpcList().get(enemyPointer).getPosition().y );
-            }
-            if(screen.getPlayerController().findEnemyToAttack()== null){
-                screen.getPlayerController().walkTo(screen.getMapModel().getExitDoor().x + screen.getPlayer().getBound().width, screen.getMapModel().getExitDoor().y - (screen.getPlayer().getBound().height * 3 /4));
-            }
-        }
+
+        screen.getPlayerController().walkTo(screen.getMapModel().getEntryDoor().x, screen.getMapModel().getEntryDoor().y);
+
+
     }
 	/**
 	 * update dialogue
@@ -179,5 +136,4 @@ public class ComputerPlayerStrategy implements Strategy{
         screen.getUiStage().act(delta);
         screen.getUiStage().draw();
 	}
-
 }

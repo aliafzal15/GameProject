@@ -222,8 +222,8 @@ public class NPCcontroller {
 	 */
 	public boolean findPlayerToAttack() {
 		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
-        meleeAttackRangeX.set(npc.getPosition().x - npc.getBound().width, npc.getPosition().y, npc.getBound().width *3 , npc.getBound().height);
-        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * 3);
+        meleeAttackRangeX.set(npc.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
 
         if(npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON) !=null
             && npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
@@ -246,9 +246,9 @@ public class NPCcontroller {
 	 * @return
 	 */
 	public Vector2 findNPCtoAttack() {
-        rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*2);
-        meleeAttackRangeX.set(npc.getPosition().x - npc.getBound().width, npc.getPosition().y, npc.getBound().width *3 , npc.getBound().height);
-        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * 3);
+        rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*PublicParameter.RANGE_WEAPON_ATTACK_CELL);
+        meleeAttackRangeX.set(npc.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
 
         npcIterator = gameScreen.getNpcList().keySet().iterator();
         while(npcIterator.hasNext()){

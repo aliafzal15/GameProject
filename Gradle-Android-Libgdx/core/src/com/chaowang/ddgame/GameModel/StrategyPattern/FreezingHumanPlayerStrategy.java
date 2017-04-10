@@ -11,20 +11,17 @@ import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-/**
- * strategy pattern for Human Player
- * @author chao wang
- * @version 3.0
- */
-public class HumanPlayerStrategy implements Strategy{
-	
+
+public class FreezingHumanPlayerStrategy implements Strategy{
+
+
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator ;
     /**
      * construct
      * @param gameScreen
      */
-	public HumanPlayerStrategy(GameScreen gameScreen){
+	public FreezingHumanPlayerStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
 		screen.getDialogueController().startDialogue(screen.getDialogue());
 	}
@@ -107,7 +104,7 @@ public class HumanPlayerStrategy implements Strategy{
                             @Override
                             public void run() {
                                 System.out.println("loading map number "+GameScreen.getCount());
-                                MainMenuScreen.logArea.setText("");
+                                MainMenuScreen.logArea.clear();
                                 screen.getGame().setScreen(new GameScreen(screen.getGame(), screen.getPlayer().getCharacter(), screen.getCampaign().getMapPack().get(GameScreen.getCount()), screen.getCampaign(), screen.isUserPlay()));
                             }
                         })));
@@ -134,7 +131,8 @@ public class HumanPlayerStrategy implements Strategy{
         } else {
             if (screen.getDialogueController().getAnswerIndex() == 0) {
                 //playerController.setStartToMove(false);   //not move yet
-            	screen.getPlayerController().movePlayer();
+                MainMenuScreen.logArea.appendText("yourself is freezing, cannot move, skip this round\n");
+                screen.startNextRound();
             }
             else if (screen.getDialogueController().getAnswerIndex() == 1) {
                 if(screen.getPlayer().getCharacter().getEquipment().get(Item.ItemType.WEAPON) != null

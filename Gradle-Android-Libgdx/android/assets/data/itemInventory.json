@@ -3,3 +3,4 @@
 {ItemType:WEAPON,Name:FREEZING,Level:1,enchantedAbility:DAMAGEBONUS,abiltyPointer:1,Weapon Type:MELEE,Weapon enchantment:[false,true,false,false,false]}
 {ItemType:WEAPON,Name:PACIFYING,Level:1,enchantedAbility:ATTACKBONUS,abiltyPointer:0,Weapon Type:RANGE,Weapon enchantment:[false,false,false,true,false]}
 {ItemType:WEAPON,Name:SLAYING,Level:1,enchantedAbility:ATTACKBONUS,abiltyPointer:0,Weapon Type:RANGE,Weapon enchantment:[false,false,false,false,true]}
+{ItemType:WEAPON,Name:HELMET,Level:1,enchantedAbility:ATTACKBONUS,abiltyPointer:0,Weapon Type:RANGE,Weapon enchantment:[false,false,true,false,false]}

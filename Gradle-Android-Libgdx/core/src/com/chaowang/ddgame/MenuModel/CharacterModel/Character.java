@@ -186,7 +186,7 @@ public class Character extends Observable implements Json.Serializable{
 			if(attacker.getEquipment().get(Item.ItemType.WEAPON) != null){
 				boolean[] tmp = attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponModel().getWeaponEnhantmentEqu();
 				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]){
-					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]= 5*10 +attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]= PublicParameter.BURING_TURNS*10 +attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
 				}
 				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()]){
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()]= attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
@@ -195,7 +195,7 @@ public class Character extends Observable implements Json.Serializable{
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()]= attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
 				}
 				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()]){
-					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()]= 1;
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()]= 1;
 				}
 				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]){
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]= 1;

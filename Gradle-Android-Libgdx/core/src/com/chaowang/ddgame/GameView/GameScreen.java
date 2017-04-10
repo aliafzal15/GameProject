@@ -31,7 +31,12 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
 import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode;
 import com.chaowang.ddgame.GameModel.StrategyPattern.ComputerPlayerStrategy;
+import com.chaowang.ddgame.GameModel.StrategyPattern.FreezingComputerPlayerStrategy;
+import com.chaowang.ddgame.GameModel.StrategyPattern.FreezingHumanPlayerStrategy;
+import com.chaowang.ddgame.GameModel.StrategyPattern.FreezingNPCStategy;
 import com.chaowang.ddgame.GameModel.StrategyPattern.FriendlyNPCStrategy;
+import com.chaowang.ddgame.GameModel.StrategyPattern.FrighteningNPCStrategy;
+import com.chaowang.ddgame.GameModel.StrategyPattern.FrighteningPlayerStrategy;
 import com.chaowang.ddgame.GameModel.StrategyPattern.HumanPlayerStrategy;
 import com.chaowang.ddgame.GameController.DialogueController;
 import com.chaowang.ddgame.GameController.GameScreenController;
@@ -196,21 +201,43 @@ public class GameScreen implements Observer, Screen{
             currentRollVectorEntry = playOrderList.poll();
             if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
                 playerOrNPC =1;
+                // ENCHANTMENT effect, burning
                 if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] >10){
                     player.getCharacter().reduceHitPoints(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10);
                     player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] -= 10;
                 }
+                // ENCHANTMENT effect, slaying
                 if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] > 0){
+                    MainMenuScreen.logArea.appendText("yourself is slaying\n");
                     player.getCharacter().makeDead();
-                    player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] = 0;
+                    player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] = 0;
                 }
+                // check player is dead
                 if (player.getCharacter().isDead()) {
                     exitIfPlayerDie();
                 } else{
                     if(isUserPlay){
                         player.setStrategy(new HumanPlayerStrategy(this));
+                        // ENCHANTMENT effect, freezing
+                        if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] > 0){
+                            player.setStrategy(new FreezingHumanPlayerStrategy(this));
+                            MainMenuScreen.logArea.appendText("yourself is freezing\n");
+                            player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] -= 1;
+                        } 
                     } else{
                         player.setStrategy(new ComputerPlayerStrategy(this));
+                        // ENCHANTMENT effect, freezing
+                        if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] > 0){
+                            player.setStrategy(new FreezingComputerPlayerStrategy(this));
+                            MainMenuScreen.logArea.appendText("yourself is freezing\n");
+                            player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] -= 1;
+                        }
+                    }
+                    // ENCHANTMENT effect, FRIGHTENING
+                    if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()] > 0){
+                        player.setStrategy(new FrighteningPlayerStrategy(this));
+                        MainMenuScreen.logArea.appendText("yourself is frightening\n");
+                        player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()] -= 1;
                     }
                     playerController.setStartToMove(true);
                     playerController.setDecideToStop(false);
@@ -218,14 +245,19 @@ public class GameScreen implements Observer, Screen{
                 }
             } else{
                 playerOrNPC =2;
+                // ENCHANTMENT effect, burning
                 if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] >10){
-                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().reduceHitPoints(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10);
+                	int damagePoint = npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10;
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().reduceHitPoints(damagePoint);
                     npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] -= 10;
                 }
+                // ENCHANTMENT effect, slaying
                 if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] > 0){
                     npcList.get(currentRollVectorEntry.getValue()).getCharacter().makeDead();
-                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] = 0;
+                    MainMenuScreen.logArea.appendText(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getName() + " is slaying\n");
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] = 0;
                 }
+                // if dead, skip the turn 
                 if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().isDead()){
                     MainMenuScreen.logArea.appendText(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getName()+ "is dead, skip play\n");
                     startNextRound();
@@ -233,10 +265,29 @@ public class GameScreen implements Observer, Screen{
                 } else{
                     npcPointer = npcList.remove(currentRollVectorEntry.getValue());
                     npcController.setNpc((NPC)npcPointer);
+                    // ENCHANTMENT effect, pacifying
+                    if(npcPointer != null && npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()] ==1){
+                    	((NPC)npcPointer).setFriendly(true);
+                        MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " is pacifying\n");
+                        npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()] = 0;
+                    }
+                    // friend or not change strategy
                     if(((NPC)npcPointer).isFriendly()){
                         npcPointer.setStrategy(new FriendlyNPCStrategy(this));
                     }else{
                         npcPointer.setStrategy(new AggressiveNPCStrategy(this));
+                    }
+                    // ENCHANTMENT effect, FREEZING
+                    if(npcPointer != null && npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] > 0){
+                    	npcPointer.setStrategy(new FreezingNPCStategy(this));
+                        MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " is freezing\n");
+                        npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] -= 1;
+                    }
+                    // ENCHANTMENT effect, Frightening
+                    if(npcPointer != null && npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()] > 0){
+                    	npcPointer.setStrategy(new FrighteningNPCStrategy(this));
+                        MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " is frightening\n");
+                        npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()] -= 1;
                     }
                     npcController.setStartToMove(true);
                     MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " start to play\n");
