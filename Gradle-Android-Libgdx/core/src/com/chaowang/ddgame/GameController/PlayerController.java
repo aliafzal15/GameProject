@@ -305,7 +305,7 @@ public class PlayerController{
                 view.getCam().unproject(touch);
                 if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
                     MainMenuScreen.logArea.appendText(" You are attacking "+view.getNpcList().get(enemyPointer).getCharacter().getName()+"\n");
-                    view.getNpcList().get(enemyPointer).getCharacter().underAttack();
+                    view.getNpcList().get(enemyPointer).getCharacter().underAttack(player.getCharacter());
                     view.startNextRound();
                 }
             }
@@ -333,7 +333,7 @@ public class PlayerController{
                 view.getCam().unproject(touch);
                 if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
                     MainMenuScreen.logArea.appendText(" You are attacking "+view.getNpcList().get(enemyPointer).getCharacter().getName()+"\n");
-                    view.getNpcList().get(enemyPointer).getCharacter().underAttack();
+                    view.getNpcList().get(enemyPointer).getCharacter().underAttack(player.getCharacter());
                     view.startNextRound();
                 }
             }

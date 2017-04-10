@@ -39,6 +39,7 @@ import com.chaowang.ddgame.GameController.NPCcontroller;
 import com.chaowang.ddgame.GameController.PlayerController;
 import com.chaowang.ddgame.GameUtl.DialogueBox;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
@@ -48,7 +49,7 @@ import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
-
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment.WeaponEnchantement;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -195,6 +196,14 @@ public class GameScreen implements Observer, Screen{
             currentRollVectorEntry = playOrderList.poll();
             if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
                 playerOrNPC =1;
+                if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] >10){
+                    player.getCharacter().reduceHitPoints(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10);
+                    player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] -= 10;
+                }
+                if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] > 0){
+                    player.getCharacter().makeDead();
+                    player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] = 0;
+                }
                 if (player.getCharacter().isDead()) {
                     exitIfPlayerDie();
                 } else{
@@ -209,11 +218,14 @@ public class GameScreen implements Observer, Screen{
                 }
             } else{
                 playerOrNPC =2;
-//                if(npcPointer == null){
-//                    Iterator<Entry<Vector2,GameActor>> entrySetIterator = npcList.entrySet().iterator();
-//                    npcPointer = entrySetIterator.next().getValue();
-//                    entrySetIterator.remove();
-//                }
+                if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] >10){
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().reduceHitPoints(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10);
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] -= 10;
+                }
+                if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()] > 0){
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().makeDead();
+                    npcList.get(currentRollVectorEntry.getValue()).getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] = 0;
+                }
                 if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().isDead()){
                     MainMenuScreen.logArea.appendText(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getName()+ "is dead, skip play\n");
                     startNextRound();

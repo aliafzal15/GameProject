@@ -11,6 +11,7 @@ import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBuilderDirector;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBullyBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterNimbleBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterTankBuilder;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.Buring;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
@@ -177,10 +178,29 @@ public class Character extends Observable implements Json.Serializable{
         }
     }
 
-	public void underAttack(){
+	public void underAttack(Character attacker){
 		if(!isDead()){
-			this.hitPoints -=10;
-			MainMenuScreen.logArea.appendText(this.getName() + " Hp -10 : "+this.getHitPoints()+"\n");
+			int damage = Math.max(attacker.attackBonus - armorClass, 0) - attacker.damageBonus;
+			this.hitPoints +=damage;
+			MainMenuScreen.logArea.appendText(this.getName() + " is under attack of "+damage+ "damage, Hp: "+this.getHitPoints()+"\n");
+			if(attacker.getEquipment().get(Item.ItemType.WEAPON) != null){
+				boolean[] tmp = attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponModel().getWeaponEnhantmentEqu();
+				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]){
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]= 5*10 +attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
+				}
+				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()]){
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()]= attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
+				}
+				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()]){
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()]= attacker.getEquipment().get(Item.ItemType.WEAPON).getLevel();
+				}
+				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()]){
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.FRIGHTENING.getIndex()]= 1;
+				}
+				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]){
+					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]= 1;
+				}
+			}
 		}
 		if(isDead()){
 			makeDead();
@@ -490,6 +510,16 @@ public class Character extends Observable implements Json.Serializable{
      */
 	public void setHitPoints(int hitPoints) {
 		this.hitPoints = hitPoints;
+	}
+	/**
+	 * reduce hit points
+	 */
+	public void reduceHitPoints(int deduction) {
+		this.hitPoints -= deduction;
+        MainMenuScreen.logArea.appendText(name + "is burning "+ deduction + "hp\n");
+		if(this.hitPoints<=0){
+			makeDead();
+		}
 	}
 	/**
 	 * get the ArmorClass

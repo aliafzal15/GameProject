@@ -158,7 +158,7 @@ public class ComputerPlayerStrategy implements Strategy{
             enemyPointer = screen.getPlayerController().findEnemyInAttackRange();
             GameActor tmp= screen.getNpcList().remove(enemyPointer);
             MainMenuScreen.logArea.appendText("you are attacking "+ tmp.getCharacter().getName()+"\n");
-            tmp.getCharacter().underAttack();
+            tmp.getCharacter().underAttack(screen.getPlayer().getCharacter());
             screen.getNpcList().put(tmp.getPosition(), tmp);
             screen.startNextRound();
         } else{

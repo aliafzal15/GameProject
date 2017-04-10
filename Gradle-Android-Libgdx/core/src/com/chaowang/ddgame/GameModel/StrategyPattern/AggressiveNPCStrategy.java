@@ -102,12 +102,12 @@ public class AggressiveNPCStrategy implements Strategy {
         if(!screen.getNpc().getCharacter().isDead()){
             if(screen.getNpcController().findPlayerToAttack() && !screen.getPlayer().getCharacter().isDead() && screen.getNpcController().isAbleToAttack()){
                 MainMenuScreen.logArea.appendText(screen.getNpc().getCharacter().getName()+ " is attacking you\n");
-                screen.getPlayer().getCharacter().underAttack();
+                screen.getPlayer().getCharacter().underAttack(screen.getNpcController().getNpc().getCharacter());
                 screen.startNextRound();
             } else if(screen.getNpcController().findNPCtoAttack() != null && screen.getNpcController().isAbleToAttack() ){
                 npcPointer = screen.getNpcController().findNPCtoAttack();
                 GameActor tmp= screen.getNpcList().remove(npcPointer);
-                tmp.getCharacter().underAttack();
+                tmp.getCharacter().underAttack(screen.getNpcController().getNpc().getCharacter());
                 ((NPC)tmp).setFriendly(false);
                 screen.getNpcList().put(tmp.getPosition(), tmp);
                 screen.startNextRound();
