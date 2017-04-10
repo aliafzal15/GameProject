@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.chaowang.ddgame.MenuController.ItemController;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
 import com.chaowang.ddgame.PublicParameter;
 
 /**
@@ -31,7 +33,9 @@ public class ItemEditorScreen implements Screen {
 	public Texture backgroundTexture;
 	public Table editorTable, inventoryTable;
 	public TextButton itemLeftButton, itemRightButton, abilityLeftButton, abilityRightButton, itemSaveButton, mainPageButton;
-	public Label itemLabel, abilityLabel, itemInfoLabel;
+	public TextButton weaponTypeLeftButton, weaponTypeRightButton;
+	public Label itemLabel, abilityLabel, itemInfoLabel, weaponTypeLabel;
+	public CheckBox[] weaponEnchantCheckBoxArr;
 	public TextField nameText, levelText;
 	public Image itemImage;
 	public ImageButton[] inventoryMatrix;
@@ -77,6 +81,9 @@ public class ItemEditorScreen implements Screen {
 		levelText = new TextField("0", MainMenuScreen.skin);
 		itemLabel = new Label(item.getItemType().toString(), MainMenuScreen.style);
 		abilityLabel = new Label(item.getEnchantedAbility().toString(), MainMenuScreen.style);
+		weaponTypeLabel = new Label("", MainMenuScreen.style);
+		weaponTypeLabel.setVisible(false);
+
 		itemImage = new Image(item.getTexture());
 
 		itemLeftButton = new TextButton("<", MainMenuScreen.buttonStyle);
@@ -115,9 +122,35 @@ public class ItemEditorScreen implements Screen {
 			}
 		});
 
+		weaponTypeLeftButton = new TextButton("<", MainMenuScreen.buttonStyle);
+		weaponTypeLeftButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				itemController.controlWeaponTypeLeftButton();
+				return true;
+			}
+		});
+		weaponTypeLeftButton.setVisible(false);
+
+		weaponTypeRightButton = new TextButton(">", MainMenuScreen.buttonStyle);
+		weaponTypeRightButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				itemController.controlWeaponTypeRightButton();
+				return true;
+			}
+		});
+		weaponTypeRightButton.setVisible(false);
+
+		weaponEnchantCheckBoxArr = new CheckBox[WeaponSpecialEnchantment.WeaponEnchantement.values().length];
+		for(int i = 0 ; i <WeaponSpecialEnchantment.WeaponEnchantement.values().length; i++ ){
+			weaponEnchantCheckBoxArr[i]= new CheckBox(WeaponSpecialEnchantment.WeaponEnchantement.getEnchantment(i).toString(), MainMenuScreen.skin);
+			weaponEnchantCheckBoxArr[i].setVisible(false);
+		}
+
 		editorTable = new Table();
-		editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 2);
-		editorTable.setPosition(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() * 1 / 4);
+		editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() * 3 / 5);
+		editorTable.setPosition(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() * 1 / 5);
 
 		editorTable.add(new Label("", MainMenuScreen.style)).width(80);
 		editorTable.add(itemImage).maxSize(200, 200).center();
@@ -136,13 +169,24 @@ public class ItemEditorScreen implements Screen {
 		editorTable.add(abilityLeftButton).size(50, 50);
 		editorTable.add(abilityLabel).center();
 		editorTable.add(abilityRightButton).size(50, 50).expandX();
+		editorTable.row();
+		editorTable.add(weaponTypeLeftButton).size(50, 50);
+		editorTable.add(weaponTypeLabel).center();
+		editorTable.add(weaponTypeRightButton).size(50, 50).expandX();
+		editorTable.row();
+		editorTable.add(weaponEnchantCheckBoxArr[0]);
+		editorTable.add(weaponEnchantCheckBoxArr[1]);
+		editorTable.add(weaponEnchantCheckBoxArr[2]);
+		editorTable.row();
+		editorTable.add(weaponEnchantCheckBoxArr[3]);
+		editorTable.add(weaponEnchantCheckBoxArr[4]);
 
 		stage.addActor(editorTable);
 
 		itemSaveButton = new TextButton("SAVE", MainMenuScreen.buttonStyle);
 		itemSaveButton.setWidth(Gdx.graphics.getWidth() / 9);
 		itemSaveButton.setHeight(Gdx.graphics.getHeight() / 9);
-		itemSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 4) - itemSaveButton.getWidth() / 2, (Gdx.graphics.getHeight() / 8));
+		itemSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 4) - itemSaveButton.getWidth() / 2, (Gdx.graphics.getHeight() / 20));
 		itemSaveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

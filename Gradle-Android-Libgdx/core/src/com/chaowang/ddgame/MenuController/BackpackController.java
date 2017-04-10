@@ -117,7 +117,8 @@ public class BackpackController {
                             Item item = new Item(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getItemType(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getName(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel(),
-                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getEnchantedAbility());
+                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getEnchantedAbility(),
+                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getWeaponModel());
                             character.getBackpack().add(item);
                             view.backpackTable.clearChildren();
                             buildBackpackMatrix();

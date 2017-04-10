@@ -234,7 +234,7 @@ public class PlayerEditorController {
                     player.getCharacter().setHitPoints(CharacterScoreModifier.hitPointCalculator(player.getCharacter().getConstitution() + player.getCharacter().getConstitutionBonus(), player.getCharacter().getLevel()));
                 }
 				player.getCharacter().setArmorClass(CharacterScoreModifier.armorClassCalculator(player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus()));
-				player.getCharacter().setAttackBonus(CharacterScoreModifier.attachBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
+				player.getCharacter().setAttackBonus(CharacterScoreModifier.attackBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
 						player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus(), player.getCharacter().getLevel()));
 				player.getCharacter().setDamageBonus(CharacterScoreModifier.damageBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(player.getCharacter().getPromotionPoint()));

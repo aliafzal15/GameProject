@@ -204,6 +204,7 @@ public class GameScreen implements Observer, Screen{
                         player.setStrategy(new ComputerPlayerStrategy(this));
                     }
                     playerController.setStartToMove(true);
+                    playerController.setDecideToStop(false);
                     MainMenuScreen.logArea.appendText("yourself start to play\n");
                 }
             } else{

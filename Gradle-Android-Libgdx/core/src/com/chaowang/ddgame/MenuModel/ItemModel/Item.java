@@ -8,7 +8,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
 import com.chaowang.ddgame.PublicParameter;
+
+import java.util.Stack;
 
 /**
  * the class is for item editor
@@ -17,70 +20,6 @@ import com.chaowang.ddgame.PublicParameter;
  */
 public class Item extends Rectangle implements Json.Serializable {
 
-	/**
-	 * all item types
-	 */
-    public enum ItemType {
-        HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
-        ARMOR(1, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
-        WEAPON(2, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS, EnchantedAbility.DAMAGEBONUS}),
-        BELT(3, new EnchantedAbility[]{EnchantedAbility.CONSTITUTION, EnchantedAbility.STRENGTH}),
-        SHIELD(4, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
-        BOOTS(5, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.DEXTERITY}),
-        RING(6, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.STRENGTH, EnchantedAbility.WISDOM, EnchantedAbility.CONSTITUTION, EnchantedAbility.CHARISMA});
-
-        EnchantedAbility[] abilityArr;
-        private int index;
-        /**
-         * construct item type
-         * @param index
-         * @param abilityArr
-         */
-        private ItemType(int index, EnchantedAbility[] abilityArr) {
-            this.index = index;
-            this.abilityArr = abilityArr;
-        }
-        /**
-         * get enchanted ability
-         * @return a array as enchanted abilities
-         */
-        public EnchantedAbility[] getEnchantedAbility() {
-            return abilityArr;
-        }
-        /**
-         * get item index
-         * @return index
-         */
-        public int getIndex() {
-            return index;
-        }
-        /**
-         * get the item type
-         * @param index to choose which specific item
-         * @return a specific item type
-         */
-        public static ItemType getItemType(int index){
-            switch (index){
-                case 0:
-                    return HELMET;
-                case 1:
-                    return ARMOR;
-                case 2:
-                    return WEAPON;
-                case 3:
-                    return BELT;
-                case 4:
-                    return SHIELD;
-                case 5:
-                    return BOOTS;
-                case 6:
-                    return RING;
-            }
-            return HELMET;
-        }
-
-    };
-
     private int level;
     private String name;
     private ItemType itemType;
@@ -88,6 +27,7 @@ public class Item extends Rectangle implements Json.Serializable {
     private Texture texture;
     private int abilityPointer = 0;
     private Texture textureOnMap;
+    private WeaponModel weaponModel;
     /**
      * constructor
      * @param type
@@ -95,7 +35,7 @@ public class Item extends Rectangle implements Json.Serializable {
      * @param level
      * @param enchantedAbility
      */
-    public Item(ItemType type , String name, int level, EnchantedAbility enchantedAbility) {
+    public Item(ItemType type , String name, int level, EnchantedAbility enchantedAbility, WeaponModel weaponModel) {
         this.itemType = type;
         abilityPointer=0;
         while(abilityPointer < type.abilityArr.length){
@@ -109,6 +49,7 @@ public class Item extends Rectangle implements Json.Serializable {
         this.enchantedAbility = enchantedAbility;
         updateTexture(this.itemType);
         textureOnMap = new Texture(Gdx.files.internal("map/chest.png"));
+        this.weaponModel = weaponModel;
     }
     /**
      * update the item type image
@@ -146,7 +87,7 @@ public class Item extends Rectangle implements Json.Serializable {
      * constructor
      */
     public Item(){
-        this(ItemType.HELMET, "HELMET", 0, ItemType.ARMOR.getEnchantedAbility()[0]);
+        this(ItemType.HELMET, "HELMET", 0, ItemType.ARMOR.getEnchantedAbility()[0], null);
     }
     /**
      * set the item level
@@ -190,6 +131,30 @@ public class Item extends Rectangle implements Json.Serializable {
     public Texture getTexture() {
         return texture;
     }
+
+    public WeaponModel getWeaponModel() {
+        return weaponModel;
+    }
+
+    public void setWeaponModel(WeaponModel weaponModel) {
+        this.weaponModel = weaponModel;
+    }
+
+    public void setWeaponType(WeaponModel.WeaponType type){
+        this.weaponModel.setWeaponType(type);
+    }
+
+    public WeaponModel.WeaponType getWeaponType(){
+        return this.weaponModel.getWeaponType();
+    }
+
+    public Stack<WeaponSpecialEnchantment.WeaponEnchantement> getWeaponEnchantment(){
+        return this.weaponModel.getWeaponEnchantment();
+    }
+
+    public void addWeaponEnchantment(boolean[] arr){
+        this.weaponModel.addWeaponEnchantment(arr);
+    }
     /**
      * get the enchanted ability
      * @return the enchanted ability
@@ -200,8 +165,13 @@ public class Item extends Rectangle implements Json.Serializable {
     /**
      * switch to the string type
      */
+
 	public  String toString(){
-        return "Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
+        String output =  "Type: " + this.itemType.toString()+ "| Name: "+this.name+"| Bonus: "+this.level+"| Ability: "+this.enchantedAbility.toString();
+        if(this.itemType==ItemType.WEAPON){
+            output +="\n"+weaponModel.toString();
+        }
+        return output;
     }
 	/**
 	 * switch to next ability type
@@ -265,6 +235,33 @@ public class Item extends Rectangle implements Json.Serializable {
     }
 
     /**
+     * switch to next weapon type
+     * @return if successfully change to the next item type
+     */
+    public boolean nextWeaponTypes(){
+        if(weaponModel.getWeaponType().getIndex() >= 1 ){
+            return false;
+        }
+        else{
+            this.weaponModel.setWeaponType(WeaponModel.WeaponType.getWeaponType(weaponModel.getWeaponType().getIndex()+1));
+            return true;
+        }
+    }
+    /**
+     * switch to the previous item type
+     * @return if successfully change back to the previous item type
+     */
+    public boolean previousWeaponType(){
+        if(itemType.index <=0 ){
+            return false;
+        }
+        else{
+            this.weaponModel.setWeaponType(WeaponModel.WeaponType.getWeaponType(weaponModel.getWeaponType().getIndex()-1));
+            return true;
+        }
+    }
+
+    /**
      * write files for item information
      */
     @Override
@@ -274,6 +271,8 @@ public class Item extends Rectangle implements Json.Serializable {
         json.writeValue("Level", level);
         json.writeValue("enchantedAbility", enchantedAbility);
         json.writeValue("abiltyPointer", abilityPointer);
+        json.writeValue("Weapon Type", weaponModel.getWeaponType());
+        json.writeValue("Weapon enchantment", weaponModel.getWeaponEnhantmentEqu());
     }
     /**
      * read files for item information
@@ -286,6 +285,11 @@ public class Item extends Rectangle implements Json.Serializable {
         level = jsonData.child.next.next.asInt();
         enchantedAbility = EnchantedAbility.valueOf(jsonData.child.next.next.next.asString());
         abilityPointer = jsonData.child.next.next.next.next.asInt();
+        if (itemType == ItemType.WEAPON){
+            weaponModel = new WeaponModel();
+            weaponModel.setWeaponType(WeaponModel.WeaponType.valueOf(jsonData.child.next.next.next.next.next.asString()));
+            weaponModel.addWeaponEnchantment(jsonData.child.next.next.next.next.next.next.asBooleanArray());
+        }
     }
 
     /**
@@ -303,5 +307,72 @@ public class Item extends Rectangle implements Json.Serializable {
         this.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
         this.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
     }
+
+
+//-------------------------------below is Item type enum--------------------------------------
+
+    /**
+     * all item types
+     */
+    public enum ItemType {
+        HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
+        ARMOR(1, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
+        WEAPON(2, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS, EnchantedAbility.DAMAGEBONUS}),
+        BELT(3, new EnchantedAbility[]{EnchantedAbility.CONSTITUTION, EnchantedAbility.STRENGTH}),
+        SHIELD(4, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
+        BOOTS(5, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.DEXTERITY}),
+        RING(6, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.STRENGTH, EnchantedAbility.WISDOM, EnchantedAbility.CONSTITUTION, EnchantedAbility.CHARISMA});
+
+        EnchantedAbility[] abilityArr;
+        private int index;
+        /**
+         * construct item type
+         * @param index
+         * @param abilityArr
+         */
+        private ItemType(int index, EnchantedAbility[] abilityArr) {
+            this.index = index;
+            this.abilityArr = abilityArr;
+        }
+        /**
+         * get enchanted ability
+         * @return a array as enchanted abilities
+         */
+        public EnchantedAbility[] getEnchantedAbility() {
+            return abilityArr;
+        }
+        /**
+         * get item index
+         * @return index
+         */
+        public int getIndex() {
+            return index;
+        }
+        /**
+         * get the item type
+         * @param index to choose which specific item
+         * @return a specific item type
+         */
+        public static ItemType getItemType(int index){
+            switch (index){
+                case 0:
+                    return HELMET;
+                case 1:
+                    return ARMOR;
+                case 2:
+                    return WEAPON;
+                case 3:
+                    return BELT;
+                case 4:
+                    return SHIELD;
+                case 5:
+                    return BOOTS;
+                case 6:
+                    return RING;
+            }
+            return HELMET;
+        }
+
+    };
 
 }

@@ -21,7 +21,6 @@ public class CharacterScoreModifier {
 	 * @return a new changed value for hit point
 	 */
     public static int hitPointCalculator(int constitution, int level){
-        MainMenuScreen.logArea.appendText("calculate hitpoint\n");
         return  Dice.roll(level, 10) + Math.max(0, level * abilityModifier(constitution));
     }
     /**
@@ -30,18 +29,37 @@ public class CharacterScoreModifier {
      * @return a new changed value for armor Class
      */
     public static int armorClassCalculator(int dexterity){
-        MainMenuScreen.logArea.appendText("calculate armor class\n");
         return  10 + abilityModifier(dexterity);
     }
+
     /**
-     * modifier for attach Bonus
+     * modifier for melee attack Bonus
      * @param strength
      * @param dexterity
      * @param level
      * @return a new changed value for attach Bonus
      */
-    public static int attachBonusCalculator(int strength, int dexterity, int level){
-        MainMenuScreen.logArea.appendText("calculate attack bonus\n");
+    public static int attackBonusCalculator(int strength, int dexterity, int level){
+        return baseAttackBonus(level)+ abilityModifier(strength);
+    }
+    /**
+     * modifier for melee attack Bonus
+     * @param strength
+     * @param dexterity
+     * @param level
+     * @return a new changed value for attach Bonus
+     */
+    public static int meleeAttackBonusCalculator(int strength, int dexterity, int level){
+        return baseAttackBonus(level)+ abilityModifier(strength);
+    }
+    /**
+     * modifier for range attack Bonus
+     * @param strength
+     * @param dexterity
+     * @param level
+     * @return a new changed value for attach Bonus
+     */
+    public static int rangeAttackBonusCalculator(int strength, int dexterity, int level){
         return baseAttackBonus(level)+ abilityModifier(dexterity);
     }
     /**
@@ -50,7 +68,6 @@ public class CharacterScoreModifier {
      * @return a new changed value for damage Bonus
      */
     public static int damageBonusCalculator(int strength){
-        MainMenuScreen.logArea.appendText("calculate damage bonus\n");
         return Math.max(0, abilityModifier(strength));
     }
 

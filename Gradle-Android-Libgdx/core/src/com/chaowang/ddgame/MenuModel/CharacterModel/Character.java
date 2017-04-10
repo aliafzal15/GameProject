@@ -11,6 +11,7 @@ import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBuilderDirector;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterBullyBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterNimbleBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterTankBuilder;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuModel.ClassesModel.Fighter.FighterType;
@@ -56,6 +57,8 @@ public class Character extends Observable implements Json.Serializable{
 	private FighterBuilder fighterBuilder;
 	private FighterBuilderDirector director;
 
+	private int[] weaponEnchantmentInfection;
+
     /**
      * constructor for the class
      */
@@ -87,6 +90,7 @@ public class Character extends Observable implements Json.Serializable{
 		this.armorClass = 0;
 		this.abilities = new Abilities(0);
 		this.abilityBonusArr = new int[Abilities.ABILITYSIZE];
+		this.weaponEnchantmentInfection = new int[WeaponSpecialEnchantment.WeaponEnchantement.values().length];
 		this.level = level;
 		this.promotionPoint = level - 1;
 		this.backpack = new ArrayList<Item>(PublicParameter.ITEM_BACKPACK_SIZE);
@@ -117,7 +121,8 @@ public class Character extends Observable implements Json.Serializable{
 		this.isDead = false;
 		updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
-        System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
+		this.weaponEnchantmentInfection = new int[WeaponSpecialEnchantment.WeaponEnchantement.values().length];
+		System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
         this.setHitPoints(abilityArr[Abilities.ABILITYSIZE]);
         this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
@@ -171,20 +176,7 @@ public class Character extends Observable implements Json.Serializable{
                 break;
         }
     }
-//    /**
-//     * decide the character is friendly or hostile 
-//     * @return true or false
-//     */
-//	public boolean getFriendly() {
-//		return isFriendly;
-//	}
-//	/**
-//	 * set the character is friendly or hostile 
-//	 * @param friend friendly or hostile 
-//	 */
-//	public void setFriendly(boolean friend) {
-//		isFriendly = friend;
-//	}
+
 	public void underAttack(){
 		if(!isDead()){
 			this.hitPoints -=10;
@@ -346,6 +338,15 @@ public class Character extends Observable implements Json.Serializable{
 	public void setAbilityBonusArr(int[] abilityBonusArr) {
 		this.abilityBonusArr = abilityBonusArr;
 	}
+
+	public int[] getWeaponEnchantmentInfection() {
+		return weaponEnchantmentInfection;
+	}
+
+	public void setWeaponEnchantmentInfection(int[] weaponEnchantmentInfection) {
+		this.weaponEnchantmentInfection = weaponEnchantmentInfection;
+	}
+
 	/**
 	 * get name
 	 * @return name
@@ -429,12 +430,12 @@ public class Character extends Observable implements Json.Serializable{
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
     		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
-    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel());
     		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] + item.getLevel());
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
-			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
 			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
@@ -457,12 +458,12 @@ public class Character extends Observable implements Json.Serializable{
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
     		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
-    		int addAttackBonus = attackBonus - CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel());
     		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] - item.getLevel());
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
-			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
 			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
@@ -544,7 +545,7 @@ public class Character extends Observable implements Json.Serializable{
 			}
 			setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
-			setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
 			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 		}
 	}
@@ -552,11 +553,11 @@ public class Character extends Observable implements Json.Serializable{
 	 * set level for enemy and NPC
 	 * @param level the level for the character
 	 */
-	public void setLevel(int level) {
+	public void changeLevel(int level) {
 		this.level = level;
 		resetPromotePoint();
 		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
-		setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
 		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 		HashMap.Entry<Item.ItemType, Item> entry;
@@ -570,7 +571,7 @@ public class Character extends Observable implements Json.Serializable{
 					abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
 					setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
 					setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
-					setAttackBonus(CharacterScoreModifier.attachBonusCalculator(getStrength(), getDexterity(), getLevel()));
+					setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
 					setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 				} else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE){
 					this.setArmorClass(getArmorClass() - difference);
@@ -620,7 +621,8 @@ public class Character extends Observable implements Json.Serializable{
 			tmp[i] = abilities.getAbilityArr()[i] + abilityBonusArr[i];
 		}
         return "Name: "+this.name + "| Race: " + this.raceType.toString()+  "| " + this.fighter.getFighterType().toString() +
-				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp)+"| HP: "+ hitPoints;
+				"| Level: "+this.level+"| Ability: "+ Arrays.toString(tmp)+"\nHP: "+ hitPoints+" | armor: "+armorClass+
+				" | attack: "+attackBonus+" | damage: "+damageBonus;
     }
     
 	/**
@@ -810,7 +812,7 @@ public class Character extends Observable implements Json.Serializable{
 		json.writeValue("attackBonus", attackBonus);
 		json.writeValue("damageBonus", damageBonus);
 		json.writeValue("armorClass", armorClass);
-//		json.writeValue("isFriendly", isFriendly);
+		json.writeValue("weaponEnchantmentInfection", weaponEnchantmentInfection);
 		json.writeValue("equipment", equipment, HashMap.class, Item.class);
 		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
 		json.writeValue("PromoPoint", promotionPoint);
@@ -832,8 +834,8 @@ public class Character extends Observable implements Json.Serializable{
 		attackBonus = jsonData.child.next.next.next.next.next.next.asInt();
 		damageBonus = jsonData.child.next.next.next.next.next.next.next.asInt();
 		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();
-//		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
-		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next;
+		weaponEnchantmentInfection = jsonData.child.next.next.next.next.next.next.next.next.next.asIntArray();
+		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
 		if(equipmentPointer != null){
 			Iterator<JsonValue> dataIterator = equipmentPointer.iterator();
 			Item item;
@@ -848,7 +850,7 @@ public class Character extends Observable implements Json.Serializable{
 			}
 		}
 
-		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
+		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next.next;
 		if(backPackPointer != null){
 			Iterator<JsonValue> dataIterator = backPackPointer.iterator();
 			Item item;
@@ -862,8 +864,8 @@ public class Character extends Observable implements Json.Serializable{
 			}
 		}
 
-		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.asInt();
-		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
+		promotionPoint  = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.asInt();
+		abilityBonusArr = jsonData.child.next.next.next.next.next.next.next.next.next.next.next.next.next.asIntArray();
 
 	}
 	

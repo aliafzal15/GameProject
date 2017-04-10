@@ -391,7 +391,7 @@ public class Map implements Json.Serializable{
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             if(enemyLocationList.get(cur).getLevel() != level){
-                enemyLocationList.get(cur).setLevel(level);
+                enemyLocationList.get(cur).changeLevel(level);
             }
         }
 
@@ -400,7 +400,7 @@ public class Map implements Json.Serializable{
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             if(friendLocationList.get(cur).getLevel() != level){
-                friendLocationList.get(cur).setLevel(level);
+                friendLocationList.get(cur).changeLevel(level);
             }
         }
     }

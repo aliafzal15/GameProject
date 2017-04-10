@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameModel.Player;
@@ -90,6 +91,7 @@ public class PlayerController{
             if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ||  //player.getPosition().dst(positionBeforeMove)
     				decideToStop){
                 isStartToMove=false;
+//                decideToStop = false;
                 positionBeforeMove.set(player.getPosition());
                 walkingDistance =0f;
                 keyDown(false);  // player does not move if out of area, or hit F
@@ -289,7 +291,7 @@ public class PlayerController{
         return null;
     }
 
-    public void attackEnemy(){
+    public void meleeAttackEnemy(){
         meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
         meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
 
@@ -319,31 +321,68 @@ public class PlayerController{
         }
     }
 
+    public void rangeAttackEnemy(){
+        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
+
+        if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
+                && rangeAttackrange.contains(enemyPointer.x + view.getNpcList().get(enemyPointer).getBound().width /2, enemyPointer.y + view.getNpcList().get(enemyPointer).getBound().height /2)
+                && ! view.getNpcList().get(enemyPointer).getCharacter().isDead()){
+            renderRangeArea();
+            if(Gdx.input.isTouched() && Gdx.input.isKeyPressed(Input.Keys.K )) {
+                touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                view.getCam().unproject(touch);
+                if(view.getNpcList().get(enemyPointer).getBound().contains(touch.x,touch.y)){
+                    MainMenuScreen.logArea.appendText(" You are attacking "+view.getNpcList().get(enemyPointer).getCharacter().getName()+"\n");
+                    view.getNpcList().get(enemyPointer).getCharacter().underAttack();
+                    view.startNextRound();
+                }
+            }
+        } else{
+            if(enemyIterator.hasNext()){
+                enemyPointer = enemyIterator.next();
+            } else{
+                view.getDialogueController().setAnswerIndex(0);
+                enemyIterator = view.getNpcList().keySet().iterator();
+                enemyPointer = enemyIterator.next();
+                view.getDialogueController().animateText("Cannot find enemy NPC to attack, change to move!");
+            }
+        }
+    }
+
     public Vector2 findEnemyInAttackRange() {
-        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE *2);
+        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
         meleeAttackRangeX.set(player.getPosition().x - player.getBound().width, player.getPosition().y, player.getBound().width *3 , player.getBound().height);
         meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * 3);
 
 //        renderRangeArea();
-        entrySetIterator = view.getNpcList().entrySet().iterator();
-        while(entrySetIterator.hasNext()){
-            entry = entrySetIterator.next();
-            if(rangeAttackrange.contains(entry.getKey().x + entry.getValue().getBound().width /2, entry.getKey().y + entry.getValue().getBound().height /2)
-                    && !((NPC)entry.getValue()).isFriendly()
-                    && ! entry.getValue().getCharacter().isDead()){
-                return entry.getKey();
-            }
-        }
-
-//        keySetIterator = view.getNpcList().keySet().iterator();
-//        while(keySetIterator.hasNext()){
-//            cur = keySetIterator.next();
-//            if(rangeAttackrange.contains(cur.x + view.getNpcList().get(cur).getBound().width /2, cur.y + view.getNpcList().get(cur).getBound().height /2)
-//                    && !((NPC)view.getNpcList().get(cur)).isFriendly()
-//                    && ! view.getNpcList().get(cur).getCharacter().isDead()){
-//                return cur;
+//        entrySetIterator = view.getNpcList().entrySet().iterator();
+//        while(entrySetIterator.hasNext()){
+//            entry = entrySetIterator.next();
+//            if(rangeAttackrange.contains(entry.getKey().x + entry.getValue().getBound().width /2, entry.getKey().y + entry.getValue().getBound().height /2)
+//                    && !((NPC)entry.getValue()).isFriendly()
+//                    && ! entry.getValue().getCharacter().isDead()){
+//                return entry.getKey();
 //            }
 //        }
+
+        keySetIterator = view.getNpcList().keySet().iterator();
+        while(keySetIterator.hasNext()){
+            cur = keySetIterator.next();
+            if(player.getCharacter().getEquipment().get(Item.ItemType.WEAPON) !=null
+                    &&player.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+                if(rangeAttackrange.contains(cur.x + view.getNpcList().get(cur).getBound().width /2, cur.y + view.getNpcList().get(cur).getBound().height /2)
+                        && !((NPC)view.getNpcList().get(cur)).isFriendly()
+                        && ! view.getNpcList().get(cur).getCharacter().isDead()){
+                    return cur;
+                }
+            } else {
+                if ((meleeAttackRangeX.overlaps(view.getNpcList().get(cur).getBound()) || meleeAttackRangeY.overlaps(view.getNpcList().get(cur).getBound()))
+                        && !((NPC) view.getNpcList().get(cur)).isFriendly()
+                        && !view.getNpcList().get(cur).getCharacter().isDead()) {
+                    return cur;
+                }
+            }
+        }
         return null;
     }
 
@@ -383,7 +422,13 @@ public class PlayerController{
         isStartToMove = startToMove;
     }
 
+    public boolean isDecideToStop() {
+        return decideToStop;
+    }
 
+    public void setDecideToStop(boolean decideToStop) {
+        this.decideToStop = decideToStop;
+    }
 
     public void renderMeleeArea() {
         Gdx.gl.glEnable(GL20.GL_BLEND);

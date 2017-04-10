@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
@@ -124,7 +126,12 @@ public class HumanPlayerStrategy implements Strategy{
             	screen.getPlayerController().movePlayer();
             }
             else if (screen.getDialogueController().getAnswerIndex() == 1) {
-            	screen.getPlayerController().attackEnemy() ; // if cannot find enemy in range to attack
+                if(screen.getPlayer().getCharacter().getEquipment().get(Item.ItemType.WEAPON) != null
+                        && screen.getPlayer().getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+                    screen.getPlayerController().rangeAttackEnemy();  // if cannot find enemy in range to attack
+                } else{
+                    screen.getPlayerController().meleeAttackEnemy();  // if cannot find enemy in range to attack
+                }
             }
             else if (screen.getDialogueController().getAnswerIndex() == 2) {
                 Vector2 friendLocation = screen.getPlayerController().tradeWithFriend();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
@@ -197,26 +198,50 @@ public class NPCcontroller {
 
 
 	public boolean findPlayerToAttack() {
-		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE);
-        
-        if(rangeAttackrange.contains(gameScreen.getPlayer().getPosition().x+gameScreen.getPlayer().getBound().width / 2, 
-        		gameScreen.getPlayer().getPosition().y+gameScreen.getPlayer().getBound().height / 2)){
-        	return true;
+		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
+        meleeAttackRangeX.set(npc.getPosition().x - npc.getBound().width, npc.getPosition().y, npc.getBound().width *3 , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * 3);
+
+        if(npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON) !=null
+            && npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+            if(rangeAttackrange.contains(gameScreen.getPlayer().getPosition().x+gameScreen.getPlayer().getBound().width / 2,
+                    gameScreen.getPlayer().getPosition().y+gameScreen.getPlayer().getBound().height / 2)){
+                return true;
+            }
+        }else{
+            if((meleeAttackRangeX.overlaps(gameScreen.getPlayer().getBound())
+                    || meleeAttackRangeY.overlaps(gameScreen.getPlayer().getBound()))){
+                return true;
+            }
         }
+
 		return false;
 	}
 
 
 	public Vector2 findNPCtoAttack() {
         rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*2);
+        meleeAttackRangeX.set(npc.getPosition().x - npc.getBound().width, npc.getPosition().y, npc.getBound().width *3 , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * 3);
+
         npcIterator = gameScreen.getNpcList().keySet().iterator();
         while(npcIterator.hasNext()){
         	npcVectorPointer = npcIterator.next();
-        	if(rangeAttackrange.contains(npcVectorPointer.x + gameScreen.getNpcList().get(npcVectorPointer).getBound().width /2
-        			, npcVectorPointer.y + gameScreen.getNpcList().get(npcVectorPointer).getBound().height /2)
-        			&& ((NPC)gameScreen.getNpcList().get(npcVectorPointer)).isFriendly()){
-        		return npcVectorPointer;
-        	}
+            if(npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON) !=null
+                    && npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE) {
+                if(rangeAttackrange.contains(npcVectorPointer.x + gameScreen.getNpcList().get(npcVectorPointer).getBound().width /2
+                        , npcVectorPointer.y + gameScreen.getNpcList().get(npcVectorPointer).getBound().height /2)
+                        && ((NPC)gameScreen.getNpcList().get(npcVectorPointer)).isFriendly()){
+                    return npcVectorPointer;
+                }
+            } else{
+                if((meleeAttackRangeX.overlaps(gameScreen.getNpcList().get(npcVectorPointer).getBound()) || meleeAttackRangeY.overlaps(gameScreen.getNpcList().get(npcVectorPointer).getBound()))
+                        && ((NPC)gameScreen.getNpcList().get(npcVectorPointer)).isFriendly()){
+                    return npcVectorPointer;
+                }
+            }
+
+
         }
 		return null;
 	}
