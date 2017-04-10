@@ -1,0 +1,39 @@
+package com.chaowang.ddgame.MenuModel.ClassesModel;
+
+
+/**
+ * Model for fighter director
+ * @author chao wang
+ * @version 3.0
+ */
+public class FighterBuilderDirector {
+
+    private FighterBuilder builder;
+    /**
+     * set builder
+     * @param newFighterBuilder
+     */
+    public void setBuilder(FighterBuilder newFighterBuilder){
+        builder = newFighterBuilder;
+    }
+    /**
+     * construct fighter
+     */
+    public void constructFighter(){
+        builder.createNewFighter();
+        builder.buildAbilityImportance();
+        builder.buildFighterType();
+    }
+<<<<<<< HEAD:Gradle-Android-Libgdx/core/src/com/chaowang/ddgame/ClassesModel/FighterBuilderDirector.java
+    /**
+     * get fighter
+     * @return fighter
+     */
+    public Fighter getFighter(){
+=======
+
+    public com.chaowang.ddgame.MenuModel.ClassesModel.Fighter getFighter(){
+>>>>>>> e556073897a3f4d5992bae6c8882a0b59908c89c:Gradle-Android-Libgdx/core/src/com/chaowang/ddgame/MenuModel/ClassesModel/FighterBuilderDirector.java
+        return  builder.getFighter();
+    }
+}
