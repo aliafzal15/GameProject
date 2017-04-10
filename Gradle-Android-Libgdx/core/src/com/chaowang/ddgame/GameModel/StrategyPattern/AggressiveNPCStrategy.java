@@ -9,7 +9,11 @@ import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-
+/**
+ * strategy pattern for AggressiveNPC
+ * @author chao wang
+ * @version 3.0
+ */
 public class AggressiveNPCStrategy implements Strategy {
 
 	private GameScreen screen;
@@ -18,18 +22,25 @@ public class AggressiveNPCStrategy implements Strategy {
     private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
     private Map.Entry<Vector2,GameActor> entry;
 
-
+    /**
+     * construct
+     * @param gameScreen
+     */
     public AggressiveNPCStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
 	}
-	
+	/**
+	 * setup Camera
+	 */
 	@Override
 	public void setupCamera() {
 		screen.getCam().position.set(screen.getNpc().getPosition().x + (screen.getNpc().getBound().width / 2), screen.getNpc().getPosition().y + screen.getNpc().getBound().height / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
 	}
-
+	/**
+	 * render Interaction
+	 */
 	@Override
 	public void renderInteraction() {
 
@@ -105,7 +116,9 @@ public class AggressiveNPCStrategy implements Strategy {
             }
         }
 	}
-
+	/**
+	 * update dialogue
+	 */
 	@Override
 	public void updateDialogueStage(float delta) {
         screen.getUiStage().act(delta);

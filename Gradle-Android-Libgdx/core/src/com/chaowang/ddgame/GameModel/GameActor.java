@@ -70,19 +70,29 @@ public class GameActor {
         this.character = character;
     }
 
-
+    /**
+     * set Strategy
+     * @param strategy
+     */
     public void setStrategy(Strategy strategy){
         this.strategy = strategy;
     }
-
+    /**
+     * execute SetupCamera Stategy
+     */
     public void executeSetupCameraStategy(){
         this.strategy.setupCamera();
     }
-
+    /**
+     * render Interaction
+     */
     public void renderInteraction() {
         this.strategy.renderInteraction();
     }
-
+    /**
+     * update Dialogue Stage
+     * @param delta
+     */
     public void updateDialogueStage(float delta){
         this.strategy.updateDialogueStage(delta);
     }

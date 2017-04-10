@@ -11,7 +11,6 @@ import com.chaowang.ddgame.GameUtl.AbstractScreen;
 /**
  * Created by Chao on 25/03/2017.
  */
-
 public class TransitionScreen extends AbstractScreen {
 
     private AbstractScreen from;
@@ -26,13 +25,19 @@ public class TransitionScreen extends AbstractScreen {
     private Viewport viewport;
 
     private TRANSITION_STATE state;
-
+    /**
+     * set enum values
+     * @author chao
+     */
     private enum TRANSITION_STATE {
         OUT,
         IN,
         ;
     }
-
+    /**
+     * construct
+     * @param app
+     */
     public TransitionScreen(DDGame app) {
         super(app);
         batch = new SpriteBatch();
@@ -53,7 +58,9 @@ public class TransitionScreen extends AbstractScreen {
     public void pause() {
 
     }
-
+    /**
+     * update
+     */
     @Override
     public void update(float delta) {
         if (state == TRANSITION_STATE.OUT) {
@@ -70,7 +77,9 @@ public class TransitionScreen extends AbstractScreen {
             }
         }
     }
-
+    /**
+     * render
+     */
     @Override
     public void render(float delta) {
         if (state == TRANSITION_STATE.OUT) {
@@ -85,7 +94,9 @@ public class TransitionScreen extends AbstractScreen {
             inTransition.render(delta, batch);
         }
     }
-
+    /**
+     * set the size of game screen
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -102,7 +113,14 @@ public class TransitionScreen extends AbstractScreen {
     public void show() {
 
     }
-
+    /**
+     * start Transition
+     * @param from
+     * @param to
+     * @param out
+     * @param in
+     * @param action
+     */
     public void startTransition(AbstractScreen from, AbstractScreen to, Transition out, Transition in, Action action) {
         this.from = from;
         this.to = to;
