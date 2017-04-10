@@ -9,17 +9,26 @@ import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-
+/**
+ * strategy pattern for Human Player
+ * @author chao wang
+ * @version 3.0
+ */
 public class HumanPlayerStrategy implements Strategy{
 	
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator ;
-    
+    /**
+     * construct
+     * @param gameScreen
+     */
 	public HumanPlayerStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
 		screen.getDialogueController().startDialogue(screen.getDialogue());
 	}
-
+	/**
+	 * setup Camera
+	 */
 	@Override
 	public void setupCamera() {
 		screen.getCam().position.set(screen.getPlayer().getPosition().x + (screen.getPlayer().getCurrentFrame().getRegionWidth() / 2), 
@@ -27,7 +36,9 @@ public class HumanPlayerStrategy implements Strategy{
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
 	}
-	
+	/**
+	 * render Interaction
+	 */
 	public void renderInteraction(){
 //        if(!screen.getDialogBox().isVisible()){
 //        }
@@ -140,7 +151,9 @@ public class HumanPlayerStrategy implements Strategy{
         }
 
 	}
-	
+	/**
+	 * update dialogue
+	 */	
 	public void updateDialogueStage(float delta){
 		screen.getDialogueController().update(delta);
 		screen.getDialogueController().keyUp();

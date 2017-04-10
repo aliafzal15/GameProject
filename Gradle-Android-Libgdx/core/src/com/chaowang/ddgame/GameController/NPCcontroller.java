@@ -17,7 +17,11 @@ import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
-
+/**
+ * NPC controller
+ * @author chao wang
+ * @version 3.0
+ */
 public class NPCcontroller {
     private NPC npc;
     private GameScreen gameScreen;
@@ -62,7 +66,9 @@ public class NPCcontroller {
         }
     }
    
-    
+    /**
+     * Pattern for walking in square
+     */
     public void walkInSquarePattern(){
 
         if(prevMovement.equals("up")){  //walk to left
@@ -75,7 +81,11 @@ public class NPCcontroller {
     		friendlyWalkTo(this.npc.getPosition().x , this.npc.getPosition().y + PublicParameter.GAME_PIXEL_SIZE* 3f);
     	}
     }
-    
+    /**
+     * walk movement operation(friendly)
+     * @param x
+     * @param y
+     */
     private void friendlyWalkTo(float x, float y){
 
 //		if(Gdx.input.isKeyPressed(Input.Keys.F )){
@@ -102,7 +112,11 @@ public class NPCcontroller {
     		}
     	}
     }
-    
+    /**
+     * walk movement operation(aggressively)
+     * @param x
+     * @param y
+     */
     public void aggressivelyWalkTo(float x, float y){
 
     	if(isStartToMove){
@@ -184,18 +198,27 @@ public class NPCcontroller {
         	npc.move(-1 * span,0);
         }
     }
-
+    /**
+     * NPC get function
+     * @return
+     */
 	public NPC getNpc() {
 		return npc;
 	}
 
-
+	/**
+	 * NPC set function
+	 * @param npc
+	 */
 	public void setNpc(NPC npc) {
 		this.npc = npc;
         positionBeforeMove = new Vector2(this.npc.getPosition());
 	}
 
-
+	/**
+	 * attack player
+	 * @return
+	 */
 	public boolean findPlayerToAttack() {
 		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE);
         
@@ -206,7 +229,10 @@ public class NPCcontroller {
 		return false;
 	}
 
-
+	/**
+	 * attack NPC
+	 * @return
+	 */
 	public Vector2 findNPCtoAttack() {
         rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*2);
         npcIterator = gameScreen.getNpcList().keySet().iterator();
@@ -220,7 +246,9 @@ public class NPCcontroller {
         }
 		return null;
 	}
-
+	/**
+	 * render range
+	 */
     public void renderRangeArea() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -231,19 +259,31 @@ public class NPCcontroller {
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
-
+    /**
+     * decide move status
+     * @return
+     */
     public boolean isStartToMove() {
         return isStartToMove;
     }
-
+    /**
+     * set startToMove value
+     * @param startToMove
+     */
     public void setStartToMove(boolean startToMove) {
         isStartToMove = startToMove;
     }
-
+    /**
+     * decide attack status
+     * @return
+     */
     public boolean isAbleToAttack() {
         return ableToAttack;
     }
-
+    /**
+     * set attack status value
+     * @param ableToAttack
+     */
     public void setAbleToAttack(boolean ableToAttack) {
         this.ableToAttack = ableToAttack;
     }

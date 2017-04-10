@@ -10,11 +10,15 @@ import java.util.Queue;
 /**
  * Created by Chao on 06/04/2017.
  */
-
 public class NPC extends GameActor{
 
     private boolean isFriendly;
-
+    /**
+     * construct
+     * @param position
+     * @param character
+     * @param isFriendly
+     */
     public NPC(Vector2 position, Character character, boolean isFriendly) {
         super(position, character);
         this.isFriendly = isFriendly;
@@ -26,11 +30,17 @@ public class NPC extends GameActor{
             this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
         }
     }
-
+    /**
+     * decide Friendly or not
+     * @return
+     */
     public boolean isFriendly() {
         return isFriendly;
     }
-
+    /**
+     * set Friendly value
+     * @param friendly
+     */
     public void setFriendly(boolean friendly) {
     	MainMenuScreen.logArea.appendText(this.character.getName() + "becomes "+ friendly +" friendly\n");
         isFriendly = friendly;

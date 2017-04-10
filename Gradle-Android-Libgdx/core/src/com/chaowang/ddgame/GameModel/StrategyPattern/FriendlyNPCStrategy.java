@@ -8,23 +8,35 @@ import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-
+/**
+ * strategy pattern for Friendly NPC
+ * @author chao wang
+ * @version 3.0
+ */
 public class FriendlyNPCStrategy implements Strategy{
 
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator ;
     private Vector2 npcPointer;
-    
+    /**
+     * construct
+     * @param gameScreen
+     */
 	public FriendlyNPCStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
 	}
+	/**
+	 * setup Camera
+	 */
 	@Override
 	public void setupCamera() {
 		screen.getCam().position.set(screen.getNpc().getPosition().x + (screen.getNpc().getBound().width / 2), screen.getNpc().getPosition().y + screen.getNpc().getBound().height / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
 	}
-
+	/**
+	 * render Interaction
+	 */
 	@Override
 	public void renderInteraction() {
 
@@ -75,7 +87,9 @@ public class FriendlyNPCStrategy implements Strategy{
 
     	screen.getNpcController().walkInSquarePattern();
 	}
-
+	/**
+	 * update dialogue
+	 */
 	@Override
 	public void updateDialogueStage(float delta) {
         screen.getUiStage().act(delta);

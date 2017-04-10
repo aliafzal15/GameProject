@@ -11,7 +11,11 @@ import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-
+/**
+ * strategy pattern for Computer Player
+ * @author chao wang
+ * @version 3.0
+ */
 public class ComputerPlayerStrategy implements Strategy{
 
 	private GameScreen screen;
@@ -19,13 +23,18 @@ public class ComputerPlayerStrategy implements Strategy{
     private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
     private Vector2 enemyPointer, cur;
     private Map.Entry<Vector2,GameActor> entry;
-
+    /**
+     * construct
+     * @param gameScreen
+     */
 	public ComputerPlayerStrategy(GameScreen gameScreen){
 		this.screen = gameScreen;
         enemyIterator = screen.getNpcList().keySet().iterator();
         enemyPointer = enemyIterator.next();
 	}
-	
+	/**
+	 * setup Camera
+	 */
 	@Override
 	public void setupCamera() {
 		screen.getCam().position.set(screen.getPlayer().getPosition().x + (screen.getPlayer().getCurrentFrame().getRegionWidth() / 2), 
@@ -33,7 +42,9 @@ public class ComputerPlayerStrategy implements Strategy{
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
 	}
-
+	/**
+	 * render Interaction
+	 */
 	@Override
 	public void renderInteraction() {
 
@@ -164,7 +175,9 @@ public class ComputerPlayerStrategy implements Strategy{
 
 
         }
-
+	/**
+	 * update dialogue
+	 */
 	@Override
 	public void updateDialogueStage(float delta) {
 
