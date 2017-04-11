@@ -28,7 +28,8 @@ public class Dice {
 	 * @return a random number
 	 */
 	public static int roll(int numberOfDice, int sides) {
-		return roll(numberOfDice, sides, 0);
+		int tmp =  roll(numberOfDice, sides, 0);
+		return  tmp;
 	}
 	/**
 	 * create a random number
@@ -39,7 +40,6 @@ public class Dice {
 	 */
 	public static int roll(int numberOfDice, int sides, int extra) {
 		int roll = 0;
-		//Gdx.app.log("MyTag", "my informative message");
 		for(int die = 1; die <= numberOfDice; die++) {
 			roll += roll(sides);
 		}

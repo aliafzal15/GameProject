@@ -1,11 +1,13 @@
 package com.chaowang.ddgame.GameView;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
@@ -90,11 +93,11 @@ public class GamePlayerEditorScreen implements Screen{
         saveButton = new TextButton("Save Game", MainMenuScreen.buttonStyle);
         saveButton.setWidth(Gdx.graphics.getWidth() / 8 );
         saveButton.setHeight(Gdx.graphics.getHeight() / 9);
-        saveButton.setPosition((Gdx.graphics.getWidth() * 13 /12 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
+        saveButton.setPosition((Gdx.graphics.getWidth() * 7 /12 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
         saveButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // ali's method: save player, mapModel, campaign.
+                saveGame();
                 return true;
             }
         });
@@ -145,6 +148,9 @@ public class GamePlayerEditorScreen implements Screen{
         raceLabel = new Label(player.getCharacter().getRaceType().toString(), MainMenuScreen.style);
         characterImage = new Image(player.getCharacter().getTexture());
         fighterTypeLabel = new Label(player.getCharacter().getFighterType().toString(), MainMenuScreen.style);
+        characterInfoLabel = new Label(player.getCharacter().toString(), MainMenuScreen.style);
+        characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 1 / 20), (Gdx.graphics.getHeight() * 1 / 100));
+        stage.addActor(characterInfoLabel);
 
         confirmButton = new TextButton("OK", MainMenuScreen.buttonStyle);
         confirmButton.addListener(new InputListener() {
@@ -352,5 +358,25 @@ public class GamePlayerEditorScreen implements Screen{
 		return backpackItemInfoLabel;
 	}
 
+
+    public void saveGame() {
+        FileHandle file = Gdx.files.local("data" + File.separator + "savedGame.json");
+        file.write(false);
+        Json json = new Json();
+        String context;
+        context = json.toJson(player) + System.getProperty("line.separator");
+        file.writeString(context,true);
+        context = json.toJson(mapModel) + System.getProperty("line.separator");
+        file.writeString(context,true);
+        context = json.toJson(campaign) + System.getProperty("line.separator");
+        file.writeString(context,true);
+        context = json.toJson(npcList) + System.getProperty("line.separator");
+        file.writeString(context,true);
+        context = json.toJson(playOrderList) + System.getProperty("line.separator");
+        file.writeString(context,true);
+        context = json.toJson(isUserPlay) + System.getProperty("line.separator");
+        file.writeString(context,true);
+
+    }
 
 }

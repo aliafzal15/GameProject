@@ -33,6 +33,7 @@ public class FriendlyNPCStrategy implements Strategy{
 		screen.getCam().position.set(screen.getNpc().getPosition().x + (screen.getNpc().getBound().width / 2), screen.getNpc().getPosition().y + screen.getNpc().getBound().height / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
+		screen.getPlayerEditorBtn().setVisible(false);
 	}
 	/**
 	 * render Interaction

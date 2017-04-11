@@ -37,7 +37,8 @@ public class HumanPlayerStrategy implements Strategy{
 				screen.getPlayer().getPosition().y + screen.getPlayer().getCurrentFrame().getRegionHeight() / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
-	}
+        screen.getPlayerEditorBtn().setVisible(true);
+    }
 	/**
 	 * render Interaction
 	 */
@@ -79,6 +80,9 @@ public class HumanPlayerStrategy implements Strategy{
                 screen.setHitObject(true);
                 if(!((NPC)screen.getNpcList().get(cur)).isFriendly()){
                     if(screen.getNpcList().get(cur).getCharacter().isDead()){
+                        screen.getCurrentRollVectorEntry().setValue(screen.getPlayer().getPosition());
+                        screen.getplayOrderList().offer(screen.getCurrentRollVectorEntry());
+                        screen.setActorPlaying(true);
                         screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, screen.getNpcList(), screen.getplayOrderList() ,screen.isUserPlay()));
                     }
                 }
@@ -147,13 +151,14 @@ public class HumanPlayerStrategy implements Strategy{
             else if (screen.getDialogueController().getAnswerIndex() == 2) {
                 Vector2 friendLocation = screen.getPlayerController().tradeWithFriend();
                 if(friendLocation !=null){
-                    screen.startNextRound();
+                    screen.getCurrentRollVectorEntry().setValue(screen.getPlayer().getPosition());
+                    screen.getplayOrderList().offer(screen.getCurrentRollVectorEntry());
+                    screen.setActorPlaying(true);
                     screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), friendLocation, screen.getNpcList(), screen.getplayOrderList() ,screen.isUserPlay()));
                 } else{
                 	screen.getDialogueController().setAnswerIndex(0);
                 	screen.getDialogueController().animateText("Cannot find friendly NPC to trade, change to move!");
                 }
-                //game.setScreen(new GameItemExchangeScreen(game,player,mapModel,campaign, cur, true));
             }
         }
 

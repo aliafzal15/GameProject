@@ -463,6 +463,10 @@ public class PlayerController{
     public void setAbleToAttack(boolean ableToAttack) {
         this.ableToAttack = ableToAttack;
     }
+
+    public Vector2 getPositionBeforeMove() {
+        return positionBeforeMove;
+    }
 }
 //    @Override
 //    public boolean keyDown(int keycode) {

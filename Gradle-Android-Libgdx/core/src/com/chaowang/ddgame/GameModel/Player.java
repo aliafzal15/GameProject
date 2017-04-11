@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 
 /**
@@ -13,7 +15,7 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
  * @author chao wang
  * @version 2.0
  */
-public class Player extends GameActor{
+public class Player extends GameActor implements Json.Serializable{
 
 
     private static final int COL = 4;
@@ -129,4 +131,13 @@ public class Player extends GameActor{
         }
     }
 
+    @Override
+    public void write(Json json) {
+        super.write(json);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        super.read(json, jsonData);
+    }
 }

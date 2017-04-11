@@ -13,6 +13,7 @@ import com.chaowang.ddgame.MenuModel.ClassesModel.FighterNimbleBuilder;
 import com.chaowang.ddgame.MenuModel.ClassesModel.FighterTankBuilder;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.Buring;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuModel.ClassesModel.Fighter.FighterType;
@@ -28,6 +29,8 @@ import com.chaowang.ddgame.MenuModel.RacesModel.Race.RaceType;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.chaowang.ddgame.util.Dice;
+
 /**
  * create characters
  * @author chao Wang
@@ -180,9 +183,13 @@ public class Character extends Observable implements Json.Serializable{
 
 	public void underAttack(Character attacker){
 		if(!isDead()){
-			int damage = Math.max(attacker.attackBonus - armorClass, 0) - attacker.damageBonus;
-			this.hitPoints +=damage;
-			MainMenuScreen.logArea.appendText(this.getName() + " is under attack of "+damage+ "damage, Hp: "+this.getHitPoints()+"\n");
+			int d20 = Dice.roll(1,20);
+			MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attackBonus) +" attack\n");
+			if( d20 + attackBonus > armorClass){
+				int damage = Math.max(Dice.roll(1,8) + damageBonus, 0);
+				this.hitPoints -= damage;
+				MainMenuScreen.logArea.appendText(this.getName() + " get "+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+			}
 			if(attacker.getEquipment().get(Item.ItemType.WEAPON) != null){
 				boolean[] tmp = attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponModel().getWeaponEnhantmentEqu();
 				if(tmp[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()]){
@@ -201,8 +208,7 @@ public class Character extends Observable implements Json.Serializable{
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]= 1;
 				}
 			}
-		}
-		if(isDead()){
+		} else{
 			makeDead();
 		}
 	}
@@ -449,13 +455,21 @@ public class Character extends Observable implements Json.Serializable{
     	equipment.put(item.getItemType(), item);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
-    		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
-    		int addAttackBonus = attackBonus - CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel());
-    		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
+			//calculate the attack bonus, damage bonus, armor class, bonused by equiped equipment
+			int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
+			int addAttackBonus = attackBonus - CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(),getDexterity(), getLevel());
+			if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+				addAttackBonus = attackBonus - CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(),getDexterity(), getLevel());
+			}
+			int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] + item.getLevel());
+			// re - add the equipment bonus after redistribute the ability score
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
-			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(), getDexterity(), getLevel())+addAttackBonus);
+			if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+				setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(), getDexterity(), getLevel())+addAttackBonus);
+			}
 			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
@@ -477,13 +491,21 @@ public class Character extends Observable implements Json.Serializable{
     	Item item = equipment.remove(itemType);
     	int index = item.getEnchantedAbility().getIndex();
     	if( index < Abilities.ABILITYSIZE){
+			//calculate the attack bonus, damage bonus, armor class, bonused by equiped equipment
     		int addArmorClass = armorClass - CharacterScoreModifier.armorClassCalculator(getDexterity());
-    		int addAttackBonus = attackBonus - CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel());
+    		int addAttackBonus = attackBonus - CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(),getDexterity(), getLevel());
+			if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+				addAttackBonus = attackBonus - CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(),getDexterity(), getLevel());
+			}
     		int addDamageBonus = damageBonus - CharacterScoreModifier.damageBonusCalculator(getStrength());
     		
         	abilities.setAbility(index, abilities.getAbilityArr()[index] - item.getLevel());
+			// re - add the equipment bonus after redistribute the ability score
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()) + addArmorClass);
-			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()) + addAttackBonus);
+			if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+				setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()) + addAttackBonus);
+			}
 			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()) + addDamageBonus);
     	}
     	if( index == Abilities.ABILITYSIZE){
@@ -516,8 +538,8 @@ public class Character extends Observable implements Json.Serializable{
 	 */
 	public void reduceHitPoints(int deduction) {
 		this.hitPoints -= deduction;
-        MainMenuScreen.logArea.appendText(name + "is burning "+ deduction + "hp\n");
-		if(this.hitPoints<=0){
+        MainMenuScreen.logArea.appendText(name + " is burning "+ deduction + "hp\n");
+		if(isDead()){
 			makeDead();
 		}
 	}
@@ -575,8 +597,10 @@ public class Character extends Observable implements Json.Serializable{
 			}
 			setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
 			setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
-			setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
-			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
+			setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+			if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+				setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+			}			setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 		}
 	}
 	/**
@@ -587,7 +611,10 @@ public class Character extends Observable implements Json.Serializable{
 		this.level = level;
 		resetPromotePoint();
 		setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
-		setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+			setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+		}
 		setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 		setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
 		HashMap.Entry<Item.ItemType, Item> entry;
@@ -601,7 +628,10 @@ public class Character extends Observable implements Json.Serializable{
 					abilities.getAbilityArr()[entry.getValue().getEnchantedAbility().getIndex()] -= difference;
 					setHitPoints(CharacterScoreModifier.hitPointCalculator(getConstitution(), getLevel()));
 					setArmorClass(CharacterScoreModifier.armorClassCalculator(getDexterity()));
-					setAttackBonus(CharacterScoreModifier.attackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+					setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+					if(this.getEquipment().get(Item.ItemType.WEAPON)!= null && this.getEquipment().get(Item.ItemType.WEAPON).getWeaponType() == WeaponModel.WeaponType.RANGE){
+						setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(getStrength(), getDexterity(), getLevel()));
+					}
 					setDamageBonus(CharacterScoreModifier.damageBonusCalculator(getStrength()));
 				} else if (entry.getValue().getEnchantedAbility().getIndex() == Abilities.ABILITYSIZE){
 					this.setArmorClass(getArmorClass() - difference);
@@ -687,7 +717,7 @@ public class Character extends Observable implements Json.Serializable{
      * @return true or false
      */
     public boolean isDead() {
-		return getHitPoints() <= 0;
+		return getHitPoints() <= 1;
 	}
     /**
      * get Strength

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,15 +18,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.Player;
+import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CampaignModel.CampaignInventory;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 import com.chaowang.ddgame.GameView.GameSelectionScreen;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuModel.ItemModel.ItemInventory;
 import com.chaowang.ddgame.MenuModel.CharacterModel.CharacterInventory;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.MenuModel.MapModel.MapInventory;
 
 /**
@@ -52,6 +64,14 @@ public class MainMenuScreen implements Screen{
 
     private SpriteBatch batch;
     private Game game;
+
+    // for load game;
+    private Player player;
+    private Map mapModel;
+    private Campaign campaign;
+    private HashMap<Vector2, GameActor> npcList;
+    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
+    private boolean isUserPlay;
     /**
      * constructor
      * @param game
@@ -114,10 +134,12 @@ public class MainMenuScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                // player = readPLayer();
-                // mapModel = readMapModel():
-                // campaign = readCampaign();
-                //ali's code, something like: game.setScreen(new GameScreen(game, player, mapModel, campaign));
+                try {
+                    readFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                game.setScreen(new GameScreen(game, player, mapModel, campaign, npcList, playOrderList, isUserPlay));
                 return true;
             }
         });
@@ -252,5 +274,35 @@ public class MainMenuScreen implements Screen{
     @Override
     public void dispose() {
 
+    }
+
+    /**
+     * read files
+     * @throws IOException
+     */
+    public  void readFile() throws IOException {
+        File file = new File("data" + File.separator + "savedGame.json");
+        file.createNewFile(); // if file already exists will do nothing
+
+        Scanner scanner = new Scanner(file);
+        Json json = new Json();
+        String context;
+        context = scanner.nextLine();
+        player = json.fromJson(Player.class, context);
+        context = scanner.nextLine();
+        mapModel = json.fromJson(Map.class, context);
+        context = scanner.nextLine();
+        campaign = json.fromJson(Campaign.class, context);
+
+        context = scanner.nextLine();
+        npcList = json.fromJson(HashMap.class, context);
+        context = scanner.nextLine();
+        playOrderList = json.fromJson(LinkedList.class, context);
+
+
+        context = scanner.nextLine();
+        isUserPlay = json.fromJson(Boolean.class, context);
+        scanner.close();
+        file.exists();
     }
 }

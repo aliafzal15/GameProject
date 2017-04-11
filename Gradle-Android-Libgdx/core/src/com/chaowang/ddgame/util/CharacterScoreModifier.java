@@ -32,16 +32,16 @@ public class CharacterScoreModifier {
         return  10 + abilityModifier(dexterity);
     }
 
-    /**
-     * modifier for melee attack Bonus
-     * @param strength
-     * @param dexterity
-     * @param level
-     * @return a new changed value for attach Bonus
-     */
-    public static int attackBonusCalculator(int strength, int dexterity, int level){
-        return baseAttackBonus(level)+ abilityModifier(strength);
-    }
+//    /**
+//     * modifier for melee attack Bonus
+//     * @param strength
+//     * @param dexterity
+//     * @param level
+//     * @return a new changed value for attach Bonus
+//     */
+//    public static int attackBonusCalculator(int strength, int dexterity, int level){
+//        return baseAttackBonus(level)+ abilityModifier(strength);
+//    }
     /**
      * modifier for melee attack Bonus
      * @param strength
@@ -68,7 +68,7 @@ public class CharacterScoreModifier {
      * @return a new changed value for damage Bonus
      */
     public static int damageBonusCalculator(int strength){
-        return Math.max(0, abilityModifier(strength));
+        return abilityModifier(strength);
     }
 
     private static int baseAttackBonus(int level){

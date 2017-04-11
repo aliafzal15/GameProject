@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
@@ -159,8 +161,12 @@ public class CharacterController {
 				}
 				character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
 				character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity() + character.getDexterityBonus()));
-				character.setAttackBonus(CharacterScoreModifier.attackBonusCalculator(character.getStrength() + character.getStrengthBonus(),
-				character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				character.setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(character.getStrength() + character.getStrengthBonus(),
+						character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				if(character.getEquipment().get(Item.ItemType.WEAPON)!=null && character.getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+					character.setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(character.getStrength() + character.getStrengthBonus(),
+							character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				}
 				character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength() + character.getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 				view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));
@@ -238,7 +244,10 @@ public class CharacterController {
 		if(character.getStrength() != 0){
 			character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution(), character.getLevel()));
 			character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity()));
-			character.setAttackBonus(CharacterScoreModifier.attackBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			character.setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			if(character.getEquipment().get(Item.ItemType.WEAPON)!=null && character.getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+				character.setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			}
 			character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength()));
 
 			view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));

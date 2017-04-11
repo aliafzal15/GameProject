@@ -1,16 +1,19 @@
 package com.chaowang.ddgame.GameModel;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Queue;
 
 /**
  * Created by Chao on 06/04/2017.
  */
-public class NPC extends GameActor{
+public class NPC extends GameActor implements Json.Serializable{
 
     private boolean isFriendly;
     /**
@@ -72,5 +75,17 @@ public class NPC extends GameActor{
         } else{
             bound.set(position.x, position.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
         }
+    }
+
+    @Override
+    public void write(Json json) {
+        super.write(json);
+        json.writeValue("IsFriendly", isFriendly);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        super.read(json, jsonData);
+        isFriendly = jsonData.child.next.next.next.asBoolean();
     }
 }

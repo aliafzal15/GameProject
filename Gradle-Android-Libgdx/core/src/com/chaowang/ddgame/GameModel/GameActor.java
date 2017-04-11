@@ -2,6 +2,8 @@ package com.chaowang.ddgame.GameModel;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.GameModel.StrategyPattern.Strategy;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.PublicParameter;
@@ -10,7 +12,7 @@ import com.chaowang.ddgame.PublicParameter;
  * Created by Chao on 06/04/2017.
  */
 
-public class GameActor {
+public class GameActor implements Json.Serializable {
 
     Vector2 position;
     Rectangle bound;
@@ -95,5 +97,23 @@ public class GameActor {
      */
     public void updateDialogueStage(float delta){
         this.strategy.updateDialogueStage(delta);
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("Position", position);
+        json.writeValue("Bound", bound);
+        json.writeValue("Character", character);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        String context;
+        context = jsonData.child.asString();
+        position = json.fromJson(Vector2.class, context);
+        context = jsonData.child.next.asString();
+        bound = json.fromJson(Rectangle.class, context);
+        context = jsonData.child.next.next.asString();
+        character = json.fromJson(Character.class, context);
     }
 }

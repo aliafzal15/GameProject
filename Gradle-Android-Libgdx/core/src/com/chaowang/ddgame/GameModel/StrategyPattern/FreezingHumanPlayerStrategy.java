@@ -34,7 +34,8 @@ public class FreezingHumanPlayerStrategy implements Strategy{
 				screen.getPlayer().getPosition().y + screen.getPlayer().getCurrentFrame().getRegionHeight() / 2, 0);
 		screen.getBatch().setProjectionMatrix(screen.getCam().combined);
 		screen.getCam().update();
-	}
+        screen.getPlayerEditorBtn().setVisible(true);
+    }
 	/**
 	 * render Interaction
 	 */

@@ -31,7 +31,8 @@ public class ComputerPlayerStrategy implements Strategy{
 		this.screen = gameScreen;
         enemyIterator = screen.getNpcList().keySet().iterator();
         enemyPointer = enemyIterator.next();
-	}
+        screen.getPlayerEditorBtn().setVisible(false);
+    }
 	/**
 	 * setup Camera
 	 */
