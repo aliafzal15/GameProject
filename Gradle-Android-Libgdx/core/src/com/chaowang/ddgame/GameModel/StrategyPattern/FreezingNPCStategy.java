@@ -91,9 +91,9 @@ public class FreezingNPCStategy implements Strategy{
                 screen.startNextRound();
             } else if(screen.getNpcController().findNPCtoAttack() != null && screen.getNpcController().isAbleToAttack() ){
                 npcPointer = screen.getNpcController().findNPCtoAttack();
-                GameActor tmp= screen.getNpcList().remove(npcPointer);
+                NPC tmp= screen.getNpcList().remove(npcPointer);
                 tmp.getCharacter().underAttack(screen.getNpcController().getNpc().getCharacter());
-                ((NPC)tmp).setFriendly(false);
+                tmp.setFriendly(false);
                 screen.getNpcList().put(tmp.getPosition(), tmp);
                 screen.startNextRound();
             } else{

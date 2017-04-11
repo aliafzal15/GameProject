@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
@@ -30,8 +31,11 @@ import com.chaowang.ddgame.MenuModel.CampaignModel.CampaignInventory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.AbstractMap.SimpleEntry;
 
 import com.chaowang.ddgame.GameView.GameSelectionScreen;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
@@ -39,6 +43,7 @@ import com.chaowang.ddgame.MenuModel.ItemModel.ItemInventory;
 import com.chaowang.ddgame.MenuModel.CharacterModel.CharacterInventory;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.MenuModel.MapModel.MapInventory;
+import com.chaowang.ddgame.util.IntVector2Pair;
 
 /**
  * view for main menu
@@ -69,8 +74,8 @@ public class MainMenuScreen implements Screen{
     private Player player;
     private Map mapModel;
     private Campaign campaign;
-    private HashMap<Vector2, GameActor> npcList;
-    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
+    private HashMap<Vector2, NPC> npcList;
+    private LinkedList<IntVector2Pair> playOrderList;
     private boolean isUserPlay;
     /**
      * constructor
@@ -294,15 +299,31 @@ public class MainMenuScreen implements Screen{
         context = scanner.nextLine();
         campaign = json.fromJson(Campaign.class, context);
 
-        context = scanner.nextLine();
-        npcList = json.fromJson(HashMap.class, context);
+        context = scanner.nextLine();        
+        HashMap<String, NPC> tmpMap;
+        tmpMap = json.fromJson(HashMap.class, Vector2.class, context);
+        npcList = ConverHMkeyStrToVec2(tmpMap);
+        
         context = scanner.nextLine();
         playOrderList = json.fromJson(LinkedList.class, context);
-
-
         context = scanner.nextLine();
         isUserPlay = json.fromJson(Boolean.class, context);
         scanner.close();
         file.exists();
     }
+    
+    
+	public HashMap<Vector2, NPC> ConverHMkeyStrToVec2(HashMap<String, NPC> tmpMap) {
+		HashMap<Vector2, NPC> hmapReturn = new HashMap<Vector2, NPC>();
+        String tmpStr;
+        Iterator<String> it = tmpMap.keySet().iterator();
+        while(it.hasNext()){
+            Vector2 tmpVec = new Vector2();
+        	tmpStr = it.next();
+        	tmpVec.x = Float.parseFloat(tmpStr.substring(tmpStr.indexOf("(")+1, tmpStr.indexOf(",")));
+        	tmpVec.y = Float.parseFloat(tmpStr.substring(tmpStr.indexOf(",")+1, tmpStr.indexOf(")")));
+        	hmapReturn.put(tmpVec,tmpMap.get(tmpStr) );
+        }
+		return hmapReturn;
+	}
 }

@@ -54,6 +54,7 @@ import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
+import com.chaowang.ddgame.util.IntVector2Pair;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment.WeaponEnchantement;
 import java.util.Collections;
 import java.util.Comparator;
@@ -92,12 +93,13 @@ public class GameScreen implements Observer, Screen{
     private TextButton playerEditorBtn;
 
     // game attributes
-    private GameActor player, npcPointer;
+    private Player player;
+    private NPC npcPointer;
     private Map mapModel;
     private Campaign campaign;
-    private HashMap<Vector2,GameActor> npcList;
-    private LinkedList<Entry<Integer,Vector2>> playOrderList;
-    private Entry<Integer,Vector2> currentRollVectorEntry;
+    private HashMap<Vector2,NPC> npcList;
+    private LinkedList<IntVector2Pair> playOrderList;
+    private IntVector2Pair currentRollVectorEntry;
     private Iterator<Vector2> keySetIterator ;
     private boolean isHitObject, isUserPlay, isActorPlaying;
     private int playerOrNPC = -1; //  1 is player, 2 is NPC
@@ -111,7 +113,7 @@ public class GameScreen implements Observer, Screen{
      * @param camp
      */
     public GameScreen(Game game, Character character,Map map, Campaign camp, boolean isUserPlay) {
-        this(game,new Player(new Vector2(1,1), character),map,camp, new HashMap<Vector2, GameActor>(), new LinkedList<Entry<Integer,Vector2>>(), isUserPlay);
+        this(game,new Player(new Vector2(1,1), character),map,camp, new HashMap<Vector2, NPC>(), new LinkedList<IntVector2Pair>(), isUserPlay);
     }
 
     /**
@@ -122,13 +124,13 @@ public class GameScreen implements Observer, Screen{
      * @param camp
      * @param actorList 
      */
-    public GameScreen(Game game, GameActor player,Map map, Campaign camp, HashMap<Vector2, GameActor> actorList, LinkedList<Entry<Integer,Vector2>> list , boolean isUserPlay){
+    public GameScreen(Game game, Player player,Map map, Campaign camp, HashMap<Vector2, NPC> actorList, LinkedList<IntVector2Pair> playOrderList2 , boolean isUserPlay){
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = new Campaign(camp);
         this.npcList = actorList;
-        this.playOrderList = list;
+        this.playOrderList = playOrderList2;
         this.isUserPlay = isUserPlay;
         batch = new SpriteBatch();
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
@@ -162,7 +164,7 @@ public class GameScreen implements Observer, Screen{
         mapModel.getEnemyLocationList().clear();
 
         // instentiate controller
-        playerController = new PlayerController((Player)player, this);
+        playerController = new PlayerController(player, this);
         npcController = new NPCcontroller((NPC)npcPointer,this);
         dialogueController = new DialogueController(dialogBox, optionBox, messageDialog);
         screenController = new GameScreenController(this,this.mapModel, (Player)this.player);
@@ -396,7 +398,7 @@ public class GameScreen implements Observer, Screen{
             diceRoll = Dice.roll(1, 20);
             MainMenuScreen.logArea.appendText(mapModel.getEnemyLocationList().get(cur).getName() + " roll dice :"+diceRoll + "+ DexModifier\n");
             diceRoll += CharacterScoreModifier.abilityModifier(mapModel.getEnemyLocationList().get(cur).getDexterity());
-            playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(cur)));
+            playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(cur)));
             npcList.put(cur, new NPC(cur,mapModel.getEnemyLocationList().get(cur), false));
         }
         keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
@@ -404,20 +406,15 @@ public class GameScreen implements Observer, Screen{
             cur = keySetIterator.next();
             diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(mapModel.getFriendLocationList().get(cur).getDexterity());
             MainMenuScreen.logArea.appendText(mapModel.getFriendLocationList().get(cur).getName() + " roll dice :"+diceRoll + "\n");
-            playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(cur)));
+            playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(cur)));
             npcList.put(cur, new NPC(cur,mapModel.getFriendLocationList().get(cur), true));
         }
 
         // add player to play order linked list
         diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(player.getCharacter().getDexterity()); //dice roll+ deterity ability modifier
         MainMenuScreen.logArea.appendText("yourself roll dice :"+diceRoll + "\n");
-        playOrderList.add(new SimpleEntry<Integer, Vector2>(diceRoll, new Vector2(player.getPosition())));
-        Collections.sort(playOrderList, new Comparator<Entry<Integer, Vector2>>() {
-            @Override
-            public int compare(Entry<Integer, Vector2> arg0, Entry<Integer, Vector2> arg1) {
-                return arg1.getKey()-arg0.getKey();
-            }
-        });
+        playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(player.getPosition())));
+        Collections.sort(playOrderList);
     }
 
     private void initializeDialogue() {
@@ -455,7 +452,7 @@ public class GameScreen implements Observer, Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetPlayersTurn();
-                game.setScreen(new GamePlayerEditorScreen(game, (Player)player, mapModel, campaign, npcList, playOrderList, isUserPlay));
+                game.setScreen(new GamePlayerEditorScreen(game, player, mapModel, campaign, npcList, playOrderList, isUserPlay));
                 return true;
             }
         });
@@ -698,11 +695,11 @@ public class GameScreen implements Observer, Screen{
         return dialogBox;
     }
 
-    public HashMap<Vector2, GameActor> getNpcList() {
+    public HashMap<Vector2, NPC> getNpcList() {
         return npcList;
     }
 
-    public void setNpcList(HashMap<Vector2, GameActor> npcList) {
+    public void setNpcList(HashMap<Vector2, NPC> npcList) {
         this.npcList = npcList;
     }
 
@@ -722,11 +719,11 @@ public class GameScreen implements Observer, Screen{
         return playerEditorBtn;
     }
 
-    public Entry<Integer, Vector2> getCurrentRollVectorEntry() {
+    public IntVector2Pair getCurrentRollVectorEntry() {
         return currentRollVectorEntry;
     }
 
-    public void setCurrentRollVectorEntry(Entry<Integer, Vector2> currentRollVectorEntry) {
+    public void setCurrentRollVectorEntry(IntVector2Pair currentRollVectorEntry) {
         this.currentRollVectorEntry = currentRollVectorEntry;
     }
 
@@ -742,7 +739,7 @@ public class GameScreen implements Observer, Screen{
         isActorPlaying = actorPlaying;
     }
 
-    public LinkedList<Entry<Integer, Vector2>> getplayOrderList() {
+    public LinkedList<IntVector2Pair> getplayOrderList() {
         return playOrderList;
     }
 

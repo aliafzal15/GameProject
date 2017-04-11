@@ -71,11 +71,11 @@ public class FreezingComputerPlayerStrategy implements Strategy{
         keySetIterator = screen.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, ((NPC)screen.getNpcList().get(cur)).isFriendly());
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly());
             if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
-                if(!((NPC)screen.getNpcList().get(cur)).isFriendly() && screen.getNpcList().get(cur).getCharacter().isDead()){
+                if(!(screen.getNpcList().get(cur)).isFriendly() && screen.getNpcList().get(cur).getCharacter().isDead()){
                         screen.getPlayerController().teleport(0, -8);
                 }
             }
@@ -124,7 +124,7 @@ public class FreezingComputerPlayerStrategy implements Strategy{
 
         if(screen.getPlayerController().findEnemyInAttackRange()!=null && screen.getPlayerController().isAbleToAttack()){
             enemyPointer = screen.getPlayerController().findEnemyInAttackRange();
-            GameActor tmp= screen.getNpcList().remove(enemyPointer);
+            NPC tmp= screen.getNpcList().remove(enemyPointer);
             MainMenuScreen.logArea.appendText("you are attacking "+ tmp.getCharacter().getName()+"\n");
             tmp.getCharacter().underAttack(screen.getPlayer().getCharacter());
             screen.getNpcList().put(tmp.getPosition(), tmp);

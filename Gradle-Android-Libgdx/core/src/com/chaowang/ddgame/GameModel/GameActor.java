@@ -21,6 +21,16 @@ public class GameActor implements Json.Serializable {
 
     /**
      * constructor
+     */
+    public GameActor(){
+        this.position = new Vector2();
+        this.character = new Character();
+        bound = new Rectangle(position.x, position.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
+    }
+
+    
+    /**
+     * constructor
      * @param position  position of  player
      * @param character different types of character
      */
@@ -109,11 +119,27 @@ public class GameActor implements Json.Serializable {
     @Override
     public void read(Json json, JsonValue jsonData) {
         String context;
-        context = jsonData.child.asString();
-        position = json.fromJson(Vector2.class, context);
-        context = jsonData.child.next.asString();
-        bound = json.fromJson(Rectangle.class, context);
-        context = jsonData.child.next.next.asString();
-        character = json.fromJson(Character.class, context);
+        context = jsonData.child.toString();
+        if(context.contains("{")){
+            context = context.substring(context.indexOf("{")-1);
+            position = json.fromJson(Vector2.class, context);
+            context = jsonData.child.next.toString();
+            context = context.substring(context.indexOf("{")-1);
+            bound = json.fromJson(Rectangle.class, context);
+            context = jsonData.child.next.next.toString();
+            context = context.substring(context.indexOf("{")-1);
+            character = json.fromJson(Character.class, context);
+        } else{
+            context = jsonData.child.next.toString();
+            context = context.substring(context.indexOf("{")-1);
+            position = json.fromJson(Vector2.class, context);
+            context = jsonData.child.next.next.toString();
+            context = context.substring(context.indexOf("{")-1);
+            bound = json.fromJson(Rectangle.class, context);
+            context = jsonData.child.next.next.next.toString();
+            context = context.substring(context.indexOf("{")-1);
+            character = json.fromJson(Character.class, context);
+        }
+
     }
 }

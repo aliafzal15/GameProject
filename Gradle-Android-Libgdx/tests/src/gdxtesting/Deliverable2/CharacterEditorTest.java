@@ -31,8 +31,8 @@ public class CharacterEditorTest {
      */
     @Before public void createCharacterSet(){
         character = new Character();
-        item1 = new Item(Item.ItemType.ARMOR, "lowLevel", 1, EnchantedAbility.ARMORCLASS);
-        item2 = new Item(Item.ItemType.ARMOR, "highLevel", 2, EnchantedAbility.ARMORCLASS);
+        item1 = new Item(Item.ItemType.ARMOR, "lowLevel", 1, EnchantedAbility.ARMORCLASS, null);
+        item2 = new Item(Item.ItemType.ARMOR, "highLevel", 2, EnchantedAbility.ARMORCLASS, null);
         controller = new EquipmentController(character);
     }
 

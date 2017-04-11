@@ -3,7 +3,6 @@ package com.chaowang.ddgame.GameView;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,12 +24,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
+import com.chaowang.ddgame.util.IntVector2Pair;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
 import com.chaowang.ddgame.GameController.PlayerEditorController;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
 /**
  * view for editor screen
@@ -50,8 +51,8 @@ public class GamePlayerEditorScreen implements Screen{
     private Player player;
     private Map mapModel;
     private Campaign campaign;
-    private HashMap<Vector2, GameActor> npcList;
-    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
+    private HashMap<Vector2, NPC> npcList;
+    private LinkedList<IntVector2Pair> playOrderList;
     private PlayerEditorController controller;
     private Label backpackItemInfoLabel;
     
@@ -69,7 +70,7 @@ public class GamePlayerEditorScreen implements Screen{
      * @param game
      * @param npcList 
      */
-    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, HashMap<Vector2, GameActor> npcList, LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrdeList , boolean isUserPlay) {
+    public GamePlayerEditorScreen (Game game, Player player, Map map, Campaign camp, HashMap<Vector2, NPC> npcList, LinkedList<IntVector2Pair> playOrdeList , boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
@@ -78,7 +79,8 @@ public class GamePlayerEditorScreen implements Screen{
         this.playOrderList = playOrdeList;
         this.isUserPlay = isUserPlay;
     }
-    /**
+
+	/**
      * show whole equipment editor on screen
      */
     @Override

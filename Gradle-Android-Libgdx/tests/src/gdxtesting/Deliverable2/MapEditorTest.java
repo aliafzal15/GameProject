@@ -41,7 +41,7 @@ public class MapEditorTest {
      */
     @Before public void createMapSet(){
         map = new Map(1,4,"name",new EntryDoor(new Vector2(0,0)), new ExitDoor(new Vector2(2,2)));
-		item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS);
+		item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS, null);
         character = new Character();
         mapMatrix = new int[map.getSize()][map.getSize()];
         buildLocationMatrix();

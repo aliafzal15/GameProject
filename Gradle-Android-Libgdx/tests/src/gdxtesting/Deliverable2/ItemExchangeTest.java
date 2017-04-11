@@ -44,11 +44,11 @@ public class ItemExchangeTest {
     @Before
     public void beforeGameTest(){
         // create item
-        item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS);
+        item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS, null);
         // create character
         character = new Character();
         character.setAbilities(new int[] {5,5,5,5,5,5});
-        character.setLevel(1);
+        character.changeLevel(1);
         character.addToBackpack(item);
         character.loadEquipment(item);
         // create map

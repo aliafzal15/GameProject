@@ -20,9 +20,9 @@ public class ComputerPlayerStrategy implements Strategy{
 
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator, enemyIterator ;
-    private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
+    private Iterator<Map.Entry<Vector2,NPC>> entrySetIterator;
     private Vector2 enemyPointer, cur;
-    private Map.Entry<Vector2,GameActor> entry;
+    private Map.Entry<Vector2,NPC> entry;
     /**
      * construct
      * @param gameScreen
@@ -78,11 +78,11 @@ public class ComputerPlayerStrategy implements Strategy{
 //        entrySetIterator = screen.getNpcList().entrySet().iterator();
 //        while(entrySetIterator.hasNext()){
 //            entry = entrySetIterator.next();
-//            entry.getValue().getCharacter().draw(screen.getBatch(), entry.getKey(), ((NPC)entry.getValue()).isFriendly());
+//            entry.getValue().getCharacter().draw(screen.getBatch(), entry.getKey(), (entry.getValue()).isFriendly());
 //            if(screen.getPlayer().getBound().overlaps(entry.getValue().getBound()) ){
 //                screen.getPlayerController().reAdjust(5);
 //                screen.setHitObject(true);
-//                if(!((NPC)entry.getValue()).isFriendly() && entry.getValue().getCharacter().isDead()){
+//                if(!(entry.getValue()).isFriendly() && entry.getValue().getCharacter().isDead()){
 //                    screen.getPlayerController().teleport(0, -8);
 //                }
 //            }
@@ -91,11 +91,11 @@ public class ComputerPlayerStrategy implements Strategy{
         keySetIterator = screen.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, ((NPC)screen.getNpcList().get(cur)).isFriendly());
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly());
             if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
-                if(!((NPC)screen.getNpcList().get(cur)).isFriendly() && screen.getNpcList().get(cur).getCharacter().isDead()){
+                if(!(screen.getNpcList().get(cur)).isFriendly() && screen.getNpcList().get(cur).getCharacter().isDead()){
                         screen.getPlayerController().teleport(0, -8);
                 }
             }
@@ -157,7 +157,7 @@ public class ComputerPlayerStrategy implements Strategy{
 
         if(screen.getPlayerController().findEnemyInAttackRange()!=null && screen.getPlayerController().isAbleToAttack()){
             enemyPointer = screen.getPlayerController().findEnemyInAttackRange();
-            GameActor tmp= screen.getNpcList().remove(enemyPointer);
+            NPC tmp= screen.getNpcList().remove(enemyPointer);
             MainMenuScreen.logArea.appendText("you are attacking "+ tmp.getCharacter().getName()+"\n");
             tmp.getCharacter().underAttack(screen.getPlayer().getCharacter());
             screen.getNpcList().put(tmp.getPosition(), tmp);

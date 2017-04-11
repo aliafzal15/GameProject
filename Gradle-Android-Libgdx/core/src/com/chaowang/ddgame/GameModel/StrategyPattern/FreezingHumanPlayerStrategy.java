@@ -71,11 +71,11 @@ public class FreezingHumanPlayerStrategy implements Strategy{
 
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, ((NPC)screen.getNpcList().get(cur)).isFriendly());
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly());
             if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
-                if(!((NPC)screen.getNpcList().get(cur)).isFriendly()){
+                if(!(screen.getNpcList().get(cur)).isFriendly()){
                     if(screen.getNpcList().get(cur).getCharacter().isDead()){
                         screen.getGame().setScreen(new GameItemExchangeScreen(screen.getGame(),screen.getPlayer(),screen.getMapModel(),screen.getCampaign(), cur, screen.getNpcList(), screen.getplayOrderList() ,screen.isUserPlay()));
                     }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Queue;
 
@@ -16,6 +15,25 @@ import java.util.Queue;
 public class NPC extends GameActor implements Json.Serializable{
 
     private boolean isFriendly;
+    
+    /**
+     * construct
+     * @param position
+     * @param character
+     * @param isFriendly
+     */
+    public NPC() {
+        super();
+        this.isFriendly = true;
+        if(isFriendly){
+            this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 3;
+            this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 3;
+        } else{
+            this.bound.width = PublicParameter.MAP_PIXEL_SIZE  / 2;
+            this.bound.height = PublicParameter.MAP_PIXEL_SIZE  / 2;
+        }
+    }
+    
     /**
      * construct
      * @param position
@@ -86,6 +104,12 @@ public class NPC extends GameActor implements Json.Serializable{
     @Override
     public void read(Json json, JsonValue jsonData) {
         super.read(json, jsonData);
-        isFriendly = jsonData.child.next.next.next.asBoolean();
+        isFriendly = jsonData.child.next.next.next.next.asBoolean();
+    }
+    
+    @Override
+    public String toString(){
+		return this.position.toString()+"|"+this.bound.toString()+"|"+this.character.toString()+"|isFriendly:"+isFriendly;
+    	
     }
 }

@@ -19,7 +19,7 @@ public class AggressiveNPCStrategy implements Strategy {
 	private GameScreen screen;
     private Iterator<Vector2> keySetIterator ;
     private Vector2 npcPointer;
-    private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
+    private Iterator<Map.Entry<Vector2,NPC>> entrySetIterator;
     private Map.Entry<Vector2,GameActor> entry;
 
     /**
@@ -107,7 +107,7 @@ public class AggressiveNPCStrategy implements Strategy {
                 screen.startNextRound();
             } else if(screen.getNpcController().findNPCtoAttack() != null && screen.getNpcController().isAbleToAttack() ){
                 npcPointer = screen.getNpcController().findNPCtoAttack();
-                GameActor tmp= screen.getNpcList().remove(npcPointer);
+                NPC tmp= screen.getNpcList().remove(npcPointer);
                 tmp.getCharacter().underAttack(screen.getNpcController().getNpc().getCharacter());
                 ((NPC)tmp).setFriendly(false);
                 screen.getNpcList().put(tmp.getPosition(), tmp);

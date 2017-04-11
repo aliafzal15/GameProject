@@ -47,8 +47,7 @@ public class PlayerController{
     private Iterator<Vector2> keySetIterator, enemyIterator ;
     private Vector2 cur, enemyPointer;
     private Vector3 touch;
-    private Map.Entry<Vector2,GameActor> entry;
-    private Iterator<Map.Entry<Vector2,GameActor>> entrySetIterator;
+
 
 
     /**

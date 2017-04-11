@@ -2,6 +2,7 @@ package com.chaowang.ddgame.GameView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.AbstractMap.SimpleEntry;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -24,7 +25,9 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.GameController.ItemExchangeController;
 import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
+import com.chaowang.ddgame.util.IntVector2Pair;
 import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 
@@ -48,8 +51,8 @@ public class GameItemExchangeScreen implements Screen{
     private Vector2 NPCposition;
     private Map mapModel;
     private Campaign campaign;
-    private HashMap<Vector2, GameActor> npcList;
-    private LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList;
+    private HashMap<Vector2, NPC> npcList;
+    private LinkedList<IntVector2Pair> playOrderList;
     private ItemExchangeController controller;
     public Label NPCItemInfoLabel, backpackItemInfoLabel;
     private boolean isUserPlay;
@@ -58,14 +61,28 @@ public class GameItemExchangeScreen implements Screen{
      * constructor
      * @param game
      */
-    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, HashMap<Vector2, GameActor> npcList, LinkedList<java.util.Map.Entry<Integer,Vector2>> playOrderList, boolean isUserPlay) {
+    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, HashMap<Vector2, NPC> npcList, LinkedList<IntVector2Pair> linkedList, boolean isUserPlay) {
         this.game = game;
         this.player = player;
         this.mapModel = map;
         this.campaign = camp;
         this.NPCposition = NPCposition;
         this.npcList = npcList;
-        this.playOrderList = playOrderList;
+        this.playOrderList = linkedList;
+        this.NPCcharacter = this.npcList.get(NPCposition).getCharacter();
+        this.isUserPlay = isUserPlay;
+    }
+    
+    /**
+     * constructor
+     * @param game
+     */
+    public GameItemExchangeScreen (Game game, Player player, Map map, Campaign camp, Vector2 NPCposition, boolean isUserPlay) {
+        this.game = game;
+        this.player = player;
+        this.mapModel = map;
+        this.campaign = camp;
+        this.NPCposition = NPCposition;
         this.NPCcharacter = this.npcList.get(NPCposition).getCharacter();
         this.isUserPlay = isUserPlay;
     }

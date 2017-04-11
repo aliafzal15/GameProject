@@ -27,7 +27,7 @@ public class ItemEditorTest {
 	 * Initialize item with certain type, value
 	 */
 	@Before public void createItemSet(){
-		 item = new Item(Item.ItemType.HELMET, "unitTest", 1, EnchantedAbility.ARMORCLASS);
+		 item = new Item(Item.ItemType.HELMET, "unitTest", 1, EnchantedAbility.ARMORCLASS, null);
 	}
 
 	/**

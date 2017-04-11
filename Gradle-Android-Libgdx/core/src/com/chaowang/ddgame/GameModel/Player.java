@@ -31,6 +31,27 @@ public class Player extends GameActor implements Json.Serializable{
      * @param position  position of  player
      * @param character different types of character
      */
+    public Player(){
+    	super();
+        playerTexture = new Texture(Gdx.files.internal("arshes.png"));
+        TextureRegion[][] tmp = TextureRegion.split(playerTexture,playerTexture.getWidth() / COL ,playerTexture.getHeight() / ROW);
+        frames = new TextureRegion[COL * ROW];
+        int index = 0;
+        for (int i = 0; i < ROW; i++){
+            for (int j = 0; j < COL; j++){
+                frames[index++]= tmp[i][j];
+            }
+        }
+        animation = new Animation(1, frames);
+        currentFrame = (TextureRegion) animation.getKeyFrame(0);
+        bound = new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+    }
+    
+    /**
+     * constructor
+     * @param position  position of  player
+     * @param character different types of character
+     */
     public Player(Vector2 position, Character character){
         super(position,character);
         playerTexture = new Texture(Gdx.files.internal("arshes.png"));

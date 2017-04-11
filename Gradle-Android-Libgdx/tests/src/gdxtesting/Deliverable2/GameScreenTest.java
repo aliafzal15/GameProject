@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 public class GameScreenTest {
     private Map map;
     private Item item;
-    private Character character;
+    private Character character1, character2;
     private int[][] mapMatrix;
     private MapController controller;
     private Player player;
@@ -45,27 +45,30 @@ public class GameScreenTest {
     @Before
     public void beforeGameTest(){
         // create item
-        item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS);
+        item = new Item(Item.ItemType.ARMOR, "unitTest", 1, EnchantedAbility.ARMORCLASS, null);
         // create character
-        character = new Character();
-        character.setAbilities(new int[] {5,5,5,5,5,5});
-        character.setLevel(1);
-        character.addToBackpack(item);
-        character.loadEquipment(item);
+        character1 = new Character();
+        character1.setAbilities(new int[] {5,5,5,5,5,5});
+        character1.changeLevel(1);
+        character1.addToBackpack(item);
+        character1.loadEquipment(item);
+        character2 = new Character();
+        character2.setAbilities(new int[] {5,5,5,5,5,5});
+        character2.changeLevel(1);
         // create map
         map = new Map(1,4,"name",new EntryDoor(new Vector2(0,0)), new ExitDoor(new Vector2(2,2)));
         mapMatrix = new int[map.getSize()][map.getSize()];
         buildLocationMatrix();
         map.setLocationMatrix(mapMatrix);
-        map.addFriendLocationList(3,3,character);
-        map.addEnemyLocationList(2,3,character);
+        map.addFriendLocationList(3,3,character1);
+        map.addEnemyLocationList(2,3,character2);
         map.addItemLocationList(1,3, item);
         //create campaign;
         campaign = new Campaign();
         campaign.addToCampaign(map);
         campaign.addToCampaign(map);
         // create player
-        player  = new Player(new Vector2(1f, 1f),character);
+        player  = new Player(new Vector2(1f, 1f),character1);
     }
 
     /**
@@ -101,7 +104,7 @@ public class GameScreenTest {
     public void testEnemyUnderAttack(){
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
         int preHP = map.getEnemyLocationList().get(enemyPosition).getHitPoints();
-        map.getEnemyLocationList().get(enemyPosition).underAttack();
+        map.getEnemyLocationList().get(enemyPosition).underAttack(character1);
         assertTrue("Hp does not reduce while under attack",  map.getEnemyLocationList().get(enemyPosition).getHitPoints() < preHP );
     }
 
@@ -143,7 +146,7 @@ public class GameScreenTest {
     @Test
     public void testEnemyLevelUp(){
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
-        map.getEnemyLocationList().get(enemyPosition).setLevel(5);
+        map.getEnemyLocationList().get(enemyPosition).changeLevel(5);
         assertTrue(player.getCharacter().getLevel() == 5
                 && player.getCharacter().getEquipment().get(Item.ItemType.ARMOR).getLevel() == 2);
     }
@@ -177,7 +180,7 @@ public class GameScreenTest {
     public void testLoadNewMap(){
         player.getCharacter().promoteUp();
         Game game = new DDGame();
-        GameScreen screen = new GameScreen(game, player, map);
+        GameScreen screen = new GameScreen(game, player.getCharacter(), map, campaign, false);
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
         System.out.println(player.getCharacter().getLevel());
         System.out.println(screen.getMapModel().getEnemyLocationList().get(enemyPosition).getLevel());
