@@ -10,7 +10,9 @@ import com.chaowang.ddgame.PublicParameter;
 import java.util.Queue;
 
 /**
- * Created by Chao on 06/04/2017.
+ * NPC Transition
+ * @author chao wang
+ * @version 3.0
  */
 public class NPC extends GameActor implements Json.Serializable{
 
@@ -94,19 +96,25 @@ public class NPC extends GameActor implements Json.Serializable{
             bound.set(position.x, position.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
         }
     }
-
+    /**
+     * write file
+     */
     @Override
     public void write(Json json) {
         super.write(json);
         json.writeValue("IsFriendly", isFriendly);
     }
-
+    /**
+     * read file
+     */
     @Override
     public void read(Json json, JsonValue jsonData) {
         super.read(json, jsonData);
         isFriendly = jsonData.child.next.next.next.next.asBoolean();
     }
-    
+    /**
+     * convert to String type
+     */
     @Override
     public String toString(){
 		return this.position.toString()+"|"+this.bound.toString()+"|"+this.character.toString()+"|isFriendly:"+isFriendly;

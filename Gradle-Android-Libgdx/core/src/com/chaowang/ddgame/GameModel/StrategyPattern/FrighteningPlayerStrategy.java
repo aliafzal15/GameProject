@@ -11,6 +11,11 @@ import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
+/**
+ * strategy pattern for Frightening Player
+ * @author chao wang
+ * @version 3.0
+ */
 public class FrighteningPlayerStrategy implements Strategy{
 
 	private GameScreen screen;

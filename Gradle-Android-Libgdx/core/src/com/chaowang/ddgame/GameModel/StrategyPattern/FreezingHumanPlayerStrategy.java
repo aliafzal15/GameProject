@@ -12,6 +12,11 @@ import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
+/**
+ * strategy pattern for Freezing Human Player
+ * @author chao wang
+ * @version 3.0
+ */
 public class FreezingHumanPlayerStrategy implements Strategy{
 
 

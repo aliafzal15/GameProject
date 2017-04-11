@@ -9,6 +9,11 @@ import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuModel.MapModel.Wall;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
+/**
+ * strategy pattern for Frightening NPC
+ * @author chao wang
+ * @version 3.0
+ */
 public class FrighteningNPCStrategy implements Strategy {
 
 

@@ -2,18 +2,19 @@ package com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern;
 
 import java.util.Stack;
 
-
-
 /**
- * Created by Chao on 09/04/2017.
+ * Item model for WeaponDecotrator Freezing
+ * @author chao wang
+ * @version 3.0
  */
-
 public class Freezing extends WeaponDecotrator {
 
     public Freezing(WeaponSpecialEnchantment decoratedWeapon) {
         super(decoratedWeapon);
     }
-
+    /**
+     * get Enchantment
+     */
     @Override
     public Stack<WeaponEnchantement> getEnchantment() {
     	Stack<WeaponEnchantement> tmp = super.getEnchantment();

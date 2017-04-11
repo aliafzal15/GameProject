@@ -9,9 +9,10 @@ import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.PublicParameter;
 
 /**
- * Created by Chao on 06/04/2017.
+ * GameActor Transition
+ * @author chao wang
+ * @version 3.0
  */
-
 public class GameActor implements Json.Serializable {
 
     Vector2 position;
@@ -47,7 +48,10 @@ public class GameActor implements Json.Serializable {
     public Vector2 getPosition() {
         return position;
     }
-
+    /**
+     * set player's position
+     * @param position
+     */
     public void setPosition(Vector2 position) {
         this.position = position;
         bound.set(position.x, position.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
@@ -108,14 +112,18 @@ public class GameActor implements Json.Serializable {
     public void updateDialogueStage(float delta){
         this.strategy.updateDialogueStage(delta);
     }
-
+    /**
+     * write file
+     */
     @Override
     public void write(Json json) {
         json.writeValue("Position", position);
         json.writeValue("Bound", bound);
         json.writeValue("Character", character);
     }
-
+    /**
+     * read file
+     */
     @Override
     public void read(Json json, JsonValue jsonData) {
         String context;

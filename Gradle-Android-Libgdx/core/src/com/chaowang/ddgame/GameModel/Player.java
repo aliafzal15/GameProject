@@ -123,7 +123,10 @@ public class Player extends GameActor implements Json.Serializable{
     public void setPlayerTexture(Texture playerTexture) {
         this.playerTexture = playerTexture;
     }
-
+    /**
+     * change the Facing Direction in screen
+     * @param target
+     */
     public void changeFacingDirection(Vector2 target){
         if(target.x > position.x && target.y > position.y){
             if( (target.x - position.x) < (target.y - position.y)){
@@ -151,12 +154,16 @@ public class Player extends GameActor implements Json.Serializable{
             }
         }
     }
-
+    /**
+     * write file
+     */
     @Override
     public void write(Json json) {
         super.write(json);
     }
-
+    /**
+     * read file
+     */
     @Override
     public void read(Json json, JsonValue jsonData) {
         super.read(json, jsonData);

@@ -14,36 +14,53 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
- * Created by Chao on 09/04/2017.
+ * Model for game weapon
+ * @author chao wang
+ * @version 3.0
  */
-
 public class WeaponModel {
 
     private WeaponType weaponType;
     private WeaponSpecialEnchantment weaponEnchantment;
-
+    /**
+     * constructor
+     */
     public WeaponModel(){
         this(WeaponType.MELEE);
     }
-
+    /**
+     * constructor
+     */
     public WeaponModel(WeaponType weaponType) {
         this.weaponType = weaponType;
         weaponEnchantment = new PlainWeapon();
     }
-
+    /**
+     * get the type of weapon
+     * @return
+     */
     public WeaponType getWeaponType() {
         return weaponType;
     }
-
+    /**
+     * set the type of weapon
+     * @param weaponType
+     */
     public void setWeaponType(WeaponType weaponType) {
         this.weaponType = weaponType;
     }
 
-
+    /**
+     * get Weapon Enchantment value
+     * @return
+     */
     public Stack<WeaponSpecialEnchantment.WeaponEnchantement> getWeaponEnchantment() {
         return weaponEnchantment.getEnchantment();
     }
-
+    /**
+     * get Weapon EnhantmentEqu status
+     * @return
+     */
     public boolean[] getWeaponEnhantmentEqu(){
         boolean [] equivalentBoolArr = new boolean[WeaponSpecialEnchantment.WeaponEnchantement.values().length];
         Iterator<WeaponSpecialEnchantment.WeaponEnchantement> iter = weaponEnchantment.getEnchantment().iterator();
@@ -53,7 +70,10 @@ public class WeaponModel {
         }
         return equivalentBoolArr;
     }
-
+    /**
+     * add Weapon Enchantment
+     * @param arr
+     */
     public void addWeaponEnchantment(boolean[] arr){
         weaponEnchantment = new PlainWeapon();
         if(arr[0] ){
@@ -72,7 +92,9 @@ public class WeaponModel {
             weaponEnchantment = new Slaying(weaponEnchantment);
         }
     }
-
+    /**
+     * convert to type String
+     */
     @Override
     public String toString() {
         return this.weaponType.toString()+" " + Arrays.toString(this.getWeaponEnchantment().toArray());

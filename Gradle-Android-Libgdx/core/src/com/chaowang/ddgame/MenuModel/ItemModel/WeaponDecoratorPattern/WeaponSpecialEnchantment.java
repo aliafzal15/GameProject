@@ -3,9 +3,10 @@ package com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern;
 import java.util.Stack;
 
 /**
- * Created by Chao on 09/04/2017.
+ * Item model for Weapon Special Enchantment
+ * @author chao wang
+ * @version 3.0
  */
-
 public abstract class WeaponSpecialEnchantment {
 
     //Stack<WeaponEnchantement> enchantmentStack;

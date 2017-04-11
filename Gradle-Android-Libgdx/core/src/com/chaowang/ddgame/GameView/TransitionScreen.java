@@ -9,7 +9,9 @@ import com.chaowang.ddgame.GameModel.Transition.Transition;
 import com.chaowang.ddgame.GameUtl.AbstractScreen;
 
 /**
- * Created by Chao on 25/03/2017.
+ * Game view for Transition Screen
+ * @author chao wang
+ * @version 3.0
  */
 public class TransitionScreen extends AbstractScreen {
 
