@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel.WeaponType;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.GameModel.Player;
@@ -73,13 +74,13 @@ public class NPCcontroller {
     public void walkInSquarePattern(){
 
         if(prevMovement.equals("up")){  //walk to left
-    		friendlyWalkTo(this.npc.getPosition().x - PublicParameter.GAME_PIXEL_SIZE* 3f, this.npc.getPosition().y);
+    		friendlyWalkTo(this.npc.getPosition().x - PublicParameter.GAME_PIXEL_SIZE* PublicParameter.MAX_WALKING_CELL, this.npc.getPosition().y);
     	} else if(prevMovement.equals("left")){ //walk down
     		friendlyWalkTo(this.npc.getPosition().x , this.npc.getPosition().y - PublicParameter.GAME_PIXEL_SIZE* 3f);
     	} else if(prevMovement.equals("down")){  // walk to right
-    		friendlyWalkTo(this.npc.getPosition().x + PublicParameter.GAME_PIXEL_SIZE* 3f, this.npc.getPosition().y);
+    		friendlyWalkTo(this.npc.getPosition().x + PublicParameter.GAME_PIXEL_SIZE* PublicParameter.MAX_WALKING_CELL, this.npc.getPosition().y);
     	} else if(prevMovement.equals("right")){  //walk up
-    		friendlyWalkTo(this.npc.getPosition().x , this.npc.getPosition().y + PublicParameter.GAME_PIXEL_SIZE* 3f);
+    		friendlyWalkTo(this.npc.getPosition().x , this.npc.getPosition().y + PublicParameter.GAME_PIXEL_SIZE* PublicParameter.MAX_WALKING_CELL);
     	}
     }
     /**
@@ -93,7 +94,7 @@ public class NPCcontroller {
 //			isStartToMove=true;
 //        }
     	if(isStartToMove){     	// moving and terminate move
-    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
+    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*PublicParameter.MAX_WALKING_CELL ){
                 if(x < npc.getPosition().x){
                 	prevMovement = "left";
                 } else if(y < npc.getPosition().y){
@@ -122,7 +123,7 @@ public class NPCcontroller {
 
     	if(isStartToMove){
             // moving and terminate move
-            if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
+            if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*PublicParameter.MAX_WALKING_CELL){
                 isStartToMove=false;
                 ableToAttack = true;
                 positionBeforeMove.set(npc.getPosition());
@@ -221,9 +222,9 @@ public class NPCcontroller {
 	 * @return
 	 */
 	public boolean findPlayerToAttack() {
-		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
-        meleeAttackRangeX.set(npc.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , npc.getBound().height);
-        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
+		rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE * WeaponType.getAttackRange(WeaponType.RANGE));
+        meleeAttackRangeX.set(npc.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * WeaponType.getAttackRange(WeaponType.MELEE)+1) , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, npc.getPosition().y - WeaponType.getAttackRange(WeaponType.MELEE) * npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * WeaponType.getAttackRange(WeaponType.MELEE)+1));
 
         if(npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON) !=null
             && npc.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
@@ -246,9 +247,9 @@ public class NPCcontroller {
 	 * @return
 	 */
 	public Vector2 findNPCtoAttack() {
-        rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*PublicParameter.RANGE_WEAPON_ATTACK_CELL);
-        meleeAttackRangeX.set(npc.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , npc.getBound().height);
-        meleeAttackRangeY.set(npc.getPosition().x, PublicParameter.MELEE_WEAPON_ATTACK_CELL * npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
+        rangeAttackrange.set(npc.getPosition().x + npc.getBound().width /2, npc.getPosition().y + npc.getBound().height / 2, PublicParameter.GAME_PIXEL_SIZE*WeaponType.getAttackRange(WeaponType.RANGE));
+        meleeAttackRangeX.set(npc.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * npc.getBound().width, npc.getPosition().y, npc.getBound().width *(2 * WeaponType.getAttackRange(WeaponType.MELEE)+1) , npc.getBound().height);
+        meleeAttackRangeY.set(npc.getPosition().x, WeaponType.getAttackRange(WeaponType.MELEE) * npc.getPosition().y - npc.getBound().height, npc.getBound().width, npc.getBound().height * (2 * WeaponType.getAttackRange(WeaponType.MELEE)+1));
 
         npcIterator = gameScreen.getNpcList().keySet().iterator();
         while(npcIterator.hasNext()){

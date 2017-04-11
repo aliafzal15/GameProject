@@ -22,7 +22,6 @@ import com.chaowang.ddgame.MenuModel.MapModel.Map;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
-import com.chaowang.ddgame.PublicParameter;
 
 import java.util.Iterator;
 import java.util.Map.Entry;

@@ -17,6 +17,7 @@ import com.chaowang.ddgame.GameModel.GameActor;
 import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel.WeaponType;
 import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameModel.Player;
@@ -87,7 +88,7 @@ public class PlayerController{
     		isStartToMove=true;
     		decideToStop = false;
     	}else{             // moving and terminate move
-            if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ||  //player.getPosition().dst(positionBeforeMove)
+            if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE* PublicParameter.MAX_WALKING_CELL ||  //player.getPosition().dst(positionBeforeMove)
     				decideToStop){
                 isStartToMove=false;
 //                decideToStop = false;
@@ -122,7 +123,7 @@ public class PlayerController{
 //			isStartToMove=true;
 //        }
     	if(isStartToMove){ //    	moving and terminate move
-    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*3 ){
+    		if(walkingDistance > PublicParameter.GAME_PIXEL_SIZE*PublicParameter.MAX_WALKING_CELL ){
                 isStartToMove=false;
                 ableToAttack = true;
                 positionBeforeMove.set(player.getPosition());
@@ -291,8 +292,8 @@ public class PlayerController{
     }
 
     public void meleeAttackEnemy(){
-        meleeAttackRangeX.set(player.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().width, player.getPosition().y, player.getBound().width *(2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1), player.getBound().height);
-        meleeAttackRangeY.set(player.getPosition().x, PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
+        meleeAttackRangeX.set(player.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * player.getBound().width, player.getPosition().y, player.getBound().width *(2 * WeaponType.getAttackRange(WeaponType.MELEE)+1), player.getBound().height);
+        meleeAttackRangeY.set(player.getPosition().x, WeaponType.getAttackRange(WeaponType.MELEE) * player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * (2 * WeaponType.getAttackRange(WeaponType.MELEE) +1));
 
         if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
                 &&(meleeAttackRangeX.overlaps(view.getNpcList().get(enemyPointer).getBound())
@@ -322,7 +323,7 @@ public class PlayerController{
     }
 
     public void rangeAttackEnemy(){
-        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
+        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * WeaponType.getAttackRange(WeaponType.RANGE));
 
         if(!((NPC)view.getNpcList().get(enemyPointer)).isFriendly()
                 && rangeAttackrange.contains(enemyPointer.x + view.getNpcList().get(enemyPointer).getBound().width /2, enemyPointer.y + view.getNpcList().get(enemyPointer).getBound().height /2)
@@ -351,9 +352,9 @@ public class PlayerController{
     }
 
     public Vector2 findEnemyInAttackRange() {
-        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.RANGE_WEAPON_ATTACK_CELL);
-        meleeAttackRangeX.set(player.getPosition().x - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().width, player.getPosition().y, player.getBound().width * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1) , player.getBound().height);
-        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - PublicParameter.MELEE_WEAPON_ATTACK_CELL * player.getBound().height, player.getBound().width, player.getBound().height * (2 * PublicParameter.MELEE_WEAPON_ATTACK_CELL+1));
+        rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * WeaponType.getAttackRange(WeaponType.RANGE));
+        meleeAttackRangeX.set(player.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * player.getBound().width, player.getPosition().y, player.getBound().width * (2 * WeaponType.getAttackRange(WeaponType.MELEE)+1) , player.getBound().height);
+        meleeAttackRangeY.set(player.getPosition().x, player.getPosition().y - WeaponType.getAttackRange(WeaponType.MELEE) * player.getBound().height, player.getBound().width, player.getBound().height * (2 * WeaponType.getAttackRange(WeaponType.MELEE)+1));
 
         keySetIterator = view.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
@@ -438,7 +439,7 @@ public class PlayerController{
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		shapeRenderer.setProjectionMatrix(view.getCam().combined);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.circle(center.x + player.getBound().width / 2 , center.y + player.getBound().height  /2, PublicParameter.GAME_PIXEL_SIZE*3);
+		shapeRenderer.circle(center.x + player.getBound().width / 2 , center.y + player.getBound().height  /2, PublicParameter.GAME_PIXEL_SIZE * PublicParameter.MAX_WALKING_CELL);
 		shapeRenderer.setColor(new Color(0, 1, 0, 0.1f));
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);

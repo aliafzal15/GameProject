@@ -1,5 +1,6 @@
 package com.chaowang.ddgame.MenuModel.ItemModel;
 
+import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.Buring;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.Freezing;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.Frightening;
@@ -81,7 +82,7 @@ public class WeaponModel {
 
     public enum WeaponType {
 
-        MELEE(0, 1), RANGE(1, 1);
+        MELEE(0, PublicParameter.MELEE_WEAPON_ATTACK_CELL), RANGE(1, PublicParameter.RANGE_WEAPON_ATTACK_CELL);
         int index;
         int attackRange;
         /**
@@ -104,8 +105,8 @@ public class WeaponModel {
          * get the index of the specific EnchantedAbility
          * @return the index of the specific EnchantedAbility
          */
-        public int getAttackRange(){
-            return attackRange;
+        public static int getAttackRange(WeaponType type){
+            return type.attackRange;
         }
 
         /**

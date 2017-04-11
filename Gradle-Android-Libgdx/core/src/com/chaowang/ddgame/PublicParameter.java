@@ -24,7 +24,7 @@ public interface PublicParameter {
     int MAP_CELL_WIDTH = Gdx.graphics.getHeight() * 7 / 8 / ITEM_INVENTORY_ROW;
     int MAP_CELL_HEIGHT = Gdx.graphics.getHeight() * 3 / 8 / ITEM_INVENTORY_COLUMN;
     int Campaign_INVENTORY_SIZE = 6;
-    int BURING_TURNS = 5, RANGE_WEAPON_ATTACK_CELL=2, MELEE_WEAPON_ATTACK_CELL=1;
+    int BURING_TURNS = 5, RANGE_WEAPON_ATTACK_CELL=2, MELEE_WEAPON_ATTACK_CELL=1, MAX_WALKING_CELL =3;
 
     // for tutorial testing
     int TILE_SIZE = 16;
