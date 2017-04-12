@@ -26,6 +26,7 @@ import java.util.Observable;
 
 import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 import com.chaowang.ddgame.MenuModel.RacesModel.Race.RaceType;
+import com.chaowang.ddgame.util.Blinker;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -63,6 +64,7 @@ public class Character extends Observable implements Json.Serializable{
 
 	private int[] weaponEnchantmentInfection;
 
+	private Blinker blinker;
     /**
      * constructor for the class
      */
@@ -102,6 +104,7 @@ public class Character extends Observable implements Json.Serializable{
         updateTexture(raceType);
         friendlyTexture = new Texture(Gdx.files.internal("map/friend1.png"));
 		this.isDead = false;
+		blinker = new Blinker();
     }
 
 	/**
@@ -134,7 +137,8 @@ public class Character extends Observable implements Json.Serializable{
         this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+3]);
 		abilityBonusArr = new int[Abilities.ABILITYSIZE];
 		System.arraycopy(abilityBonus, 0, abilityBonusArr, 0, abilityBonus.length );
-    }
+		blinker = new Blinker();
+	}
     /**
      * 
      * @param name the name of the character
@@ -217,6 +221,7 @@ public class Character extends Observable implements Json.Serializable{
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]= 1;
 				}
 			}
+			blinker.setBlinking(true);
 		} else{
 			makeDead();
 		}
@@ -951,12 +956,14 @@ public class Character extends Observable implements Json.Serializable{
 	 * @param cur  NPC, or player location
 	 * @param isFriendly
 	 */
-	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly) {
-		if(isFriendly == true){
-		   // is friendly NPC use unified image
-	        batch.draw(friendlyTexture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3 );
-		} else{
-	        batch.draw(texture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
+	public void draw(SpriteBatch batch, Vector2 cur, boolean isFriendly, float delta) {
+		if(!blinker.shouldBlink(delta)){
+			if(isFriendly == true){
+				// is friendly NPC use unified image
+				batch.draw(friendlyTexture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 3, PublicParameter.MAP_PIXEL_SIZE  / 3 );
+			} else{
+				batch.draw(texture, cur.x, cur.y, PublicParameter.MAP_PIXEL_SIZE  / 2, PublicParameter.MAP_PIXEL_SIZE  / 2);
+			}
 		}
 	}
 
