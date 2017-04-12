@@ -302,7 +302,7 @@ public class MainMenuScreen implements Screen{
         context = scanner.nextLine();        
         HashMap<String, NPC> tmpMap;
         tmpMap = json.fromJson(HashMap.class, Vector2.class, context);
-        npcList = ConverHMkeyStrToVec2(tmpMap);
+        npcList = ConvertHMkeyStrToVec2(tmpMap);
         
         context = scanner.nextLine();
         playOrderList = json.fromJson(LinkedList.class, context);
@@ -313,7 +313,7 @@ public class MainMenuScreen implements Screen{
     }
     
     
-	public HashMap<Vector2, NPC> ConverHMkeyStrToVec2(HashMap<String, NPC> tmpMap) {
+	public HashMap<Vector2, NPC> ConvertHMkeyStrToVec2(HashMap<String, NPC> tmpMap) {
 		HashMap<Vector2, NPC> hmapReturn = new HashMap<Vector2, NPC>();
         String tmpStr;
         Iterator<String> it = tmpMap.keySet().iterator();

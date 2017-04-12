@@ -1,7 +1,8 @@
-package gdxtesting.Deliverable2;
+package gdxtesting.Deliverable3;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.DDGame;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import gdxtesting.GdxTestRunner;
@@ -103,7 +105,10 @@ public class GameScreenTest {
     @Test
     public void testEnemyUnderAttack(){
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
+        map.getEnemyLocationList().get(enemyPosition).setHitPoints(40);
         int preHP = map.getEnemyLocationList().get(enemyPosition).getHitPoints();
+        character1.setAttackBonus(100);
+        character1.setDamageBonus(20);
         map.getEnemyLocationList().get(enemyPosition).underAttack(character1);
         assertTrue("Hp does not reduce while under attack",  map.getEnemyLocationList().get(enemyPosition).getHitPoints() < preHP );
     }
@@ -126,7 +131,8 @@ public class GameScreenTest {
     public void testPlayerLevelUp(){
         int prevHP = player.getCharacter().getHitPoints();
         player.getCharacter().promoteUp();
-        assertTrue(player.getCharacter().getLevel() == 2
+        player.getCharacter().promoteUp();
+        assertTrue(player.getCharacter().getLevel() == 3
                         && prevHP < player.getCharacter().getHitPoints());
     }
     /**
@@ -146,9 +152,10 @@ public class GameScreenTest {
     @Test
     public void testEnemyLevelUp(){
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
+        map.getEnemyLocationList().get(enemyPosition).loadEquipment(item);
         map.getEnemyLocationList().get(enemyPosition).changeLevel(5);
-        assertTrue(player.getCharacter().getLevel() == 5
-                && player.getCharacter().getEquipment().get(Item.ItemType.ARMOR).getLevel() == 2);
+        assertTrue(map.getEnemyLocationList().get(enemyPosition).getLevel() == 5
+                && map.getEnemyLocationList().get(enemyPosition).getEquipment().get(Item.ItemType.ARMOR).getLevel() == 2);
     }
 
 
@@ -180,11 +187,25 @@ public class GameScreenTest {
     public void testLoadNewMap(){
         player.getCharacter().promoteUp();
         Game game = new DDGame();
-        GameScreen screen = new GameScreen(game, player.getCharacter(), map, campaign, false);
+        GameScreen screen = new GameScreen(game, player, map, campaign, new HashMap<Vector2, NPC>(), false);
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
         System.out.println(player.getCharacter().getLevel());
         System.out.println(screen.getMapModel().getEnemyLocationList().get(enemyPosition).getLevel());
         assertEquals(player.getCharacter().getLevel(), screen.getMapModel().getEnemyLocationList().get(enemyPosition).getLevel());
+    }
+
+    /**
+     * Test if strategy is changing accoridng to good npc or bad npc
+     */
+    @Test
+    public void testNPCStrategy(){
+        HashMap<Vector2,NPC> npcList = new HashMap<Vector2,NPC>();
+        NPC  npc = new NPC(new Vector2(1,1), character2, false);
+        npcList.put(npc.getPosition(),npc);
+        Game game = new DDGame();
+        GameScreen screen = new GameScreen(game, player, map, campaign, npcList, false);
+        screen.setNPCStrategy(npc, screen);
+        assertTrue(npc.getStrategy().getClass().toString().contains("AggressiveNPCStrategy"));
     }
     /**
      * internal use to build location matrix, instead of read from view

@@ -132,7 +132,7 @@ public class GameScreen implements Observer, Screen{
         this.npcList = actorList;
         this.playOrderList = playOrderList2;
         this.isUserPlay = isUserPlay;
-        batch = new SpriteBatch();
+        this.batch = new SpriteBatch();
         this.map = new TmxMapLoader().load("terrain/terrain"+mapModel.getSize() + "x" + mapModel.getSize() + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(this.map);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -171,6 +171,36 @@ public class GameScreen implements Observer, Screen{
 
         initializeDialogue();
 
+    }
+    /**
+     * constructor for unit test
+     * @param game
+     * @param player
+     * @param map
+     * @param camp
+     * @param actorList
+     */
+    public GameScreen(Game game, Player player,Map map, Campaign camp, HashMap<Vector2, NPC> actorList , boolean isUserPlay){
+        this.game = game;
+        this.player = player;
+        this.mapModel = map;
+        this.campaign = new Campaign(camp);
+        this.npcList = actorList;
+        this.isUserPlay = isUserPlay;
+        isActorPlaying = false;
+        // re adjust player position, if player enter a new map
+        if(player.getPosition().x ==1){
+            if(mapModel.getEntryDoor().y - player.getBound().getHeight() > 0 ){
+                player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                        mapModel.getEntryDoor().y - player.getBound().getHeight()));
+            } else {
+                player.setPosition(new Vector2(mapModel.getEntryDoor().x + mapModel.getEntryDoor().width / 2 - player.getBound().getWidth() /2,
+                        mapModel.getEntryDoor().y +  mapModel.getEntryDoor().getHeight()));
+            }
+        }
+        if(mapModel.getLevel() != player.getCharacter().getLevel()){
+            mapModel.adjustLevel(player.getCharacter().getLevel());
+        }
     }
 
     /**
@@ -236,6 +266,7 @@ public class GameScreen implements Observer, Screen{
         currentRollVectorEntry = playOrderList.poll();
         if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
             playerOrNPC =1;
+            playerController.resetEnemyIterator();
             // ENCHANTMENT effect, burning
             if(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] >10){
                 player.getCharacter().reduceHitPoints(player.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.BURNING.getIndex()] % 10);
@@ -307,11 +338,7 @@ public class GameScreen implements Observer, Screen{
                     npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.PACIFYING.getIndex()] = 0;
                 }
                 // friend or not change strategy
-                if(((NPC)npcPointer).isFriendly()){
-                    npcPointer.setStrategy(new FriendlyNPCStrategy(this));
-                }else{
-                    npcPointer.setStrategy(new AggressiveNPCStrategy(this));
-                }
+                setNPCStrategy(npcPointer, this);
                 // ENCHANTMENT effect, FREEZING
                 if(npcPointer != null && npcPointer.getCharacter().getWeaponEnchantmentInfection()[WeaponSpecialEnchantment.WeaponEnchantement.FREEZING.getIndex()] > 0){
                     npcPointer.setStrategy(new FreezingNPCStategy(this));
@@ -327,6 +354,14 @@ public class GameScreen implements Observer, Screen{
                 npcController.setStartToMove(true);
                 MainMenuScreen.logArea.appendText(npcPointer.getCharacter().getName() + " start to play\n");
             }
+        }
+    }
+
+    public void setNPCStrategy(NPC npc, GameScreen screen) {
+        if(npc.isFriendly()){
+            npc.setStrategy(new FriendlyNPCStrategy(screen));
+        }else{
+            npc.setStrategy(new AggressiveNPCStrategy(screen));
         }
     }
 

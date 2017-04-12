@@ -1,7 +1,8 @@
-package gdxtesting.Deliverable2;
+package gdxtesting.Deliverable3;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.GameModel.NPC;
 import com.chaowang.ddgame.MenuModel.CampaignModel.Campaign;
 import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.DDGame;
@@ -15,10 +16,14 @@ import com.chaowang.ddgame.MenuController.MapController;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameView.GameItemExchangeScreen;
+import com.chaowang.ddgame.util.IntVector2Pair;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import gdxtesting.GdxTestRunner;
 
@@ -77,8 +82,10 @@ public class ItemExchangeTest {
     @Test
     public void testExchangeItem(){
         Game game = new DDGame();
+        HashMap<Vector2,NPC> npcList = new HashMap<Vector2, NPC>();
         Vector2 enemyPosition =  new Vector2(3 * PublicParameter.MAP_PIXEL_SIZE, 2 * PublicParameter.MAP_PIXEL_SIZE);
-        GameItemExchangeScreen screen = new GameItemExchangeScreen(game, player, map, campaign, enemyPosition, false);
+        npcList.put(enemyPosition, new NPC(enemyPosition, character, false));
+        GameItemExchangeScreen screen = new GameItemExchangeScreen(game, player, map, campaign, enemyPosition,npcList, new LinkedList<IntVector2Pair>(), false);
         ItemExchangeController controller = new ItemExchangeController(screen, player, map.getEnemyLocationList().get(enemyPosition));
         Item.ItemType type = player.getCharacter().getBackpack().get( player.getCharacter().getBackpack().size()-1).getItemType();
         controller.exchangeItem(player.getCharacter().getBackpack().size()-1);

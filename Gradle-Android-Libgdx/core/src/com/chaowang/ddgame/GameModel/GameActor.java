@@ -93,6 +93,15 @@ public class GameActor implements Json.Serializable {
     public void setStrategy(Strategy strategy){
         this.strategy = strategy;
     }
+
+    /**
+     * get Strategy
+     * @@return  strategy
+     */
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
     /**
      * execute SetupCamera Stategy
      */

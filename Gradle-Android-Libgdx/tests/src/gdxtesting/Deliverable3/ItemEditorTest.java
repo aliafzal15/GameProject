@@ -1,5 +1,5 @@
 
-package gdxtesting.Deliverable2;
+package gdxtesting.Deliverable3;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

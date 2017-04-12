@@ -184,11 +184,15 @@ public class Character extends Observable implements Json.Serializable{
 	public void underAttack(Character attacker){
 		if(!isDead()){
 			int d20 = Dice.roll(1,20);
-			MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attackBonus) +" attack\n");
-			if( d20 + attackBonus > armorClass){
-				int damage = Math.max(Dice.roll(1,8) + damageBonus, 0);
+			if(MainMenuScreen.logArea !=null){
+				MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attackBonus) +" attack\n");
+			}
+			if( d20 + attacker.getAttackBonus() > armorClass){
+				int damage = Math.max(Dice.roll(1,8) + attacker.getDamageBonus(), 0);
 				this.hitPoints -= damage;
-				MainMenuScreen.logArea.appendText(this.getName() + " get "+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+				if(MainMenuScreen.logArea !=null){
+					MainMenuScreen.logArea.appendText(this.getName() + " get "+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+				}
 			}
 			if(attacker.getEquipment().get(Item.ItemType.WEAPON) != null){
 				boolean[] tmp = attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponModel().getWeaponEnhantmentEqu();
@@ -231,7 +235,9 @@ public class Character extends Observable implements Json.Serializable{
 		this.armorClass = 0;
 		this.attackBonus = 0 ;
 		this.damageBonus = 0;
-		MainMenuScreen.logArea.appendText(this.getName() + " is dead \n");
+		if(MainMenuScreen.logArea!= null){
+			MainMenuScreen.logArea.appendText(this.getName() + " is dead \n");
+		}
 	}
 
 	/**

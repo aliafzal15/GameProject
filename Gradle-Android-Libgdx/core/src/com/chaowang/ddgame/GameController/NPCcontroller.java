@@ -48,8 +48,12 @@ public class NPCcontroller {
     public NPCcontroller(NPC p, GameScreen screen){
         this.npc = p;
         this.gameScreen = screen;
-        MapProperties prop = gameScreen.getMap().getProperties();
-        mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
+        if(gameScreen.getMap() != null){
+            MapProperties prop = gameScreen.getMap().getProperties();
+            mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
+            shapeRenderer = new ShapeRenderer();
+
+        }
         walkingDistance =0f;
         isStartToMove =false;
         ableToAttack = true;
@@ -60,7 +64,6 @@ public class NPCcontroller {
         meleeAttackRangeX = new Rectangle();
         meleeAttackRangeY = new Rectangle();
         rangeAttackrange =new Circle();
-        shapeRenderer = new ShapeRenderer();
 
         npcIterator = gameScreen.getNpcList().keySet().iterator();
         if(npcIterator.hasNext()){

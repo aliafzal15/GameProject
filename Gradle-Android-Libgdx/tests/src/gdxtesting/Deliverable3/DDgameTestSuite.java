@@ -1,4 +1,4 @@
-package gdxtesting.Deliverable2;
+package gdxtesting.Deliverable3;
 
 
 import org.junit.runner.RunWith;
@@ -15,7 +15,9 @@ import org.junit.runners.Suite;
         GameScreenTest.class,
         ItemEditorTest.class,
         ItemExchangeTest.class,
-        MapEditorTest.class
+        MapEditorTest.class,
+        WeaponModelTest.class,
+        BattleTest.class
 })
 public class DDgameTestSuite {
 

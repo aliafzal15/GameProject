@@ -23,6 +23,7 @@ import com.chaowang.ddgame.PublicParameter;
 import com.chaowang.ddgame.GameModel.Player;
 import com.chaowang.ddgame.GameView.GameScreen;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -59,15 +60,17 @@ public class PlayerController{
     public PlayerController(Player p, GameScreen screen){
         this.player = p;
         this.view = screen;
-        MapProperties prop = view.getMap().getProperties();
-        mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
+        if(view.getMap()!=null){
+            MapProperties prop = view.getMap().getProperties();
+            mapBound = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
+            shapeRenderer = new ShapeRenderer();
+        }
         stateTime = 0f;
         isStartToMove =false;
         decideToStop =false;
         ableToAttack = true;
         walkingDistance =0f;
         positionBeforeMove = new Vector2(player.getPosition());
-        shapeRenderer = new ShapeRenderer();
         touch = new Vector3();
         playerTradeRange = new Rectangle();
         meleeAttackRangeX = new Rectangle();
@@ -78,6 +81,7 @@ public class PlayerController{
             enemyPointer = enemyIterator.next();
         }
     }
+
     public PlayerController(Player p){
         this.player = p;
     }
@@ -116,6 +120,12 @@ public class PlayerController{
     	}
     }
 
+    public void resetEnemyIterator(){
+        enemyIterator = view.getNpcList().keySet().iterator();
+        if(enemyIterator.hasNext()){
+            enemyPointer = enemyIterator.next();
+        }
+    }
 
     public void walkTo(float x, float y){
 
@@ -407,6 +417,14 @@ public class PlayerController{
     public void pickupItem(Item item){
         player.getCharacter().addToBackpack(item);
 
+    }
+
+    public Vector2 getEnemyPointer() {
+        return enemyPointer;
+    }
+
+    public void setEnemyPointer(Vector2 enemyPointer) {
+        this.enemyPointer = enemyPointer;
     }
 
     public void setStartToMove(boolean startToMove) {
