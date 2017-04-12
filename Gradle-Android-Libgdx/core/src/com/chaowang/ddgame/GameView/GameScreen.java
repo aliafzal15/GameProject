@@ -251,9 +251,9 @@ public class GameScreen implements Observer, Screen{
         batch.draw(((Player)player).getCurrentFrame(), player.getPosition().x, player.getPosition().y );
 
         if(playerOrNPC ==1){
-            player.renderInteraction();
+            player.renderInteraction(delta);
         } else if(playerOrNPC ==2){
-            npcPointer.renderInteraction();
+            npcPointer.renderInteraction(delta);
         }
 
         batch.end();

@@ -111,8 +111,8 @@ public class GameActor implements Json.Serializable {
     /**
      * render Interaction
      */
-    public void renderInteraction() {
-        this.strategy.renderInteraction();
+    public void renderInteraction(float delta) {
+        this.strategy.renderInteraction(delta);
     }
     /**
      * update Dialogue Stage
