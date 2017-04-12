@@ -195,10 +195,27 @@ public class Character extends Observable implements Json.Serializable{
 				MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attacker.getAttackBonus()) +" attack\n");
 			}
 			if( d20 + attacker.getAttackBonus() > armorClass){
-				int damage = Math.max(Dice.roll(1,8) + attacker.getDamageBonus(), 0);
+				int damage;
+				// FIST DAMAGE MODIFER
+				if(attacker.getEquipment().get(Item.ItemType.WEAPON)== null){
+					damage = Math.max(Dice.roll(1,3) + attacker.getDamageBonus(), 0);
+					// RANGE MELEE MODIFER
+				} else if(attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.MELEE){
+					damage = Math.max(Dice.roll(1,6) + attacker.getDamageBonus(), 0);
+				} else{
+					// RANGE DAMAGE MODIFER
+					damage = Math.max(Dice.roll(1,8) + attacker.getDamageBonus(), 0);
+				}
 				this.hitPoints -= damage;
+				// display which weapon gives damage
 				if(MainMenuScreen.logArea !=null){
-					MainMenuScreen.logArea.appendText(this.getName() + " get "+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+					if(attacker.getEquipment().get(Item.ItemType.WEAPON)!=null){
+						MainMenuScreen.logArea.appendText(this.getName() +" get " + attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponType().toString()
+								+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+					} else{
+						MainMenuScreen.logArea.appendText(this.getName() +" get fist"
+								+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
+					}
 				}
 			} else{
 				MainMenuScreen.logArea.appendText(this.getName() + "defend " + attacker.getName()+ "'s attack\n");
@@ -221,6 +238,7 @@ public class Character extends Observable implements Json.Serializable{
 					weaponEnchantmentInfection[WeaponSpecialEnchantment.WeaponEnchantement.SLAYING.getIndex()]= 1;
 				}
 			}
+			// VISUALIZE THE DAMAGE
 			blinker.setBlinking(true);
 		} else{
 			makeDead();
