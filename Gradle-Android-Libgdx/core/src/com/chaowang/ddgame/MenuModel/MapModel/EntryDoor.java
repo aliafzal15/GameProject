@@ -65,7 +65,10 @@ public class EntryDoor extends Door implements Json.Serializable{
         this.x = position.x;
         this.y = position.y;
     }
-
+    /**
+     * get Texture for map model
+     * @return
+     */
     public Texture getTexture() {
         return entryDoor;
     }

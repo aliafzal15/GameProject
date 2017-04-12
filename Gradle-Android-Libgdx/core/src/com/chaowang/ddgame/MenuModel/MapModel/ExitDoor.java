@@ -13,9 +13,6 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class ExitDoor extends Door implements Json.Serializable{
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -3064593254115695006L;
 	private Texture exitDoor;
     /**

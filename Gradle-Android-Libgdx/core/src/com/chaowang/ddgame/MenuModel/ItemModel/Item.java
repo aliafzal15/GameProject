@@ -131,27 +131,45 @@ public class Item extends Rectangle implements Json.Serializable {
     public Texture getTexture() {
         return texture;
     }
-
+    /**
+     * get Weapon Model
+     * @return
+     */
     public WeaponModel getWeaponModel() {
         return weaponModel;
     }
-
+    /**
+     * set Weapon Model
+     * @param weaponModel
+     */
     public void setWeaponModel(WeaponModel weaponModel) {
         this.weaponModel = weaponModel;
     }
-
+    /**
+     * set Weapon Type
+     * @param type
+     */
     public void setWeaponType(WeaponModel.WeaponType type){
         this.weaponModel.setWeaponType(type);
     }
-
+    /**
+     * get Weapon Type
+     * @return
+     */
     public WeaponModel.WeaponType getWeaponType(){
         return this.weaponModel.getWeaponType();
     }
-
+    /**
+     * get Weapon Enchantment
+     * @return
+     */
     public Stack<WeaponSpecialEnchantment.WeaponEnchantement> getWeaponEnchantment(){
         return this.weaponModel.getWeaponEnchantment();
     }
-
+    /**
+     * add Weapon Enchantment
+     * @param arr
+     */
     public void addWeaponEnchantment(boolean[] arr){
         this.weaponModel.addWeaponEnchantment(arr);
     }

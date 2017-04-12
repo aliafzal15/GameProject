@@ -70,7 +70,11 @@ public class CharacterScoreModifier {
     public static int damageBonusCalculator(int strength){
         return abilityModifier(strength);
     }
-
+    /**
+     * base Attack Bonus
+     * @param level
+     * @return
+     */
     private static int baseAttackBonus(int level){
         return level + Math.max(0, level-5) + Math.max(0, level-10) + Math.max(0, level-15);
     }

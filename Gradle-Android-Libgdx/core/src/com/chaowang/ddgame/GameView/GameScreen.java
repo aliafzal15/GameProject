@@ -261,7 +261,9 @@ public class GameScreen implements Observer, Screen{
         }
 
     }
-
+    /**
+     * turn screen
+     */
     private void turn(){
         currentRollVectorEntry = playOrderList.poll();
         if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
@@ -365,6 +367,9 @@ public class GameScreen implements Observer, Screen{
         }
     }
 
+    /**
+     * exit game when die
+     */
     private void exitIfPlayerDie() {
         if (player.getCharacter().isDead()) {
             playerController.setStartToMove(false);  // does not allow next npc play, in fade out 3 seconds
@@ -379,7 +384,9 @@ public class GameScreen implements Observer, Screen{
             })));
         }
     }
-
+    /**
+     * to next round
+     */
     public void startNextRound() {
         if(playerOrNPC==1){
             currentRollVectorEntry.setValue(player.getPosition());
@@ -423,7 +430,10 @@ public class GameScreen implements Observer, Screen{
     public void dispose() {
         uiStage.dispose();
     }
-
+    /**
+     * initialize Npc List And Order
+     * @param player
+     */
     private void initializeNpcListAndOrder(GameActor player) {
         Vector2 cur;
         int diceRoll;
@@ -451,7 +461,9 @@ public class GameScreen implements Observer, Screen{
         playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(player.getPosition())));
         Collections.sort(playOrderList);
     }
-
+    /**
+     * initialize Dialogue
+     */
     private void initializeDialogue() {
         dialogue = new Dialogue();
         DialogueNode node1 = new DialogueNode("Your Turn starts", 0);
@@ -498,7 +510,9 @@ public class GameScreen implements Observer, Screen{
         root.add(dialogTable).colspan(2).align(Align.center).top().maxHeight(360);
         root.add(playerEditTable).right().bottom().width(60).height(80);
     }
-
+    /**
+     * reset Players' Turn
+     */
     private void resetPlayersTurn() {
         MainMenuScreen.logArea.appendText("reset player's turn before editor");
         player.setPosition(playerController.getPositionBeforeMove());
@@ -672,108 +686,186 @@ public class GameScreen implements Observer, Screen{
     public Map getMapModel() {
         return mapModel;
     }
-
+    /**
+     * is Hit Object or not
+     * @return
+     */
 	public boolean isHitObject() {
 		return isHitObject;
 	}
-
+	/**
+	 * set Hit Object
+	 * @param isHitObject
+	 */
 	public void setHitObject(boolean isHitObject) {
 		this.isHitObject = isHitObject;
 	}
-
+	/**
+	 * get Dialogue
+	 * @return
+	 */
     public Dialogue getDialogue() {
         return dialogue;
     }
-
+    /**
+     * get Dialogue Controller
+     * @return
+     */
     public DialogueController getDialogueController() {
         return dialogueController;
     }
-
+    /**
+     * get Player
+     * @return
+     */
 	public Player getPlayer() {
 		return (Player)player;
 	}
-
+	/**
+	 * get Npc
+	 * @return
+	 */
 	public GameActor getNpc() {
 		return npcPointer;
 	}
-
+	/**
+	 * get Batch
+	 * @return
+	 */
 	public SpriteBatch getBatch() {
 		return batch;
 	}
-
+	/**
+	 * get Player Controller
+	 * @return
+	 */
 	public PlayerController getPlayerController() {
 		return playerController;
 	}
-
+	/**
+	 * get Npc Controller
+	 * @return
+	 */
 	public NPCcontroller getNpcController() {
 		return npcController;
 	}
-
+	/**
+	 * get Game
+	 * @return
+	 */
 	public Game getGame() {
 		return game;
 	}
-
-
+	
+	/**
+	 * get Screen Controller
+	 * @return
+	 */
 	public GameScreenController getScreenController() {
 		return screenController;
 	}
-
+	/**
+	 * get Campaign
+	 * @return
+	 */
 	public Campaign getCampaign() {
 		return campaign;
 	}
-
+	/**
+	 * get UI Stage
+	 * @return
+	 */
 	public Stage getUiStage() {
 		return uiStage;
 	}
-
+	/**
+	 * get Dialog Box
+	 * @return
+	 */
     public DialogueBox getDialogBox() {
         return dialogBox;
     }
-
+    /**
+     * get NPC List
+     * @return
+     */
     public HashMap<Vector2, NPC> getNpcList() {
         return npcList;
     }
-
+    /**
+     * set NPC List value
+     * @param npcList
+     */
     public void setNpcList(HashMap<Vector2, NPC> npcList) {
         this.npcList = npcList;
     }
-
+    /**
+     * decide play or not
+     * @return
+     */
     public boolean isUserPlay() {
 		return isUserPlay;
 	}
-    
+    /**
+     * get Message Dialog
+     * @return
+     */
     public DialogueBox getMessageDialog() {
 		return messageDialog;
 	}
-
+    /**
+     * get Count
+     * @return
+     */
 	public static int getCount() {
 		return count;
 	}
-
+	/**
+	 * get Player Editor button
+	 * @return
+	 */
     public TextButton getPlayerEditorBtn() {
         return playerEditorBtn;
     }
-
+    /**
+     * get Current Roll Vector Entry
+     * @return
+     */
     public IntVector2Pair getCurrentRollVectorEntry() {
         return currentRollVectorEntry;
     }
-
+    /**
+     * set Current Roll Vector Entry
+     * @param currentRollVectorEntry
+     */
     public void setCurrentRollVectorEntry(IntVector2Pair currentRollVectorEntry) {
         this.currentRollVectorEntry = currentRollVectorEntry;
     }
-
+    /**
+     * set Count
+     * @param count
+     */
     public static void setCount(int count) {
 		GameScreen.count = count;
 	}
-
+    /**
+     * decide is actor playing or not
+     * @return
+     */
     public boolean isActorPlaying() {
         return isActorPlaying;
     }
-
+    /**
+     * set actor playing
+     * @param actorPlaying
+     */
     public void setActorPlaying(boolean actorPlaying) {
         isActorPlaying = actorPlaying;
     }
-
+    /**
+     * get play order List
+     * @return
+     */
     public LinkedList<IntVector2Pair> getplayOrderList() {
         return playOrderList;
     }

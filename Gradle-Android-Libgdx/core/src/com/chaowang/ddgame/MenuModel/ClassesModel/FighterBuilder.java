@@ -22,8 +22,13 @@ public abstract class FighterBuilder {
     public void createNewFighter(){
         fighterProduct = new Fighter();
     }
-
+    /**
+     * abstract class for buildFighterType class
+     */
     abstract void buildFighterType();
+    /**
+     * abstract class for buildAbilityImportance class
+     */
     abstract void buildAbilityImportance ();
 
 }
