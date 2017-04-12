@@ -68,7 +68,10 @@ public class Fighter implements Class {
     public int[] getAbilityImportance() {
         return abilityImportance;
     }
-
+    /**
+     * set Fighter Type
+     * @param type
+     */
     public void setFighterType (FighterType type){
         fighterType = type;
     }

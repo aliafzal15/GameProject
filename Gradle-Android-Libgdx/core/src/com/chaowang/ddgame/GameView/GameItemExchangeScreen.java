@@ -165,7 +165,9 @@ public class GameItemExchangeScreen implements Screen{
         //stage.setDebugAll(true);
         batch.end();
     }
-
+    /**
+     * resize view
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -186,7 +188,9 @@ public class GameItemExchangeScreen implements Screen{
     public void hide() {
 
     }
-
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();

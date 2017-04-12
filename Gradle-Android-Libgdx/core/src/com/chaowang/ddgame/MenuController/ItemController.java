@@ -158,7 +158,10 @@ public class ItemController {
                     .show(view.stage);
         }
     }
-
+    /**
+     * save Weapon Enchantment
+     * @param weaponEnchantCheckBoxArr
+     */
     private void saveWeaponEnchantment(CheckBox[] weaponEnchantCheckBoxArr) {
         boolean[] weaponEnchantBoolArr = new boolean[weaponEnchantCheckBoxArr.length];
         for(int i = 0; i < weaponEnchantBoolArr.length; i++){

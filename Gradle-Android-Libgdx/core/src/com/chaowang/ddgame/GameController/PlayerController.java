@@ -78,10 +78,16 @@ public class PlayerController{
             enemyPointer = enemyIterator.next();
         }
     }
+    /**
+     * constructor
+     * @param p
+     */
     public PlayerController(Player p){
         this.player = p;
     }
-
+    /**
+     * move player on screen
+     */
     public void movePlayer(){
     	// pin the position before move
     	if(isStartToMove==false){
@@ -116,7 +122,11 @@ public class PlayerController{
     	}
     }
 
-
+    /**
+     * walk on screen 
+     * @param x
+     * @param y
+     */
     public void walkTo(float x, float y){
 
 //		if(Gdx.input.isKeyPressed(Input.Keys.F )){
@@ -278,6 +288,10 @@ public class PlayerController{
         return true;
 
     }
+    /**
+     * trade items with friend
+     * @return
+     */
     public Vector2 tradeWithFriend() {
         keySetIterator = view.getNpcList().keySet().iterator();
         playerTradeRange.set(player.getBound().x - 20, player.getBound().y -20, player.getBound().width +50, player.getBound().height +50);
@@ -290,7 +304,9 @@ public class PlayerController{
         }
         return null;
     }
-
+    /**
+     * melee attack enermy
+     */
     public void meleeAttackEnemy(){
         meleeAttackRangeX.set(player.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * player.getBound().width, player.getPosition().y, player.getBound().width *(2 * WeaponType.getAttackRange(WeaponType.MELEE)+1), player.getBound().height);
         meleeAttackRangeY.set(player.getPosition().x, WeaponType.getAttackRange(WeaponType.MELEE) * player.getPosition().y - player.getBound().height, player.getBound().width, player.getBound().height * (2 * WeaponType.getAttackRange(WeaponType.MELEE) +1));
@@ -321,7 +337,9 @@ public class PlayerController{
             }
         }
     }
-
+    /**
+     * attack enermy range
+     */
     public void rangeAttackEnemy(){
         rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * WeaponType.getAttackRange(WeaponType.RANGE));
 
@@ -350,7 +368,10 @@ public class PlayerController{
             }
         }
     }
-
+    /**
+     * find enerny in certain range
+     * @return
+     */
     public Vector2 findEnemyInAttackRange() {
         rangeAttackrange.set(player.getPosition().x + player.getBound().width / 2 ,player.getPosition().y + player.getBound().height /2, PublicParameter.GAME_PIXEL_SIZE * WeaponType.getAttackRange(WeaponType.RANGE));
         meleeAttackRangeX.set(player.getPosition().x - WeaponType.getAttackRange(WeaponType.MELEE) * player.getBound().width, player.getPosition().y, player.getBound().width * (2 * WeaponType.getAttackRange(WeaponType.MELEE)+1) , player.getBound().height);
@@ -378,7 +399,10 @@ public class PlayerController{
     }
 
 
-
+    /**
+     * find enermy to attack
+     * @return
+     */
     public Vector2 findEnemyToAttack() {
 //        entrySetIterator = view.getNpcList().entrySet().iterator();
 //        while(entrySetIterator.hasNext()){
@@ -408,19 +432,30 @@ public class PlayerController{
         player.getCharacter().addToBackpack(item);
 
     }
-
+    /**
+     * set start to move
+     * @param startToMove
+     */
     public void setStartToMove(boolean startToMove) {
         isStartToMove = startToMove;
     }
-
+    /**
+     * decide status of stop
+     * @return
+     */
     public boolean isDecideToStop() {
         return decideToStop;
     }
-
+    /**
+     * set decide To stop
+     * @param decideToStop
+     */
     public void setDecideToStop(boolean decideToStop) {
         this.decideToStop = decideToStop;
     }
-
+    /**
+     * render melee area
+     */
     public void renderMeleeArea() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -433,7 +468,10 @@ public class PlayerController{
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-
+    /**
+     * render movement area
+     * @param center
+     */
 	public void renderMovementArea(Vector2 center) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -444,7 +482,9 @@ public class PlayerController{
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
-
+	/**
+	 * render range area
+	 */
     public void renderRangeArea() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -455,15 +495,23 @@ public class PlayerController{
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
-
+    /**
+     * decide attack capacity
+     * @return
+     */
     public boolean isAbleToAttack() {
         return ableToAttack;
     }
-
+    /**
+     * @param ableToAttack
+     */
     public void setAbleToAttack(boolean ableToAttack) {
         this.ableToAttack = ableToAttack;
     }
-
+    /**
+     * get Position Before Move
+     * @return
+     */
     public Vector2 getPositionBeforeMove() {
         return positionBeforeMove;
     }

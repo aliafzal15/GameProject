@@ -15,7 +15,9 @@ public class DDGame extends Game {
 
     Game game;
 
-
+    /**
+     * initialize game
+     */
     @Override
 	public void create () {
 		game = this;
@@ -31,7 +33,9 @@ public class DDGame extends Game {
 
 
     }
-
+    /**
+     * render
+     */
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0f, 0f, 0f ,1f);

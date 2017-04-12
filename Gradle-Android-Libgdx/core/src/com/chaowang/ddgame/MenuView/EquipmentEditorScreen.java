@@ -131,7 +131,9 @@ public class EquipmentEditorScreen implements Screen{
         //stage.setDebugAll(true);
         batch.end();
     }
-
+    /**
+     * resize equipment editor screen
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);

@@ -131,7 +131,10 @@ public class ItemExchangeController {
             });
         }
     }
-
+    /**
+     * exchange Item
+     * @param index
+     */
     public void exchangeItem(int index ) {
         character.getBackpack().add(player.getCharacter().getBackpack().get(index));
         int randomNum =  (int)(Math.random() * ( character.getBackpack().size() -1 ));
@@ -165,11 +168,15 @@ public class ItemExchangeController {
                     }
                     return true;
                 }
-
+                /**
+                 * enter map
+                 */
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     view.NPCItemInfoLabel.setText(character.getBackpack().get(getButton()).toString());
                 }
-
+                /**
+                 * exit map
+                 */
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     view.NPCItemInfoLabel.setText("");

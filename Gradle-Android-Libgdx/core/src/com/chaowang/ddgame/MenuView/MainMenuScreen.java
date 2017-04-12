@@ -312,7 +312,11 @@ public class MainMenuScreen implements Screen{
         file.exists();
     }
     
-    
+    /**
+     * Conver HMkey String To vector
+     * @param tmpMap
+     * @return
+     */
 	public HashMap<Vector2, NPC> ConverHMkeyStrToVec2(HashMap<String, NPC> tmpMap) {
 		HashMap<Vector2, NPC> hmapReturn = new HashMap<Vector2, NPC>();
         String tmpStr;

@@ -360,7 +360,9 @@ public class GamePlayerEditorScreen implements Screen{
 		return backpackItemInfoLabel;
 	}
 
-
+	/**
+	 * save game
+	 */
     public void saveGame() {
         FileHandle file = Gdx.files.local("data" + File.separator + "savedGame.json");
         file.write(false);

@@ -180,7 +180,10 @@ public class Character extends Observable implements Json.Serializable{
                 break;
         }
     }
-
+    /**
+     * under Attack
+     * @param attacker
+     */
 	public void underAttack(Character attacker){
 		if(!isDead()){
 			int d20 = Dice.roll(1,20);
@@ -212,7 +215,9 @@ public class Character extends Observable implements Json.Serializable{
 			makeDead();
 		}
 	}
-
+	/**
+	 * set dead status
+	 */
 	public void makeDead() {
 		this.isDead = true;
 		this.texture = new Texture(Gdx.files.internal("races/dead.png"));
@@ -973,7 +978,10 @@ public class Character extends Observable implements Json.Serializable{
 		notifyObservers(1);
 	}
 
-
+	/**
+	 * create Fighter Based On Type
+	 * @param type
+	 */
 	private void createFighterBasedOnType(FighterType type) {
 		director = new FighterBuilderDirector();
 		switch (type){
@@ -993,11 +1001,17 @@ public class Character extends Observable implements Json.Serializable{
 		director.setBuilder(fighterBuilder);
 		director.constructFighter();
 	}
-
+	/**
+	 * get Fighter
+	 * @return
+	 */
 	public Fighter getFighter() {
 		return fighter;
 	}
-
+	/**
+	 * set Fighter value
+	 * @param fighter
+	 */
 	public void setFighter(Fighter fighter) {
 		this.fighter = fighter;
 	}
