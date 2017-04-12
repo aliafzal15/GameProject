@@ -39,7 +39,7 @@ public class FriendlyNPCStrategy implements Strategy{
 	 * render Interaction
 	 */
 	@Override
-	public void renderInteraction() {
+	public void renderInteraction(float delta) {
 
         screen.getBatch().draw(screen.getNpc().getCharacter().getFriendlyTexture(), screen.getNpc().getPosition().x, screen.getNpc().getPosition().y, screen.getNpc().getBound().width, screen.getNpc().getBound().height);
         //draw walls on screen
@@ -71,7 +71,7 @@ public class FriendlyNPCStrategy implements Strategy{
 
         while(keySetIterator.hasNext()){
         	npcPointer = keySetIterator.next();
-        	screen.getNpcList().get(npcPointer).getCharacter().draw(screen.getBatch(), npcPointer, ((NPC)screen.getNpcList().get(npcPointer)).isFriendly());
+        	screen.getNpcList().get(npcPointer).getCharacter().draw(screen.getBatch(), npcPointer, ((NPC)screen.getNpcList().get(npcPointer)).isFriendly(), delta);
             if(screen.getNpc().getBound().overlaps(screen.getNpcList().get(npcPointer).getBound()) ){
             	screen.getNpcController().walkReAdjust(5);
                 screen.setHitObject(true);            

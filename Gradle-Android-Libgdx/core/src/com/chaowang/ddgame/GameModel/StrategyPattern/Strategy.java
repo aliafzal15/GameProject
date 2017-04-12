@@ -11,7 +11,7 @@ public interface Strategy {
 	 */
 	void setupCamera();
 
-	void renderInteraction();
+	void renderInteraction(float delta);
 	
 	void updateDialogueStage(float delta);
 }

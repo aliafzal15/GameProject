@@ -47,7 +47,7 @@ public class ComputerPlayerStrategy implements Strategy{
 	 * render Interaction
 	 */
 	@Override
-	public void renderInteraction() {
+	public void renderInteraction(float delta) {
 
         //draw walls on screen
         for(Wall cur : screen.getMapModel().getWallLocationList() ){
@@ -91,7 +91,7 @@ public class ComputerPlayerStrategy implements Strategy{
         keySetIterator = screen.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly());
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly(), delta);
             if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);

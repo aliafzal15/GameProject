@@ -44,7 +44,7 @@ public class FreezingHumanPlayerStrategy implements Strategy{
 	/**
 	 * render Interaction
 	 */
-	public void renderInteraction(){
+	public void renderInteraction(float delta){
 //        if(!screen.getDialogBox().isVisible()){
 //        }
 
@@ -76,7 +76,7 @@ public class FreezingHumanPlayerStrategy implements Strategy{
 
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
-            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly());
+            screen.getNpcList().get(cur).getCharacter().draw(screen.getBatch(), cur, (screen.getNpcList().get(cur)).isFriendly(), delta);
             if(screen.getPlayer().getBound().overlaps(screen.getNpcList().get(cur).getBound()) ){
             	screen.getPlayerController().reAdjust(5);
                 screen.setHitObject(true);
