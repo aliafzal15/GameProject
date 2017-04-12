@@ -12,14 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.CharacterModel.Abilities;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Abilities;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
-import com.chaowang.ddgame.View.CharacterEditorScreen;
+import com.chaowang.ddgame.MenuView.CharacterEditorScreen;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -103,7 +105,7 @@ public class CharacterController {
      * controller for switching to main menu page
      */
 	public void controlSwitchPageButton(){
-		character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
+		character.changeLevel(Integer.parseInt(view.levelLabel.getText().toString()));
 		character.setName(view.nameText.getText());
 		for (int i = 0; i < view.bonusField.length; i++) {
 			character.getAbilityBonusArr()[i] = Integer.parseInt(view.bonusField[i].getText());
@@ -159,8 +161,12 @@ public class CharacterController {
 				}
 				character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution() + character.getConstitutionBonus(), character.getLevel()));
 				character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity() + character.getDexterityBonus()));
-				character.setAttackBonus(CharacterScoreModifier.attachBonusCalculator(character.getStrength() + character.getStrengthBonus(),
-				character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				character.setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(character.getStrength() + character.getStrengthBonus(),
+						character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				if(character.getEquipment().get(Item.ItemType.WEAPON)!=null && character.getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+					character.setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(character.getStrength() + character.getStrengthBonus(),
+							character.getDexterity() + character.getDexterityBonus(), character.getLevel()));
+				}
 				character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength() + character.getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(character.getPromotionPoint()));
 				view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));
@@ -185,7 +191,9 @@ public class CharacterController {
 	public void controlSaveButton() {
 		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[0]$|^") && Integer.parseInt(view.wisdomLabel.getText().toString()) != 0) {
 			if (view.bonusField[0].isDisabled()) {
-				character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
+				if(Integer.parseInt(view.levelLabel.getText().toString())!=character.getLevel()){
+					character.changeLevel(Integer.parseInt(view.levelLabel.getText().toString()));
+				}
 				character.setName(view.nameText.getText());
 				MainMenuScreen.characterInventory.addToInventory(character);
 				MainMenuScreen.characterInventory.saveToFile();
@@ -212,7 +220,7 @@ public class CharacterController {
 	 */
 	public void controlDiceButton() {
 		if (view.levelLabel.getText().toString().matches("^[1-9]$|^0[1-9]$|^1[1-9]$|^2[0]$|^") && Integer.valueOf(view.wisdomLabel.getText().toString()) == 0) {
-			character.setLevel(Integer.parseInt(view.levelLabel.getText().toString()));
+			character.changeLevel(Integer.parseInt(view.levelLabel.getText().toString()));
 			Integer[] arrTmp = new Integer[Abilities.ABILITYSIZE];
 			for ( int i = 0 ; i < arrTmp.length; i++){
 				arrTmp[i] = Dice.roll(Dice.DICENUMBER, Dice.DICESIDE );
@@ -236,7 +244,10 @@ public class CharacterController {
 		if(character.getStrength() != 0){
 			character.setHitPoints(CharacterScoreModifier.hitPointCalculator(character.getConstitution(), character.getLevel()));
 			character.setArmorClass(CharacterScoreModifier.armorClassCalculator(character.getDexterity()));
-			character.setAttackBonus(CharacterScoreModifier.attachBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			character.setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			if(character.getEquipment().get(Item.ItemType.WEAPON)!=null && character.getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+				character.setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(character.getStrength(), character.getDexterity(), character.getLevel()));
+			}
 			character.setDamageBonus(CharacterScoreModifier.damageBonusCalculator(character.getStrength()));
 
 			view.hitpointLabel.setText(Integer.toString(character.getHitPoints()));

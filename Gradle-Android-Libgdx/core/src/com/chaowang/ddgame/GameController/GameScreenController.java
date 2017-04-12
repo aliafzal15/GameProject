@@ -2,26 +2,26 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.MapModel.Map;
-import com.chaowang.ddgame.PlayModel.Player;
-import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.GameScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.GameModel.NPC;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.MapModel.Map;
+import com.chaowang.ddgame.GameModel.Player;
+import com.chaowang.ddgame.GameView.GameScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -39,6 +39,7 @@ public class GameScreenController {
     private Player player;
     private Vector3 touch;
     private Vector2 pointer;
+
     /**
      * construct
      * @param screen
@@ -50,13 +51,9 @@ public class GameScreenController {
         this.mapModel = map;
         this.player = role;
         player.getCharacter().addObserver(view);
-        Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+        Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
         while(keySetIterator.hasNext()) {
-            mapModel.getEnemyLocationList().get(keySetIterator.next()).addObserver(view);
-        }
-        keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-        while(keySetIterator.hasNext()) {
-            mapModel.getFriendLocationList().get(keySetIterator.next()).addObserver(view);
+            view.getNpcList().get(keySetIterator.next()).getCharacter().addObserver(view);
         }
         touch = new Vector3();
     }
@@ -84,19 +81,11 @@ public class GameScreenController {
                 enableItemPreviewTouch();
             }
 
-            Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+            Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
             while(keySetIterator.hasNext()) {
                 pointer = keySetIterator.next();
-                if(mapModel.getEnemyLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getEnemyLocationList().get(pointer).previewLoadEquipment(-1);
-                    disableItemPreviewTouch();
-                }
-            }
-            keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-            while(keySetIterator.hasNext()) {
-                pointer = keySetIterator.next();
-                if(mapModel.getFriendLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getFriendLocationList().get(pointer).previewLoadEquipment(-1);
+                if(view.getNpcList().get(pointer).getBound().contains(touch.x, touch.y)){
+                    view.getNpcList().get(pointer).getCharacter().previewLoadEquipment(-1);
                     disableItemPreviewTouch();
                 }
             }
@@ -106,18 +95,11 @@ public class GameScreenController {
             if(player.getBound().contains(touch.x,touch.y)){
                 player.getCharacter().previewAllAttribute();
             }
-            Iterator<Vector2> keySetIterator = mapModel.getEnemyLocationList().keySet().iterator();
+            Iterator<Vector2> keySetIterator = view.getNpcList().keySet().iterator();
             while(keySetIterator.hasNext()) {
                 pointer = keySetIterator.next();
-                if(mapModel.getEnemyLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getEnemyLocationList().get(pointer).previewAllAttribute();
-                }
-            }
-            keySetIterator = mapModel.getFriendLocationList().keySet().iterator();
-            while(keySetIterator.hasNext()) {
-                pointer = keySetIterator.next();
-                if(mapModel.getFriendLocationList().get(pointer).getBound().contains(touch.x, touch.y)){
-                    mapModel.getFriendLocationList().get(pointer).previewAllAttribute();
+                if(view.getNpcList().get(pointer).getBound().contains(touch.x, touch.y)){
+                    view.getNpcList().get(pointer).getCharacter().previewAllAttribute();
                 }
             }
         }
@@ -131,7 +113,7 @@ public class GameScreenController {
 		    view.getBackpackMatrix()[i].addListener(new ClickListener(i) {
 		        @Override
 		        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		            if ( getButton() < player.getCharacter().getBackpack().size()  
+		            if ( getButton() < player.getCharacter().getBackpack().size()
 		            		&& !player.getCharacter().getEquipment().containsKey(player.getCharacter().getBackpack().get(getButton()).getItemType())) {
 		                player.getCharacter().previewLoadEquipment(getButton());
 		            }
@@ -186,20 +168,5 @@ public class GameScreenController {
 		}
 		view.getItemInfoLabel().setVisible(false);
 	}
-	/**
-	 * decide game state
-	 * @return
-	 */
-    public boolean isEnemyAllDead(){
-    	if(mapModel.getEnemyLocationList().size() == 0){
-    		return true;
-    	}
-    	for (Entry<Vector2, Character> entry: mapModel.getEnemyLocationList().entrySet()){
-    		if(! entry.getValue().isDead()){
-    			return false;
-    		}
-    	}
-    	return true;
-    	
-    }
+
 }

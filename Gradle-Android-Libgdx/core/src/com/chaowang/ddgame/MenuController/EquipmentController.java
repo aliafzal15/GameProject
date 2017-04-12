@@ -11,15 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.View.EquipmentEditorScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.EquipmentEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.chaowang.ddgame.CharacterModel.Character;
-import com.chaowang.ddgame.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
 /**
  * controller for equipment
  * @author chao wang

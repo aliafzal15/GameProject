@@ -18,7 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import com.chaowang.ddgame.MapModel.Tree;
+import com.chaowang.ddgame.MenuModel.MapModel.Tree;
 
 /**
  * view for playing game(not for current build)
@@ -31,10 +31,10 @@ public class PlayScreen implements Screen{
     private Sprite sprite;
     private Vector2 position;
     private PlayerEg playerEg;
-    private com.chaowang.ddgame.MapModel.Tree tree, tree1;
+    private Tree tree, tree1;
     //private ShapeRenderer sr;  //        draw boundary rectangle for testing
-    private ArrayList<com.chaowang.ddgame.MapModel.Tree> trees;
-    private Iterator<com.chaowang.ddgame.MapModel.Tree> treeIterator;
+    private ArrayList<Tree> trees;
+    private Iterator<Tree> treeIterator;
 
     private EnemyEg enemyEg;
     private ArrayList<EnemyEg> enemies;

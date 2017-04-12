@@ -3,12 +3,12 @@ package com.chaowang.ddgame.GameController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.chaowang.ddgame.DialogueSystem.Dialogue;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode;
-import com.chaowang.ddgame.DialogueSystem.DialogueTraverser;
-import com.chaowang.ddgame.GameUI.DialogueBox;
-import com.chaowang.ddgame.GameUI.OptionBox;
-import com.chaowang.ddgame.DialogueSystem.DialogueNode.NODE_TYPE;
+import com.chaowang.ddgame.GameModel.DialogueSystem.Dialogue;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueTraverser;
+import com.chaowang.ddgame.GameUtl.DialogueBox;
+import com.chaowang.ddgame.GameUtl.OptionBox;
+import com.chaowang.ddgame.GameModel.DialogueSystem.DialogueNode.NODE_TYPE;
 
 /**
  * controller for dialogue table
@@ -24,7 +24,7 @@ public class DialogueController extends InputAdapter{
     private DialogueBox messageDialog;
     private OptionBox optionBox;
     private int answerIndex;
-    private boolean indexFlag;
+    private boolean dialogStopRolling;
     /**
      * construct
      * @param box
@@ -36,10 +36,18 @@ public class DialogueController extends InputAdapter{
         this.optionBox = optionBox;
         answerIndex = -1;
         messageDialog = message;
-        indexFlag = false;
+        dialogStopRolling = false;
+    }
+
+    /**
+     * setter AnswerIndex
+     * @return
+     */
+    public void setAnswerIndex(int index) {
+        answerIndex = index;
     }
     /**
-     * get index
+     * getter AnswerIndex
      * @return
      */
     public int getAnswerIndex() {
@@ -59,15 +67,15 @@ public class DialogueController extends InputAdapter{
      * index flag
      * @return
      */
-    public boolean isIndexFlag() {
-        return indexFlag;
+    public boolean isDialogStopRolling() {
+        return dialogStopRolling;
     }
     /**
      * set index flag
-     * @param indexFlag
+     * @param dialogStopRolling
      */
-    public void setIndexFlag(boolean indexFlag) {
-        this.indexFlag = indexFlag;
+    public void setDialogStopRolling(boolean dialogStopRolling) {
+        this.dialogStopRolling = dialogStopRolling;
     }
     /**
      * choose answer option
@@ -83,7 +91,7 @@ public class DialogueController extends InputAdapter{
                 return true;
             }
         }
-        if (traverser != null && Gdx.input.isKeyPressed(Input.Keys.ENTER ) && dialogueBox.isFinished()) { // continue through tree
+        if (traverser != null && Gdx.input.isKeyPressed(Input.Keys.ENTER ) && dialogueBox.isFinished() && dialogueBox.isVisible()) { // continue through tree
             if (traverser.getType() == NODE_TYPE.END) {
                 traverser = null;
                 dialogueBox.setVisible(false);
@@ -93,11 +101,23 @@ public class DialogueController extends InputAdapter{
             } else if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE) {
                 answerIndex = optionBox.getIndex();
                 if( answerIndex == 0){
-                    indexFlag = true;
-                    System.out.println("in root, answer index is " + answerIndex);
+                    dialogStopRolling = true;
+                    optionBox.setVisible(false);
+                    dialogueBox.setVisible(false);
+                    System.out.println("in DialogController, answer index is " + answerIndex+ " which means move");
                 }
-                optionBox.setVisible(false);
-                dialogueBox.setVisible(false);
+                else if(answerIndex ==1){
+                    dialogStopRolling = true;
+                    optionBox.setVisible(false);
+                    dialogueBox.setVisible(false);
+                    System.out.println("in DialogController, answer index is " + answerIndex+ "which means fight");
+                }
+                else if(answerIndex ==2){
+                    dialogStopRolling = true;
+                    optionBox.setVisible(false);
+                    dialogueBox.setVisible(false);
+                    System.out.println("in DialogController, answer index is " + answerIndex+ "which means trade");
+                }
                 return true;
             }
             return true;
@@ -129,6 +149,7 @@ public class DialogueController extends InputAdapter{
     public void startDialogue(Dialogue dialogue) {
         traverser = new DialogueTraverser(dialogue);
         dialogueBox.setVisible(true);
+        dialogStopRolling = false;
         dialogueBox.animateText(traverser.getText());
         if (traverser.getType() == NODE_TYPE.MULTIPLE_CHOICE) {
             optionBox.clear();

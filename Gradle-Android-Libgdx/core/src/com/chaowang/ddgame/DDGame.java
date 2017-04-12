@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.chaowang.ddgame.View.*;
 
 /**
  * class for driving the game view
@@ -16,11 +15,13 @@ public class DDGame extends Game {
 
     Game game;
 
-
+    /**
+     * initialize game
+     */
     @Override
 	public void create () {
 		game = this;
-        setScreen(new MainMenuScreen(game));
+        setScreen(new com.chaowang.ddgame.MenuView.MainMenuScreen(game));
 
 
 		float w = Gdx.graphics.getWidth();
@@ -32,7 +33,9 @@ public class DDGame extends Game {
 
 
     }
-
+    /**
+     * render
+     */
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0f, 0f, 0f ,1f);

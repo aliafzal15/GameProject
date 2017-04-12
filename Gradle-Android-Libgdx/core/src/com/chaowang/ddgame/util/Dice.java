@@ -1,4 +1,9 @@
 package com.chaowang.ddgame.util;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
+
 /**
  * class for dice
  * @author chao wang
@@ -23,7 +28,8 @@ public class Dice {
 	 * @return a random number
 	 */
 	public static int roll(int numberOfDice, int sides) {
-		return roll(numberOfDice, sides, 0);
+		int tmp =  roll(numberOfDice, sides, 0);
+		return  tmp;
 	}
 	/**
 	 * create a random number

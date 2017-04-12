@@ -2,6 +2,7 @@ package com.chaowang.ddgame.GameController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,18 +13,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.PlayModel.Player;
+import com.badlogic.gdx.utils.Json;
+import com.chaowang.ddgame.GameModel.GameActor;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.GameModel.Player;
+import com.chaowang.ddgame.MenuModel.ItemModel.WeaponModel;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.EquipmentEditorScreen;
-import com.chaowang.ddgame.View.GameItemExchangeScreen;
-import com.chaowang.ddgame.View.GamePlayerEditorScreen;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.GameView.GamePlayerEditorScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.util.CharacterScoreModifier;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * controller for equipment
@@ -33,13 +36,13 @@ import java.util.Random;
 public class PlayerEditorController {
 
     private GamePlayerEditorScreen view;
-    private Player player;
+    private GameActor player;
     /**
      * constructor
      * @param gamePlayerEditorScreen
      * @param gamePlayer
      */
-    public PlayerEditorController(GamePlayerEditorScreen gamePlayerEditorScreen, Player gamePlayer){
+    public PlayerEditorController(GamePlayerEditorScreen gamePlayerEditorScreen, GameActor gamePlayer){
         this.view = gamePlayerEditorScreen;
         player = gamePlayer;
     }
@@ -236,14 +239,19 @@ public class PlayerEditorController {
                     player.getCharacter().setHitPoints(CharacterScoreModifier.hitPointCalculator(player.getCharacter().getConstitution() + player.getCharacter().getConstitutionBonus(), player.getCharacter().getLevel()));
                 }
 				player.getCharacter().setArmorClass(CharacterScoreModifier.armorClassCalculator(player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus()));
-				player.getCharacter().setAttackBonus(CharacterScoreModifier.attachBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
+				player.getCharacter().setAttackBonus(CharacterScoreModifier.meleeAttackBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
 						player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus(), player.getCharacter().getLevel()));
+                if(player.getCharacter().getEquipment().get(Item.ItemType.WEAPON)!=null && player.getCharacter().getEquipment().get(Item.ItemType.WEAPON).getWeaponType()== WeaponModel.WeaponType.RANGE){
+                    player.getCharacter().setAttackBonus(CharacterScoreModifier.rangeAttackBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus(),
+                            player.getCharacter().getDexterity() + player.getCharacter().getDexterityBonus(), player.getCharacter().getLevel()));
+                }
 				player.getCharacter().setDamageBonus(CharacterScoreModifier.damageBonusCalculator(player.getCharacter().getStrength() + player.getCharacter().getStrengthBonus()));
 				view.promotePointLabel.setText(Integer.toString(player.getCharacter().getPromotionPoint()));
 				view.hitpointLabel.setText(Integer.toString(player.getCharacter().getHitPoints()));
 				view.armorClassLabel.setText(Integer.toString(player.getCharacter().getArmorClass()));
 				view.attackBonusLabel.setText(Integer.toString(player.getCharacter().getAttackBonus()));
 				view.damageBonusLaber.setText(Integer.toString(player.getCharacter().getDamageBonus()));
+                view.characterInfoLabel.setText(player.getCharacter().toString());
 				view.confirmButton.setTouchable(Touchable.disabled);
 			} else {
 				new Dialog("Error", MainMenuScreen.skin, "dialog") {
@@ -278,6 +286,7 @@ public class PlayerEditorController {
 		view.armorClassLabel.setText(Integer.toString(player.getCharacter().getArmorClass()));
 		view.attackBonusLabel.setText(Integer.toString(player.getCharacter().getAttackBonus()));
 		view.damageBonusLaber.setText(Integer.toString(player.getCharacter().getDamageBonus()));
-	}
+        view.characterInfoLabel.setText(player.getCharacter().toString());
+    }
 
 }

@@ -11,12 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.chaowang.ddgame.View.MainMenuScreen;
+import com.chaowang.ddgame.MenuView.MainMenuScreen;
 import com.chaowang.ddgame.PublicParameter;
-import com.chaowang.ddgame.View.BackpackEditorScreen;
+import com.chaowang.ddgame.MenuView.BackpackEditorScreen;
 
-import com.chaowang.ddgame.ItemModel.Item;
-import com.chaowang.ddgame.CharacterModel.Character;
+import com.chaowang.ddgame.MenuModel.ItemModel.Item;
+import com.chaowang.ddgame.MenuModel.CharacterModel.Character;
 /**
  * controller for backpack
  * @author chao wang
@@ -117,7 +117,8 @@ public class BackpackController {
                             Item item = new Item(MainMenuScreen.itemInventory.getItemPack().get(getButton()).getItemType(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getName(),
                                     MainMenuScreen.itemInventory.getItemPack().get(getButton()).getLevel(),
-                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getEnchantedAbility());
+                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getEnchantedAbility(),
+                                    MainMenuScreen.itemInventory.getItemPack().get(getButton()).getWeaponModel());
                             character.getBackpack().add(item);
                             view.backpackTable.clearChildren();
                             buildBackpackMatrix();
