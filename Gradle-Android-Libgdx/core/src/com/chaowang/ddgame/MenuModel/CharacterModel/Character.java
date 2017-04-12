@@ -188,7 +188,7 @@ public class Character extends Observable implements Json.Serializable{
 		if(!isDead()){
 			int d20 = Dice.roll(1,20);
 			if(MainMenuScreen.logArea !=null){
-				MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attackBonus) +" attack\n");
+				MainMenuScreen.logArea.appendText(this.getName() + "'s AC " + this.armorClass + " VS "+ (d20 + attacker.getAttackBonus()) +" attack\n");
 			}
 			if( d20 + attacker.getAttackBonus() > armorClass){
 				int damage = Math.max(Dice.roll(1,8) + attacker.getDamageBonus(), 0);
@@ -196,6 +196,8 @@ public class Character extends Observable implements Json.Serializable{
 				if(MainMenuScreen.logArea !=null){
 					MainMenuScreen.logArea.appendText(this.getName() + " get "+damage+ " damage, Hp:"+this.getHitPoints()+"\n");
 				}
+			} else{
+				MainMenuScreen.logArea.appendText(this.getName() + "defend " + attacker.getName()+ "'s attack\n");
 			}
 			if(attacker.getEquipment().get(Item.ItemType.WEAPON) != null){
 				boolean[] tmp = attacker.getEquipment().get(Item.ItemType.WEAPON).getWeaponModel().getWeaponEnhantmentEqu();
@@ -225,7 +227,7 @@ public class Character extends Observable implements Json.Serializable{
 	public void makeDead() {
 		this.isDead = true;
 		this.texture = new Texture(Gdx.files.internal("races/dead.png"));
-		setAbilities(new int[]{0,0,0,0,0,0});
+		setAbilities(new int[]{-1,-1,-1,-1,-1,-1});
 		
 		for(Iterator<Map.Entry<Item.ItemType, Item>> it = equipment.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<Item.ItemType, Item> entry = it.next();
@@ -902,6 +904,9 @@ public class Character extends Observable implements Json.Serializable{
 		level = jsonData.child.next.next.next.asInt();
 		setAbilities(jsonData.child.next.next.next.next.child.asIntArray());
 		hitPoints = jsonData.child.next.next.next.next.next.asInt();
+		if(isDead()){
+			this.texture = new Texture(Gdx.files.internal("races/dead.png"));
+		}
 		attackBonus = jsonData.child.next.next.next.next.next.next.asInt();
 		damageBonus = jsonData.child.next.next.next.next.next.next.next.asInt();
 		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();

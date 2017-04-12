@@ -56,6 +56,9 @@ import com.chaowang.ddgame.util.CharacterScoreModifier;
 import com.chaowang.ddgame.util.Dice;
 import com.chaowang.ddgame.util.IntVector2Pair;
 import com.chaowang.ddgame.MenuModel.ItemModel.WeaponDecoratorPattern.WeaponSpecialEnchantment.WeaponEnchantement;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -265,6 +268,7 @@ public class GameScreen implements Observer, Screen{
      * turn screen
      */
     private void turn(){
+        System.out.println(Arrays.toString(playOrderList.toArray()));
         currentRollVectorEntry = playOrderList.poll();
         if(currentRollVectorEntry.getValue().epsilonEquals(player.getPosition(),0.1f)){
             playerOrNPC =1;
@@ -328,8 +332,9 @@ public class GameScreen implements Observer, Screen{
             // if dead, skip the turn
             if(npcList.get(currentRollVectorEntry.getValue()).getCharacter().isDead()){
                 MainMenuScreen.logArea.appendText(npcList.get(currentRollVectorEntry.getValue()).getCharacter().getName()+ "is dead, skip play\n");
-                startNextRound();
+                playOrderList.offer(currentRollVectorEntry);
                 playerOrNPC = -1;
+                isActorPlaying = true;
             } else{
                 npcPointer = npcList.remove(currentRollVectorEntry.getValue());
                 npcController.setNpc((NPC)npcPointer);
@@ -402,7 +407,6 @@ public class GameScreen implements Observer, Screen{
         }
     }
 
-
     /**
      * update the size of map
      */
@@ -450,14 +454,14 @@ public class GameScreen implements Observer, Screen{
         while(keySetIterator.hasNext()){
             cur = keySetIterator.next();
             diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(mapModel.getFriendLocationList().get(cur).getDexterity());
-            MainMenuScreen.logArea.appendText(mapModel.getFriendLocationList().get(cur).getName() + " roll dice :"+diceRoll + "\n");
+            MainMenuScreen.logArea.appendText(mapModel.getFriendLocationList().get(cur).getName() + " roll dice :"+diceRoll + "+ DexModifier\n");
             playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(cur)));
             npcList.put(cur, new NPC(cur,mapModel.getFriendLocationList().get(cur), true));
         }
 
         // add player to play order linked list
         diceRoll = Dice.roll(1, 20) + CharacterScoreModifier.abilityModifier(player.getCharacter().getDexterity()); //dice roll+ deterity ability modifier
-        MainMenuScreen.logArea.appendText("yourself roll dice :"+diceRoll + "\n");
+        MainMenuScreen.logArea.appendText("yourself roll dice :"+diceRoll + "+ DexModifier\n");
         playOrderList.add(new IntVector2Pair(diceRoll, new Vector2(player.getPosition())));
         Collections.sort(playOrderList);
     }

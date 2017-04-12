@@ -43,7 +43,7 @@ public class GamePlayerEditorScreen implements Screen{
     private Game game;
     public Stage stage;
     private SpriteBatch batch;
-    public TextButton backwardButton, confirmButton, saveButton, userModeButton;
+    public TextButton backwardButton, confirmButton, saveButton, quitButton, userModeButton;
     private Texture backgroundTexture;
 
     private ImageButton[] backpackMatrix, equipmentMatrix;
@@ -93,9 +93,9 @@ public class GamePlayerEditorScreen implements Screen{
         controller = new PlayerEditorController(this,this.player);
 
         saveButton = new TextButton("Save Game", MainMenuScreen.buttonStyle);
-        saveButton.setWidth(Gdx.graphics.getWidth() / 8 );
+        saveButton.setWidth(Gdx.graphics.getWidth() / 9 );
         saveButton.setHeight(Gdx.graphics.getHeight() / 9);
-        saveButton.setPosition((Gdx.graphics.getWidth() * 7 /12 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
+        saveButton.setPosition((Gdx.graphics.getWidth() * 13 /24 + 20 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
         saveButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -104,8 +104,20 @@ public class GamePlayerEditorScreen implements Screen{
             }
         });
         stage.addActor(saveButton);
-        
-        
+
+        quitButton = new TextButton("Quit", MainMenuScreen.buttonStyle);
+        quitButton.setWidth(Gdx.graphics.getWidth() / 9 );
+        quitButton.setHeight(Gdx.graphics.getHeight() / 9);
+        quitButton.setPosition((Gdx.graphics.getWidth() * 11 /16 + 35 ) , (Gdx.graphics.getHeight() * 1 / 30 ) );
+        quitButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MainMenuScreen(game));
+                return true;
+            }
+        });
+        stage.addActor(quitButton);
+
         userModeButton = new TextButton("", MainMenuScreen.buttonStyle);
         if(isUserPlay){
             userModeButton.setText("User");
